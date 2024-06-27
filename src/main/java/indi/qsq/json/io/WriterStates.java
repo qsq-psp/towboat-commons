@@ -1,6 +1,6 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.util.value.EnumMapping;
+import indi.qsq.util.value.EnumMapping;
 
 /**
  * Created in webbiton on 2020/12/16, named JsonBlobBuilder.State.

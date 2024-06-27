@@ -1,12 +1,12 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.ParseHint;
-import indi.um.json.entity.JsonConstant;
-import indi.um.json.io.JsonStringWriter;
-import indi.um.json.value.IterableValueSerializer;
-import indi.um.util.reflect.GenericTravel;
-import indi.um.util.value.PublicBooleanSlot;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.ParseHint;
+import indi.qsq.json.entity.JsonConstant;
+import indi.qsq.json.io.JsonStringWriter;
+import indi.qsq.json.value.IterableValueSerializer;
+import indi.qsq.util.reflect.GenericTravel;
+import indi.qsq.util.value.PublicBooleanSlot;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

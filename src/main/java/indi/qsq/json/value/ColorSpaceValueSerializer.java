@@ -1,10 +1,10 @@
-package indi.um.json.value;
+package indi.qsq.json.value;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.ValueSerializer;
-import indi.um.json.reflect.ConversionConfig;
-import indi.um.json.reflect.JsonSerializer;
-import indi.um.util.value.EnumMapping;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.ValueSerializer;
+import indi.qsq.json.reflect.ConversionConfig;
+import indi.qsq.json.reflect.JsonSerializer;
+import indi.qsq.util.value.EnumMapping;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.color.ColorSpace;

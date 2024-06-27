@@ -1,8 +1,8 @@
-package indi.um.json.api;
+package indi.qsq.json.api;
 
-import indi.um.json.entity.RawNumber;
-import indi.um.util.reflect.ClassUtility;
-import indi.um.util.text.Quote;
+import indi.qsq.json.entity.RawNumber;
+import indi.qsq.util.reflect.ClassUtility;
+import indi.qsq.util.text.Quote;
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

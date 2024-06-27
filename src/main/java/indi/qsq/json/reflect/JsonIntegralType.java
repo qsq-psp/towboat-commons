@@ -1,7 +1,7 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.ParseHint;
-import indi.um.util.text.Quote;
+import indi.qsq.json.api.ParseHint;
+import indi.qsq.util.text.Quote;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

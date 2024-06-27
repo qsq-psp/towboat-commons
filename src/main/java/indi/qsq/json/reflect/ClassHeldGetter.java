@@ -1,7 +1,7 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.value.ClassValueSerializer;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.value.ClassValueSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

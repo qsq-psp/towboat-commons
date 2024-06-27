@@ -1,6 +1,6 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.entity.JsonConstant;
+import indi.qsq.json.entity.JsonConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

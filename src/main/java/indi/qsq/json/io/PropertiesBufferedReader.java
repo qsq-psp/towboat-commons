@@ -1,6 +1,6 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.json.api.JsonConsumer;
+import indi.qsq.json.api.JsonConsumer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;

@@ -1,11 +1,11 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.util.nio.AsyncByteBufConsumer;
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.entity.StructureChecker;
-import indi.um.json.entity.RawNumber;
-import indi.um.util.text.HexCase;
-import indi.um.util.text.Quote;
+import indi.qsq.util.nio.AsyncByteBufConsumer;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.entity.StructureChecker;
+import indi.qsq.json.entity.RawNumber;
+import indi.qsq.util.text.HexCase;
+import indi.qsq.util.text.Quote;
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

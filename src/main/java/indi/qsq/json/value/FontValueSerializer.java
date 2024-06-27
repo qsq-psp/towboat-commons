@@ -1,11 +1,11 @@
-package indi.um.json.value;
+package indi.qsq.json.value;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.JsonStructure;
-import indi.um.json.api.SerializeFrom;
-import indi.um.json.api.ValueSerializer;
-import indi.um.json.reflect.ConversionConfig;
-import indi.um.json.reflect.JsonSerializer;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.JsonStructure;
+import indi.qsq.json.api.SerializeFrom;
+import indi.qsq.json.api.ValueSerializer;
+import indi.qsq.json.reflect.ConversionConfig;
+import indi.qsq.json.reflect.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;

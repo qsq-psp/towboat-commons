@@ -1,4 +1,4 @@
-package indi.um.json.entity;
+package indi.qsq.json.entity;
 
 /**
  * Created in infrastructure on 2022/5/17.

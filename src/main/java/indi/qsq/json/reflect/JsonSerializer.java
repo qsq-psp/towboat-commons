@@ -1,13 +1,13 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.util.io.BinarySerializer;
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.ReflectOperations;
-import indi.um.json.api.SerializeFrom;
-import indi.um.json.io.JsonByteBufWriter;
-import indi.um.json.io.JsonStringWriter;
-import indi.um.json.io.TerminalScriptStringWriter;
-import indi.um.util.ds.WeakIdentityHashSet;
+import indi.qsq.util.io.BinarySerializer;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.ReflectOperations;
+import indi.qsq.json.api.SerializeFrom;
+import indi.qsq.json.io.JsonByteBufWriter;
+import indi.qsq.json.io.JsonStringWriter;
+import indi.qsq.json.io.TerminalScriptStringWriter;
+import indi.qsq.util.ds.WeakIdentityHashSet;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 

@@ -1,11 +1,11 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.ParseHint;
-import indi.um.json.api.SerializeFrom;
-import indi.um.json.entity.JsonConstant;
-import indi.um.util.text.HexCodec;
-import indi.um.util.text.Quote;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.ParseHint;
+import indi.qsq.json.api.SerializeFrom;
+import indi.qsq.json.entity.JsonConstant;
+import indi.qsq.util.text.HexCodec;
+import indi.qsq.util.text.Quote;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ class JsonFloatType extends JsonFractionalType {
     private static final int INTERESTED_CONFIG = SerializeFrom.ZERO_DECIMAL | SerializeFrom.INFINITE | SerializeFrom.NAN;
 
     /**
-     * Almost same with indi.um.json.value.FractionalValueSerializer.serialize(String key, Number value, JsonConsumer jc, JsonSerializer js)
+     * Almost same with indi.qsq.json.value.FractionalValueSerializer.serialize(String key, Number value, JsonConsumer jc, JsonSerializer js)
      */
     @Override
     protected void serializeValue(String key, Object value, JsonConsumer jc, JsonSerializer js) {

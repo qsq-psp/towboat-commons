@@ -1,9 +1,9 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.json.api.JsonStructure;
-import indi.um.util.ds.HeapIntBuf;
-import indi.um.util.reflect.ClassUtility;
-import indi.um.util.text.Quote;
+import indi.qsq.json.api.JsonStructure;
+import indi.qsq.util.ds.HeapIntBuf;
+import indi.qsq.util.reflect.ClassUtility;
+import indi.qsq.util.text.Quote;
 import org.jetbrains.annotations.NotNull;
 
 /**

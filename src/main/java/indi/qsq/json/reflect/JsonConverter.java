@@ -1,8 +1,8 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonStructure;
-import indi.um.json.io.ResultSetReader;
-import indi.um.util.reflect.ClassUtility;
+import indi.qsq.json.api.JsonStructure;
+import indi.qsq.json.io.ResultSetReader;
+import indi.qsq.util.reflect.ClassUtility;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;

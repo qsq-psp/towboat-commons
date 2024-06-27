@@ -1,8 +1,8 @@
-package indi.um.json.entity;
+package indi.qsq.json.entity;
 
-import indi.um.json.api.JsonName;
-import indi.um.json.api.SerializeFrom;
-import indi.um.json.api.SerializeToUndefined;
+import indi.qsq.json.api.JsonName;
+import indi.qsq.json.api.SerializeFrom;
+import indi.qsq.json.api.SerializeToUndefined;
 
 import java.io.Serializable;
 import java.util.List;

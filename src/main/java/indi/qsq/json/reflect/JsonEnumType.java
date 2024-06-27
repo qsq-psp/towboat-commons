@@ -1,11 +1,11 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.SerializeFrom;
-import indi.um.json.entity.JsonConstant;
-import indi.um.util.text.IdentifierFormat;
-import indi.um.util.text.IdentifierReformat;
-import indi.um.util.text.Quote;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.SerializeFrom;
+import indi.qsq.json.entity.JsonConstant;
+import indi.qsq.util.text.IdentifierFormat;
+import indi.qsq.util.text.IdentifierReformat;
+import indi.qsq.util.text.Quote;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

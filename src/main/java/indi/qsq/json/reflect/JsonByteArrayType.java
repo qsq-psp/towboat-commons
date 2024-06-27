@@ -1,10 +1,10 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.ParseHint;
-import indi.um.json.entity.JsonConstant;
-import indi.um.util.text.Quote;
-import indi.um.util.ds.ByteArray;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.ParseHint;
+import indi.qsq.json.entity.JsonConstant;
+import indi.qsq.util.text.Quote;
+import indi.qsq.util.ds.ByteArray;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;

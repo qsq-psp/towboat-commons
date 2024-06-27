@@ -1,8 +1,8 @@
-package indi.um.json.entity;
+package indi.qsq.json.entity;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.io.JsonCharSequenceReader;
-import indi.um.json.io.JsonStringWriter;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.io.JsonCharSequenceReader;
+import indi.qsq.json.io.JsonStringWriter;
 import org.jetbrains.annotations.NotNull;
 
 /**

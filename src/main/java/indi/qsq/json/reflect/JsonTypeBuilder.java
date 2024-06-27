@@ -1,7 +1,7 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonStructure;
-import indi.um.util.reflect.GenericTravel;
+import indi.qsq.json.api.JsonStructure;
+import indi.qsq.util.reflect.GenericTravel;
 import io.netty.buffer.ByteBuf;
 
 import java.lang.reflect.Type;

@@ -1,6 +1,6 @@
-package indi.um.util.math;
+package indi.qsq.util.math;
 
-import indi.um.util.value.BitCount32;
+import indi.qsq.util.value.BitCount32;
 
 import java.math.BigInteger;
 import java.util.Arrays;

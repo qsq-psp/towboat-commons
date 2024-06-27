@@ -1,9 +1,9 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.json.api.JsonStructure;
-import indi.um.util.ds.HeapIntBuf;
-import indi.um.util.io.ByteBufWriter;
-import indi.um.util.io.Utf8Utility;
+import indi.qsq.json.api.JsonStructure;
+import indi.qsq.util.ds.HeapIntBuf;
+import indi.qsq.util.io.ByteBufWriter;
+import indi.qsq.util.io.Utf8Utility;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.jetbrains.annotations.NotNull;

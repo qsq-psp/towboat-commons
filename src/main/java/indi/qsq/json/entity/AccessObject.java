@@ -1,6 +1,6 @@
-package indi.um.json.entity;
+package indi.qsq.json.entity;
 
-import indi.um.util.value.ReadFlagPole;
+import indi.qsq.util.value.ReadFlagPole;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

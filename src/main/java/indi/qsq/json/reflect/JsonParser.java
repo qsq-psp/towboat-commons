@@ -1,14 +1,14 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.ReflectOperations;
-import indi.um.json.entity.JsonConstant;
-import indi.um.json.io.JsonCharSequenceReader;
-import indi.um.json.io.SyncReader;
-import indi.um.util.ds.TruncateList;
-import indi.um.util.reflect.ArtificialParameterizedType;
-import indi.um.util.reflect.ClassUtility;
-import indi.um.util.text.CommandLine;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.ReflectOperations;
+import indi.qsq.json.entity.JsonConstant;
+import indi.qsq.json.io.JsonCharSequenceReader;
+import indi.qsq.json.io.SyncReader;
+import indi.qsq.util.ds.TruncateList;
+import indi.qsq.util.reflect.ArtificialParameterizedType;
+import indi.qsq.util.reflect.ClassUtility;
+import indi.qsq.util.text.CommandLine;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;

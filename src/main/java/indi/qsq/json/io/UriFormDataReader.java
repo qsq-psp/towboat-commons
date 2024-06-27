@@ -1,9 +1,9 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.util.ds.Index;
-import indi.um.util.text.Quote;
-import indi.um.util.text.StringUtility;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.util.ds.Index;
+import indi.qsq.util.text.Quote;
+import indi.qsq.util.text.StringUtility;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.util.ByteProcessor;

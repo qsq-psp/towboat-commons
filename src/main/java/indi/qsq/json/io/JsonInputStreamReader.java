@@ -1,13 +1,13 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.entity.RawNumber;
-import indi.um.util.ds.HeapIntBuf;
-import indi.um.util.ds.IntMatrix;
-import indi.um.util.text.HexCase;
-import indi.um.util.text.Quote;
-import indi.um.util.ds.IntArray;
-import indi.um.util.ds.LongArray;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.entity.RawNumber;
+import indi.qsq.util.ds.HeapIntBuf;
+import indi.qsq.util.ds.IntMatrix;
+import indi.qsq.util.text.HexCase;
+import indi.qsq.util.text.Quote;
+import indi.qsq.util.ds.IntArray;
+import indi.qsq.util.ds.LongArray;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.util.internal.InternalThreadLocalMap;

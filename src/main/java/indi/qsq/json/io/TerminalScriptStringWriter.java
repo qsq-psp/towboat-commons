@@ -1,7 +1,7 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.util.io.TerminalStyle;
-import indi.um.util.text.TypedString;
+import indi.qsq.util.io.TerminalStyle;
+import indi.qsq.util.text.TypedString;
 import org.jetbrains.annotations.NotNull;
 
 /**

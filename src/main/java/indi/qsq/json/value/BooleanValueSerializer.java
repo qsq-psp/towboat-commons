@@ -1,10 +1,10 @@
-package indi.um.json.value;
+package indi.qsq.json.value;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.reflect.JsonSerializer;
-import indi.um.json.api.SerializeFrom;
-import indi.um.json.api.ValueSerializer;
-import indi.um.json.reflect.ConversionConfig;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.reflect.JsonSerializer;
+import indi.qsq.json.api.SerializeFrom;
+import indi.qsq.json.api.ValueSerializer;
+import indi.qsq.json.reflect.ConversionConfig;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class BooleanValueSerializer implements ValueSerializer<Boolean> {
     public static final BooleanValueSerializer INSTANCE = new BooleanValueSerializer();
 
     /**
-     * Almost same with indi.um.json.reflect.JsonBooleanType.serializeValue(String key, Object value, JsonConsumer jc, JsonSerializer js)
+     * Almost same with indi.qsq.json.reflect.JsonBooleanType.serializeValue(String key, Object value, JsonConsumer jc, JsonSerializer js)
      */
     @Override
     public void serialize(String key, Boolean value, @NotNull JsonConsumer jc, @NotNull ConversionConfig cc, @NotNull JsonSerializer js) {

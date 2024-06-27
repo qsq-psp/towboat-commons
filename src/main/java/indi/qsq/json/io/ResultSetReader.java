@@ -1,7 +1,7 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.util.ds.Index;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.util.ds.Index;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.ResultSet;

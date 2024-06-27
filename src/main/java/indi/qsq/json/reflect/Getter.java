@@ -1,10 +1,10 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.JsonStructure;
-import indi.um.json.entity.JsonConstant;
-import indi.um.json.io.JsonStringWriter;
-import indi.um.util.reflect.ClassUtility;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.JsonStructure;
+import indi.qsq.json.entity.JsonConstant;
+import indi.qsq.json.io.JsonStringWriter;
+import indi.qsq.util.reflect.ClassUtility;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandles;

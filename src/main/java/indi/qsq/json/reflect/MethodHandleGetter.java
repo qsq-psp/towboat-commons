@@ -1,4 +1,4 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

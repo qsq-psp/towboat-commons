@@ -1,6 +1,6 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.io.RecursiveReader;
+import indi.qsq.json.io.RecursiveReader;
 import org.jetbrains.annotations.NotNull;
 
 /**

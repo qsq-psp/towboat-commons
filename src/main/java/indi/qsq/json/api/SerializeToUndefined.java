@@ -1,4 +1,4 @@
-package indi.um.json.api;
+package indi.qsq.json.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

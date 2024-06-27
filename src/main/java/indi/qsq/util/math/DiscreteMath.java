@@ -1,6 +1,6 @@
-package indi.um.util.math;
+package indi.qsq.util.math;
 
-import indi.um.util.value.PublicIntSlot;
+import indi.qsq.util.value.PublicIntSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;

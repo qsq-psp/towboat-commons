@@ -1,12 +1,12 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.*;
-import indi.um.json.io.IndexedColumn;
-import indi.um.json.io.SyncReader;
-import indi.um.json.io.RecursiveReader;
-import indi.um.util.random.RandomContext;
-import indi.um.util.text.CommandLine;
-import indi.um.util.text.Quote;
+import indi.qsq.json.api.*;
+import indi.qsq.json.io.IndexedColumn;
+import indi.qsq.json.io.SyncReader;
+import indi.qsq.json.io.RecursiveReader;
+import indi.qsq.util.random.RandomContext;
+import indi.qsq.util.text.CommandLine;
+import indi.qsq.util.text.Quote;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

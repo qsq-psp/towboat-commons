@@ -1,8 +1,8 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.json.api.DatabaseColumnType;
-import indi.um.util.ds.Index;
-import indi.um.util.text.TypedString;
+import indi.qsq.json.api.DatabaseColumnType;
+import indi.qsq.util.ds.Index;
+import indi.qsq.util.text.TypedString;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;

@@ -1,10 +1,10 @@
-package indi.um.json.entity;
+package indi.qsq.json.entity;
 
-import indi.um.json.api.FrameStructure;
-import indi.um.json.reflect.ConverterFrame;
-import indi.um.json.reflect.JsonConverter;
-import indi.um.json.reflect.JsonParser;
-import indi.um.json.reflect.MergeFrame;
+import indi.qsq.json.api.FrameStructure;
+import indi.qsq.json.reflect.ConverterFrame;
+import indi.qsq.json.reflect.JsonConverter;
+import indi.qsq.json.reflect.JsonParser;
+import indi.qsq.json.reflect.MergeFrame;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

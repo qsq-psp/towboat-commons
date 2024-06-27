@@ -1,4 +1,4 @@
-package indi.um.json.api;
+package indi.qsq.json.api;
 
 /**
  * Created in infrastructure on 2021/12/30, named UseOrder.

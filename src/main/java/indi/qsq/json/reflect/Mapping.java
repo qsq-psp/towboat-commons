@@ -1,10 +1,10 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.*;
-import indi.um.json.io.IndexedColumn;
-import indi.um.json.io.JsonStringWriter;
-import indi.um.util.reflect.ClassUtility;
-import indi.um.util.text.TypedString;
+import indi.qsq.json.api.*;
+import indi.qsq.json.io.IndexedColumn;
+import indi.qsq.json.io.JsonStringWriter;
+import indi.qsq.util.reflect.ClassUtility;
+import indi.qsq.util.text.TypedString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

@@ -1,13 +1,13 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.ParseHint;
-import indi.um.json.api.SerializeFrom;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.ParseHint;
+import indi.qsq.json.api.SerializeFrom;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static indi.um.json.reflect.ClosureConfig.*;
+import static indi.qsq.json.reflect.ClosureConfig.*;
 
 /**
  * Created on 2022/7/12.
@@ -30,13 +30,13 @@ final class ClosurePreset {
     }
 
     private static void putBoolean() {
-        final ClosureConfig config = new PolyfillClosureConfig("indi.um.json.value.BooleanValueSerializer");
+        final ClosureConfig config = new PolyfillClosureConfig("indi.qsq.json.value.BooleanValueSerializer");
         MAP.put("boolean", config);
         MAP.put("java.lang.Boolean", config);
     }
 
     private static void putIntegral() {
-        final ClosureConfig config = new PolyfillClosureConfig("indi.um.json.value.IntegralValueSerializer");
+        final ClosureConfig config = new PolyfillClosureConfig("indi.qsq.json.value.IntegralValueSerializer");
         config.parseConfig = ParseHint.ACCEPT_STRING;
         MAP.put("byte", config);
         MAP.put("java.lang.Byte", config);
@@ -54,7 +54,7 @@ final class ClosurePreset {
     }
 
     private static void putFractional() {
-        final ClosureConfig config = new PolyfillClosureConfig("indi.um.json.value.FractionalValueSerializer");
+        final ClosureConfig config = new PolyfillClosureConfig("indi.qsq.json.value.FractionalValueSerializer");
         config.parseConfig = ParseHint.ACCEPT_STRING | ParseHint.ACCEPT_DOT_STRING | ParseHint.ACCEPT_SCI_STRING;
         config.serializeConfig = SerializeFrom.INFINITE | SerializeFrom.NAN;
         MAP.put("float", config);
@@ -67,7 +67,7 @@ final class ClosurePreset {
     }
 
     private static void putString() {
-        final ClosureConfig config = new PolyfillClosureConfig("indi.um.json.value.StringValueSerializer");
+        final ClosureConfig config = new PolyfillClosureConfig("indi.qsq.json.value.StringValueSerializer");
         config.parseConfig = ParseHint.ACCEPT_BOOLEAN | ParseHint.ACCEPT_NUMBER;
         // classes that implements CharSequence
         MAP.put("java.lang.String", config);
@@ -100,35 +100,35 @@ final class ClosurePreset {
         putIntegral();
         putFractional();
         putString();
-        put("java.lang.Class", "indi.um.json.value.ClassValueSerializer", false); // this class is final
-        put("java.lang.ClassLoader", "indi.um.json.value.ClassLoaderValueSerializer", true);
-        put("java.lang.Runtime", "indi.um.json.value.RuntimeValueSerializer", false); // this class is singleton
-        put("java.lang.Runtime$Version", "indi.um.json.value.RuntimeVersionValueSerializer", false); // this class is final
-        put("java.lang.Thread", "indi.um.json.value.ThreadValueSerializer", true);
-        put("java.lang.ThreadGroup", "indi.um.json.value.ThreadGroupValueSerializer", false); // do not cover subclasses
-        put("java.util.Locale", "indi.um.json.value.LocaleValueSerializer", false); // this class is final
-        put("java.util.Locale$LanguageRange", "indi.um.json.value.LanguageRangeValueSerializer", false); // this class is final
-        put("java.util.Date", "indi.um.json.value.DateValueSerializer", true); // java.util.Date has subclasses
-        put("java.util.Calendar", "indi.um.json.value.CalendarValueSerializer", true); // java.util.Calendar has subclasses
-        put("java.util.TimeZone", "indi.um.json.value.TimeZoneValueSerializer", true);
-        put("java.time.ZoneId", "indi.um.json.value.ZoneIdValueSerializer", true);
-        put("java.nio.ByteBuffer", "indi.um.json.value.ByteBufferValueSerializer", true);
-        put("java.nio.charset.Charset", "indi.um.json.value.CharsetValueSerializer", true);
-        put("java.nio.file.FileStore", "indi.um.json.value.FileStoreValueSerializer", true);
-        put("java.nio.file.FileSystem", "indi.um.json.value.FileSystemValueSerializer", true);
-        put("java.nio.file.attribute.FileTime", "indi.um.json.value.FileTimeValueSerializer", false); // this class is final
+        put("java.lang.Class", "indi.qsq.json.value.ClassValueSerializer", false); // this class is final
+        put("java.lang.ClassLoader", "indi.qsq.json.value.ClassLoaderValueSerializer", true);
+        put("java.lang.Runtime", "indi.qsq.json.value.RuntimeValueSerializer", false); // this class is singleton
+        put("java.lang.Runtime$Version", "indi.qsq.json.value.RuntimeVersionValueSerializer", false); // this class is final
+        put("java.lang.Thread", "indi.qsq.json.value.ThreadValueSerializer", true);
+        put("java.lang.ThreadGroup", "indi.qsq.json.value.ThreadGroupValueSerializer", false); // do not cover subclasses
+        put("java.util.Locale", "indi.qsq.json.value.LocaleValueSerializer", false); // this class is final
+        put("java.util.Locale$LanguageRange", "indi.qsq.json.value.LanguageRangeValueSerializer", false); // this class is final
+        put("java.util.Date", "indi.qsq.json.value.DateValueSerializer", true); // java.util.Date has subclasses
+        put("java.util.Calendar", "indi.qsq.json.value.CalendarValueSerializer", true); // java.util.Calendar has subclasses
+        put("java.util.TimeZone", "indi.qsq.json.value.TimeZoneValueSerializer", true);
+        put("java.time.ZoneId", "indi.qsq.json.value.ZoneIdValueSerializer", true);
+        put("java.nio.ByteBuffer", "indi.qsq.json.value.ByteBufferValueSerializer", true);
+        put("java.nio.charset.Charset", "indi.qsq.json.value.CharsetValueSerializer", true);
+        put("java.nio.file.FileStore", "indi.qsq.json.value.FileStoreValueSerializer", true);
+        put("java.nio.file.FileSystem", "indi.qsq.json.value.FileSystemValueSerializer", true);
+        put("java.nio.file.attribute.FileTime", "indi.qsq.json.value.FileTimeValueSerializer", false); // this class is final
         putManagementBeans();
-        put("java.awt.GraphicsDevice", "indi.um.json.value.GraphicsDeviceValueSerializer", true);
-        put("java.awt.image.ColorModel", "indi.um.json.value.ColorModelValueSerializer", true);
-        put("java.awt.color.ColorSpace", "indi.um.json.value.ColorSpaceValueSerializer", true);
-        put("java.awt.Font", "indi.um.json.value.FontValueSerializer", true);
-        put("org.xml.sax.Attributes", "indi.um.json.value.SaxAttributesValueSerializer", true);
-        put("org.xml.sax.Locator", "indi.um.json.value.SaxLocatorValueSerializer", true);
-        put("io.netty.buffer.ByteBuf", "indi.um.json.value.NettyBufferValueSerializer", true);
-        put("io.netty.channel.Channel", "indi.um.json.value.NettyChannelValueSerializer", true);
-        put("io.netty.channel.EventLoopGroup", "indi.um.json.value.NettyEventLoopGroupValueSerializer", true);
-        put("io.netty.handler.codec.http.HttpMethod", "indi.um.json.value.HttpMethodValueSerializer", false); // do not cover subclasses
-        put("io.netty.handler.codec.http.HttpResponseStatus", "indi.um.json.value.HttpResponseStatusValueSerializer", false); // do not cover subclasses
+        put("java.awt.GraphicsDevice", "indi.qsq.json.value.GraphicsDeviceValueSerializer", true);
+        put("java.awt.image.ColorModel", "indi.qsq.json.value.ColorModelValueSerializer", true);
+        put("java.awt.color.ColorSpace", "indi.qsq.json.value.ColorSpaceValueSerializer", true);
+        put("java.awt.Font", "indi.qsq.json.value.FontValueSerializer", true);
+        put("org.xml.sax.Attributes", "indi.qsq.json.value.SaxAttributesValueSerializer", true);
+        put("org.xml.sax.Locator", "indi.qsq.json.value.SaxLocatorValueSerializer", true);
+        put("io.netty.buffer.ByteBuf", "indi.qsq.json.value.NettyBufferValueSerializer", true);
+        put("io.netty.channel.Channel", "indi.qsq.json.value.NettyChannelValueSerializer", true);
+        put("io.netty.channel.EventLoopGroup", "indi.qsq.json.value.NettyEventLoopGroupValueSerializer", true);
+        put("io.netty.handler.codec.http.HttpMethod", "indi.qsq.json.value.HttpMethodValueSerializer", false); // do not cover subclasses
+        put("io.netty.handler.codec.http.HttpResponseStatus", "indi.qsq.json.value.HttpResponseStatusValueSerializer", false); // do not cover subclasses
     }
 
     static final int QUEUE_SIZE = 64;

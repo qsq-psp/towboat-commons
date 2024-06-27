@@ -1,7 +1,7 @@
-package indi.um.json.api;
+package indi.qsq.json.api;
 
-import indi.um.json.reflect.ConversionConfig;
-import indi.um.json.reflect.JsonSerializer;
+import indi.qsq.json.reflect.ConversionConfig;
+import indi.qsq.json.reflect.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**

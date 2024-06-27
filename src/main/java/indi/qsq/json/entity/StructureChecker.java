@@ -1,9 +1,9 @@
-package indi.um.json.entity;
+package indi.qsq.json.entity;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.util.ds.HeapBooleanBuf;
-import indi.um.util.reflect.ClassUtility;
-import indi.um.util.value.EnumMapping;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.util.ds.HeapBooleanBuf;
+import indi.qsq.util.reflect.ClassUtility;
+import indi.qsq.util.value.EnumMapping;
 import org.jetbrains.annotations.NotNull;
 
 /**

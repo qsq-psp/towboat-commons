@@ -1,8 +1,8 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.FrameStructure;
-import indi.um.json.entity.JsonArray;
-import indi.um.json.entity.JsonObject;
+import indi.qsq.json.api.FrameStructure;
+import indi.qsq.json.entity.JsonArray;
+import indi.qsq.json.entity.JsonObject;
 
 /**
  * Created on 2022/7/31.

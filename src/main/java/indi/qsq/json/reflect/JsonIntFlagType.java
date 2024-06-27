@@ -1,13 +1,13 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.*;
-import indi.um.json.entity.JsonArray;
-import indi.um.json.entity.JsonConstant;
-import indi.um.json.entity.JsonObject;
-import indi.um.util.text.NumberText;
-import indi.um.util.text.Quote;
-import indi.um.util.text.SplitBy;
-import indi.um.util.value.FlagName;
+import indi.qsq.json.api.*;
+import indi.qsq.json.entity.JsonArray;
+import indi.qsq.json.entity.JsonConstant;
+import indi.qsq.json.entity.JsonObject;
+import indi.qsq.util.text.NumberText;
+import indi.qsq.util.text.Quote;
+import indi.qsq.util.text.SplitBy;
+import indi.qsq.util.value.FlagName;
 import io.netty.util.internal.InternalThreadLocalMap;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

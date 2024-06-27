@@ -1,7 +1,7 @@
-package indi.um.json.api;
+package indi.qsq.json.api;
 
-import indi.um.json.entity.RawNumber;
-import indi.um.util.text.TypedString;
+import indi.qsq.json.entity.RawNumber;
+import indi.qsq.util.text.TypedString;
 import org.jetbrains.annotations.NotNull;
 
 /**

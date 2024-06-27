@@ -1,7 +1,7 @@
-package indi.um.json.api;
+package indi.qsq.json.api;
 
-import indi.um.json.reflect.ConverterFrame;
-import indi.um.json.reflect.JsonConverter;
+import indi.qsq.json.reflect.ConverterFrame;
+import indi.qsq.json.reflect.JsonConverter;
 
 /**
  * Created on 2022/7/26.

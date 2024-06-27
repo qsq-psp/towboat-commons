@@ -1,8 +1,8 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.*;
-import indi.um.json.entity.JsonConstant;
-import indi.um.util.text.Quote;
+import indi.qsq.json.api.*;
+import indi.qsq.json.entity.JsonConstant;
+import indi.qsq.util.text.Quote;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ class JsonIntType extends JsonIntegralType {
     }
 
     /**
-     * Almost same with indi.um.json.value.IntegralValueSerializer.serialize(String key, Number value, JsonConsumer jc, JsonSerializer js)
+     * Almost same with indi.qsq.json.value.IntegralValueSerializer.serialize(String key, Number value, JsonConsumer jc, JsonSerializer js)
      */
     @Override
     protected void serializeValue(String key, Object value, JsonConsumer jc, JsonSerializer js) {

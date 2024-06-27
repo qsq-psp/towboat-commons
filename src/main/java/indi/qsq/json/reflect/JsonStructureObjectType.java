@@ -1,7 +1,7 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.JsonStructure;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.JsonStructure;
 
 /**
  * Created on 2022/7/26.

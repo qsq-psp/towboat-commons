@@ -1,4 +1,4 @@
-package indi.um.json.entity;
+package indi.qsq.json.entity;
 
 import org.jetbrains.annotations.NotNull;
 

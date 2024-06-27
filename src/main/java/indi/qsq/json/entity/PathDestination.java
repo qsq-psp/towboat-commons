@@ -1,7 +1,7 @@
-package indi.um.json.entity;
+package indi.qsq.json.entity;
 
-import indi.um.util.text.Quote;
-import indi.um.util.value.FlagName;
+import indi.qsq.util.text.Quote;
+import indi.qsq.util.value.FlagName;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,7 +1,7 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.AnyEnum;
-import indi.um.json.api.BooleanEnumValue;
+import indi.qsq.json.api.AnyEnum;
+import indi.qsq.json.api.BooleanEnumValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.AnnotatedElement;

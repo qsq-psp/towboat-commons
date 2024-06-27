@@ -1,7 +1,7 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.entity.JsonConstant;
-import indi.um.json.io.RecursiveReader;
+import indi.qsq.json.entity.JsonConstant;
+import indi.qsq.json.io.RecursiveReader;
 
 import java.util.function.Consumer;
 

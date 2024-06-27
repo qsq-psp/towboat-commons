@@ -1,7 +1,7 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.json.api.JsonConsumer;
-import indi.um.util.text.HexCase;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.util.text.HexCase;
 
 /**
  * Created in infrastructure on 2021/12/30, named JsonWriter.

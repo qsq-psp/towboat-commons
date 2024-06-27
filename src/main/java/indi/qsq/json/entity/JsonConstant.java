@@ -1,4 +1,4 @@
-package indi.um.json.entity;
+package indi.qsq.json.entity;
 
 /**
  * Created on 2022/7/8.

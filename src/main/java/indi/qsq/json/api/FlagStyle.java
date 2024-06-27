@@ -1,4 +1,4 @@
-package indi.um.json.api;
+package indi.qsq.json.api;
 
 /**
  * Created on 2022/8/27.

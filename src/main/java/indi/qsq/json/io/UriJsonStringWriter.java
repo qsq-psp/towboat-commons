@@ -1,8 +1,8 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.json.api.JsonStructure;
-import indi.um.util.text.Quote;
-import indi.um.util.text.TypedString;
+import indi.qsq.json.api.JsonStructure;
+import indi.qsq.util.text.Quote;
+import indi.qsq.util.text.TypedString;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,11 +1,11 @@
-package indi.um.json.reflect;
+package indi.qsq.json.reflect;
 
-import indi.um.json.api.CallBuilder;
-import indi.um.json.api.FrameStructure;
-import indi.um.json.api.JsonConsumer;
-import indi.um.json.api.UseBuilder;
-import indi.um.json.entity.JsonConstant;
-import indi.um.util.value.PublicBooleanSlot;
+import indi.qsq.json.api.CallBuilder;
+import indi.qsq.json.api.FrameStructure;
+import indi.qsq.json.api.JsonConsumer;
+import indi.qsq.json.api.UseBuilder;
+import indi.qsq.json.entity.JsonConstant;
+import indi.qsq.util.value.PublicBooleanSlot;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

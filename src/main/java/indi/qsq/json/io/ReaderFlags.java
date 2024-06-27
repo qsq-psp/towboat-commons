@@ -1,7 +1,7 @@
-package indi.um.json.io;
+package indi.qsq.json.io;
 
-import indi.um.util.value.EnumMapping;
-import indi.um.util.value.FlagName;
+import indi.qsq.util.value.EnumMapping;
+import indi.qsq.util.value.FlagName;
 
 /**
  * Created on 2022/6/12, named ReaderStates.
