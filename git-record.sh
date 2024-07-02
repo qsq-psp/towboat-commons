@@ -9,6 +9,7 @@ git clone git@gitee.com:qsq-psp/towboat-commons.git
 cd towboat-commons
 git config --local user.name "qsq-psp"
 git config --local user.email "qsq-psp@qq.com"
+git remote rename origin gitee
 ssh -T git@github.com
 git remote add github git@github.com:qsq-psp/towboat-commons.git
 git push -u github master
