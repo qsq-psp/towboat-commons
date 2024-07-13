@@ -1,8 +1,12 @@
 package indi.qsq.io.string;
 
+import indi.qsq.util.reflect.ConstantComposition;
+import indi.qsq.util.reflect.ConstantInterface;
+
 /**
  * Created on 2024/7/2.
  */
+@ConstantInterface(composition = ConstantComposition.OR)
 public interface PreparedCharacteristic {
 
     /**
