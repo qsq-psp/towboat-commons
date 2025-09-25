@@ -1,0 +1,195 @@
+package mujica.reflect.bytecode;
+
+import mujica.io.stream.LimitedDataInput;
+import mujica.reflect.invoke.BytecodeFieldType;
+import mujica.reflect.modifier.CodeHistory;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.DataOutput;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+
+@CodeHistory(date = "2025/9/17")
+public class LocalVariableTableAttributeInfo extends AttributeInfo {
+
+    private static final long serialVersionUID = 0xB459F74DD30BA246L;
+
+    @CodeHistory(date = "2025/9/17")
+    private static class LocalVariableEntry implements Independent {
+
+        private static final long serialVersionUID = 0xD1664378176A5AFBL;
+
+        int startPC; // u2
+
+        int endPC; // length
+
+        int nameIndex; // CONSTANT_UTF8
+
+        int descriptorIndex; // CONSTANT_UTF8
+
+        int localVariableIndex; // long or double occupy 2 indexes
+
+        LocalVariableEntry() {
+            super();
+        }
+
+        @Override
+        public int groupCount() {
+            return 0;
+        }
+
+        @NotNull
+        @Override
+        public Class<?> getGroup(int groupIndex) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        @Override
+        public int nodeCount(@NotNull Class<?> group) {
+            return 0;
+        }
+
+        @NotNull
+        @Override
+        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        @Override
+        public void read(@NotNull LimitedDataInput in) throws IOException {
+            startPC = in.readUnsignedShort();
+            endPC = startPC + in.readUnsignedShort(); // read length
+            nameIndex = in.readUnsignedShort();
+            descriptorIndex = in.readUnsignedShort();
+            localVariableIndex = in.readUnsignedShort();
+        }
+
+        @Override
+        public void read(@NotNull ByteBuffer buffer) {
+            startPC = 0xffff & buffer.getShort();
+            endPC = startPC + (0xffff & buffer.getShort());
+            nameIndex = 0xffff & buffer.getShort();
+            descriptorIndex = 0xffff & buffer.getShort();
+            localVariableIndex = 0xffff & buffer.getShort();
+        }
+
+        @Override
+        public void write(@NotNull DataOutput out) throws IOException {
+            out.writeShort(startPC);
+            out.writeShort(endPC - startPC);
+            out.writeShort(nameIndex);
+            out.writeShort(descriptorIndex);
+            out.writeShort(localVariableIndex);
+        }
+
+        @Override
+        public void write(@NotNull ByteBuffer buffer) {
+            buffer.putShort((short) startPC);
+            buffer.putShort((short) (endPC - startPC));
+            buffer.putShort((short) nameIndex);
+            buffer.putShort((short) descriptorIndex);
+            buffer.putShort((short) localVariableIndex);
+        }
+
+        @NotNull
+        @Override
+        public String toString(@NotNull ClassFile context, int position) {
+            return "from " + startPC + " to " + endPC + ' '
+                    + (new BytecodeFieldType(context.constantPool.getUtf8(descriptorIndex))).toSourceString() + ' '
+                    + context.constantPool.getUtf8(nameIndex) + " at " + localVariableIndex;
+        }
+    }
+
+    LocalVariableEntry[] entries;
+
+    LocalVariableTableAttributeInfo() {
+        super();
+    }
+
+    @Override
+    public int groupCount() {
+        return 1;
+    }
+
+    @NotNull
+    @Override
+    public Class<?> getGroup(int groupIndex) {
+        if (groupIndex == 0) {
+            return LocalVariableEntry.class;
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    @Override
+    public int nodeCount(@NotNull Class<?> group) {
+        if (group == LocalVariableEntry.class) {
+            return entries.length;
+        } else {
+            return 0;
+        }
+    }
+
+    @NotNull
+    @Override
+    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+        if (group == LocalVariableEntry.class) {
+            return entries[nodeIndex];
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    public static final String NAME = "LocalVariableTable";
+
+    @NotNull
+    @Override
+    public String attributeName() {
+        return NAME;
+    }
+
+    @Override
+    public int byteSize() {
+        return 2 + 10 * entries.length;
+    }
+
+    @Override
+    public void read(@NotNull ConstantPool context, @NotNull LimitedDataInput in) throws IOException {
+        final int tableLength = in.readUnsignedShort();
+        entries = new LocalVariableEntry[tableLength];
+        for (int index = 0; index < tableLength; index++) {
+            LocalVariableEntry entry = new LocalVariableEntry();
+            entry.read(in);
+            entries[index] = entry;
+        }
+    }
+
+    @Override
+    public void read(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
+        final int tableLength = 0xffff & buffer.getShort();
+        entries = new LocalVariableEntry[tableLength];
+        for (int index = 0; index < tableLength; index++) {
+            LocalVariableEntry entry = new LocalVariableEntry();
+            entry.read(buffer);
+            entries[index] = entry;
+        }
+    }
+
+    @Override
+    public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
+        super.write(context, out);
+        out.writeShort(entries.length);
+        for (LocalVariableEntry entry : entries) {
+            entry.write(out);
+        }
+    }
+
+    @Override
+    public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
+        super.write(context, buffer);
+        buffer.putShort((short) entries.length);
+        for (LocalVariableEntry entry : entries) {
+            entry.write(buffer);
+        }
+    }
+}
