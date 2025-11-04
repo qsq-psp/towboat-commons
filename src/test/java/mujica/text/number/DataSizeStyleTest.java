@@ -1,5 +1,6 @@
 package mujica.text.number;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import java.math.BigInteger;
 /**
  * Created on 2025/3/5.
  */
+@CodeHistory(date = "2025/3/5")
 public class DataSizeStyleTest {
 
     private void caseInt(@NotNull DataSizeStyle style, int input, @NotNull String output) {
@@ -85,5 +87,121 @@ public class DataSizeStyleTest {
         Assert.assertEquals("0x000000005a5a5a5a", style.stringify(1515870810L));
         Assert.assertEquals("0x000000007f7f7f7f", style.stringify(2139062143L));
         Assert.assertEquals("0x7fffffffffffffff", style.stringify(Long.MAX_VALUE));
+    }
+
+    @Test
+    public void case1000M0() {
+        final DataSizeStyle style = DataSizeStyle.create1000(0);
+        Assert.assertEquals("0 byte(s)", style.stringify(0));
+        Assert.assertEquals("1 byte(s)", style.stringify(1));
+        Assert.assertEquals("999 byte(s)", style.stringify(999));
+        Assert.assertEquals("1KB", style.stringify(1000));
+        Assert.assertEquals("1KB", style.stringify(1001));
+        Assert.assertEquals("1KB", style.stringify(1499));
+        Assert.assertEquals("1KB", style.stringify(1999));
+        Assert.assertEquals("2KB", style.stringify(2000));
+        Assert.assertEquals("999KB", style.stringify(999_000));
+        Assert.assertEquals("1MB", style.stringify(1_000_000));
+        Assert.assertEquals("1MB", style.stringify(1_000_999));
+        Assert.assertEquals("1MB", style.stringify(1_999_999));
+        Assert.assertEquals("307MB", style.stringify(307_000_000));
+        Assert.assertEquals("214GB", style.stringify(214_000_000_000L));
+        Assert.assertEquals("79TB", style.stringify(79_000_000_000_000L));
+        Assert.assertEquals("6PB", style.stringify(6_050_040_030_020_010L));
+    }
+
+    @Test
+    public void case1000M1() {
+        final DataSizeStyle style = DataSizeStyle.create1000(1);
+        Assert.assertEquals("0 byte(s)", style.stringify(0));
+        Assert.assertEquals("1 byte(s)", style.stringify(1));
+        Assert.assertEquals("999 byte(s)", style.stringify(999));
+        Assert.assertEquals("1.0KB", style.stringify(1000));
+        Assert.assertEquals("1.0KB", style.stringify(1007));
+        Assert.assertEquals("1.3KB", style.stringify(1399));
+        Assert.assertEquals("1.4KB", style.stringify(1400));
+        Assert.assertEquals("1.7KB", style.stringify(1799));
+        Assert.assertEquals("2.0KB", style.stringify(2000));
+        Assert.assertEquals("999.0KB", style.stringify(999_000));
+        Assert.assertEquals("1.0MB", style.stringify(1_000_000));
+        Assert.assertEquals("1.0MB", style.stringify(1_000_500));
+        Assert.assertEquals("1.0MB", style.stringify(1_002_750));
+        Assert.assertEquals("1.1MB", style.stringify(1_122_800));
+        Assert.assertEquals("282.0MB", style.stringify(282_000_288));
+        Assert.assertEquals("339.3GB", style.stringify(339_331_337_332L));
+        Assert.assertEquals("79.1TB", style.stringify(79_112_233_445_566L));
+    }
+
+    @Test
+    public void case1000M2() {
+        final DataSizeStyle style = DataSizeStyle.create1000(2);
+        Assert.assertEquals("0 byte(s)", style.stringify(0));
+        Assert.assertEquals("4 byte(s)", style.stringify(4));
+        Assert.assertEquals("5 byte(s)", style.stringify(5));
+        Assert.assertEquals("18 byte(s)", style.stringify(18));
+        Assert.assertEquals("81 byte(s)", style.stringify(81));
+        Assert.assertEquals("202 byte(s)", style.stringify(202));
+        Assert.assertEquals("889 byte(s)", style.stringify(889));
+        Assert.assertEquals("1.00KB", style.stringify(1000));
+        Assert.assertEquals("1.00KB", style.stringify(1005));
+        Assert.assertEquals("1.01KB", style.stringify(1019));
+        Assert.assertEquals("1.02KB", style.stringify(1024));
+        Assert.assertEquals("1.02KB", style.stringify(1025));
+        Assert.assertEquals("1.10KB", style.stringify(1100));
+        Assert.assertEquals("1.10KB", style.stringify(1109));
+        Assert.assertEquals("1.14KB", style.stringify(1142));
+        Assert.assertEquals("3.14KB", style.stringify(3143));
+        Assert.assertEquals("5.66MB", style.stringify(5_662_710));
+        Assert.assertEquals("33.80MB", style.stringify(33_801_920));
+        Assert.assertEquals("39.99MB", style.stringify(39_999_920));
+        Assert.assertEquals("1.05GB", style.stringify(1_057_170_391));
+        Assert.assertEquals("2.14GB", style.stringify(2_147_483_646));
+        Assert.assertEquals("2.14GB", style.stringify(2_147_483_647));
+        Assert.assertEquals("5.04PB", style.stringify(5_040_030_020_010_000L));
+    }
+
+    @Test
+    public void case1000M3() {
+        final DataSizeStyle style = DataSizeStyle.create1000(3);
+        Assert.assertEquals("45 byte(s)", style.stringify(45));
+        Assert.assertEquals("54 byte(s)", style.stringify(54));
+        Assert.assertEquals("509 byte(s)", style.stringify(509));
+        Assert.assertEquals("905 byte(s)", style.stringify(905));
+        Assert.assertEquals("1.000KB", style.stringify(1000));
+        Assert.assertEquals("1.001KB", style.stringify(1001));
+        Assert.assertEquals("1.499KB", style.stringify(1499));
+        Assert.assertEquals("1.999KB", style.stringify(1999));
+        Assert.assertEquals("2.000KB", style.stringify(2000));
+        Assert.assertEquals("1.000MB", style.stringify(1_000_000));
+        Assert.assertEquals("1.000MB", style.stringify(1_000_500));
+        Assert.assertEquals("1.002MB", style.stringify(1_002_750));
+        Assert.assertEquals("1.122MB", style.stringify(1_122_881));
+        Assert.assertEquals("1.002TB", style.stringify(1_002_231_415_512L));
+        Assert.assertEquals("6.193TB", style.stringify(6_193_449_215_608L));
+        Assert.assertEquals("79.112TB", style.stringify(79_112_233_445_566L));
+        Assert.assertEquals("9.000EB", style.stringify(9_000_000_000_000_000_000L));
+        Assert.assertEquals("9.200EB", style.stringify(9_200_000_000_000_000_000L));
+        Assert.assertEquals("9.220EB", style.stringify(9_220_000_000_000_000_000L));
+        Assert.assertEquals("9.223EB", style.stringify(9_223_000_000_000_000_000L));
+        Assert.assertEquals("9.223EB", style.stringify(9_223_372_000_000_000_000L));
+        Assert.assertEquals("9.223EB", style.stringify(9_223_372_036_000_000_000L));
+        Assert.assertEquals("9.223EB", style.stringify(9_223_372_036_854_000_000L));
+        Assert.assertEquals("9.223EB", style.stringify(9_223_372_036_854_775_000L));
+        Assert.assertEquals("9.223EB", style.stringify(9_223_372_036_854_775_807L));
+    }
+
+    @Test
+    public void case1024M0() {
+        final DataSizeStyle style = DataSizeStyle.create1024(0);
+        Assert.assertEquals("0 byte(s)", style.stringify(0));
+        Assert.assertEquals("1 byte(s)", style.stringify(1));
+        Assert.assertEquals("8 byte(s)", style.stringify(8));
+        Assert.assertEquals("9 byte(s)", style.stringify(9));
+        Assert.assertEquals("1000 byte(s)", style.stringify(1000));
+        Assert.assertEquals("1023 byte(s)", style.stringify(1023));
+        Assert.assertEquals("1KiB", style.stringify(1024));
+        Assert.assertEquals("1KiB", style.stringify(1025));
+        Assert.assertEquals("1KiB", style.stringify(2047));
+        Assert.assertEquals("2KiB", style.stringify(2048));
     }
 }

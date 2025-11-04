@@ -1,25 +1,35 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
+import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/9/15")
+@ReferencePage(title = "JVMS12 The InnerClasses Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.6")
 public class InnerClassesAttributeInfo extends AttributeInfo {
 
+    private static final long serialVersionUID = 0xBA27CD966BC157F7L;
+
     @CodeHistory(date = "2025/9/15")
-    private static class InnerClassEntry implements Dependent {
+    private static class InnerClassEntry implements ClassFileNode.Independent {
 
-        int innerClassIndex; // CONSTANT_CLASS
+        private static final long serialVersionUID = 0xAB333D9BE3F93997L;
 
-        int outerClassIndex; // CONSTANT_CLASS
+        @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+        int innerClassIndex;
 
-        int innerNameIndex; // CONSTANT_UTF8
+        @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+        int outerClassIndex;
+
+        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        int innerNameIndex;
 
         int innerAccessFlags;
 
@@ -50,7 +60,7 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
         }
 
         @Override
-        public void read(@NotNull ConstantPool context, @NotNull LimitedDataInput in) throws IOException {
+        public void read(@NotNull LimitedDataInput in) throws IOException {
             innerClassIndex = in.readUnsignedShort();
             outerClassIndex = in.readUnsignedShort();
             innerNameIndex = in.readUnsignedShort();
@@ -58,7 +68,7 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
         }
 
         @Override
-        public void read(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
+        public void read(@NotNull ByteBuffer buffer) {
             innerClassIndex = 0xffff & buffer.getShort();
             outerClassIndex = 0xffff & buffer.getShort();
             innerNameIndex = 0xffff & buffer.getShort();
@@ -66,7 +76,7 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
         }
 
         @Override
-        public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
+        public void write(@NotNull DataOutput out) throws IOException {
             out.writeShort(innerClassIndex);
             out.writeShort(outerClassIndex);
             out.writeShort(innerNameIndex);
@@ -74,7 +84,7 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
         }
 
         @Override
-        public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
+        public void write(@NotNull ByteBuffer buffer) {
             buffer.putShort((short) innerClassIndex);
             buffer.putShort((short) outerClassIndex);
             buffer.putShort((short) innerNameIndex);
@@ -83,7 +93,7 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
+        public String toString(@NotNull ClassFile context) {
             final StringBuilder sb = new StringBuilder();
             if ((innerAccessFlags & Modifier.PUBLIC) != 0) {
                 sb.append("public ");
@@ -134,11 +144,18 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
             }
             return sb.toString();
         }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            innerClassIndex = remap.applyAsInt(innerClassIndex);
+            outerClassIndex = remap.applyAsInt(outerClassIndex);
+            innerNameIndex = remap.applyAsInt(innerNameIndex);
+        }
     }
 
-    InnerClassEntry[] entries;
+    private InnerClassEntry[] entries;
 
-    public InnerClassesAttributeInfo() {
+    InnerClassesAttributeInfo() {
         super();
     }
 
@@ -176,6 +193,17 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
         }
     }
 
+    @NotNull
+    @Override
+    public ImportanceLevel importanceLevel() {
+        return ImportanceLevel.HIGH;
+    }
+
+    @Override
+    public boolean isNecessary() {
+        return true;
+    }
+
     public static final String NAME = "InnerClasses";
 
     @NotNull
@@ -195,7 +223,7 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
         entries = new InnerClassEntry[entryCount];
         for (int index = 0; index < entryCount; index++) {
             InnerClassEntry entry = new InnerClassEntry();
-            entry.read(context, in);
+            entry.read(in);
             entries[index] = entry;
         }
     }
@@ -206,26 +234,24 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
         entries = new InnerClassEntry[entryCount];
         for (int index = 0; index < entryCount; index++) {
             InnerClassEntry entry = new InnerClassEntry();
-            entry.read(context, buffer);
+            entry.read(buffer);
             entries[index] = entry;
         }
     }
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
-        super.write(context, out);
         out.writeShort(entries.length);
         for (InnerClassEntry entry : entries) {
-            entry.write(context, out);
+            entry.write(out);
         }
     }
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        super.write(context, buffer);
         buffer.putShort((short) entries.length);
         for (InnerClassEntry entry : entries) {
-            entry.write(context, buffer);
+            entry.write(buffer);
         }
     }
 }

@@ -14,7 +14,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2024/11/17", project = "Ultramarine")
 @CodeHistory(date = "2025/1/17", project = "OSHI", name = "MD2Core")
 @CodeHistory(date = "2025/5/16")
-@ReferencePage(title = "RFC1319", href = "https://datatracker.ietf.org/doc/html/rfc1319")
+@ReferencePage(title = "The MD2 Message-Digest Algorithm", href = "https://datatracker.ietf.org/doc/html/rfc1319")
 public class MD2 extends ByteBlockByteHashCore implements ByteSequence {
 
     private static final long serialVersionUID = 0x2e2ac6b13b29d6bfL;
@@ -114,8 +114,8 @@ public class MD2 extends ByteBlockByteHashCore implements ByteSequence {
 
     @NotNull
     @Override
-    public DataView getDataView() {
-        return new ByteSequenceDataView(this, ByteOrder.LITTLE_ENDIAN);
+    public DataView getDataView(@NotNull Runnable guard) {
+        return new ByteSequenceDataView(this, ByteOrder.LITTLE_ENDIAN, guard);
     }
 
     @Override

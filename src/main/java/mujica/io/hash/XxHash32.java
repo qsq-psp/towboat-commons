@@ -14,7 +14,7 @@ import java.util.function.IntSupplier;
 
 @CodeHistory(date = "2025/5/17")
 @ReferencePage(title = "xxHash", href = "https://cyan4973.github.io/xxHash/")
-public class XxHash32 extends ByteBlockByteHashCore implements IntSupplier {
+public class XxHash32 extends ByteBlockByteHashCore {
 
     private static final long serialVersionUID = 0x31b9a8190e170264L;
 
@@ -117,12 +117,10 @@ public class XxHash32 extends ByteBlockByteHashCore implements IntSupplier {
 
     @NotNull
     @Override
-    public DataView getDataView() {
-        return new IntDataView(this, ByteFillPolicy.MIDDLE_TO_RIGHT, Integer.SIZE);
-    }
-
-    @Override
-    public int getAsInt() {
-        return result;
+    public DataView getDataView(@NotNull Runnable guard) {
+        return new IntDataView(() -> {
+            guard.run();
+            return result;
+        }, ByteFillPolicy.MIDDLE_TO_RIGHT, Integer.SIZE);
     }
 }

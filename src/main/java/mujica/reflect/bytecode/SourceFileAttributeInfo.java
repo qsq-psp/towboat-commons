@@ -1,20 +1,26 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.nest.LimitedDataInput;
+import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.function.IntUnaryOperator;
 
 /**
  * Created on 2025/9/16.
  */
+@CodeHistory(date = "2025/9/16")
+@ReferencePage(title = "JVMS12 The SourceFile Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.9")
 public class SourceFileAttributeInfo extends AttributeInfo {
 
     private static final long serialVersionUID = 0x8326D0B801E6B67BL;
 
-    int sourceFileIndex; // CONSTANT_UTF8
+    @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+    int sourceFileIndex;
 
     public static final String NAME = "SourceFile";
 
@@ -41,19 +47,22 @@ public class SourceFileAttributeInfo extends AttributeInfo {
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
-        super.write(context, out);
         out.writeShort(sourceFileIndex);
     }
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        super.write(context, buffer);
         buffer.putShort((short) sourceFileIndex);
     }
 
     @NotNull
     @Override
-    public String toString(@NotNull ClassFile context, int position) {
-        return NAME + ' ' + context.constantPool.getUtf8(sourceFileIndex);
+    public String toString(@NotNull ClassFile context) {
+        return NAME + " " + context.constantPool.getUtf8(sourceFileIndex);
+    }
+
+    @Override
+    public void remapConstant(@NotNull IntUnaryOperator remap) {
+        sourceFileIndex = remap.applyAsInt(sourceFileIndex);
     }
 }

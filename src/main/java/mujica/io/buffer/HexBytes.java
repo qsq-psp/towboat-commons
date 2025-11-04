@@ -1,7 +1,7 @@
 package mujica.io.buffer;
 
 import mujica.text.number.DataSizeStyle;
-import mujica.io.function.Base16Case;
+import mujica.io.codec.Base16Case;
 import mujica.text.number.HexEncoder;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;

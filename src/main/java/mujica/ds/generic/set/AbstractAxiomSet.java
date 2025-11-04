@@ -1,6 +1,7 @@
 package mujica.ds.generic.set;
 
 import mujica.math.algebra.random.RandomContext;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,7 @@ import java.util.function.Consumer;
 /**
  * Created on 2025/6/5.
  */
+@CodeHistory(date = "2025/6/5")
 public abstract class AbstractAxiomSet<E> extends AbstractCollection<E> implements AxiomSet<E> {
 
     private static final long serialVersionUID = 0x59e4957b619171bbL;

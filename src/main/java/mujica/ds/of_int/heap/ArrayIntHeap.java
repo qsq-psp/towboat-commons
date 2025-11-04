@@ -27,7 +27,7 @@ public abstract class ArrayIntHeap extends AbstractOrderedIntQueue {
     }
 
     protected ArrayIntHeap() {
-        this(INITIAL_CAPACITY);
+        this(INITIAL_CAPACITY); // todo: use ResizePolicy
     }
 
     @NotNull

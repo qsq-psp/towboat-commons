@@ -4,9 +4,6 @@ import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/4/15.
- */
 @CodeHistory(date = "2025/4/15")
 public interface CharSequenceConsumer extends CharConsumer {
 

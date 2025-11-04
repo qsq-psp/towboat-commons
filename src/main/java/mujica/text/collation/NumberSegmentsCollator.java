@@ -9,14 +9,36 @@ import java.text.Collator;
 @CodeHistory(date = "2025/3/4")
 public class NumberSegmentsCollator extends Collator {
 
+    private int radix = 10;
+
+    public int getRadix() {
+        return radix;
+    }
+
+    public void setRadix(int radix) {
+        if (!(Character.MIN_RADIX <= radix && radix <= Character.MAX_RADIX)) {
+            throw new IllegalArgumentException();
+        }
+        this.radix = radix;
+    }
+
     @Override
     public int compare(String source, String target) {
-        return 0;
+        final NumberSegmentsCollationKey sourceKey = getCollationKey(source);
+        final NumberSegmentsCollationKey targetKey = getCollationKey(target);
+        final int strength = getStrength();
+        if (strength <= PRIMARY) {
+            return sourceKey.weakCompareTo(targetKey);
+        } else if (strength <= SECONDARY) {
+            return sourceKey.normalCompareTo(targetKey);
+        } else {
+            return sourceKey.compareTo(targetKey); // the interface method compareTo is strong
+        }
     }
 
     @Override
     public NumberSegmentsCollationKey getCollationKey(String source) {
-        return null;
+        return new NumberSegmentsCollationKey(source, radix);
     }
 
     @Override

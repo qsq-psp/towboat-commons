@@ -2,9 +2,6 @@ package mujica.io.function;
 
 import mujica.reflect.modifier.CodeHistory;
 
-/**
- * Created on 2025/4/9.
- */
 @CodeHistory(date = "2025/4/9")
 public interface AsyncProcessor<R> {
 

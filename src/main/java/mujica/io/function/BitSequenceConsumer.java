@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.BooleanSupplier;
 
 /**
- * Created on 2025/4/10.
  * Call accept(boolean) method sequentially, not necessarily consuming the {@code BitSequence} object
  */
 @CodeHistory(date = "2025/4/10")

@@ -1,20 +1,44 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.nest.LimitedDataInput;
+import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.function.IntUnaryOperator;
 
-/**
- * Created on 2025/9/20.
- */
-public class ConstantValueAttributeInfo extends AttributeInfo {
+@CodeHistory(date = "2025/9/20")
+@ReferencePage(title = "JVMS12 The ConstantValue Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.2")
+class ConstantValueAttributeInfo extends AttributeInfo {
 
     private static final long serialVersionUID = 0xB6343F1560711CF1L;
 
-    int constantValueIndex; // CONSTANT_INTEGER, CONSTANT_FLOAT, CONSTANT_LONG, CONSTANT_DOUBLE, CONSTANT_STRING
+    @ConstantType(tags = {
+            ConstantPool.CONSTANT_INTEGER,
+            ConstantPool.CONSTANT_FLOAT,
+            ConstantPool.CONSTANT_LONG,
+            ConstantPool.CONSTANT_DOUBLE,
+            ConstantPool.CONSTANT_STRING
+    }) // constant value
+    private int constantValueIndex;
+
+    ConstantValueAttributeInfo() {
+        super();
+    }
+
+    @NotNull
+    @Override
+    public ImportanceLevel importanceLevel() {
+        return ImportanceLevel.CRITICAL;
+    }
+
+    @Override
+    public boolean isNecessary() {
+        return true;
+    }
 
     public static final String NAME = "ConstantValue";
 
@@ -41,24 +65,27 @@ public class ConstantValueAttributeInfo extends AttributeInfo {
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
-        super.write(context, out);
         out.writeShort(constantValueIndex);
     }
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        super.write(context, buffer);
         buffer.putShort((short) constantValueIndex);
     }
 
     @NotNull
     @Override
-    public String toString(@NotNull ClassFile context, int position) {
+    public String toString(@NotNull ClassFile context) {
         return NAME + " " + constantValueToString(context);
     }
 
     @NotNull
     public String constantValueToString(@NotNull ClassFile context) {
         return context.constantPool.constantValueToString(context, constantValueIndex);
+    }
+
+    @Override
+    public void remapConstant(@NotNull IntUnaryOperator remap) {
+        constantValueIndex = remap.applyAsInt(constantValueIndex);
     }
 }

@@ -9,7 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -22,6 +24,9 @@ public class HeapTest {
     public static void initializeNetty() {
         ByteBufUtil.hexDump(new byte[0]);
     }
+
+    @Rule
+    public final ErrorCollector errorCollector = new ErrorCollector();
 
     private static final int REPEAT = 78;
 
@@ -161,8 +166,8 @@ public class HeapTest {
                     PublicIntSlot.increase(map, element);
                 }
                 dst = (PriorityQueue<String>) JdkObjectCodec.copy(src);
-                src.checkHealth();
-                dst.checkHealth();
+                src.checkHealth(errorCollector::addError);
+                dst.checkHealth(errorCollector::addError);
                 for (int index = 0; index < size; index++) {
                     if (rc.nextBoolean()) {
                         src.offer(nextString());
@@ -220,8 +225,8 @@ public class HeapTest {
                     PublicIntSlot.increase(map, element);
                 }
                 dst = src.clone();
-                src.checkHealth();
-                dst.checkHealth();
+                src.checkHealth(errorCollector::addError);
+                dst.checkHealth(errorCollector::addError);
                 for (int index = 0; index < size; index++) {
                     if (rc.nextBoolean()) {
                         src.offer(nextString());
@@ -278,8 +283,8 @@ public class HeapTest {
                     map.put(element, element);
                 }
                 dst = src.duplicate(element -> new String(element.toCharArray()));
-                src.checkHealth();
-                dst.checkHealth();
+                src.checkHealth(errorCollector::addError);
+                dst.checkHealth(errorCollector::addError);
                 for (int index = 0; index < size; index++) {
                     if (rc.nextBoolean()) {
                         src.offer(nextString());
@@ -507,8 +512,8 @@ public class HeapTest {
                     PublicIntSlot.increase(map, element);
                 }
                 Assert.assertTrue(dst.addAll(src));
-                src.checkHealth();
-                dst.checkHealth();
+                src.checkHealth(errorCollector::addError);
+                dst.checkHealth(errorCollector::addError);
                 for (int index = 0; index < size; index++) {
                     if (rc.nextBoolean()) {
                         src.offer(nextString());

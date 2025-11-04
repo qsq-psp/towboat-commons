@@ -3,12 +3,6 @@ package mujica.ds.of_double;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created in existence on 2018/7/3, named MtDouble.
- * Recreated in coo on 2020/2/22, named DoubleModel.
- * Recreated in Ultramarine on 2024/1/20.
- * Moved here on 2025/3/21.
- */
 @CodeHistory(date = "2018/7/3", project = "existence", name = "MtDouble")
 @CodeHistory(date = "2020/2/22", project = "coo", name = "DoubleModel")
 @CodeHistory(date = "2024/1/20", project = "Ultramarine")

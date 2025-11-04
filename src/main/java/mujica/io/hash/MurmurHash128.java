@@ -141,8 +141,8 @@ public class MurmurHash128 extends ByteBlockByteHashCore implements LongSequence
 
     @NotNull
     @Override
-    public DataView getDataView() {
-        return new LongSequenceDataView(this, ByteOrder.BIG_ENDIAN);
+    public DataView getDataView(@NotNull Runnable guard) {
+        return new LongSequenceDataView(this, ByteOrder.BIG_ENDIAN, guard);
     }
 
     @Override

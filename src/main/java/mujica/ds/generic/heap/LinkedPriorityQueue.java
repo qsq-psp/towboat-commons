@@ -10,9 +10,6 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
-/**
- * Created on 2025/6/8.
- */
 @CodeHistory(date = "2025/6/8")
 public class LinkedPriorityQueue<E> extends AbstractCollection<E> implements PriorityQueue<E> {
 

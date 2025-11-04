@@ -14,9 +14,6 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
-/**
- * Created on 2025/6/25.
- */
 @CodeHistory(date = "2025/6/25")
 public abstract class AbstractIntSet implements IntSet {
 

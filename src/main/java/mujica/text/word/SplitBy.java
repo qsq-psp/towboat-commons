@@ -1,5 +1,6 @@
 package mujica.text.word;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -7,11 +8,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.IntUnaryOperator;
 
-/**
- * Created by Hiro in bone on 2019/5/8.
- * Recreated in Ultramarine on 2020/12/26.
- * Recreated on 2025/3/7.
- */
+@CodeHistory(date = "2019/5/8", project = "bone")
+@CodeHistory(date = "2020/12/26", project = "Ultramarine")
+@CodeHistory(date = "2025/3/7")
 public abstract class SplitBy implements Iterable<String>, Iterator<String> {
 
     protected final String string;

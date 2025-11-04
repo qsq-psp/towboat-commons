@@ -6,14 +6,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-/**
- * Created on 2025/9/12.
- */
 @CodeHistory(date = "2025/9/12")
 public interface HealthAware {
 
     void checkHealth(@NotNull Consumer<RuntimeException> consumer);
 
+    /**
+     * it is called dataStructureInvariants() in LinkedList
+     */
     default void checkHealth() throws RuntimeException {
         checkHealth(re -> {throw re;});
     }

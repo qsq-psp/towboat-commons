@@ -1,8 +1,9 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.BufferedLimitedDataInputStream;
-import mujica.io.stream.IndentWriter;
-import mujica.io.stream.RepeatCharIndentWriter;
+import mujica.io.nest.BufferedLimitedDataInputStream;
+import mujica.io.codec.IndentWriter;
+import mujica.io.codec.RepeatCharIndentWriter;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileInputStream;
@@ -14,12 +15,13 @@ import java.nio.charset.StandardCharsets;
  * Created on 2025/9/22.
  */
 @SuppressWarnings("SameParameterValue")
+@CodeHistory(date = "2025/9/22")
 public class JavaP {
 
     public static void main(String[] args) {
         transform(
-                "D:\\Java\\CDP\\target\\classes\\mujica\\reflect\\TypeUtil.class",
-                "D:\\Download\\Miscellaneous\\TypeUtil.javap.txt"
+                "D:\\Java\\CDP\\target\\classes\\mujica\\io\\compress\\TowboatInflaterInputStream.class",
+                "D:\\Java\\coo\\TowboatInflaterInputStream.javap.txt"
         );
     }
 

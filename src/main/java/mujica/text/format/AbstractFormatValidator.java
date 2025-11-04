@@ -6,9 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
-/**
- * Created on 2025/9/11.
- */
 @CodeHistory(date = "2025/9/11")
 public abstract class AbstractFormatValidator implements FormatValidator {
 

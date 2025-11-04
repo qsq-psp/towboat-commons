@@ -12,12 +12,5 @@ public @interface ReferencePage {
 
     String title();
 
-    String author() default "";
-
-    /**
-     * @return "java", "C", "C++", "python", "kotlin", "javascript", "en", "zh"
-     */
-    String language() default "java";
-
     String href();
 }

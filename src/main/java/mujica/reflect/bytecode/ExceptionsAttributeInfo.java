@@ -1,20 +1,38 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.function.IntUnaryOperator;
 
-/**
- * Created on 2025/9/23.
- */
 @CodeHistory(date = "2025/9/23")
+@ReferencePage(title = "JVMS12 The Exceptions Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.5")
 public class ExceptionsAttributeInfo extends AttributeInfo {
 
-    int[] indexes; // CONSTANT_CLASS
+    private static final long serialVersionUID = 0xD2E64B8B77CB428FL;
+
+    @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+    private int[] indexes;
+
+    ExceptionsAttributeInfo() {
+        super();
+    }
+
+    @NotNull
+    @Override
+    public ImportanceLevel importanceLevel() {
+        return ImportanceLevel.HIGH;
+    }
+
+    @Override
+    public boolean isNecessary() {
+        return true;
+    }
 
     public static final String NAME = "Exceptions";
 
@@ -49,7 +67,6 @@ public class ExceptionsAttributeInfo extends AttributeInfo {
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
-        super.write(context, out);
         out.writeShort(indexes.length);
         for (int index : indexes) {
             out.writeShort(index);
@@ -58,7 +75,6 @@ public class ExceptionsAttributeInfo extends AttributeInfo {
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        super.write(context, buffer);
         buffer.putShort((short) indexes.length);
         for (int index : indexes) {
             buffer.putShort((short) index);
@@ -78,10 +94,15 @@ public class ExceptionsAttributeInfo extends AttributeInfo {
 
     @NotNull
     @Override
-    public String toString(@NotNull ClassFile context, int position) {
+    public String toString(@NotNull ClassFile context) {
         final StringBuilder sb = new StringBuilder();
-        sb.append(NAME).append(' ');
+        sb.append(NAME).append(" [");
         append(context, sb);
-        return sb.toString();
+        return sb.append("]").toString();
+    }
+
+    @Override
+    public void remapConstant(@NotNull IntUnaryOperator remap) {
+        remapConstant(remap, indexes);
     }
 }

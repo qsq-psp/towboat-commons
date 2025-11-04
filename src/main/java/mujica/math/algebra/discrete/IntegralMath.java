@@ -118,6 +118,20 @@ public class IntegralMath {
         return x.multiply(y);
     }
 
+    public int dotMultiply(@NotNull int[] x, @NotNull int[] y) {
+        final int n = Math.min(x.length, y.length);
+        int s = 0;
+        for (int i = 0; i < n; i++) {
+            s = add(s, multiply(x[i], y[i]));
+        }
+        return s;
+    }
+
+    @NotNull
+    public int[][] matMultiply(@NotNull int[][] x, @NotNull int[][] y) {
+        return x; // ...
+    }
+
     public int multiplyFraction(int number, int numerator, int denominator) {
         return cast2i(divideExact(
                 ((long) number) * numerator,
@@ -750,6 +764,40 @@ public class IntegralMath {
                 array[i] = c;
                 x0 = x1;
             }
+        }
+    }
+
+    public int floorSquareRoot(int x) {
+        if (x <= 0) {
+            if (x == 0) {
+                return 0;
+            }
+            throw new ArithmeticException();
+        }
+        int a = x;
+        while (true) {
+            int b = (a + x / a) >>> 1;
+            if (b >= a) {
+                return a;
+            }
+            a = b;
+        }
+    }
+
+    public long floorSquareRoot(long x) {
+        if (x <= 0L) {
+            if (x == 0L) {
+                return 0L;
+            }
+            throw new ArithmeticException();
+        }
+        long a = x;
+        while (true) {
+            long b = (a + x / a) >>> 1;
+            if (b >= a) {
+                return a;
+            }
+            a = b;
         }
     }
 }

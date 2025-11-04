@@ -1,5 +1,6 @@
 package mujica.math.algebra.random;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +16,12 @@ import java.util.*;
  * Recreated in Ultramarine on 2022/5/26.
  * Moved here on 2025/3/3.
  */
+@CodeHistory(date = "2018/7/5", project = "existence", name = "WrappedRandom")
+@CodeHistory(date = "2018/11/6", project = "bone", name = "RandomX")
+@CodeHistory(date = "2020/7/20", project = "va", name = "PrimitiveRandom")
+@CodeHistory(date = "2022/4/2", project = "infrastructure")
+@CodeHistory(date = "2022/5/26", project = "Ultramarine")
+@CodeHistory(date = "2025/3/3")
 public class RandomContext implements Serializable {
 
     private static final long serialVersionUID = 0x0cd1e2a8e072e5d5L;
@@ -72,7 +79,7 @@ public class RandomContext implements Serializable {
     public int nextInt(int to) {
         if (to < 2) {
             if (to < 1) {
-                throw new ArithmeticException("Random range");
+                throw new ArithmeticException("random range");
             }
             return 0;
         }
@@ -103,7 +110,7 @@ public class RandomContext implements Serializable {
                 }
             }
         }
-        throw new ArithmeticException("Random range");
+        throw new ArithmeticException("random range");
     }
 
     private static final double EPS = 0x1p-16;
@@ -189,7 +196,7 @@ public class RandomContext implements Serializable {
             return Integer.MAX_VALUE;
         }
         if (to < 1) {
-            throw new ArithmeticException("Random range");
+            throw new ArithmeticException("random range");
         }
         if (to > 1) {
             int min = Integer.MAX_VALUE;
@@ -219,7 +226,7 @@ public class RandomContext implements Serializable {
     @NotNull
     public int[] nextIntArray(int to, int length) {
         if (to < 1) {
-            throw new ArithmeticException("Random range");
+            throw new ArithmeticException("random range");
         }
         final int[] array = new int[length];
         if (to > 1) {
@@ -262,7 +269,7 @@ public class RandomContext implements Serializable {
             }
             return array;
         }
-        throw new ArithmeticException("Random range");
+        throw new ArithmeticException("random range");
     }
 
     public void shuffledCardinal(@NotNull int[] array) {
@@ -334,7 +341,7 @@ public class RandomContext implements Serializable {
     public long nextLong(long to) {
         if (to < 2) {
             if (to < 1) {
-                throw new ArithmeticException("Random range");
+                throw new ArithmeticException("random range");
             }
             return 0;
         }
@@ -365,7 +372,7 @@ public class RandomContext implements Serializable {
                 }
             }
         }
-        throw new ArithmeticException("Random range");
+        throw new ArithmeticException("random range");
     }
 
     @NotNull
@@ -380,7 +387,7 @@ public class RandomContext implements Serializable {
     @NotNull
     public long[] nextLongArray(long to, int length) {
         if (to < 1) {
-            throw new ArithmeticException("Random range");
+            throw new ArithmeticException("random range");
         }
         final long[] array = new long[length];
         if (to > 1) {
@@ -423,28 +430,28 @@ public class RandomContext implements Serializable {
             }
             return array;
         }
-        throw new ArithmeticException("Random range");
+        throw new ArithmeticException("random range");
     }
 
     private int nextFloatMantissa() {
         return source.next(24);
     }
 
-    protected static final float UNIT_FLOAT = 0x1.0p-24f;
+    private static final float UNIT_FLOAT = 0x1.0p-24f;
 
     public float nextFloat() {
         return UNIT_FLOAT * nextFloatMantissa();
     }
 
     public float nextFloat(float from, float to) {
-        return from + (to - from) * nextFloat();
+        return from + (to - from) * UNIT_FLOAT * nextFloatMantissa(); // inline is good
     }
 
     @NotNull
     public float[] nextFloatArray(int length) {
         final float[] array = new float[length];
         for (int i = 0; i < length; i++) {
-            array[i] = nextFloat();
+            array[i] = UNIT_FLOAT * nextFloatMantissa(); // inline is good
         }
         return array;
     }
@@ -453,7 +460,7 @@ public class RandomContext implements Serializable {
         return ((long) (source.next(26)) << 27) + source.next(27);
     }
 
-    protected static final double UNIT_DOUBLE = 0x1.0p-53d;
+    private static final double UNIT_DOUBLE = 0x1.0p-53d;
 
     /**
      * PDF = 1.0 (0.0 <= x < 1.0)
@@ -463,14 +470,14 @@ public class RandomContext implements Serializable {
     }
 
     public double nextDouble(double from, double to) {
-        return from + (to - from) * nextDouble();
+        return from + (to - from) * UNIT_DOUBLE * nextDoubleMantissa(); // inline is good
     }
 
     /**
      * PDF = 2.0 * x (0.0 <= x < 1.0)
      */
     public double nextSlope() {
-        return UNIT_DOUBLE * Math.min(nextDoubleMantissa(), nextDoubleMantissa());
+        return UNIT_DOUBLE * Math.min(nextDoubleMantissa(), nextDoubleMantissa()); // long operation is faster
     }
 
     /**
@@ -478,7 +485,7 @@ public class RandomContext implements Serializable {
      * PDF = 4.0 - 4.0 * x (0.5 <= x < 1.0)
      */
     public double nextUnitHill() {
-        return (0.5 * UNIT_DOUBLE) * (nextDoubleMantissa() + nextDoubleMantissa());
+        return (0.5 * UNIT_DOUBLE) * (nextDoubleMantissa() + nextDoubleMantissa()); // long operation is faster
     }
 
     /**
@@ -486,33 +493,33 @@ public class RandomContext implements Serializable {
      * PDF = 1.0 - x (0.0 <= x < 1.0)
      */
     public double nextBipolarHill() {
-        return UNIT_DOUBLE * (nextDoubleMantissa() - nextDoubleMantissa());
+        return UNIT_DOUBLE * (nextDoubleMantissa() - nextDoubleMantissa()); // long operation is faster
     }
 
-    public static long min(long a, long b, long c) {
-        return Math.min(a, Math.min(b, c));
+    private static long min(long a, long b, long c) {
+        return Math.min(a, Math.min(b, c)); // simple and not shared
     }
 
     public double nextQuadraticSlope() {
-        return UNIT_DOUBLE * min(nextDoubleMantissa(), nextDoubleMantissa(), nextDoubleMantissa());
+        return UNIT_DOUBLE * min(nextDoubleMantissa(), nextDoubleMantissa(), nextDoubleMantissa()); // long operation is faster
     }
 
-    public static long median(long a, long b, long c) {
-        return min(Math.max(a, b), Math.max(b, c), Math.max(c, a));
+    private static long median(long a, long b, long c) {
+        return min(Math.max(a, b), Math.max(b, c), Math.max(c, a)); // simple and not shared
     }
 
     /**
      * PDF = 6.0 * x * (1.0 - x) (0.0 <= x < 1.0)
      */
     public double nextQuadraticHill() {
-        return UNIT_DOUBLE * median(nextDoubleMantissa(), nextDoubleMantissa(), nextDoubleMantissa());
+        return UNIT_DOUBLE * median(nextDoubleMantissa(), nextDoubleMantissa(), nextDoubleMantissa()); // long operation is faster
     }
 
     public double nextGaussian() {
         double x, y, s;
         do {
-            x = 2.0 * nextDouble() - 1.0;
-            y = 2.0 * nextDouble() - 1.0;
+            x = 2.0 * nextDouble() - 1.0; // inline later
+            y = 2.0 * nextDouble() - 1.0; // inline later
             s = x * x + y * y;
         } while (s >= 1.0 || s == 0.0);
         double multiplier = StrictMath.sqrt(-2.0 * Math.log(s) / s);
@@ -523,7 +530,7 @@ public class RandomContext implements Serializable {
     public double[] nextDoubleArray(int length) {
         final double[] array = new double[length];
         for (int i = 0; i < length; i++) {
-            array[i] = nextDouble();
+            array[i] = UNIT_DOUBLE * nextDoubleMantissa(); // inline is good
         }
         return array;
     }
@@ -534,8 +541,8 @@ public class RandomContext implements Serializable {
         for (int i = 1; i < length; i += 2) {
             double x, y, s;
             do {
-                x = 2.0 * nextDouble() - 1.0;
-                y = 2.0 * nextDouble() - 1.0;
+                x = 2.0 * nextDouble() - 1.0; // inline later
+                y = 2.0 * nextDouble() - 1.0; // inline later
                 s = x * x + y * y;
             } while (s >= 1.0 || s == 0.0);
             double multiplier = StrictMath.sqrt(-2.0 * Math.log(s) / s);
@@ -553,26 +560,31 @@ public class RandomContext implements Serializable {
         final int byteCount = (bitLength + Byte.SIZE - 1) >> 3;
         final byte[] bytes = new byte[byteCount];
         for (int index = 0; index < byteCount; index++) {
-            bytes[index] = (byte) source.next(Byte.SIZE);
+            bytes[index] = (byte) source.next(Byte.SIZE); // inline nextByteArray(int length)
         }
-        bytes[0] &= 0xff >> ((byteCount << 3) - bitLength);
+        bytes[0] &= 0xff >> ((byteCount << 3) - bitLength); // 0 <= shift < 8
         return new BigInteger(1, bytes);
     }
 
     @NotNull
     public BigInteger nextBigInteger(@NotNull BigInteger to) {
-        return BigInteger.ZERO;
+        if (to.signum() <= 0) {
+            throw new ArithmeticException("random range");
+        }
+        final int bitLength = to.bitLength();
+        while (true) {
+            BigInteger value = nextBigInteger(bitLength);
+            if (value.compareTo(to) < 0) {
+                return value;
+            }
+        }
     }
 
     @NotNull
     public BigInteger nextBigInteger(@NotNull BigInteger from, @NotNull BigInteger to) {
-        return BigInteger.ZERO;
+        return from.add(nextBigInteger(to.subtract(from)));
     }
-
-    /**
-     * Added in 2022/7/27
-     * For HashConsumer unit tests
-     */
+    
     public <T> void rotateList(@NotNull List<T> list) {
         final int size = list.size();
         if (size > 1) {
@@ -585,13 +597,9 @@ public class RandomContext implements Serializable {
             }
         }
     }
-
-    /**
-     * Added in 2022/7/27
-     * For HashConsumer unit tests
-     */
+    
     @NotNull
-    public <T> ArrayList<T> rotateCopy(@NotNull Collection<T> collection) {
+    public <T> ArrayList<T> copyAndRotateList(@NotNull Collection<T> collection) {
         final int size = collection.size();
         if (size > 1) {
             int shift = nextInt(size);
@@ -680,13 +688,9 @@ public class RandomContext implements Serializable {
             }
         }
     }
-
-    /**
-     * Added in 2022/7/27
-     * For HashConsumer unit tests
-     */
+    
     @NotNull
-    public <T> ArrayList<T> shuffleCopy(@NotNull Collection<T> collection) {
+    public <T> ArrayList<T> copyAndShuffleList(@NotNull Collection<T> collection) {
         final ArrayList<T> list = new ArrayList<>(collection);
         shuffleList(list);
         return list;
@@ -774,6 +778,7 @@ public class RandomContext implements Serializable {
         return array[nextDefaultGeometric(array.length)];
     }
 
+    @Deprecated // move to test
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void randomizeHashCodes() {
         for (int i = 0xfff & nextInt(); i > 0; i--) {

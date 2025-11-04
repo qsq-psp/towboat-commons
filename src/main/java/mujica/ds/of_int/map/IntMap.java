@@ -7,8 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 /**
- * Created in Ultramarine on 2023/2/27.
- * Recreated on 2025/3/25.
  * Mapping from int to int, initially, all 2**32 values map to zero, designed as a counter
  */
 @CodeHistory(date = "2023/2/27", project = "Ultramarine")

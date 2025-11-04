@@ -11,8 +11,10 @@ import org.jetbrains.annotations.NotNull;
  * Multiple data type; endian fixed; sign variable; read only
  */
 @CodeHistory(date = "2025/5/9")
-@ReferencePage(title = "DataView", language = "en", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView")
+@ReferencePage(title = "DataView", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView")
 public interface DataView extends BitSequence, ByteSequence, IntSequence, LongSequence {
+
+    Runnable NOP_GUARD = () -> {};
 
     @Override
     int bitLength();

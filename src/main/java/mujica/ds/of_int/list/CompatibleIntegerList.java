@@ -4,14 +4,14 @@ import mujica.ds.of_boolean.PublicBooleanSlot;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 @CodeHistory(date = "2025/6/1")
-public class CompatibleIntegerList implements List<Integer> {
+public class CompatibleIntegerList implements List<Integer>, RandomAccess, Serializable {
+
+    private static final long serialVersionUID = 0xE7511E2571F6575EL;
 
     @NotNull
     private final IntList intList;

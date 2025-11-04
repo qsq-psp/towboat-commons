@@ -9,14 +9,12 @@ import java.io.Serializable;
 import java.util.PrimitiveIterator;
 import java.util.function.Consumer;
 
-/**
- * Created on 2025/6/27.
- */
 @CodeHistory(date = "2025/6/27")
 public class LinkOpenHashIntSet extends AbstractHashIntSet {
 
     private static final long serialVersionUID = 0xad45741f369a787fL;
 
+    @CodeHistory(date = "2025/6/27")
     private static class Node implements Serializable {
 
         private static final long serialVersionUID = 0xbc13fefc05bec133L;
@@ -83,6 +81,7 @@ public class LinkOpenHashIntSet extends AbstractHashIntSet {
         //
     }
 
+    @CodeHistory(date = "2025/6/27")
     private class SafeIterator implements PrimitiveIterator.OfInt {
 
         int expectedModCount;

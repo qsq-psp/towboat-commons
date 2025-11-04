@@ -14,7 +14,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2024/11/22", project = "Ultramarine")
 @CodeHistory(date = "2025/1/17", project = "OSHI", name = "MD4Core")
 @CodeHistory(date = "2025/5/16")
-@ReferencePage(title = "RFC1320", href = "https://datatracker.ietf.org/doc/html/rfc1320")
+@ReferencePage(title = "The MD4 Message-Digest Algorithm", href = "https://datatracker.ietf.org/doc/html/rfc1320")
 public class MD4 extends ByteBlockBitHashCore implements IntSequence {
 
     private static final long serialVersionUID = 0xb1dfffa2cb0e5738L;
@@ -129,8 +129,8 @@ public class MD4 extends ByteBlockBitHashCore implements IntSequence {
 
     @NotNull
     @Override
-    public DataView getDataView() {
-        return new IntSequenceDataView(this, ByteOrder.LITTLE_ENDIAN);
+    public DataView getDataView(@NotNull Runnable guard) {
+        return new IntSequenceDataView(this, ByteOrder.LITTLE_ENDIAN, guard);
     }
 
     @Override

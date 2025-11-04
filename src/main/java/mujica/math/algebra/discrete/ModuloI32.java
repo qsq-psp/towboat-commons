@@ -1,5 +1,6 @@
 package mujica.math.algebra.discrete;
 
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Unsigned;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,6 +9,7 @@ import java.math.BigInteger;
 /**
  * Created on 2025/3/3.
  */
+@CodeHistory(date = "2025/3/3")
 public class ModuloI32 extends ModularMath {
 
     protected static final long MASK = (1L << Integer.SIZE) - 1L;

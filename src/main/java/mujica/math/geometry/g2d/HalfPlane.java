@@ -2,18 +2,19 @@ package mujica.math.geometry.g2d;
 
 import mujica.math.geometry.Geometry;
 import mujica.math.geometry.GeometryOperationResult;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 /**
- * Created in va on 2020/7/20, named GeneralLine.
- * Created in va on 2021/9/10, named Line.
- * Recreated on 2022/6/6.
- *
  * a * x + b * y + c > 0
  */
+@CodeHistory(date = "2018/3/21", project = "aquarium", name = "GeneralLineV2")
+@CodeHistory(date = "2020/3/10", project = "coo", name = "GeneralLine")
+@CodeHistory(date = "2021/9/10", project = "va", name = "Line")
+@CodeHistory(date = "2022/6/6")
 public class HalfPlane extends Jordan2 {
 
     private static final long serialVersionUID = 0x6c4eece83f57e51bL;

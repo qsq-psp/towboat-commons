@@ -1,31 +1,36 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
-import mujica.reflect.invoke.BytecodeFieldType;
+import mujica.io.nest.LimitedDataInput;
+import mujica.reflect.basic.BytecodeFieldType;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/9/17")
+@ReferencePage(title = "JVMS12 The LocalVariableTable Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.13")
 public class LocalVariableTableAttributeInfo extends AttributeInfo {
 
     private static final long serialVersionUID = 0xB459F74DD30BA246L;
 
     @CodeHistory(date = "2025/9/17")
-    private static class LocalVariableEntry implements Independent {
+    private static class LocalVariableEntry implements ClassFileNode.Independent {
 
         private static final long serialVersionUID = 0xD1664378176A5AFBL;
 
-        int startPC; // u2
+        int startPC;
 
-        int endPC; // length
+        int endPC;
 
-        int nameIndex; // CONSTANT_UTF8
+        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        int nameIndex;
 
-        int descriptorIndex; // CONSTANT_UTF8
+        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        int descriptorIndex;
 
         int localVariableIndex; // long or double occupy 2 indexes
 
@@ -93,14 +98,20 @@ public class LocalVariableTableAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
-            return "from " + startPC + " to " + endPC + ' '
-                    + (new BytecodeFieldType(context.constantPool.getUtf8(descriptorIndex))).toSourceString() + ' '
+        public String toString(@NotNull ClassFile context) {
+            return "from " + startPC + " to " + endPC + " "
+                    + (new BytecodeFieldType(context.constantPool.getUtf8(descriptorIndex))).toSourceString() + " "
                     + context.constantPool.getUtf8(nameIndex) + " at " + localVariableIndex;
+        }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            nameIndex = remap.applyAsInt(nameIndex);
+            descriptorIndex = remap.applyAsInt(descriptorIndex);
         }
     }
 
-    LocalVariableEntry[] entries;
+    private LocalVariableEntry[] entries;
 
     LocalVariableTableAttributeInfo() {
         super();
@@ -140,6 +151,12 @@ public class LocalVariableTableAttributeInfo extends AttributeInfo {
         }
     }
 
+    @NotNull
+    @Override
+    public ImportanceLevel importanceLevel() {
+        return ImportanceLevel.HIGH;
+    }
+
     public static final String NAME = "LocalVariableTable";
 
     @NotNull
@@ -177,7 +194,6 @@ public class LocalVariableTableAttributeInfo extends AttributeInfo {
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
-        super.write(context, out);
         out.writeShort(entries.length);
         for (LocalVariableEntry entry : entries) {
             entry.write(out);
@@ -186,7 +202,6 @@ public class LocalVariableTableAttributeInfo extends AttributeInfo {
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        super.write(context, buffer);
         buffer.putShort((short) entries.length);
         for (LocalVariableEntry entry : entries) {
             entry.write(buffer);

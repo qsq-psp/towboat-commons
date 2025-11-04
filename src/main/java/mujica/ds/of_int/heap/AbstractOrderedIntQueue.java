@@ -7,9 +7,6 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
-/**
- * Created on 2025/7/7.
- */
 @CodeHistory(date = "2025/7/7")
 public abstract class AbstractOrderedIntQueue implements OrderedIntQueue {
 

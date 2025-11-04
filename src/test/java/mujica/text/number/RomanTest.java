@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.Set;
 
 @CodeHistory(date = "2025/3/1")
+@SuppressWarnings("SpellCheckingInspection")
 public class RomanTest {
 
     @NotNull

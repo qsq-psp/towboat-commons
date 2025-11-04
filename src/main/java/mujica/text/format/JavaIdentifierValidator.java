@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 @CodeHistory(date = "2025/4/16")
-@ReferencePage(title = "JLS12 Chapter 3. Lexical Structure", author = "James Gosling", language = "en", href = "https://docs.oracle.com/javase/specs/jls/se12/html/jls-3.html#jls-3.8")
+@ReferencePage(title = "JLS12 Lexical Structure", href = "https://docs.oracle.com/javase/specs/jls/se12/html/jls-3.html#jls-3.8")
 public class JavaIdentifierValidator extends AbstractFormatValidator.StringForm {
 
     public static final JavaIdentifierValidator INSTANCE = new JavaIdentifierValidator();

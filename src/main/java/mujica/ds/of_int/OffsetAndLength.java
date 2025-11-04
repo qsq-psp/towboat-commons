@@ -5,9 +5,6 @@ import mujica.reflect.modifier.CodeHistory;
 import java.io.Serializable;
 import java.util.function.IntPredicate;
 
-/**
- * Created on 2025/3/23.
- */
 @CodeHistory(date = "2025/3/23")
 public class OffsetAndLength implements IntInterval, IntPredicate, Cloneable, Serializable {
 

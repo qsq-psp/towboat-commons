@@ -1,7 +1,7 @@
 package mujica.math.geometry;
 
 import mujica.ds.DataStructure;
-import mujica.reflect.ClassUtil;
+import mujica.reflect.basic.ClassUtil;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,9 +10,8 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.util.function.Consumer;
 
-@CodeHistory(date = "2019/4/23", project = "Ultramarine", name = "Geometric")
-@CodeHistory(date = "2020/3/8", project = "Ultramarine", name = "Geometric")
-@CodeHistory(date = "2020/7/20", project = "Ultramarine", name = "Geometric")
+@CodeHistory(date = "2019/4/23", name = "Geometric")
+@CodeHistory(date = "2020/3/8", project = "coo", name = "Geometric")
 @CodeHistory(date = "2022/6/5", project = "Ultramarine")
 @CodeHistory(date = "2025/3/2")
 public abstract class Geometry implements DataStructure, Serializable {

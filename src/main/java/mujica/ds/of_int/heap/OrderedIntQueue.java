@@ -10,9 +10,6 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
-/**
- * Created on 2025/7/7.
- */
 @CodeHistory(date = "2025/7/7")
 public interface OrderedIntQueue extends IntCollection {
 

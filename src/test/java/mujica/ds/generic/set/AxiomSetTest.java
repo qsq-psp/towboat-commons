@@ -1,13 +1,13 @@
 package mujica.ds.generic.set;
 
-import io.netty.buffer.ByteBufUtil;
 import mujica.ds.of_int.list.*;
 import mujica.math.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,10 +18,8 @@ import java.util.function.Supplier;
 @CodeHistory(date = "2025/6/13")
 public class AxiomSetTest {
 
-    @BeforeClass
-    public static void initializeNetty() {
-        ByteBufUtil.hexDump(new byte[0]);
-    }
+    @Rule
+    public final ErrorCollector errorCollector = new ErrorCollector();
 
     private static final int REPEAT = 78;
 
@@ -140,7 +138,7 @@ public class AxiomSetTest {
                 }
             }
             try {
-                set.checkHealth();
+                set.checkHealth(errorCollector::addError);
             } catch (RuntimeException re) {
                 for (String string : list) {
                     System.out.println(string);
@@ -313,7 +311,6 @@ public class AxiomSetTest {
                 for (Iterator<String> it = actual.iterator(); it.hasNext();) {
                     String element = it.next();
                     if (rc.nextBoolean()) {
-                        // System.out.println(actual);
                         it.remove();
                         expected.remove(element);
                         list.add(element);
@@ -412,7 +409,7 @@ public class AxiomSetTest {
                     set.remove(list.get(rc.nextInt(list.size())));
                 }
             }
-            set.checkHealth();
+            set.checkHealth(errorCollector::addError);
         }
     }
 
@@ -450,7 +447,7 @@ public class AxiomSetTest {
                     set.remove(list.get(rc.nextInt(list.size())));
                 }
             }
-            set.checkHealth();
+            set.checkHealth(errorCollector::addError);
         }
     }
 

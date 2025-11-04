@@ -12,9 +12,6 @@ import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
 
-/**
- * Created on 2025/6/25.
- */
 @CodeHistory(date = "2025/6/25")
 public class CopyOnResizeIntList extends AbstractIntList {
 

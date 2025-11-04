@@ -1,11 +1,13 @@
 package mujica.text.format;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Created on 2025/9/11.
  */
+@CodeHistory(date = "2025/9/11")
 class BooleanFailureMessage implements LocalizedFailureMessage {
 
     private static final long serialVersionUID = 0x508B4BA193B5AA30L;

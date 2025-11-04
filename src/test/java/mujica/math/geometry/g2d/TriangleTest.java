@@ -183,4 +183,33 @@ public class TriangleTest extends G2dTest {
             Assert.assertTrue(triangle.test(point));
         }
     }
+
+    @Test
+    public void checkEqualRotate() {
+        for (int triangleIndex = 0; triangleIndex < TRIANGLE; triangleIndex++) {
+            Triangle<Point> t1 = nextTriangle();
+            Triangle<Point> t2 = new Triangle<>(t1.p2, t1.p3, t1.p1);
+            Assert.assertFalse(t1.equalTriangle(t2));
+            Assert.assertFalse(t2.equalTriangle(t1));
+            Assert.assertTrue(t1.equalTriangleRotate(t2));
+            Assert.assertTrue(t2.equalTriangleRotate(t1));
+        }
+    }
+
+    @Test
+    public void checkEqualPermute() {
+        for (int triangleIndex = 0; triangleIndex < TRIANGLE; triangleIndex++) {
+            Triangle<Point> t1 = nextTriangle();
+            Triangle<Point> t2 = new Triangle<>(t1.p1, t1.p3, t1.p2);
+            Assert.assertFalse(t1.equalTriangle(t2));
+            Assert.assertFalse(t2.equalTriangle(t1));
+            Assert.assertFalse(t1.equalTriangleRotate(t2));
+            Assert.assertFalse(t2.equalTriangleRotate(t1));
+            Assert.assertTrue(t1.equalTrianglePermute(t2));
+            Assert.assertTrue(t2.equalTrianglePermute(t1));
+            t2 = new Triangle<>(t1.p3, t1.p2, t1.p2);
+            Assert.assertFalse(t1.equalTrianglePermute(t2));
+            Assert.assertFalse(t2.equalTrianglePermute(t1));
+        }
+    }
 }

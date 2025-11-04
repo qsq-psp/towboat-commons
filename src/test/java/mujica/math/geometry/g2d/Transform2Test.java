@@ -2,15 +2,17 @@ package mujica.math.geometry.g2d;
 
 import mujica.math.geometry.Geometry;
 import mujica.math.geometry.GeometryOperationResult;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created in va on 2021/9/28, named Affine2Test.
  * Created on 2022/6/26.
  */
+@CodeHistory(date = "2021/9/28", name = "Affine2Test")
+@CodeHistory(date = "2022/6/26")
 public class Transform2Test extends G2dTest {
 
     public double nextDirection() {
@@ -67,7 +69,7 @@ public class Transform2Test extends G2dTest {
     public void testPreserveLength() {
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
             Transform2 transform = nextPreserveLength();
-            assertTrue(transform.preserveLength());
+            Assert.assertTrue(transform.preserveLength());
             for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                 Point point0 = nextPoint();
                 Point point1 = nextPoint();
@@ -75,7 +77,7 @@ public class Transform2Test extends G2dTest {
                 transform.transform(point0, point0);
                 transform.transform(point1, point1);
                 double length1 = Point.euclidDistance(point0, point1);
-                assertEquals(length0, length1, Geometry.EPSILON);
+                Assert.assertEquals(length0, length1, Geometry.EPSILON);
             }
         }
     }
@@ -134,8 +136,8 @@ public class Transform2Test extends G2dTest {
 
     @Test
     public void testLinear() {
-        Point point2 = new Point();
-        Point point3 = new Point();
+        final Point point2 = new Point();
+        final Point point3 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
             Transform2 transform = nextLinear();
             for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
@@ -146,25 +148,25 @@ public class Transform2Test extends G2dTest {
                 transform.transform(point1, point1);
                 transform.transform(point2, point2);
                 point3.setToMedian(point0, point1);
-                assertTrue(point2.equalPointEpsilon(point3));
+                Assert.assertTrue(point2.equalPointEpsilon(point3));
             }
         }
     }
 
     @Test
     public void testTransform0() {
-        Point point1 = new Point();
-        Point point2 = new Point();
+        final Point point1 = new Point();
+        final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
             Transform2 transform = nextLinear();
             try {
-                assertTrue(transform.isHealthy());
+                Assert.assertTrue(transform.isHealthy());
                 for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                     Point point0 = nextPoint();
                     point1.setPoint(point0);
                     transform.transform0(point1, point2);
-                    assertTrue(point0.equalPoint(point1));
-                    assertTrue(point2.isHealthy());
+                    Assert.assertTrue(point0.equalPoint(point1));
+                    Assert.assertTrue(point2.isHealthy());
                 }
             } catch (AssertionError e) {
                 System.out.println(transform);
@@ -175,18 +177,18 @@ public class Transform2Test extends G2dTest {
 
     @Test
     public void testTransform() {
-        Point point1 = new Point();
-        Point point2 = new Point();
+        final Point point1 = new Point();
+        final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
             Transform2 transform = nextLinear();
             try {
-                assertTrue(transform.isHealthy());
+                Assert.assertTrue(transform.isHealthy());
                 for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                     Point point0 = nextPoint();
                     point1.setPoint(point0);
                     transform.transform(point1, point2);
-                    assertTrue(point0.equalPoint(point1));
-                    assertTrue(point2.isHealthy());
+                    Assert.assertTrue(point0.equalPoint(point1));
+                    Assert.assertTrue(point2.isHealthy());
                 }
             } catch (AssertionError e) {
                 System.out.println(transform);
@@ -205,11 +207,11 @@ public class Transform2Test extends G2dTest {
                 for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                     Point point0 = nextPoint();
                     HalfPlane halfPlane0 = nextHalfPlane();
-                    assertNotEquals(GeometryOperationResult.FAIL, halfPlane0.project(point0, point0));
-                    assertEquals(0.0, halfPlane0.height(point0), Geometry.EPSILON);
+                    Assert.assertNotEquals(GeometryOperationResult.FAIL, halfPlane0.project(point0, point0));
+                    Assert.assertEquals(0.0, halfPlane0.height(point0), Geometry.EPSILON);
                     transform.transform(point0, point1);
                     transform.transform(halfPlane0, halfPlane1);
-                    assertEquals(0.0, halfPlane1.height(point1), Geometry.EPSILON);
+                    Assert.assertEquals(0.0, halfPlane1.height(point1), Geometry.EPSILON);
                 }
             } catch (AssertionError e) {
                 System.out.println(transform);
@@ -230,12 +232,12 @@ public class Transform2Test extends G2dTest {
                     HalfPlane halfPlane0 = nextHalfPlane();
                     halfPlane1.setHalfPlane(halfPlane0);
                     transform.transform(halfPlane1, halfPlane2);
-                    assertEquals(halfPlane0, halfPlane1);
+                    Assert.assertEquals(halfPlane0, halfPlane1);
                     halfPlane0.toLine(line);
                     transform.transform(line.p1, line.p1);
                     transform.transform(line.p2, line.p2);
                     halfPlane1.setHalfPlane(line);
-                    assertTrue(halfPlane1.equalHalfPlaneEpsilon(halfPlane2));
+                    Assert.assertTrue(halfPlane1.equalHalfPlaneEpsilon(halfPlane2));
                 }
             } catch (AssertionError e) {
                 System.out.println(transform);
@@ -256,12 +258,12 @@ public class Transform2Test extends G2dTest {
                     HalfPlane halfPlane0 = nextHalfPlane();
                     halfPlane1.setHalfPlane(halfPlane0);
                     transform.transform(halfPlane1, halfPlane2);
-                    assertEquals(halfPlane0, halfPlane1);
+                    Assert.assertEquals(halfPlane0, halfPlane1);
                     halfPlane0.toLine(line, nextPoint());
                     transform.transform(line.p1, line.p1);
                     transform.transform(line.p2, line.p2);
                     halfPlane1.setHalfPlane(line);
-                    assertTrue(halfPlane1.equalHalfPlaneEpsilon(halfPlane2));
+                    Assert.assertTrue(halfPlane1.equalHalfPlaneEpsilon(halfPlane2));
                 }
             } catch (AssertionError e) {
                 System.out.println(transform);
@@ -280,7 +282,7 @@ public class Transform2Test extends G2dTest {
                 Point point0 = nextPoint();
                 transform.transform(point0, point1);
                 transform.inverseTransform(point1, point2);
-                assertTrue(point0.equalPointEpsilon(point2));
+                Assert.assertTrue(point0.equalPointEpsilon(point2));
             }
         }
     }
@@ -292,14 +294,14 @@ public class Transform2Test extends G2dTest {
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
             Transform2 transform = nextLinear();
             Transform2 inverse = transform.duplicate();
-            assertEquals(0, transform.compareTo(inverse)); // also test clone()
+            Assert.assertEquals(0, transform.compareTo(inverse)); // also test clone()
             inverse.setToInverse();
-            assertNotNull(inverse);
+            Assert.assertNotNull(inverse);
             for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                 Point point0 = nextPoint();
                 transform.transform(point0, point1);
                 inverse.transform(point1, point2);
-                assertTrue(point0.equalPointEpsilon(point2));
+                Assert.assertTrue(point0.equalPointEpsilon(point2));
             }
         }
     }
@@ -311,12 +313,12 @@ public class Transform2Test extends G2dTest {
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
             Transform2 transform = nextLinear();
             Transform2 inverse = transform.invert();
-            assertNotNull(inverse);
+            Assert.assertNotNull(inverse);
             for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                 Point point0 = nextPoint();
                 transform.transform(point0, point1);
                 inverse.transform(point1, point2);
-                assertTrue(point0.equalPointEpsilon(point2));
+                Assert.assertTrue(point0.equalPointEpsilon(point2));
             }
         }
     }
@@ -327,10 +329,10 @@ public class Transform2Test extends G2dTest {
         Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
             Transform2 transform = nextLinear();
-            assertEquals(9, transform.vectorLength());
-            assertEquals(0.0, transform.vectorComponent(6), Geometry.EPSILON);
-            assertEquals(0.0, transform.vectorComponent(7), Geometry.EPSILON);
-            assertEquals(1.0, transform.vectorComponent(8), Geometry.EPSILON);
+            Assert.assertEquals(9, transform.vectorLength());
+            Assert.assertEquals(0.0, transform.vectorComponent(6), Geometry.EPSILON);
+            Assert.assertEquals(0.0, transform.vectorComponent(7), Geometry.EPSILON);
+            Assert.assertEquals(1.0, transform.vectorComponent(8), Geometry.EPSILON);
             for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                 Point point0 = nextPoint();
                 transform.transform(point0, point1);
@@ -338,7 +340,7 @@ public class Transform2Test extends G2dTest {
                         transform.vectorComponent(0) * point0.x + transform.vectorComponent(1) * point0.y + transform.vectorComponent(2),
                         transform.vectorComponent(3) * point0.x + transform.vectorComponent(4) * point0.y + transform.vectorComponent(5)
                 );
-                assertTrue(point1.equalPointEpsilon(point2));
+                Assert.assertTrue(point1.equalPointEpsilon(point2));
             }
         }
     }
@@ -393,7 +395,7 @@ public class Transform2Test extends G2dTest {
                     continue;
                 }
                 transform.transform(point0, point1);
-                assertTrue(point0.equalPointEpsilon(point1));
+                Assert.assertTrue(point0.equalPointEpsilon(point1));
             } catch (AssertionError e) {
                 System.out.println(transform);
                 throw e;
@@ -412,7 +414,7 @@ public class Transform2Test extends G2dTest {
             transform.transform(point0, point0);
             transform.scaleBefore(scale);
             transform.transform(point1, point1);
-            assertTrue(point0.equalPointEpsilon(point1));
+            Assert.assertTrue(point0.equalPointEpsilon(point1));
         }
     }
 
@@ -427,7 +429,7 @@ public class Transform2Test extends G2dTest {
             transform.transform(center, point1);
             transform.scaleBefore(center, scale);
             transform.transform(center, point2);
-            assertTrue(point1.equalPointEpsilon(point2));
+            Assert.assertTrue(point1.equalPointEpsilon(point2));
         }
     }
 
@@ -439,13 +441,14 @@ public class Transform2Test extends G2dTest {
             ViewportTransform transform = nextViewportTransform();
             double scale = nextViewportTransform().mxx;
             ViewportTransform inverse = transform.invert();
+            Assert.assertNotNull(inverse);
             transform.scaleAfter(scale);
             inverse.scaleBefore(1.0 / scale);
             for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                 Point point0 = nextPoint();
                 transform.transform(point0, point1);
                 inverse.transform(point1, point2);
-                assertTrue(point0.equalPointEpsilon(point2));
+                Assert.assertTrue(point0.equalPointEpsilon(point2));
             }
         }
     }
@@ -460,13 +463,14 @@ public class Transform2Test extends G2dTest {
             double scale = nextViewportTransform().mxx;
             try {
                 ViewportTransform inverse = transform.invert();
+                Assert.assertNotNull(inverse);
                 transform.scaleAfter(center, scale);
                 inverse.scaleBefore(center, 1.0 / scale);
                 for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                     Point point0 = nextPoint();
                     transform.transform(point0, point1);
                     inverse.transform(point1, point2);
-                    assertTrue(point0.equalPointEpsilon(point2));
+                    Assert.assertTrue(point0.equalPointEpsilon(point2));
                 }
             } catch (AssertionError e) {
                 System.out.println(transform);
@@ -498,7 +502,7 @@ public class Transform2Test extends G2dTest {
             transform.transform(point0, point0);
             transform.rotateBefore(angle1);
             transform.transform(point1, point1);
-            assertTrue(point0.equalPointEpsilon(point1));
+            Assert.assertTrue(point0.equalPointEpsilon(point1));
         }
     }
 
@@ -512,7 +516,7 @@ public class Transform2Test extends G2dTest {
             transform.transform(pivot, point1);
             transform.rotateBefore(pivot, nextDirection());
             transform.transform(pivot, point2);
-            assertTrue(point1.equalPointEpsilon(point2));
+            Assert.assertTrue(point1.equalPointEpsilon(point2));
         }
     }
 
@@ -524,13 +528,14 @@ public class Transform2Test extends G2dTest {
             double angle = nextDirection();
             Axes transform = nextRotate();
             Axes inverse = transform.invert();
+            Assert.assertNotNull(inverse);
             transform.rotateAfter(angle);
             inverse.rotateBefore(-angle);
             for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                 Point point0 = nextPoint();
                 transform.transform(point0, point1);
                 inverse.transform(point1, point2);
-                assertTrue(point0.equalPointEpsilon(point2));
+                Assert.assertTrue(point0.equalPointEpsilon(point2));
             }
         }
     }
@@ -543,6 +548,7 @@ public class Transform2Test extends G2dTest {
             double angle = nextDirection();
             Axes transform = nextRotate();
             Axes inverse = transform.invert();
+            Assert.assertNotNull(inverse);
             Point pivot = nextPoint();
             transform.rotateAfter(pivot, angle);
             inverse.rotateBefore(pivot, -angle);
@@ -550,7 +556,7 @@ public class Transform2Test extends G2dTest {
                 Point point0 = nextPoint();
                 transform.transform(point0, point1);
                 inverse.transform(point1, point2);
-                assertTrue(point0.equalPointEpsilon(point2));
+                Assert.assertTrue(point0.equalPointEpsilon(point2));
             }
         }
     }
@@ -564,9 +570,9 @@ public class Transform2Test extends G2dTest {
             for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
                 Point point0 = nextNonzeroPoint();
                 affine2.transform(point0, point1);
-                assertNotEquals(GeometryOperationResult.FAIL, affine2.orthogonalizeCore(point0));
+                Assert.assertNotEquals(GeometryOperationResult.FAIL, affine2.orthogonalizeCore(point0));
                 affine2.transform(point0, point2);
-                assertTrue(point1.equalPointEpsilon(point2));
+                Assert.assertTrue(point1.equalPointEpsilon(point2));
             }
         }
     }
@@ -596,7 +602,7 @@ public class Transform2Test extends G2dTest {
                 right.transform(point0, point1); // right first
                 left.transform(point1, point1);
                 product.transform(point0, point2);
-                assertTrue(point1.equalPointEpsilon(point2));
+                Assert.assertTrue(point1.equalPointEpsilon(point2));
             }
         }
     }
@@ -626,7 +632,7 @@ public class Transform2Test extends G2dTest {
                 right.transform(point0, point1); // right first
                 left.transform(point1, point1);
                 product.transform(point0, point2);
-                assertTrue(point1.equalPointEpsilon(point2));
+                Assert.assertTrue(point1.equalPointEpsilon(point2));
             }
         }
     }

@@ -6,15 +6,14 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import mujica.math.algebra.random.RandomContext;
 import mujica.math.geometry.Geometry;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-/**
- * Created on 2022/12/15.
- */
+@CodeHistory(date = "2022/12/15")
 public class G2dTest {
 
     protected final RandomContext rc = new RandomContext();

@@ -1,25 +1,24 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.InterpretAsByte;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.util.function.IntUnaryOperator;
 
-/**
- * Created on 2025/9/14.
- */
 @CodeHistory(date = "2025/9/14")
+@ReferencePage(title = "JVMS12 The StackMapTable Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.4")
 public class StackMapTableAttributeInfo extends AttributeInfo {
 
     private static final long serialVersionUID = 0xECE64000722FC308L;
 
     @CodeHistory(date = "2025/9/14")
-    private static class VerificationTypeInfo implements Independent {
+    private static class VerificationTypeInfo implements ClassFileNode.Independent {
 
         private static final long serialVersionUID = 0x96CA6590D0241D72L;
 
@@ -53,6 +52,20 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
             }
         }
 
+        @NotNull
+        static VerificationTypeInfo readNew(@NotNull LimitedDataInput in) throws IOException {
+            final VerificationTypeInfo verificationTypeInfo = createByTag(in.readUnsignedByte());
+            verificationTypeInfo.read(in);
+            return verificationTypeInfo;
+        }
+
+        @NotNull
+        static VerificationTypeInfo readNew(@NotNull ByteBuffer buffer) {
+            final VerificationTypeInfo verificationTypeInfo = createByTag(0xff & buffer.get());
+            verificationTypeInfo.read(buffer);
+            return verificationTypeInfo;
+        }
+
         @InterpretAsByte(unsigned = true)
         final int tag;
 
@@ -83,6 +96,10 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
             throw new IndexOutOfBoundsException();
         }
 
+        int byteSize() {
+            return 1;
+        }
+
         @Override
         public void read(@NotNull LimitedDataInput in) throws IOException {
             // pass
@@ -105,7 +122,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
+        public String toString(@NotNull ClassFile context) {
             return toString();
         }
 
@@ -135,6 +152,11 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
                     throw new BytecodeException("StackMapTable VerificationTypeInfo tag = " + tag);
             }
         }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            // pass
+        }
     }
 
     @CodeHistory(date = "2025/9/14")
@@ -142,10 +164,15 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
 
         private static final long serialVersionUID = 0x5B1F6398ECD93414L;
 
-        int classIndex; // CONSTANT_CLASS
+        @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+        int classIndex;
 
         ObjectVariableInfo(int tag) {
             super(tag);
+        }
+
+        int byteSize() {
+            return 3;
         }
 
         @Override
@@ -172,8 +199,13 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
+        public String toString(@NotNull ClassFile context) {
             return toString() + " " + context.constantPool.getSourceClassName(classIndex);
+        }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            classIndex = remap.applyAsInt(classIndex);
         }
     }
 
@@ -186,6 +218,10 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
 
         UninitializedVariableInfo(int tag) {
             super(tag);
+        }
+
+        int byteSize() {
+            return 3;
         }
 
         @Override
@@ -212,7 +248,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
+        public String toString(@NotNull ClassFile context) {
             return toString() + " " + newCP;
         }
     }
@@ -221,7 +257,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
      * The base class is same_frame, frame_type 0-63
      */
     @CodeHistory(date = "2025/9/14")
-    private static class StackMapFrame implements Independent {
+    private static class StackMapFrame implements ClassFileNode.Independent {
 
         private static final long serialVersionUID = 0x8DDBBD032DEA1B4BL;
 
@@ -255,6 +291,10 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
             throw new IndexOutOfBoundsException();
         }
 
+        int byteSize() {
+            return 1;
+        }
+
         @Override
         public void read(@NotNull LimitedDataInput in) throws IOException {
             // pass
@@ -277,8 +317,13 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
+        public String toString(@NotNull ClassFile context) {
             return "same-frame " + frameType;
+        }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            // pass
         }
     }
 
@@ -296,10 +341,42 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
             super(frameType);
         }
 
+        @Override
+        int byteSize() {
+            return 1 + stack.byteSize();
+        }
+
+        @Override
+        public void read(@NotNull LimitedDataInput in) throws IOException {
+            stack = VerificationTypeInfo.readNew(in);
+        }
+
+        @Override
+        public void read(@NotNull ByteBuffer buffer) {
+            stack = VerificationTypeInfo.readNew(buffer);
+        }
+
+        @Override
+        public void write(@NotNull DataOutput out) throws IOException {
+            out.writeByte(frameType);
+            stack.write(out);
+        }
+
+        @Override
+        public void write(@NotNull ByteBuffer buffer) {
+            buffer.put((byte) frameType);
+            stack.write(buffer);
+        }
+
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
+        public String toString(@NotNull ClassFile context) {
             return "same-locals-1-stack-item-frame " + (frameType - 64);
+        }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            stack.remapConstant(remap);
         }
     }
 
@@ -317,9 +394,40 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
             super(frameType);
         }
 
+        @Override
+        int byteSize() {
+            return 3 + stack.byteSize();
+        }
+
+        @Override
+        public void read(@NotNull LimitedDataInput in) throws IOException {
+            offsetDelta = in.readUnsignedShort();
+            super.read(in);
+        }
+
+        @Override
+        public void read(@NotNull ByteBuffer buffer) {
+            offsetDelta = 0xffff & buffer.getShort();
+            super.read(buffer);
+        }
+
+        @Override
+        public void write(@NotNull DataOutput out) throws IOException {
+            out.writeByte(frameType);
+            out.writeShort(offsetDelta);
+            stack.write(out);
+        }
+
+        @Override
+        public void write(@NotNull ByteBuffer buffer) {
+            buffer.put((byte) frameType);
+            buffer.putShort((short) offsetDelta);
+            stack.write(buffer);
+        }
+
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
+        public String toString(@NotNull ClassFile context) {
             return "same-locals-1-stack-item-extended " + offsetDelta;
         }
     }
@@ -339,9 +447,35 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
             super(frameType);
         }
 
+        int byteSize() {
+            return 3;
+        }
+
+        @Override
+        public void read(@NotNull LimitedDataInput in) throws IOException {
+            offsetDelta = in.readUnsignedShort();
+        }
+
+        @Override
+        public void read(@NotNull ByteBuffer buffer) {
+            offsetDelta = 0xffff & buffer.getShort();
+        }
+
+        @Override
+        public void write(@NotNull DataOutput out) throws IOException {
+            out.writeByte(frameType);
+            out.writeShort(offsetDelta);
+        }
+
+        @Override
+        public void write(@NotNull ByteBuffer buffer) {
+            buffer.put((byte) frameType);
+            buffer.putShort((short) offsetDelta);
+        }
+
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
+        public String toString(@NotNull ClassFile context) {
             if (frameType == 251) {
                 return "same-frame-extended " + offsetDelta;
             } else {
@@ -358,12 +492,63 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
 
         private static final long serialVersionUID = 0x4F4DFFC2D3B0C00DL;
 
-        int offsetDelta;
+        final VerificationTypeInfo[] locals;
 
-        VerificationTypeInfo[] locals;
+        int offsetDelta;
 
         AppendFrame(int frameType) {
             super(frameType);
+            locals = new VerificationTypeInfo[frameType - 251];
+        }
+
+        @Override
+        int byteSize() {
+            int size = 3;
+            for (VerificationTypeInfo verificationTypeInfo : locals) {
+                size += verificationTypeInfo.byteSize();
+            }
+            return size;
+        }
+
+        @Override
+        public void read(@NotNull LimitedDataInput in) throws IOException {
+            offsetDelta = in.readUnsignedShort();
+            for (int index = 0; index < locals.length; index++) {
+                locals[index] = VerificationTypeInfo.readNew(in);
+            }
+        }
+
+        @Override
+        public void read(@NotNull ByteBuffer buffer) {
+            offsetDelta = 0xffff & buffer.getShort();
+            for (int index = 0; index < locals.length; index++) {
+                locals[index] = VerificationTypeInfo.readNew(buffer);
+            }
+        }
+
+        @Override
+        public void write(@NotNull DataOutput out) throws IOException {
+            out.writeByte(frameType);
+            out.writeShort(offsetDelta);
+            for (VerificationTypeInfo verificationTypeInfo : locals) {
+                verificationTypeInfo.write(out);
+            }
+        }
+
+        @Override
+        public void write(@NotNull ByteBuffer buffer) {
+            buffer.put((byte) frameType);
+            buffer.putShort((short) offsetDelta);
+            for (VerificationTypeInfo verificationTypeInfo : locals) {
+                verificationTypeInfo.write(buffer);
+            }
+        }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            for (VerificationTypeInfo verificationTypeInfo : locals) {
+                verificationTypeInfo.remapConstant(remap);
+            }
         }
     }
 
@@ -384,9 +569,99 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
         FullFrame(int frameType) {
             super(frameType);
         }
+
+        @Override
+        int byteSize() {
+            int size = 7;
+            for (VerificationTypeInfo verificationTypeInfo : locals) {
+                size += verificationTypeInfo.byteSize();
+            }
+            for (VerificationTypeInfo verificationTypeInfo : stack) {
+                size += verificationTypeInfo.byteSize();
+            }
+            return size;
+        }
+
+        @Override
+        public void read(@NotNull LimitedDataInput in) throws IOException {
+            offsetDelta = in.readUnsignedShort();
+            int length = in.readUnsignedShort();
+            locals = new VerificationTypeInfo[length];
+            for (int index = 0; index < length; index++) {
+                locals[index] = VerificationTypeInfo.readNew(in);
+            }
+            length = in.readUnsignedShort();
+            stack = new VerificationTypeInfo[length];
+            for (int index = 0; index < length; index++) {
+                stack[index] = VerificationTypeInfo.readNew(in);
+            }
+        }
+
+        @Override
+        public void read(@NotNull ByteBuffer buffer) {
+            offsetDelta = 0xffff & buffer.getShort();
+            int length = 0xffff & buffer.getShort();
+            locals = new VerificationTypeInfo[length];
+            for (int index = 0; index < length; index++) {
+                locals[index] = VerificationTypeInfo.readNew(buffer);
+            }
+            length = 0xffff & buffer.getShort();
+            stack = new VerificationTypeInfo[length];
+            for (int index = 0; index < length; index++) {
+                stack[index] = VerificationTypeInfo.readNew(buffer);
+            }
+        }
+
+        @Override
+        public void write(@NotNull DataOutput out) throws IOException {
+            out.writeByte(frameType);
+            out.writeShort(offsetDelta);
+            out.writeShort(locals.length);
+            for (VerificationTypeInfo verificationTypeInfo : locals) {
+                verificationTypeInfo.write(out);
+            }
+            out.writeShort(stack.length);
+            for (VerificationTypeInfo verificationTypeInfo : stack) {
+                verificationTypeInfo.write(out);
+            }
+        }
+
+        @Override
+        public void write(@NotNull ByteBuffer buffer) {
+            buffer.put((byte) frameType);
+            buffer.putShort((short) offsetDelta);
+            buffer.putShort((short) locals.length);
+            for (VerificationTypeInfo verificationTypeInfo : locals) {
+                verificationTypeInfo.write(buffer);
+            }
+            buffer.putShort((short) stack.length);
+            for (VerificationTypeInfo verificationTypeInfo : stack) {
+                verificationTypeInfo.write(buffer);
+            }
+        }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            for (VerificationTypeInfo verificationTypeInfo : locals) {
+                verificationTypeInfo.remapConstant(remap);
+            }
+            for (VerificationTypeInfo verificationTypeInfo : stack) {
+                verificationTypeInfo.remapConstant(remap);
+            }
+        }
     }
 
-    StackMapFrame[] entries;
+    private StackMapFrame[] entries;
+
+    StackMapTableAttributeInfo() {
+        super();
+    }
+
+    @NotNull
+    @Override
+    public ImportanceLevel importanceLevel() {
+        return ImportanceLevel.CRITICAL;
+    }
 
     public static final String NAME = "StackMapTable";
 
@@ -399,6 +674,9 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
     @Override
     public int byteSize() {
         int size = 2;
+        for (StackMapFrame item : entries) {
+            size += item.byteSize();
+        }
         return size;
     }
 
@@ -408,29 +686,67 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
         entries = new StackMapFrame[numberOfEntries];
         for (int index = 0; index < numberOfEntries; index++) {
             int frameType = in.readUnsignedByte();
-            StackMapFrame frame;
+            StackMapFrame item;
             if (frameType < 64) {
-                frame = new StackMapFrame(frameType); // SameFrame
+                item = new StackMapFrame(frameType); // SameFrame
             } else if (frameType < 128) {
-                frame = new SameLocalsOneStackItemFrame(frameType);
+                item = new SameLocalsOneStackItemFrame(frameType);
             } else if (frameType < 247) {
-                throw new IOException();
+                throw new BytecodeException();
             } else if (frameType == 247) {
-                frame = new SameLocalsOneStackItemFrameExtended(frameType);
+                item = new SameLocalsOneStackItemFrameExtended(frameType);
             } else if (frameType < 251) {
-                frame = new ChopFrameOrSameFrameExtended(frameType);
+                item = new ChopFrameOrSameFrameExtended(frameType);
             } else if (frameType < 255) {
-                frame = new AppendFrame(frameType);
+                item = new AppendFrame(frameType);
             } else {
-                frame = new FullFrame(frameType);
+                item = new FullFrame(frameType);
             }
-            // read
-            entries[index] = frame;
+            item.read(in);
+            entries[index] = item;
         }
     }
 
     @Override
     public void read(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
+        final int numberOfEntries = 0xffff & buffer.getShort();
+        entries = new StackMapFrame[numberOfEntries];
+        for (int index = 0; index < numberOfEntries; index++) {
+            int frameType = 0xff & buffer.get();
+            StackMapFrame item;
+            if (frameType < 64) {
+                item = new StackMapFrame(frameType); // SameFrame
+            } else if (frameType < 128) {
+                item = new SameLocalsOneStackItemFrame(frameType);
+            } else if (frameType < 247) {
+                throw new BytecodeException();
+            } else if (frameType == 247) {
+                item = new SameLocalsOneStackItemFrameExtended(frameType);
+            } else if (frameType < 251) {
+                item = new ChopFrameOrSameFrameExtended(frameType);
+            } else if (frameType < 255) {
+                item = new AppendFrame(frameType);
+            } else {
+                item = new FullFrame(frameType);
+            }
+            item.read(buffer);
+            entries[index] = item;
+        }
+    }
 
+    @Override
+    public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
+        out.writeShort(entries.length);
+        for (StackMapFrame item : entries) {
+            item.write(out);
+        }
+    }
+
+    @Override
+    public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
+        buffer.putShort((short) entries.length);
+        for (StackMapFrame item : entries) {
+            item.write(buffer);
+        }
     }
 }

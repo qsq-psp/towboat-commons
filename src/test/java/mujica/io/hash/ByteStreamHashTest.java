@@ -3,6 +3,7 @@ package mujica.io.hash;
 import io.netty.buffer.ByteBufUtil;
 import mujica.io.view.ByteSequence;
 import mujica.math.algebra.random.FuzzyContext;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -22,6 +23,8 @@ import java.util.zip.Checksum;
  * Created in Ultramarine on 2024/12/13.
  * Recreated on 2025/4/13.
  */
+@CodeHistory(date = "2024/12/13", project = "Ultramarine")
+@CodeHistory(date = "2025/4/13")
 public class ByteStreamHashTest {
 
     @BeforeClass

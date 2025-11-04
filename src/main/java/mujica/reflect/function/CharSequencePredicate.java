@@ -7,9 +7,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-/**
- * Created on 2025/9/12.
- */
 @CodeHistory(date = "2025/9/12")
 public interface CharSequencePredicate extends Predicate<CharSequence> {
 

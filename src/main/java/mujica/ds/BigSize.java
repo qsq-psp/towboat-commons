@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2025/5/26.
- */
 @CodeHistory(date = "2025/5/26")
 public interface BigSize {
 

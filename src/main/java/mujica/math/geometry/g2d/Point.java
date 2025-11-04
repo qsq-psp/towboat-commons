@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
+@CodeHistory(date = "2018/3/16", name = "PointV2")
 @CodeHistory(date = "2018/7/9", name = "MtPointD2")
 @CodeHistory(date = "2022/6/5")
 @CodeHistory(date = "2025/3/2")

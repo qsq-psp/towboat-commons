@@ -171,8 +171,8 @@ public class SHA3 extends ByteBlockBitHashCore implements LongSequence {
 
     @NotNull
     @Override
-    public DataView getDataView() {
-        return new LongSequenceDataView(this, ByteOrder.LITTLE_ENDIAN);
+    public DataView getDataView(@NotNull Runnable guard) {
+        return new LongSequenceDataView(this, ByteOrder.LITTLE_ENDIAN, guard);
     }
 
     @Override

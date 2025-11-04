@@ -9,9 +9,6 @@ import java.util.Comparator;
 import java.util.Queue;
 import java.util.function.UnaryOperator;
 
-/**
- * Created on 2025/6/12.
- */
 @CodeHistory(date = "2025/6/12")
 public interface PriorityQueue<E> extends Queue<E>, DataStructure {
 

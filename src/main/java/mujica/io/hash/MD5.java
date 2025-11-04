@@ -14,7 +14,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2024/11/14", project = "Ultramarine")
 @CodeHistory(date = "2025/1/17", project = "OSHI", name = "MD5Core")
 @CodeHistory(date = "2025/5/16")
-@ReferencePage(title = "RFC1321", href = "https://datatracker.ietf.org/doc/html/rfc1321")
+@ReferencePage(title = "The MD5 Message-Digest Algorithm", href = "https://datatracker.ietf.org/doc/html/rfc1321")
 public class MD5 extends ByteBlockBitHashCore implements IntSequence {
 
     private static final long serialVersionUID = 0x72ac2e225c2045c6L;
@@ -136,8 +136,8 @@ public class MD5 extends ByteBlockBitHashCore implements IntSequence {
 
     @NotNull
     @Override
-    public DataView getDataView() {
-        return new IntSequenceDataView(this, ByteOrder.LITTLE_ENDIAN);
+    public DataView getDataView(@NotNull Runnable guard) {
+        return new IntSequenceDataView(this, ByteOrder.LITTLE_ENDIAN, guard);
     }
 
     @Override

@@ -2,9 +2,6 @@ package mujica.ds.proto;
 
 import mujica.reflect.modifier.CodeHistory;
 
-/**
- * Created on 2025/9/1.
- */
 @CodeHistory(date = "2025/9/1")
 public enum ProtoOperationPreference {
 

@@ -1,12 +1,12 @@
 package mujica.text.format;
 
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Created on 2025/9/15.
- */
+@CodeHistory(date = "2025/9/15")
+@SuppressWarnings("SpellCheckingInspection")
 public class FormatValidatorTest {
 
     @Test

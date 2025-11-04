@@ -12,6 +12,7 @@ import java.util.function.Consumer;
  * Optional class for angle representation
  * All directions are mutable
  */
+@CodeHistory(date = "2018/2/19", project = "aquarium", name = "AngleD")
 @CodeHistory(date = "2018/7/9", project = "existence", name = "Angle")
 @CodeHistory(date = "2020/2/27", project = "coo", name = "Angle")
 @CodeHistory(date = "2022/6/26", project = "Ultramarine")

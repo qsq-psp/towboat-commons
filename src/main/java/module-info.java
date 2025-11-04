@@ -1,3 +1,4 @@
+import mujica.io.codec.TowboatCharsetProvider;
 import mujica.reflect.modifier.CodeHistory;
 
 @CodeHistory(date = "2023/12/12", name = "CDP")
@@ -9,17 +10,16 @@ module CDP {
 
     exports org.slf4j;
 
-    exports mujica.reflect;
     exports mujica.reflect.modifier;
     exports mujica.reflect.function;
-    exports mujica.reflect.meta;
+    exports mujica.reflect.basic;
+    exports mujica.reflect.bytecode;
     exports mujica.io.function;
     exports mujica.io.view;
-    exports mujica.io.stream;
+    exports mujica.io.codec;
     exports mujica.io.buffer;
     exports mujica.io.hash;
-    exports mujica.io.charset;
-    exports mujica.io.fs;
+    exports mujica.io.nest;
     exports mujica.ds;
     exports mujica.ds.generic;
     exports mujica.ds.generic.list;
@@ -40,12 +40,17 @@ module CDP {
     exports mujica.text.pattern;
     exports mujica.text.collation;
     exports mujica.math.algebra;
-    exports mujica.math.algebra.discrete;
+    exports mujica.math.algebra.discrete; // expand math package next year
     exports mujica.math.algebra.prime;
     exports mujica.math.algebra.random;
     exports mujica.math.algebra.symbol;
     exports mujica.math.geometry;
     exports mujica.math.geometry.g2d;
+    exports mujica.json.io;
+    exports mujica.json.entity;
+    exports mujica.grammar;
+    exports mujica.grammar.regex;
+    exports mujica.grammar.bnf;
 
-    provides java.nio.charset.spi.CharsetProvider with mujica.io.charset.TowboatCharsetProvider;
+    provides java.nio.charset.spi.CharsetProvider with TowboatCharsetProvider;
 }

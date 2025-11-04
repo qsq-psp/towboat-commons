@@ -2,9 +2,6 @@ package mujica.math.algebra.discrete;
 
 import mujica.reflect.modifier.CodeHistory;
 
-/**
- * Created on 2025/3/3.
- */
 @CodeHistory(date = "2025/3/3")
 public class CastToFloor implements IntegralCast {
 

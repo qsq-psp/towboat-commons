@@ -2,6 +2,7 @@ package mujica.math.algebra.discrete;
 
 import mujica.math.algebra.random.FuzzyContext;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -689,9 +690,8 @@ public class IntegralMathTest {
         }
     }
 
-    /**
-     * OEIS A000166
-     */
+
+    @ReferencePage(title = "OEIS A000166", href = "https://oeis.org/A000166")
     @Test
     public void caseDerangementBig() {
         final IntegralMath algorithm = IntegralMath.INSTANCE;
@@ -702,5 +702,34 @@ public class IntegralMathTest {
         Assert.assertEquals(9, algorithm.derangement(BigInteger.valueOf(4)).longValueExact());
         Assert.assertEquals(44, algorithm.derangement(BigInteger.valueOf(5)).longValueExact());
         Assert.assertEquals(265, algorithm.derangement(BigInteger.valueOf(6)).longValueExact());
+    }
+
+    @Test
+    public void caseFloorSquareRootInt() {
+        final IntegralMath algorithm = IntegralMath.INSTANCE;
+        Assert.assertEquals(0, algorithm.floorSquareRoot(0));
+        Assert.assertEquals(1, algorithm.floorSquareRoot(1));
+        Assert.assertEquals(1, algorithm.floorSquareRoot(2));
+        Assert.assertEquals(1, algorithm.floorSquareRoot(3));
+        Assert.assertEquals(2, algorithm.floorSquareRoot(4));
+        Assert.assertEquals(2, algorithm.floorSquareRoot(5));
+        Assert.assertEquals(4, algorithm.floorSquareRoot(24));
+        Assert.assertEquals(5, algorithm.floorSquareRoot(25));
+        Assert.assertEquals(24, algorithm.floorSquareRoot(624));
+        Assert.assertEquals(25, algorithm.floorSquareRoot(625));
+    }
+
+    @Test
+    public void caseFloorSquareRootLong() {
+        final IntegralMath algorithm = IntegralMath.INSTANCE;
+        Assert.assertEquals(2L, algorithm.floorSquareRoot(6L));
+        Assert.assertEquals(2L, algorithm.floorSquareRoot(7L));
+        Assert.assertEquals(2L, algorithm.floorSquareRoot(8L));
+        Assert.assertEquals(3L, algorithm.floorSquareRoot(9L));
+        Assert.assertEquals(3L, algorithm.floorSquareRoot(10L));
+        Assert.assertEquals(9L, algorithm.floorSquareRoot(99L));
+        Assert.assertEquals(10L, algorithm.floorSquareRoot(100L));
+        Assert.assertEquals(31L, algorithm.floorSquareRoot(1000L));
+        Assert.assertEquals(54L, algorithm.floorSquareRoot(3000L));
     }
 }

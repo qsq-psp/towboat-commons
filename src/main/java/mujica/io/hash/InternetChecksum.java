@@ -73,7 +73,7 @@ public class InternetChecksum extends ByteBlockByteHashCore implements LongSuppl
 
     @NotNull
     @Override
-    public DataView getDataView() {
+    public DataView getDataView(@NotNull Runnable guard) {
         return new LongDataView(this, ByteFillPolicy.MIDDLE_TO_RIGHT, Short.SIZE);
     }
 

@@ -1,6 +1,8 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.nest.LimitedDataInput;
+import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
@@ -10,11 +12,24 @@ import java.nio.ByteBuffer;
 /**
  * Created on 2025/9/16.
  */
+@CodeHistory(date = "2025/9/16")
+@ReferencePage(title = "JVMS12 The Signature Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.9")
 public class SignatureAttributeInfo extends AttributeInfo {
 
     private static final long serialVersionUID = 0x30E93CFD17675433L;
 
-    int signatureIndex; // CONSTANT_UTF8
+    @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+    int signatureIndex;
+
+    SignatureAttributeInfo() {
+        super();
+    }
+
+    @NotNull
+    @Override
+    public ImportanceLevel importanceLevel() {
+        return ImportanceLevel.HIGH;
+    }
 
     public static final String NAME = "Signature";
 
@@ -26,7 +41,7 @@ public class SignatureAttributeInfo extends AttributeInfo {
 
     @Override
     public int byteSize() {
-        return 2;
+        return 2; // fixed
     }
 
     @Override
@@ -41,19 +56,17 @@ public class SignatureAttributeInfo extends AttributeInfo {
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
-        super.write(context, out);
         out.writeShort(signatureIndex);
     }
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        super.write(context, buffer);
         buffer.putShort((short) signatureIndex);
     }
 
     @NotNull
     @Override
-    public String toString(@NotNull ClassFile context, int position) {
-        return NAME + ' ' + context.constantPool.getUtf8(signatureIndex);
+    public String toString(@NotNull ClassFile context) {
+        return NAME + " " + context.constantPool.getUtf8(signatureIndex);
     }
 }

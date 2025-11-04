@@ -10,7 +10,7 @@ import java.util.Locale;
 
 @CodeHistory(date = "2021/9/9", project = "webbiton", name = "FileNames")
 @CodeHistory(date = "2025/4/1")
-@ReferencePage(title = "命名文件、路径和命名空间", language = "zh", href = "https://learn.microsoft.com/zh-cn/windows/win32/fileio/naming-a-file")
+@ReferencePage(title = "命名文件、路径和命名空间", href = "https://learn.microsoft.com/zh-cn/windows/win32/fileio/naming-a-file")
 public class WindowsFileNameValidator extends AbstractFormatValidator.StringForm {
 
     public static final WindowsFileNameValidator INSTANCE = new WindowsFileNameValidator();

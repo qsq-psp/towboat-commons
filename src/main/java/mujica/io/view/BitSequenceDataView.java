@@ -19,24 +19,35 @@ public class BitSequenceDataView implements DataView {
     @NotNull
     private final ByteOrder byteOrder;
 
-    public BitSequenceDataView(@NotNull BitSequence bitSequence, @NotNull ByteOrder byteOrder) {
+    @NotNull
+    private final Runnable guard;
+
+    public BitSequenceDataView(@NotNull BitSequence bitSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
         super();
         this.bitSequence = bitSequence;
         this.byteOrder = byteOrder;
+        this.guard = guard;
+    }
+
+    public BitSequenceDataView(@NotNull BitSequence bitSequence, @NotNull ByteOrder byteOrder) {
+        this(bitSequence, byteOrder, NOP_GUARD);
     }
 
     @Override
     public int bitLength() {
+        guard.run();
         return bitSequence.bitLength();
     }
 
     @Override
     public boolean getBit(int index) {
+        guard.run();
         return bitSequence.getBit(index);
     }
 
     @Override
     public boolean getBitExact() {
+        guard.run();
         if (bitSequence.bitLength() == 1) {
             return bitSequence.getBit(0);
         } else {
@@ -46,11 +57,13 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int byteLength() {
+        guard.run();
         return (bitSequence.bitLength() + (Byte.SIZE - 1)) >>> 3;
     }
 
     @Override
     public byte getByte(int index) {
+        guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Byte.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -83,6 +96,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public byte getByteAll() {
+        guard.run();
         final int bitLength = bitSequence.bitLength();
         if (bitLength > Byte.SIZE) {
             throw new DataSizeMismatchException();
@@ -113,6 +127,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public byte getByteExact() {
+        guard.run();
         if (bitSequence.bitLength() != Byte.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -136,6 +151,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public short getUnsignedByte(int index) {
+        guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Byte.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -168,6 +184,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public short getUnsignedByteAll() {
+        guard.run();
         final int bitLength = bitSequence.bitLength();
         if (bitLength > Byte.SIZE) {
             throw new DataSizeMismatchException();
@@ -198,6 +215,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public short getUnsignedByteExact() {
+        guard.run();
         if (bitSequence.bitLength() != Byte.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -221,11 +239,13 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int shortLength() {
+        guard.run();
         return (bitSequence.bitLength() + (Short.SIZE - 1)) >>> 4;
     }
 
     @Override
     public short getShort(int index) {
+        guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Short.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -258,6 +278,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public short shortAt(int byteOffset) {
+        guard.run();
         int index = ClampedMath.INSTANCE.multiply(byteOffset, Byte.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -290,6 +311,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public short getShortAll() {
+        guard.run();
         final int bitLength = bitSequence.bitLength();
         if (bitLength > Short.SIZE) {
             throw new DataSizeMismatchException();
@@ -320,6 +342,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public short getShortExact() {
+        guard.run();
         if (bitSequence.bitLength() != Short.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -343,6 +366,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int getUnsignedShort(int index) {
+        guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Short.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -375,6 +399,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int unsignedShortAt(int byteOffset) {
+        guard.run();
         int index = ClampedMath.INSTANCE.multiply(byteOffset, Byte.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -407,6 +432,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int getUnsignedShortAll() {
+        guard.run();
         final int bitLength = bitSequence.bitLength();
         if (bitLength > Short.SIZE) {
             throw new DataSizeMismatchException();
@@ -437,6 +463,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int getUnsignedShortExact() {
+        guard.run();
         if (bitSequence.bitLength() != Short.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -460,11 +487,13 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int intLength() {
+        guard.run();
         return (bitSequence.bitLength() + (Integer.SIZE - 1)) >>> 5;
     }
 
     @Override
     public int getInt(int index) {
+        guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Integer.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -497,6 +526,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int intAt(int byteOffset) {
+        guard.run();
         int index = ClampedMath.INSTANCE.multiply(byteOffset, Byte.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -529,6 +559,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int getIntAll() {
+        guard.run();
         final int bitLength = bitSequence.bitLength();
         if (bitLength > Integer.SIZE) {
             throw new DataSizeMismatchException();
@@ -559,6 +590,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int getIntExact() {
+        guard.run();
         if (bitSequence.bitLength() != Integer.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -582,6 +614,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public long getUnsignedInt(int index) {
+        guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Integer.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -614,6 +647,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public long unsignedIntAt(int byteOffset) {
+        guard.run();
         int index = ClampedMath.INSTANCE.multiply(byteOffset, Byte.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -646,6 +680,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public long getUnsignedIntAll() {
+        guard.run();
         final int bitLength = bitSequence.bitLength();
         if (bitLength > Integer.SIZE) {
             throw new DataSizeMismatchException();
@@ -676,6 +711,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public long getUnsignedIntExact() {
+        guard.run();
         if (bitSequence.bitLength() != Integer.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -699,11 +735,13 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public int longLength() {
+        guard.run();
         return (bitSequence.bitLength() + (Long.SIZE - 1)) >>> 6;
     }
 
     @Override
     public long getLong(int index) {
+        guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Long.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -736,6 +774,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public long longAt(int byteOffset) {
+        guard.run();
         int index = ClampedMath.INSTANCE.multiply(byteOffset, Byte.SIZE); // integer overflow exception reserved
         final int bitLength = bitSequence.bitLength();
         if (index < bitLength) {
@@ -768,6 +807,7 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public long getLongAll() {
+        guard.run();
         final int bitLength = bitSequence.bitLength();
         if (bitLength > Long.SIZE) {
             throw new DataSizeMismatchException();
@@ -792,12 +832,14 @@ public class BitSequenceDataView implements DataView {
 
     @Override
     public long getLongExact() {
+        guard.run();
         return 0;
     }
 
     @NotNull
     @Override
     public String toBinaryString() {
+        guard.run();
         final int bitLength = bitSequence.bitLength();
         final char[] charArray = new char[bitLength];
         for (int index = 0; index < bitLength; index++) {
@@ -809,6 +851,7 @@ public class BitSequenceDataView implements DataView {
     @NotNull
     @Override
     public String toHexString(boolean upperCase) {
+        guard.run();
         return "";
     }
 }

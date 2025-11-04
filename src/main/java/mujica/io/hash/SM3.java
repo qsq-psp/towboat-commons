@@ -154,8 +154,8 @@ public class SM3 extends ByteBlockBitHashCore implements IntSequence {
 
     @NotNull
     @Override
-    public DataView getDataView() {
-        return new IntSequenceDataView(this, ByteOrder.BIG_ENDIAN);
+    public DataView getDataView(@NotNull Runnable guard) {
+        return new IntSequenceDataView(this, ByteOrder.BIG_ENDIAN, guard);
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.Locale;
 
 @CodeHistory(date = "2021/4/23", project = "webbiton", name = "DomainNames")
 @CodeHistory(date = "2025/4/30")
-@ReferencePage(title = "The Domain Naming Convention for Internet User Applications", language = "en", href = "https://www.rfc-editor.org/rfc/rfc819.html")
+@ReferencePage(title = "The Domain Naming Convention for Internet User Applications", href = "https://www.rfc-editor.org/rfc/rfc819.html")
 public class DomainNameValidator extends AbstractFormatValidator.IntervalForm {
 
     public static final DomainNameValidator INSTANCE = new DomainNameValidator();

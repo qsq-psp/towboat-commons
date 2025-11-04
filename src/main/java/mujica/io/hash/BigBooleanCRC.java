@@ -11,10 +11,6 @@ import java.io.Serializable;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-/**
- * Created in Ultramarine on 2025/4/8, named BigCRC.
- * Recreated on 2025/4/11.
- */
 @CodeHistory(date = "2025/4/8", project = "Ultramarine", name = "BigCRC")
 @CodeHistory(date = "2025/4/11")
 public class BigBooleanCRC extends EachBitStreamHash implements BitSequence, Serializable {

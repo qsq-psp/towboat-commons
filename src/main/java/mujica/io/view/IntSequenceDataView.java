@@ -1,7 +1,7 @@
 package mujica.io.view;
 
 import mujica.ds.of_int.list.IntSequence;
-import mujica.io.function.Base16Case;
+import mujica.io.codec.Base16Case;
 import mujica.math.algebra.discrete.ClampedMath;
 import mujica.math.algebra.discrete.IntegralMath;
 import mujica.reflect.modifier.CodeHistory;
@@ -21,19 +21,29 @@ public class IntSequenceDataView implements DataView {
     @NotNull
     private final ByteOrder byteOrder;
 
-    public IntSequenceDataView(@NotNull IntSequence intSequence, @NotNull ByteOrder byteOrder) {
+    @NotNull
+    private final Runnable guard;
+
+    public IntSequenceDataView(@NotNull IntSequence intSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
         super();
         this.intSequence = intSequence;
         this.byteOrder = byteOrder;
+        this.guard = guard;
+    }
+
+    public IntSequenceDataView(@NotNull IntSequence intSequence, @NotNull ByteOrder byteOrder) {
+        this(intSequence, byteOrder, NOP_GUARD);
     }
 
     @Override
     public int bitLength() {
+        guard.run();
         return ClampedMath.INSTANCE.multiply(intSequence.intLength(), Integer.SIZE);
     }
 
     @Override
     public boolean getBit(int index) {
+        guard.run();
         final int value = intSequence.getInt(index >>> 5);
         int shift = index & 0x1f;
         if (byteOrder != ByteOrder.LITTLE_ENDIAN) {
@@ -44,16 +54,19 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public boolean getBitExact() {
+        guard.run();
         throw new DataSizeMismatchException(bitLength() + " != 1");
     }
 
     @Override
     public int byteLength() {
+        guard.run();
         return intSequence.intLength() << 2;
     }
 
     @Override
     public byte getByte(int index) {
+        guard.run();
         final int value = intSequence.getInt(index >>> 2);
         int shift = (index & 0x3) << 3;
         if (byteOrder != ByteOrder.LITTLE_ENDIAN) {
@@ -64,6 +77,7 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public byte getByteAll() {
+        guard.run();
         if (intSequence.intLength() != 0) {
             throw new RuntimeException();
         }
@@ -72,11 +86,13 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public byte getByteExact() {
+        guard.run();
         throw new DataSizeMismatchException(bitLength() + " != " + Byte.SIZE);
     }
 
     @Override
     public short getUnsignedByte(int index) {
+        guard.run();
         final int value = intSequence.getInt(index >>> 2);
         int shift = (index & 0x3) << 3;
         if (byteOrder != ByteOrder.LITTLE_ENDIAN) {
@@ -87,6 +103,7 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public short getUnsignedByteAll() {
+        guard.run();
         if (intSequence.intLength() != 0) {
             throw new DataSizeMismatchException();
         }
@@ -95,16 +112,19 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public short getUnsignedByteExact() {
+        guard.run();
         throw new DataSizeMismatchException(bitLength() + " != " + Byte.SIZE);
     }
 
     @Override
     public int shortLength() {
+        guard.run();
         return intSequence.intLength() << 1;
     }
 
     @Override
     public short getShort(int index) {
+        guard.run();
         final int value = intSequence.getInt(index >>> 1);
         int shift = (index & 0x1) << 4;
         if (byteOrder != ByteOrder.LITTLE_ENDIAN) {
@@ -115,11 +135,13 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public short shortAt(int byteOffset) {
+        guard.run();
         return 0;
     }
 
     @Override
     public short getShortAll() {
+        guard.run();
         if (intSequence.intLength() != 0) {
             throw new DataSizeMismatchException();
         }
@@ -128,11 +150,13 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public short getShortExact() {
+        guard.run();
         throw new DataSizeMismatchException(bitLength() + " != " + Short.SIZE);
     }
 
     @Override
     public int getUnsignedShort(int index) {
+        guard.run();
         final int value = intSequence.getInt(index >>> 1);
         int shift = (index & 0x1) << 4;
         if (byteOrder != ByteOrder.LITTLE_ENDIAN) {
@@ -143,11 +167,13 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public int unsignedShortAt(int byteOffset) {
+        guard.run();
         return 0;
     }
 
     @Override
     public int getUnsignedShortAll() {
+        guard.run();
         if (intSequence.intLength() != 0) {
             throw new DataSizeMismatchException();
         }
@@ -156,21 +182,25 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public int getUnsignedShortExact() {
+        guard.run();
         throw new DataSizeMismatchException(bitLength() + " != " + Short.SIZE);
     }
 
     @Override
     public int intLength() {
+        guard.run();
         return intSequence.intLength();
     }
 
     @Override
     public int getInt(int index) {
+        guard.run();
         return intSequence.getInt(index);
     }
 
     @Override
     public int intAt(int byteOffset) {
+        guard.run();
         final int index = byteOffset >> 2;
         switch (byteOffset & 0x3) {
             default:
@@ -199,6 +229,7 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public int getIntAll() {
+        guard.run();
         final int intLength = intSequence.intLength();
         if (intLength == 1) {
             return intSequence.getInt(0);
@@ -211,6 +242,7 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public int getIntExact() {
+        guard.run();
         if (intSequence.intLength() == 1) {
             return intSequence.getInt(0);
         } else {
@@ -220,16 +252,19 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public long getUnsignedInt(int index) {
+        guard.run();
         return 0xffffffffL & getInt(index);
     }
 
     @Override
     public long unsignedIntAt(int byteOffset) {
+        guard.run();
         return 0xffffffffL & intAt(byteOffset);
     }
 
     @Override
     public long getUnsignedIntAll() {
+        guard.run();
         final int size = intSequence.intLength();
         if (size == 1) {
             return 0xffffffffL & intSequence.getInt(0);
@@ -242,6 +277,7 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public long getUnsignedIntExact() {
+        guard.run();
         if (intSequence.intLength() == 1) {
             return 0xffffffffL & intSequence.getInt(0);
         } else {
@@ -251,11 +287,13 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public int longLength() {
+        guard.run();
         return (intSequence.intLength() + 0x1) >>> 1;
     }
 
     @Override
     public long longAt(int index) {
+        guard.run();
         index <<= 1;
         final int intLength = intSequence.intLength();
         if (index < intLength) {
@@ -276,13 +314,15 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public long getLong(int byteOffset) {
+        guard.run();
         return 0;
     }
 
     @Override
     public long getLongAll() {
+        guard.run();
         final int intLength = intSequence.intLength();
-        long value0 = 0L;
+        long value0;
         long value1 = 0L;
         switch (intLength) {
             case 2:
@@ -305,6 +345,7 @@ public class IntSequenceDataView implements DataView {
 
     @Override
     public long getLongExact() {
+        guard.run();
         if (intSequence.intLength() != 2) {
             throw new DataSizeMismatchException(bitLength() + " != " + Long.SIZE);
         }
@@ -320,6 +361,7 @@ public class IntSequenceDataView implements DataView {
     @NotNull
     @Override
     public String toBinaryString() {
+        guard.run();
         final int intLength = intSequence.intLength();
         final char[] charArray = new char[IntegralMath.INSTANCE.multiply(intLength, Integer.SIZE)];
         int shiftStart, shiftDelta;
@@ -349,6 +391,7 @@ public class IntSequenceDataView implements DataView {
     @NotNull
     @Override
     public String toHexString(boolean upperCase) {
+        guard.run();
         final int intLength = intSequence.intLength();
         final char[] charArray = new char[IntegralMath.INSTANCE.multiply(intLength, 8)];
         int[] shiftArray;

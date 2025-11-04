@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2022/11/19", project = "Ultramarine")
 @CodeHistory(date = "2025/3/2")
-@CodeHistory(date = "")
 public interface Curve2 {
 
     @NotNull

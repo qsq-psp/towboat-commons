@@ -1,8 +1,9 @@
 package mujica.text.number;
 
-import mujica.io.function.Base16Case;
+import mujica.io.codec.Base16Case;
 import mujica.math.algebra.discrete.CastToFloor;
 import mujica.math.algebra.discrete.IntegralMath;
+import mujica.reflect.modifier.CodeHistory;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +14,7 @@ import java.util.Objects;
 /**
  * Created on 2025/3/3.
  */
+@CodeHistory(date = "2025/3/3")
 public class DataSizeStyle extends HexEncoder implements IntegralToStringFunction {
 
     public static final int STYLE_DEC = 0x01;
@@ -39,11 +41,11 @@ public class DataSizeStyle extends HexEncoder implements IntegralToStringFunctio
     @NotNull
     protected final String itemDelimiter;
 
-    /**
-     * 0 <= mantissa <= 9, or ArithmeticException thrown
-     */
     protected DataSizeStyle(@MagicConstant(valuesFromClass = Base16Case.class) int alphabetOffset, int style, int mantissa, @NotNull String itemDelimiter) {
         super(alphabetOffset);
+        if (mantissa < 0 || 3 < mantissa) {
+            throw new IllegalArgumentException();
+        }
         this.style = style;
         this.multiplier = IntegralMath.INSTANCE.power(10, mantissa);
         this.mantissa = new PaddedRadix(10, mantissa);
@@ -91,15 +93,9 @@ public class DataSizeStyle extends HexEncoder implements IntegralToStringFunctio
         if (mantissa.minLength == 0) { // minLength and maxLength are same
             return;
         }
-        if (numerator == 0L) {
-            return;
-        }
         try {
             numerator = IntegralMath.INSTANCE.multiply(numerator, multiplier); // throws ArithmeticException if overflow
             numerator = CastToFloor.INSTANCE.divide(numerator, denominator);
-            if (numerator == 0L) {
-                return;
-            }
             out.append('.');
             mantissa.append(numerator, out);
         } catch (ArithmeticException e) {
@@ -111,13 +107,7 @@ public class DataSizeStyle extends HexEncoder implements IntegralToStringFunctio
         if (mantissa.minLength == 0) { // minLength and maxLength are same
             return;
         }
-        if (numerator.signum() == 0) {
-            return;
-        }
         numerator = numerator.multiply(BigInteger.valueOf(multiplier)).divide(denominator);
-        if (numerator.signum() == 0) {
-            return;
-        }
         out.append('.');
         mantissa.append(numerator, out);
     }
@@ -168,7 +158,9 @@ public class DataSizeStyle extends HexEncoder implements IntegralToStringFunctio
             }
             int integral = value / unit0;
             out.append(integral);
-            appendMantissa(value - integral * unit0, unit0, out);
+            if (index != 0) {
+                appendMantissa(value - integral * unit0, unit0, out);
+            }
             out.append(UNITS_1000[index]);
             subsequent = true;
         }
@@ -188,7 +180,9 @@ public class DataSizeStyle extends HexEncoder implements IntegralToStringFunctio
             }
             int integral = value / unit0;
             out.append(integral);
-            appendMantissa(value - integral * unit0, unit0, out);
+            if (index != 0) {
+                appendMantissa(value - integral * unit0, unit0, out);
+            }
             out.append(UNITS_1024[index]);
         }
     }

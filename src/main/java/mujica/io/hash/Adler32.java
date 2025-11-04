@@ -9,10 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.util.function.IntSupplier;
 
-/**
- * Created in Ultramarine on 2024/12/11.
- * Recreated on 2025/4/14.
- */
 @CodeHistory(date = "2024/12/11", project = "Ultramarine")
 @CodeHistory(date = "2025/4/14")
 public class Adler32 extends EachByteStreamHash implements IntSupplier, Serializable {

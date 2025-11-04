@@ -52,7 +52,7 @@ public class ArrayPriorityQueue<E> extends AbstractPriorityQueue<E> {
         list.sort(this.comparator);
         this.policy = policy;
         final int size = list.size();
-        final int capacity = policy.nextCapacity(size);
+        final int capacity = policy.notSmallerCapacity(size);
         this.elements = new Object[capacity];
         final int offset = (capacity - size) >> 1;
         for (int index = 0; index < size; index++) {

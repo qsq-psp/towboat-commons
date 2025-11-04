@@ -5,11 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntSupplier;
 
-/**
- * Created in existence on 2018/7/3, named HasIntValue.
- * Recreated in Ultramarine on 2024/1/20.
- * Moved here on 2025/3/9.
- */
 @CodeHistory(date = "2018/7/3", project = "existence", name = "HasIntValue")
 @CodeHistory(date = "2024/1/20", project = "Ultramarine")
 @CodeHistory(date = "2025/3/9")

@@ -1,6 +1,6 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,6 +8,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/9/18")
 public interface ClassFileNode extends Serializable {
@@ -23,7 +24,9 @@ public interface ClassFileNode extends Serializable {
     ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex);
 
     @NotNull
-    String toString(@NotNull ClassFile context, int position);
+    String toString(@NotNull ClassFile context);
+
+    void remapConstant(@NotNull IntUnaryOperator remap);
 
     @CodeHistory(date = "2025/9/18")
     interface Independent extends ClassFileNode {

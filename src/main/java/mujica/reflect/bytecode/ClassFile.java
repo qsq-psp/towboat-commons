@@ -1,7 +1,10 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.IndentWriter;
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.codec.IndentWriter;
+import mujica.io.nest.LimitedDataInput;
+import mujica.io.nest.LimitedInput;
+import mujica.math.algebra.random.RandomContext;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
@@ -9,11 +12,16 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.IntUnaryOperator;
+import java.util.function.Predicate;
 
-/**
- * Created on 2025/9/9.
- */
-public class ClassFile implements ClassFileNode.Independent {
+@CodeHistory(date = "2019/8/15", project = "bone", name = "JavaClassFile")
+@CodeHistory(date = "2025/9/9")
+public class ClassFile implements ClassFileNode.Independent, BiConsumer<AttributeInfo.Statistics, String>, Consumer<CodeAttributeInfo.Statistics> {
 
     private static final long serialVersionUID = 0xD029789AF7932A07L;
 
@@ -28,11 +36,14 @@ public class ClassFile implements ClassFileNode.Independent {
 
     AttributeInfo[] attributes;
 
-    String thisClass; // CONSTANT_CLASS
+    @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+    String thisClass;
 
-    String superClass; // CONSTANT_CLASS
+    @ConstantType(tags = ConstantPool.CONSTANT_CLASS, zero = true)
+    String superClass;
 
-    String[] superInterfaces; // CONSTANT_CLASS
+    @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+    String[] superInterfaces;
 
     int accessFlags;
 
@@ -42,6 +53,11 @@ public class ClassFile implements ClassFileNode.Independent {
 
     public ClassFile() {
         super();
+    }
+
+    @NotNull
+    public ConstantPool getConstantPool() {
+        return constantPool;
     }
 
     private static final Class<?>[] GROUPS = {
@@ -94,6 +110,7 @@ public class ClassFile implements ClassFileNode.Independent {
 
     @Override
     public void read(@NotNull LimitedDataInput in) throws IOException {
+        in.setBehavior(LimitedInput.Behavior.THROW);
         {
             int magic = in.readInt();
             if (magic != MAGIC) {
@@ -160,7 +177,7 @@ public class ClassFile implements ClassFileNode.Independent {
         for (MemberInfo methodInfo : methods) {
             methodInfo.write(constantPool, out);
         }
-        AttributeInfo.writeArray(constantPool, out, attributes);
+        AttributeInfo.writeArray(attributes, constantPool, out);
     }
 
     @Override
@@ -169,11 +186,11 @@ public class ClassFile implements ClassFileNode.Independent {
     }
 
     public void write(@NotNull IndentWriter writer) throws IOException {
-        write(this, writer, this, 0);
+        write(this, writer, this);
     }
 
-    private static void write(@NotNull ClassFile context, @NotNull IndentWriter writer, @NotNull ClassFileNode node, int index) throws IOException {
-        writer.write(node.toString(context, index));
+    private static void write(@NotNull ClassFile context, @NotNull IndentWriter writer, @NotNull ClassFileNode node) throws IOException {
+        writer.write(node.toString(context));
         boolean firstChild = true;
         final int groupCount = node.groupCount();
         for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
@@ -185,7 +202,7 @@ public class ClassFile implements ClassFileNode.Independent {
                     writer.indentIn();
                 }
                 writer.newLine();
-                write(context, writer, node.getNode(group, nodeIndex), nodeIndex);
+                write(context, writer, node.getNode(group, nodeIndex));
             }
         }
         if (!firstChild) {
@@ -193,9 +210,19 @@ public class ClassFile implements ClassFileNode.Independent {
         }
     }
 
+    public void writeReference(@NotNull IndentWriter writer) throws IOException {
+        constantPool.writeReference(this, writer);
+    }
+
+    public void writeAssemble(@NotNull IndentWriter writer) throws IOException {
+        for (MemberInfo.MethodInfo method : methods) {
+            method.writeAssemble(this, writer);
+        }
+    }
+
     @NotNull
     @Override
-    public String toString(@NotNull ClassFile context, int position) {
+    public String toString(@NotNull ClassFile context) {
         final StringBuilder sb = new StringBuilder();
         if ((accessFlags & Modifier.PUBLIC) != 0) {
             sb.append("public ");
@@ -251,6 +278,71 @@ public class ClassFile implements ClassFileNode.Independent {
     @Override
     @NotNull
     public String toString() {
-        return toString(this, 0);
+        return toString(this);
+    }
+
+    @Override
+    public void accept(@NotNull AttributeInfo.Statistics statistics, @NotNull String prefix) {
+        for (MemberInfo member : fields) {
+            member.accept(statistics, prefix);
+        }
+        for (MemberInfo member : methods) {
+            member.accept(statistics, prefix);
+        }
+        for (AttributeInfo attribute : attributes) {
+            attribute.accept(statistics, prefix);
+        }
+    }
+
+    public void accept(@NotNull AttributeInfo.Statistics statistics) {
+        accept(statistics, "");
+    }
+
+    @Override
+    public void accept(@NotNull CodeAttributeInfo.Statistics statistics) {
+        for (MemberInfo.MethodInfo method : methods) {
+            method.accept(statistics);
+        }
+    }
+
+    public void filterAttributeInfo(@NotNull Predicate<AttributeInfo> predicate) {
+        for (MemberInfo memberInfo : fields) {
+            memberInfo.filterAttributeInfo(predicate);
+        }
+        for (MemberInfo memberInfo : methods) {
+            memberInfo.filterAttributeInfo(predicate);
+        }
+        attributes = AttributeInfo.filterArray(attributes, predicate);
+    }
+
+    public void simplifyAttributeInfo() {
+        filterAttributeInfo(AttributeInfo::isNecessary);
+    }
+
+    public void sortAttributeInfo(@NotNull Comparator<AttributeInfo> comparator) {
+        for (MemberInfo memberInfo : fields) {
+            memberInfo.sortAttributeInfo(comparator);
+        }
+        for (MemberInfo memberInfo : methods) {
+            memberInfo.sortAttributeInfo(comparator);
+        }
+        Arrays.sort(attributes, comparator);
+    }
+
+    public void shuffleAttributeInfo() {
+        sortAttributeInfo((new RandomContext()).shuffleComparator());
+    }
+
+    @Override
+    public void remapConstant(@NotNull IntUnaryOperator remap) {
+        for (MemberInfo memberInfo : fields) {
+            memberInfo.remapConstant(remap);
+        }
+        for (MemberInfo memberInfo : methods) {
+            memberInfo.remapConstant(remap);
+        }
+        for (AttributeInfo attribute : attributes) {
+            attribute.remapConstant(remap);
+        }
     }
 }

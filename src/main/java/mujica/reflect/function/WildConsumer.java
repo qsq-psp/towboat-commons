@@ -1,13 +1,12 @@
 package mujica.reflect.function;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
-/**
- * Created on 2025/3/5.
- */
+@CodeHistory(date = "2025/3/5")
 @FunctionalInterface
 public interface WildConsumer<T> {
 

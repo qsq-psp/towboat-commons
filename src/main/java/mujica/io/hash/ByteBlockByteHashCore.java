@@ -1,7 +1,6 @@
 package mujica.io.hash;
 
 import mujica.io.view.DataView;
-import mujica.io.view.DataViewOwner;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +9,7 @@ import java.nio.ByteBuffer;
 
 @CodeHistory(date = "2024/12/19", project = "OSHI", name = "BlockDigestCore")
 @CodeHistory(date = "2025/4/17")
-public abstract class ByteBlockByteHashCore implements DataViewOwner, Serializable {
+public abstract class ByteBlockByteHashCore implements Serializable {
 
     private static final long serialVersionUID = 0x22f098248136ae45L;
 
@@ -58,7 +57,7 @@ public abstract class ByteBlockByteHashCore implements DataViewOwner, Serializab
     }
 
     @NotNull
-    public abstract DataView getDataView(); // insert interceptor
+    public abstract DataView getDataView(@NotNull Runnable guard);
 
     protected void pad10(@NotNull ByteBuffer buffer, int lengthFieldBytes) {
         //

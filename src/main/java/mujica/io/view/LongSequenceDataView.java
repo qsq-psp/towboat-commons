@@ -1,7 +1,7 @@
 package mujica.io.view;
 
 import mujica.ds.of_long.LongSequence;
-import mujica.io.function.Base16Case;
+import mujica.io.codec.Base16Case;
 import mujica.math.algebra.discrete.ClampedMath;
 import mujica.math.algebra.discrete.IntegralMath;
 import mujica.reflect.modifier.CodeHistory;
@@ -21,19 +21,29 @@ public class LongSequenceDataView implements DataView {
     @NotNull
     private final ByteOrder byteOrder;
 
-    public LongSequenceDataView(@NotNull LongSequence longSequence, @NotNull ByteOrder byteOrder) {
+    @NotNull
+    private final Runnable guard;
+
+    public LongSequenceDataView(@NotNull LongSequence longSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
         super();
         this.longSequence = longSequence;
         this.byteOrder = byteOrder;
+        this.guard = guard;
+    }
+
+    public LongSequenceDataView(@NotNull LongSequence longSequence, @NotNull ByteOrder byteOrder) {
+        this(longSequence, byteOrder, NOP_GUARD);
     }
 
     @Override
     public int bitLength() {
+        guard.run();
         return ClampedMath.INSTANCE.multiply(longSequence.longLength(), Long.SIZE);
     }
 
     @Override
     public boolean getBit(int index) {
+        guard.run();
         final long value = longSequence.getLong(index >>> 6);
         int shift = index & 0x3f;
         if (byteOrder != ByteOrder.LITTLE_ENDIAN) {
@@ -44,162 +54,194 @@ public class LongSequenceDataView implements DataView {
 
     @Override
     public boolean getBitExact() {
+        guard.run();
         throw new DataSizeMismatchException();
     }
 
     @Override
     public int byteLength() {
+        guard.run();
         return 0;
     }
 
     @Override
     public byte getByte(int index) {
+        guard.run();
         return 0;
     }
 
     @Override
     public byte getByteAll() {
+        guard.run();
         return 0;
     }
 
     @Override
     public byte getByteExact() {
+        guard.run();
         throw new DataSizeMismatchException();
     }
 
     @Override
     public short getUnsignedByte(int index) {
+        guard.run();
         return 0;
     }
 
     @Override
     public short getUnsignedByteAll() {
+        guard.run();
         return 0;
     }
 
     @Override
     public short getUnsignedByteExact() {
+        guard.run();
         throw new DataSizeMismatchException();
     }
 
     @Override
     public int shortLength() {
+        guard.run();
         return 0;
     }
 
     @Override
     public short getShort(int index) {
+        guard.run();
         return 0;
     }
 
     @Override
     public short shortAt(int byteOffset) {
+        guard.run();
         return 0;
     }
 
     @Override
     public short getShortAll() {
+        guard.run();
         return 0;
     }
 
     @Override
     public short getShortExact() {
+        guard.run();
         throw new DataSizeMismatchException();
     }
 
     @Override
     public int getUnsignedShort(int index) {
+        guard.run();
         return 0;
     }
 
     @Override
     public int unsignedShortAt(int byteOffset) {
+        guard.run();
         return 0;
     }
 
     @Override
     public int getUnsignedShortAll() {
+        guard.run();
         return 0;
     }
 
     @Override
     public int getUnsignedShortExact() {
+        guard.run();
         throw new DataSizeMismatchException();
     }
 
     @Override
     public int intLength() {
+        guard.run();
         return 0;
     }
 
     @Override
     public int getInt(int index) {
+        guard.run();
         return 0;
     }
 
     @Override
     public int intAt(int byteOffset) {
+        guard.run();
         return 0;
     }
 
     @Override
     public int getIntAll() {
+        guard.run();
         return 0;
     }
 
     @Override
     public int getIntExact() {
+        guard.run();
         throw new DataSizeMismatchException();
     }
 
     @Override
     public long getUnsignedInt(int index) {
+        guard.run();
         return 0;
     }
 
     @Override
     public long unsignedIntAt(int byteOffset) {
+        guard.run();
         return 0;
     }
 
     @Override
     public long getUnsignedIntAll() {
+        guard.run();
         return 0;
     }
 
     @Override
     public long getUnsignedIntExact() {
+        guard.run();
         throw new DataSizeMismatchException();
     }
 
     @Override
     public int longLength() {
+        guard.run();
         return 0;
     }
 
     @Override
     public long getLong(int index) {
+        guard.run();
         return 0;
     }
 
     @Override
     public long longAt(int byteOffset) {
+        guard.run();
         return 0;
     }
 
     @Override
     public long getLongAll() {
+        guard.run();
         return 0;
     }
 
     @Override
     public long getLongExact() {
+        guard.run();
         return 0;
     }
 
     @NotNull
     @Override
     public String toBinaryString() {
+        guard.run();
         final int longLength = longSequence.longLength();
         final char[] charArray = new char[IntegralMath.INSTANCE.multiply(longLength, Long.SIZE)];
         int shiftStart, shiftDelta;
@@ -229,6 +271,7 @@ public class LongSequenceDataView implements DataView {
     @NotNull
     @Override
     public String toHexString(boolean upperCase) {
+        guard.run();
         final int intLength = longSequence.longLength();
         final char[] charArray = new char[IntegralMath.INSTANCE.multiply(intLength, 16)];
         int[] shiftArray;

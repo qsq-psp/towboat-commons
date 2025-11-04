@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 
 @CodeHistory(date = "2025/4/16")
-@ReferencePage(title = "MySQL 8.0 Schema Object Names", language = "en", href = "https://dev.mysql.com/doc/refman/8.0/en/identifiers.html")
+@ReferencePage(title = "MySQL 8.0 Schema Object Names", href = "https://dev.mysql.com/doc/refman/8.0/en/identifiers.html")
 public class SchemaObjectNameValidator extends AbstractFormatValidator.IntervalForm {
 
     public static final SchemaObjectNameValidator INSTANCE = new SchemaObjectNameValidator();

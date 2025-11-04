@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 
 @CodeHistory(date = "2025/9/10")
-@ReferencePage(title = "JLS12 Chapter 6. Names", author = "James Gosling", language = "en", href = "https://docs.oracle.com/javase/specs/jls/se12/html/jls-6.html#jls-6.7")
+@ReferencePage(title = "JLS12 Names", href = "https://docs.oracle.com/javase/specs/jls/se12/html/jls-6.html#jls-6.7")
 public class JavaFullyQualifiedNameValidator extends AbstractFormatValidator.IntervalForm {
 
     /**

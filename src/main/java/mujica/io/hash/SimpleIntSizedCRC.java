@@ -1,16 +1,15 @@
 package mujica.io.hash;
 
 import mujica.io.view.*;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.nio.ByteOrder;
 import java.util.function.IntSupplier;
 
-/**
- * Created in Ultramarine on 2024/12/11, named BaselineCRC32.
- * Created on 2025/4/12.
- */
+@CodeHistory(date = "2024/12/11", name = "BaselineCRC32")
+@CodeHistory(date = "2025/4/12")
 public class SimpleIntSizedCRC extends EachBitStreamHash implements IntSupplier, Serializable {
 
     private static final long serialVersionUID = 0xf49818281cf481eeL;

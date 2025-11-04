@@ -1,20 +1,23 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/9/17")
+@ReferencePage(title = "JVMS12 The LineNumberTable Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.12")
 public class LineNumberTableAttributeInfo extends AttributeInfo {
 
     private static final long serialVersionUID = 0xBE372F5329355F0DL;
 
     @CodeHistory(date = "2025/9/17")
-    private static class LineNumberEntry implements Dependent {
+    private static class LineNumberEntry implements ClassFileNode.Independent {
 
         private static final long serialVersionUID = 0x3400DFA459BFA386L;
 
@@ -49,37 +52,42 @@ public class LineNumberTableAttributeInfo extends AttributeInfo {
         }
 
         @Override
-        public void read(@NotNull ConstantPool context, @NotNull LimitedDataInput in) throws IOException {
+        public void read(@NotNull LimitedDataInput in) throws IOException {
             startPC = in.readUnsignedShort();
             lineNumber = in.readUnsignedShort();
         }
 
         @Override
-        public void read(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
+        public void read(@NotNull ByteBuffer buffer) {
             startPC = 0xffff & buffer.getShort();
             lineNumber = 0xffff & buffer.getShort();
         }
 
         @Override
-        public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
+        public void write(@NotNull DataOutput out) throws IOException {
             out.writeShort(startPC);
             out.writeShort(lineNumber);
         }
 
         @Override
-        public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
+        public void write(@NotNull ByteBuffer buffer) {
             buffer.putShort((short) startPC);
             buffer.putShort((short) lineNumber);
         }
 
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
+        public String toString(@NotNull ClassFile context) {
             return "PC " + startPC + " line " + lineNumber;
+        }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            // pass
         }
     }
 
-    LineNumberEntry[] entries;
+    private LineNumberEntry[] entries;
 
     LineNumberTableAttributeInfo() {
         super();
@@ -119,6 +127,12 @@ public class LineNumberTableAttributeInfo extends AttributeInfo {
         }
     }
 
+    @NotNull
+    @Override
+    public ImportanceLevel importanceLevel() {
+        return ImportanceLevel.HIGH;
+    }
+
     public static final String NAME = "LineNumberTable";
 
     @NotNull
@@ -138,7 +152,7 @@ public class LineNumberTableAttributeInfo extends AttributeInfo {
         entries = new LineNumberEntry[tableLength];
         for (int index = 0; index < tableLength; index++) {
             LineNumberEntry entry = new LineNumberEntry();
-            entry.read(context, in);
+            entry.read(in);
             entries[index] = entry;
         }
     }
@@ -149,26 +163,24 @@ public class LineNumberTableAttributeInfo extends AttributeInfo {
         entries = new LineNumberEntry[tableLength];
         for (int index = 0; index < tableLength; index++) {
             LineNumberEntry entry = new LineNumberEntry();
-            entry.read(context, buffer);
+            entry.read(buffer);
             entries[index] = entry;
         }
     }
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
-        super.write(context, out);
         out.writeShort(entries.length);
         for (LineNumberEntry entry : entries) {
-            entry.write(context, out);
+            entry.write(out);
         }
     }
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        super.write(context, buffer);
         buffer.putShort((short) entries.length);
         for (LineNumberEntry entry : entries) {
-            entry.write(context, buffer);
+            entry.write(buffer);
         }
     }
 }

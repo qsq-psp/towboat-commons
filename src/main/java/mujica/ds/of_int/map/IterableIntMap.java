@@ -1,6 +1,7 @@
 package mujica.ds.of_int.map;
 
 import mujica.reflect.function.IntEntryConsumer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.IntSummaryStatistics;
@@ -12,6 +13,7 @@ import java.util.function.IntPredicate;
 /**
  * Created on 2025/3/27.
  */
+@CodeHistory(date = "2025/3/27")
 public abstract class IterableIntMap extends IntMap implements Iterable<IntMapEntry> {
 
     @NotNull

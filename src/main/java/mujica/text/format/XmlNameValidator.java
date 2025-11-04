@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 
 @CodeHistory(date = "2025/9/13")
-@ReferencePage(title = "Extensible Markup Language (XML) 1.0 (Fifth Edition)", language = "en", href = "https://www.w3.org/TR/REC-xml/#d0e804")
+@ReferencePage(title = "Extensible Markup Language (XML) 1.0 (Fifth Edition)", href = "https://www.w3.org/TR/REC-xml/#d0e804")
 public class XmlNameValidator extends AbstractFormatValidator.IntervalForm {
 
     private static final FailureMessage EMPTY = new FailureMessage(

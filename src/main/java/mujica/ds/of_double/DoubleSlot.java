@@ -15,6 +15,9 @@ public interface DoubleSlot {
     @ReferencePage(title = "MIN_SAFE_INTEGER", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_SAFE_INTEGER")
     long MIN_SAFE_LONG = -MAX_SAFE_LONG;
 
+    @ReferencePage(title = "Number.EPSILON", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON")
+    double EPSILON = Math.ulp(1.0);
+
     double getDouble();
 
     double setDouble(double newValue);

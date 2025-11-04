@@ -1,16 +1,19 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.nest.LimitedDataInput;
+import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-/**
- * Created on 2025/9/15.
- */
+@CodeHistory(date = "2025/9/15")
+@ReferencePage(title = "JVMS12 Attributes", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7")
 public class NotParsedAttributeInfo extends AttributeInfo {
+
+    private static final long serialVersionUID = 0x1A562EF5C401B03DL;
 
     @NotNull
     final String name;
@@ -20,6 +23,46 @@ public class NotParsedAttributeInfo extends AttributeInfo {
     public NotParsedAttributeInfo(@NotNull String name) {
         super();
         this.name = name;
+    }
+
+    @NotNull
+    @Override
+    public ImportanceLevel importanceLevel() {
+        switch (name) {
+            case "ConstantValue":
+            case "Code":
+            case "StackMapTable":
+            case "BootstrapMethods":
+            case "NestHost":
+            case "NestMembers":
+                return ImportanceLevel.CRITICAL;
+            case "Exceptions":
+            case "InnerClasses":
+            case "EnclosingMethod":
+            case "Synthetic":
+            case "Signature":
+            case "SourceFile":
+            case "LineNumberTable":
+            case "LocalVariableTable":
+            case "LocalVariableTypeTable":
+                return ImportanceLevel.HIGH;
+            case "SourceDebugExtension":
+            case "Deprecated":
+            case "RuntimeVisibleAnnotations":
+            case "RuntimeInvisibleAnnotations":
+            case "RuntimeVisibleParameterAnnotations":
+            case "RuntimeInvisibleParameterAnnotations":
+            case "RuntimeVisibleTypeAnnotations":
+            case "RuntimeInvisibleTypeAnnotations":
+            case "AnnotationDefault":
+            case "MethodParameters":
+            case "Module":
+            case "ModulePackages":
+            case "ModuleMainClass":
+                return ImportanceLevel.MEDIUM;
+            default:
+                return ImportanceLevel.LOW;
+        }
     }
 
     @NotNull
@@ -47,13 +90,11 @@ public class NotParsedAttributeInfo extends AttributeInfo {
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
-        super.write(context, out);
         out.write(data);
     }
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        super.write(context, buffer);
         buffer.put(data);
     }
 }

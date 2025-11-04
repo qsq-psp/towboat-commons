@@ -1,22 +1,28 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.stream.LimitedDataInput;
+import mujica.io.nest.LimitedDataInput;
+import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
+import java.util.function.IntUnaryOperator;
 
 /**
  * Created on 2025/9/20.
  */
+@CodeHistory(date = "2025/9/20")
+@ReferencePage(title = "JVMS12 The MethodParameters Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.24")
 public class MethodParametersAttributeInfo extends AttributeInfo {
 
     public static final String NAME = "MethodParameters";
 
-    static class MethodParameter implements Independent {
+    static class MethodParameter implements ClassFileNode.Independent {
 
+        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
         int nameIndex;
 
         int accessFlags;
@@ -69,7 +75,7 @@ public class MethodParametersAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public String toString(@NotNull ClassFile context, int position) {
+        public String toString(@NotNull ClassFile context) {
             final StringBuilder sb = new StringBuilder();
             if ((accessFlags & Modifier.FINAL) != 0) {
                 sb.append("final ");
@@ -80,9 +86,14 @@ public class MethodParametersAttributeInfo extends AttributeInfo {
             sb.append(context.constantPool.getUtf8(nameIndex));
             return sb.toString();
         }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            nameIndex = remap.applyAsInt(nameIndex);
+        }
     }
 
-    MethodParameter[] parameters;
+    private MethodParameter[] parameters;
 
     @NotNull
     @Override
@@ -119,7 +130,6 @@ public class MethodParametersAttributeInfo extends AttributeInfo {
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
-        super.write(context, out);
         out.writeShort(parameters.length);
         for (MethodParameter parameter : parameters) {
             parameter.write(out);
@@ -128,7 +138,6 @@ public class MethodParametersAttributeInfo extends AttributeInfo {
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        super.write(context, buffer);
         buffer.putShort((short) parameters.length);
         for (MethodParameter parameter : parameters) {
             parameter.write(buffer);

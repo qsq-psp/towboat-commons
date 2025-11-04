@@ -1,10 +1,10 @@
 package mujica.ds.generic.heap;
 
+import mujica.reflect.modifier.CodeHistory;
+
 import java.io.Serializable;
 
-/**
- * Created on 2025/6/7.
- */
+@CodeHistory(date = "2025/6/7")
 public class LinkedNode<E> implements Serializable {
 
     private static final long serialVersionUID = 0xc7e353c557a61863L;

@@ -1,9 +1,16 @@
 package mujica.ds.of_int.map;
 
+import mujica.reflect.modifier.CodeHistory;
+
+import java.io.Serializable;
+
 /**
  * Created on 2025/3/27.
  */
-class SimpleIntMapEntry implements IntMapEntry {
+@CodeHistory(date = "2025/3/27")
+class SimpleIntMapEntry implements IntMapEntry, Serializable {
+
+    private static final long serialVersionUID = 0xF306C658F3EC17B5L;
 
     int key, value;
 
@@ -15,5 +22,10 @@ class SimpleIntMapEntry implements IntMapEntry {
     @Override
     public int getIntValue() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        return key + " -> " + value;
     }
 }

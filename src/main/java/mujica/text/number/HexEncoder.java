@@ -1,7 +1,7 @@
 package mujica.text.number;
 
 import io.netty.buffer.ByteBuf;
-import mujica.io.function.Base16Case;
+import mujica.io.codec.Base16Case;
 import mujica.reflect.modifier.CodeHistory;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;

@@ -4,12 +4,10 @@ import mujica.ds.generic.Slot;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
-/**
- * Created on 2025/9/24.
- */
 @CodeHistory(date = "2022/6/4", project = "Ultramarine")
 @CodeHistory(date = "2025/9/24")
 public class JsonObject extends HashMap<String, Object> implements JsonContainer<String> {
@@ -22,9 +20,33 @@ public class JsonObject extends HashMap<String, Object> implements JsonContainer
         return keySet();
     }
 
+    @CodeHistory(date = "2025/10/2")
+    private class NamedSlot implements Slot<Object>, Serializable {
+
+        private static final long serialVersionUID = 0xEC1ECF6F2A21B14FL;
+
+        @NotNull
+        final String name;
+
+        private NamedSlot(@NotNull String name) {
+            super();
+            this.name = name;
+        }
+
+        @Override
+        public Object get() {
+            return JsonObject.this.get(name);
+        }
+
+        @Override
+        public Object set(@NotNull Object newValue) {
+            return put(name, newValue);
+        }
+    }
+
     @NotNull
     @Override
     public Slot<Object> getSlot(@NotNull String key) {
-        return null;
+        return new NamedSlot(key);
     }
 }
