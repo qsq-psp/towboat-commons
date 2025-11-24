@@ -62,6 +62,7 @@ public class Base32DecodeOutputStream extends FilterOutputStream implements Base
     @Override
     public void setPolicyImmediately(@NotNull BufferingPolicy policy) throws IOException {
         this.policy = policy;
+        // todo
     }
 
     private void write() throws IOException {

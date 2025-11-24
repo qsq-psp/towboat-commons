@@ -16,8 +16,8 @@ public class LongDescendingBubbleSort implements SortingAlgorithm<long[]> {
     }
 
     @Override
-    public boolean order() {
-        return DESCENDING;
+    public int orderingComposition() {
+        return COMPOSITION_DESCENDING;
     }
 
     @Override

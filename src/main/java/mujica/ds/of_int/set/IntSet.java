@@ -2,6 +2,7 @@ package mujica.ds.of_int.set;
 
 import mujica.ds.of_int.IntCollection;
 import mujica.math.algebra.random.RandomContext;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +16,7 @@ import java.util.function.IntPredicate;
 /**
  * Created on 2025/6/25.
  */
+@CodeHistory(date = "2025/6/25")
 public interface IntSet extends IntCollection {
 
     @NotNull

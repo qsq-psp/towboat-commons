@@ -29,7 +29,7 @@ public class MemberAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
         if (groupIndex == 0) {
             return Annotation.class;
         } else {
@@ -38,7 +38,7 @@ public class MemberAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == Annotation.class) {
             return annotations.length;
         } else {
@@ -48,7 +48,7 @@ public class MemberAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == Annotation.class) {
             return annotations[nodeIndex];
         } else {

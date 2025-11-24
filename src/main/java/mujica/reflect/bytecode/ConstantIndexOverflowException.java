@@ -3,9 +3,6 @@ package mujica.reflect.bytecode;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/10/25.
- */
 @CodeHistory(date = "2025/10/25")
 public class ConstantIndexOverflowException extends BytecodeException {
 

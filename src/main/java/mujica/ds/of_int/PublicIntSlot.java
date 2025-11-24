@@ -7,13 +7,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * Created in existence on 2018/7/3, named MtInteger.
- * Recreated in coo on 2020/2/22, named IntegerModel.
- * Recreated in Ultramarine on 2022/7/2, named Counter.
- * Renamed on 2024/1/20.
- * Recreated on 2025/3/9.
- */
 @CodeHistory(date = "2018/7/3", project = "existence", name = "MtInteger")
 @CodeHistory(date = "2020/2/22", project = "coo", name = "IntegerModel")
 @CodeHistory(date = "2022/7/2", project = "Ultramarine", name = "Counter")

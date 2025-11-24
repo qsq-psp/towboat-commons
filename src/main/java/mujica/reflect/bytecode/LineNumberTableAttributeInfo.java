@@ -17,7 +17,7 @@ public class LineNumberTableAttributeInfo extends AttributeInfo {
     private static final long serialVersionUID = 0xBE372F5329355F0DL;
 
     @CodeHistory(date = "2025/9/17")
-    private static class LineNumberEntry implements ClassFileNode.Independent {
+    private static class LineNumberEntry extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
         private static final long serialVersionUID = 0x3400DFA459BFA386L;
 
@@ -27,28 +27,6 @@ public class LineNumberTableAttributeInfo extends AttributeInfo {
 
         LineNumberEntry() {
             super();
-        }
-
-        @Override
-        public int groupCount() {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public Class<?> getGroup(int groupIndex) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        @Override
-        public int nodeCount(@NotNull Class<?> group) {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
-            throw new IndexOutOfBoundsException();
         }
 
         @Override
@@ -100,7 +78,7 @@ public class LineNumberTableAttributeInfo extends AttributeInfo {
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
         if (groupIndex == 0) {
             return LineNumberEntry.class;
         } else {
@@ -109,7 +87,7 @@ public class LineNumberTableAttributeInfo extends AttributeInfo {
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == LineNumberEntry.class) {
             return entries.length;
         } else {
@@ -119,7 +97,7 @@ public class LineNumberTableAttributeInfo extends AttributeInfo {
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == LineNumberEntry.class) {
             return entries[nodeIndex];
         } else {

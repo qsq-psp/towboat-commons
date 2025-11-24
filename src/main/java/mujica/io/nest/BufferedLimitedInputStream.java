@@ -9,9 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-/**
- * Created on 2025/10/14.
- */
 @CodeHistory(date = "2025/10/14")
 public class BufferedLimitedInputStream extends BufferedInputStream implements LimitedInput {
 
@@ -25,6 +22,13 @@ public class BufferedLimitedInputStream extends BufferedInputStream implements L
 
     public BufferedLimitedInputStream(@NotNull InputStream in) {
         this(in, 4096);
+    }
+
+    @NotNull
+    public static BufferedLimitedInputStream createWithRemaining(@NotNull InputStream in, long remaining) {
+        final BufferedLimitedInputStream lis = new BufferedLimitedInputStream(in);
+        lis.setRemaining(remaining);
+        return lis;
     }
 
     /**
@@ -152,14 +156,23 @@ public class BufferedLimitedInputStream extends BufferedInputStream implements L
         return (int) Math.min(value, Integer.MAX_VALUE);
     }
 
+    public void drain() throws IOException {
+        skipNBytes(remaining);
+    }
+
     @Override
-    public void mark(int readLimit) {
+    public void close() {
         // pass
     }
 
     @Override
-    public void reset() throws IOException {
-        throw new IOException("mark/reset not supported");
+    public void mark(int readLimit) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void reset() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

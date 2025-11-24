@@ -23,6 +23,40 @@ public class ExceptionsAttributeInfo extends AttributeInfo {
         super();
     }
 
+    @Override
+    public int groupCount() {
+        return 1;
+    }
+
+    @NotNull
+    @Override
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
+        if (groupIndex == 0) {
+            return ConstantReferenceNodeAdapter.class;
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    @Override
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
+        if (group == ConstantReferenceNodeAdapter.class) {
+            return indexes.length;
+        } else {
+            return 0;
+        }
+    }
+
+    @NotNull
+    @Override
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
+        if (group == ConstantReferenceNodeAdapter.class) {
+            return new ConstantReferenceNodeAdapter(indexes[nodeIndex]);
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
     @NotNull
     @Override
     public ImportanceLevel importanceLevel() {
@@ -90,15 +124,6 @@ public class ExceptionsAttributeInfo extends AttributeInfo {
             out.append(context.constantPool.getSourceClassName(index));
             subsequent = true;
         }
-    }
-
-    @NotNull
-    @Override
-    public String toString(@NotNull ClassFile context) {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(NAME).append(" [");
-        append(context, sb);
-        return sb.append("]").toString();
     }
 
     @Override

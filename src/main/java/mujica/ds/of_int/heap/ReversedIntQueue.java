@@ -1,14 +1,13 @@
 package mujica.ds.of_int.heap;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
-/**
- * Created on 2025/7/9.
- */
+@CodeHistory(date = "2025/7/9")
 public class ReversedIntQueue implements OrderedIntQueue {
 
     private static final long serialVersionUID = 0xb5860fc94b2dd029L;

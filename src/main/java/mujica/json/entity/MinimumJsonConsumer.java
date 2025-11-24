@@ -14,7 +14,7 @@ public interface MinimumJsonConsumer {
 
     void closeObject();
 
-    void key(@NotNull String key);
+    void stringKey(@NotNull String key);
 
     void jsonValue(@NotNull String value);
 }

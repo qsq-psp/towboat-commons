@@ -16,12 +16,12 @@ public interface ClassFileNode extends Serializable {
     int groupCount();
 
     @NotNull
-    Class<?> getGroup(int groupIndex);
+    Class<? extends ClassFileNode> getGroup(int groupIndex);
 
-    int nodeCount(@NotNull Class<?> group);
+    int nodeCount(@NotNull Class<? extends ClassFileNode> group);
 
     @NotNull
-    ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex);
+    ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex);
 
     @NotNull
     String toString(@NotNull ClassFile context);

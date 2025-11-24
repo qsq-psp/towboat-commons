@@ -3,16 +3,16 @@ package mujica.math.geometry.g2d;
 import mujica.math.algebra.random.RandomContext;
 import mujica.math.geometry.Geometry;
 import mujica.math.geometry.GeometryOperationResult;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-/**
- * Created in coo on 2020/7/20, named RestrictionArea.
- * Created on 2022/6/5.
- */
+@CodeHistory(date = "2020/7/20", project = "coo", name = "RestrictionArea")
+@CodeHistory(date = "2022/6/5", project = "Ultramarine")
+@CodeHistory(date = "2025/3/2")
 public class Jordan2 extends Geometry implements Predicate<Point> {
 
     private static final long serialVersionUID = 0x727888394fd493bbL;

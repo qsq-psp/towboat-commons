@@ -250,6 +250,16 @@ public class TruncateList<E> extends ArrayList<E> implements DataStructure {
         super.removeRange(newSize, size());
     }
 
+    public void reverse() {
+        int low = 0;
+        int high = size() - 1;
+        while (low < high) {
+            set(low, set(high, get(low)));
+            low++;
+            high--;
+        }
+    }
+
     public void map(@NotNull UnaryOperator<E> operator) {
         final int size = size();
         for (int index = 0; index < size; index++) {

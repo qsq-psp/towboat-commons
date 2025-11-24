@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.DataOutput;
 import java.io.IOException;
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 @CodeHistory(date = "2019", project = "bone", name = "JavaConstantUtf8")
@@ -55,7 +57,36 @@ class Utf8ConstantInfo extends ConstantInfo {
 
     @Override
     public void read(@NotNull ByteBuffer buffer) {
-        string = ByteBufferUtil.readMUTF8(buffer);
+        final int length = 0xffff & buffer.getShort(); // read unsigned short as byte length
+        final int oldLimit = buffer.limit();
+        final int newLimit = buffer.position() + length;
+        if (newLimit > oldLimit) {
+            throw new BufferUnderflowException();
+        }
+        buffer.limit(newLimit);
+        try {
+            char[] chars = new char[length]; // estimated maximum size; the actual string may be smaller
+            int charIndex = 0;
+            while (buffer.hasRemaining()) {
+                int b0 = buffer.get();
+                if ((b0 & 0x80) == 0) {
+                    if (b0 == 0) {
+                        throw new RuntimeException();
+                    }
+                    chars[charIndex++] = (char) b0;
+                } else if ((b0 & 0xe0) == 0xc0) {
+                    int b1 = buffer.get();
+                    chars[charIndex++] = (char) (((b0 & 0x1f) << 6) | (b1 & 0x3f));
+                } else {
+                    int b1 = buffer.get();
+                    int b2 = buffer.get();
+                    chars[charIndex++] = (char) (((b0 & 0x0f) << 12) | ((b1 & 0x3f) << 6) | (b2 & 0x3f));
+                }
+            }
+            string = new String(chars, 0, charIndex);
+        } finally {
+            buffer.limit(oldLimit);
+        }
     }
 
     @Override
@@ -65,7 +96,28 @@ class Utf8ConstantInfo extends ConstantInfo {
 
     @Override
     public void write(@NotNull ByteBuffer buffer) {
-        ByteBufferUtil.writeMUTF8(string, buffer);
+        final int position = buffer.position();
+        try {
+            buffer.putShort((short) 0); // reserve a slot for an unsigned short, fill it later
+            int length = string.length();
+            for (int index = 0; index < length; index++) {
+                int ch = string.charAt(index);
+                if (0 < ch && ch < 0x80) {
+                    buffer.put((byte) ch);
+                } else if (ch < 0x800) {
+                    buffer.put((byte) (0xc0 | (ch >>> 6)));
+                    buffer.put((byte) (0x80 | (ch & 0x3f)));
+                } else {
+                    buffer.put((byte) (0xe0 | (ch >>> 12)));
+                    buffer.put((byte) (0x80 | ((ch >>> 6) & 0x3f)));
+                    buffer.put((byte) (0x80 | (ch & 0x3f)));
+                }
+            }
+            buffer.putShort(position, (short) (buffer.position() - position - 2));
+        } catch (BufferOverflowException e) {
+            buffer.position(position);
+            throw e;
+        }
     }
 
     @NotNull

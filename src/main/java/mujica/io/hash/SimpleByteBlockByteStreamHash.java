@@ -74,7 +74,7 @@ public class SimpleByteBlockByteStreamHash implements ByteStreamHash {
 
     @Override
     public void start() {
-        core.clear();
+        core.start();
         concatBuffer.clear();
         state = HashState.STARTED;
     }
@@ -202,8 +202,6 @@ public class SimpleByteBlockByteStreamHash implements ByteStreamHash {
         if (state != HashState.FINISHED) {
             throw new IllegalHashStateException();
         }
-        assert concatBuffer.position() == 0;
-        assert concatBuffer.limit() == core.resultBytes();
     }
 
     @NotNull

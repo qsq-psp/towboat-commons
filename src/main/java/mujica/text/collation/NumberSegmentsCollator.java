@@ -32,8 +32,12 @@ public class NumberSegmentsCollator extends Collator {
         } else if (strength <= SECONDARY) {
             return sourceKey.normalCompareTo(targetKey);
         } else {
-            return sourceKey.compareTo(targetKey); // the interface method compareTo is strong
+            return sourceKey.strongCompareTo(targetKey);
         }
+    }
+
+    public int normalizedCompare(String source, String target) {
+        return Integer.signum(compare(source, target));
     }
 
     @Override
@@ -43,6 +47,6 @@ public class NumberSegmentsCollator extends Collator {
 
     @Override
     public int hashCode() {
-        return 0;
+        return radix;
     }
 }

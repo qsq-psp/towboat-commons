@@ -19,9 +19,9 @@ public interface ClassifiedJsonConsumer extends MinimumJsonConsumer {
     void closeObject();
 
     @Override
-    void key(@NotNull String key);
+    void stringKey(@NotNull String key);
 
-    void key(@NotNull FastString key);
+    void stringKey(@NotNull FastString key);
 
     @Override
     void jsonValue(@NotNull String value);
@@ -31,6 +31,8 @@ public interface ClassifiedJsonConsumer extends MinimumJsonConsumer {
     void booleanValue(boolean value);
 
     void numberValue(long value);
+
+    void numberValue(double value);
 
     void numberValue(@NotNull FastNumber value);
 

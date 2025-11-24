@@ -11,10 +11,6 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created in UltraIO on 2025/4/29.
- * Moved here on 2025/4/30.
- */
 @CodeHistory(date = "2025/4/29", project = "UltraIO")
 @CodeHistory(date = "2025/4/30")
 public class Base32DecodeInputStream extends FilterInputStream implements Base32StreamingCodec {

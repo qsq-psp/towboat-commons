@@ -75,8 +75,7 @@ public class MurmurHash128 extends ByteBlockByteHashCore implements LongSequence
 
     @Override
     public void step(@NotNull ByteBuffer buffer) {
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-        long k1 = buffer.getLong();
+        long k1 = buffer.order(ByteOrder.LITTLE_ENDIAN).getLong();
         long k2 = buffer.getLong();
         k1 *= 0x87c37b91114253d5L;
         k1 = Long.rotateLeft(k1, 31);
@@ -97,8 +96,7 @@ public class MurmurHash128 extends ByteBlockByteHashCore implements LongSequence
 
     @Override
     public void finish(@NotNull ByteBuffer buffer) {
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-        int remaining = buffer.remaining();
+        int remaining = buffer.order(ByteOrder.LITTLE_ENDIAN).flip().remaining();
         length += remaining;
         if (remaining > 0) {
             long k1 = 0;

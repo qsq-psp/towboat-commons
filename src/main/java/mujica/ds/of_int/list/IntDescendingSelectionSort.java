@@ -10,14 +10,16 @@ import org.jetbrains.annotations.NotNull;
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
 public class IntDescendingSelectionSort implements SortingAlgorithm<int[]> {
 
+    public static final IntAscendingSelectionSort INSTANCE = new IntAscendingSelectionSort();
+
     @Override
     public boolean stable() {
         return false; // array implementation of selection sort is not stable
     }
 
     @Override
-    public boolean order() {
-        return DESCENDING;
+    public int orderingComposition() {
+        return COMPOSITION_DESCENDING;
     }
 
     @Override

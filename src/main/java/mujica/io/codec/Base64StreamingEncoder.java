@@ -1,5 +1,6 @@
 package mujica.io.codec;
 
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ConstantInterface;
 
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.io.IOException;
 /**
  * Created on 2025/4/17.
  */
+@CodeHistory(date = "2025/4/17")
 @ConstantInterface
 public interface Base64StreamingEncoder extends Base64StreamingCodec {
 
@@ -21,6 +23,11 @@ public interface Base64StreamingEncoder extends Base64StreamingCodec {
     int FLAG_CONSUME_CLOSE          = 0x0080; // no use in InputStream
 
     int FLAG_URL                    = 0x0100; // use '-' and '_' instead of '+' and '/'
+
+    int CHAR_62                     = '+';
+    int CHAR_63                     = '/';
+    int URL_CHAR_62                 = '-';
+    int URL_CHAR_63                 = '_';
 
     void setFlags(int newFlags);
 

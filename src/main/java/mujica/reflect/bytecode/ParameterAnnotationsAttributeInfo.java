@@ -29,7 +29,7 @@ public class ParameterAnnotationsAttributeInfo extends AnnotationsAttributeInfo 
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
         if (groupIndex == 0) {
             return ParameterAnnotation.class;
         } else {
@@ -38,7 +38,7 @@ public class ParameterAnnotationsAttributeInfo extends AnnotationsAttributeInfo 
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == ParameterAnnotation.class) {
             return annotations.length;
         } else {
@@ -48,7 +48,7 @@ public class ParameterAnnotationsAttributeInfo extends AnnotationsAttributeInfo 
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == ParameterAnnotation.class) {
             return annotations[nodeIndex];
         } else {
@@ -68,7 +68,7 @@ public class ParameterAnnotationsAttributeInfo extends AnnotationsAttributeInfo 
 
     @Override
     public int byteSize() {
-        int size = 2;
+        int size = 1;
         for (ParameterAnnotation annotation : annotations) {
             size += annotation.byteSize();
         }
@@ -77,7 +77,7 @@ public class ParameterAnnotationsAttributeInfo extends AnnotationsAttributeInfo 
 
     @Override
     public void read(@NotNull ConstantPool context, @NotNull LimitedDataInput in) throws IOException {
-        final int length = in.readUnsignedShort();
+        final int length = in.readByte();
         annotations = new ParameterAnnotation[length];
         for (int index = 0; index < length; index++) {
             ParameterAnnotation annotation = new ParameterAnnotation();
@@ -88,7 +88,7 @@ public class ParameterAnnotationsAttributeInfo extends AnnotationsAttributeInfo 
 
     @Override
     public void read(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        final int length = 0xffff & buffer.getShort();
+        final int length = 0xff & buffer.get();
         annotations = new ParameterAnnotation[length];
         for (int index = 0; index < length; index++) {
             ParameterAnnotation annotation = new ParameterAnnotation();
@@ -99,7 +99,7 @@ public class ParameterAnnotationsAttributeInfo extends AnnotationsAttributeInfo 
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
-        out.writeShort(annotations.length);
+        out.writeByte(annotations.length);
         for (ParameterAnnotation annotation : annotations) {
             annotation.write(out);
         }
@@ -107,7 +107,7 @@ public class ParameterAnnotationsAttributeInfo extends AnnotationsAttributeInfo 
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        buffer.putShort((short) annotations.length);
+        buffer.put((byte) annotations.length);
         for (ParameterAnnotation annotation : annotations) {
             annotation.write(buffer);
         }

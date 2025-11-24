@@ -148,18 +148,18 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
 
         @NotNull
         @Override
-        public Class<?> getGroup(int groupIndex) {
+        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
             throw new IndexOutOfBoundsException();
         }
 
         @Override
-        public int nodeCount(@NotNull Class<?> group) {
+        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
             return 0;
         }
 
         @NotNull
         @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -222,7 +222,7 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
         if (groupIndex == 0) {
             return CodeException.class;
         } else if (groupIndex == 1) {
@@ -233,7 +233,7 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == CodeException.class) {
             return exceptions.length;
         } else if (group == AttributeInfo.class) {
@@ -245,7 +245,7 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == CodeException.class) {
             return exceptions[nodeIndex];
         } else if (group == AttributeInfo.class) {

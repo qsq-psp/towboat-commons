@@ -161,7 +161,7 @@ public class BufferedLimitedDataInputStream extends BufferedLimitedInputStream i
     public String readUTF() throws IOException {
         final int length = readUnsignedShort();
         fill(length);
-        final String string = new String(buf, pos, length, StandardCharsets.UTF_8);
+        final String string = new String(buf, pos, length, StandardCharsets.UTF_8); // todo
         pos += length;
         return string;
     }

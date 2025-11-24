@@ -3,26 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <prerequisites>
+        <maven>3.6.3</maven>
+    </prerequisites>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <groupId>indi.qsq</groupId>
-    <artifactId>towboat-commons</artifactId>
-    <version>0.1</version>
+    <artifactId>CDP</artifactId>
+    <version>1.2</version>
+    <packaging>jar</packaging>
     <build>
-        <directory>${project.basedir}/target</directory>
-        <outputDirectory>${project.build.directory}/classes</outputDirectory>
-        <finalName>${project.artifactId}-${project.version}</finalName>
-        <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
-        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>${project.basedir}/src/test/resources</directory>
-            </testResource>
-        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -31,32 +22,19 @@
                 <configuration>
                     <source>12</source>
                     <target>12</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.2</version>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
                 <configuration>
-                    <outputDirectory>${basedir}/target/javadoc</outputDirectory>
-                    <reportOutputDirectory>${basedir}/target/javadoc</reportOutputDirectory>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.2</version>
-                <configuration>
-                    <outputDirectory>${basedir}/target/javadoc</outputDirectory>
-                    <reportOutputDirectory>${basedir}/target/javadoc</reportOutputDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
     <dependencies>
         <dependency>
             <groupId>org.jetbrains</groupId>
@@ -65,9 +43,17 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
+        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.60.Final</version>
+            <version>4.2.7.Final</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

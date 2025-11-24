@@ -79,7 +79,9 @@ public class NumberSegmentsCollationKey extends CollationKey {
     }
 
     @CodeHistory(date = "2025/11/1")
-    abstract class NumberSegment implements Comparable<NumberSegment>, Serializable {
+    private abstract class NumberSegment implements Comparable<NumberSegment>, Serializable {
+
+        private static final long serialVersionUID = 0xCD15B301952ADBBBL;
 
         final int charCount;
 
@@ -90,15 +92,21 @@ public class NumberSegmentsCollationKey extends CollationKey {
         @Override
         public abstract int compareTo(@NotNull NumberSegment that);
 
-        public abstract int compareToInt(@NotNull IntNumberSegment that);
+        abstract int compareToInt(@NotNull IntNumberSegment that);
 
-        public abstract int compareToLong(@NotNull LongNumberSegment that);
+        abstract int compareToLong(@NotNull LongNumberSegment that);
 
-        public abstract int compareToBigInteger(@NotNull BigIntegerNumberSegment that);
+        abstract int compareToBigInteger(@NotNull BigIntegerNumberSegment that);
+
+        abstract int byteCount();
+
+        abstract void fillBytes(@NotNull byte[] array, int offset, int length);
     }
 
     @CodeHistory(date = "2025/11/1")
-    class IntNumberSegment extends NumberSegment {
+    private class IntNumberSegment extends NumberSegment {
+
+        private static final long serialVersionUID = 0x4DAE4F9D9EFBA05BL;
 
         final int intValue;
 
@@ -113,23 +121,44 @@ public class NumberSegmentsCollationKey extends CollationKey {
         }
 
         @Override
-        public int compareToInt(@NotNull IntNumberSegment that) {
+        int compareToInt(@NotNull IntNumberSegment that) {
             return Integer.compare(this.intValue, that.intValue);
         }
 
         @Override
-        public int compareToLong(@NotNull LongNumberSegment that) {
+        int compareToLong(@NotNull LongNumberSegment that) {
             return Long.compare(this.intValue, that.longValue);
         }
 
         @Override
-        public int compareToBigInteger(@NotNull BigIntegerNumberSegment that) {
+        int compareToBigInteger(@NotNull BigIntegerNumberSegment that) {
             return BigInteger.valueOf(this.intValue).compareTo(that.bigIntegerValue);
+        }
+
+        @Override
+        int byteCount() {
+            int value = intValue;
+            for (int count = 0; count < 4; count++) {
+                if (value == 0) {
+                    return count;
+                }
+                value >>>= Byte.SIZE;
+            }
+            return 4;
+        }
+
+        @Override
+        void fillBytes(@NotNull byte[] array, int offset, int length) {
+            for (int index = length - 1; index >= 0; index--) {
+                array[offset++] = (byte) (intValue >>> (index << 3));
+            }
         }
     }
 
     @CodeHistory(date = "2025/11/1")
-    class LongNumberSegment extends NumberSegment {
+    private class LongNumberSegment extends NumberSegment {
+
+        private static final long serialVersionUID = 0xEFB27B05CD6BEAE1L;
 
         final long longValue;
 
@@ -144,23 +173,44 @@ public class NumberSegmentsCollationKey extends CollationKey {
         }
 
         @Override
-        public int compareToInt(@NotNull IntNumberSegment that) {
+        int compareToInt(@NotNull IntNumberSegment that) {
             return Long.compare(this.longValue, that.intValue);
         }
 
         @Override
-        public int compareToLong(@NotNull LongNumberSegment that) {
+        int compareToLong(@NotNull LongNumberSegment that) {
             return Long.compare(this.longValue, that.longValue);
         }
 
         @Override
-        public int compareToBigInteger(@NotNull BigIntegerNumberSegment that) {
+        int compareToBigInteger(@NotNull BigIntegerNumberSegment that) {
             return BigInteger.valueOf(this.longValue).compareTo(that.bigIntegerValue);
+        }
+
+        @Override
+        int byteCount() {
+            long value = longValue;
+            for (int count = 0; count < 8; count++) {
+                if (value == 0L) {
+                    return count;
+                }
+                value >>>= Byte.SIZE;
+            }
+            return 8;
+        }
+
+        @Override
+        void fillBytes(@NotNull byte[] array, int offset, int length) {
+            for (int index = length - 1; index >= 0; index--) {
+                array[offset++] = (byte) (longValue >>> (index << 3));
+            }
         }
     }
 
     @CodeHistory(date = "2025/11/1")
-    class BigIntegerNumberSegment extends NumberSegment {
+    private class BigIntegerNumberSegment extends NumberSegment {
+
+        private static final long serialVersionUID = 0x3058FB127B447BFBL;
 
         @NotNull
         final BigInteger bigIntegerValue;
@@ -176,18 +226,29 @@ public class NumberSegmentsCollationKey extends CollationKey {
         }
 
         @Override
-        public int compareToInt(@NotNull IntNumberSegment that) {
+        int compareToInt(@NotNull IntNumberSegment that) {
             return this.bigIntegerValue.compareTo(BigInteger.valueOf(that.intValue));
         }
 
         @Override
-        public int compareToLong(@NotNull LongNumberSegment that) {
+        int compareToLong(@NotNull LongNumberSegment that) {
             return this.bigIntegerValue.compareTo(BigInteger.valueOf(that.longValue));
         }
 
         @Override
-        public int compareToBigInteger(@NotNull BigIntegerNumberSegment that) {
+        int compareToBigInteger(@NotNull BigIntegerNumberSegment that) {
             return this.bigIntegerValue.compareTo(that.bigIntegerValue);
+        }
+
+        @Override
+        int byteCount() {
+            return (bigIntegerValue.bitLength() + 7) >>> 3; // exclude sign bit
+        }
+
+        @Override
+        void fillBytes(@NotNull byte[] dst, int offset, int length) {
+            final byte[] src = bigIntegerValue.toByteArray(); // include sign bit
+            System.arraycopy(src, src.length - length, dst, offset, length);
         }
     }
 
@@ -219,13 +280,13 @@ public class NumberSegmentsCollationKey extends CollationKey {
         } else {
             return new BigIntegerNumberSegment(
                     charCount,
-                    new BigInteger(source, radix)
+                    new BigInteger(source.substring(startIndex, endIndex), radix)
             );
         }
     }
 
     @NotNull
-    NumberSegment[] getSegments() {
+    private NumberSegment[] getSegments() {
         NumberSegment[] array;
         {
             SoftReference<NumberSegment[]> reference = segments;
@@ -312,8 +373,51 @@ public class NumberSegmentsCollationKey extends CollationKey {
         return strongCompareTo((NumberSegmentsCollationKey) target);
     }
 
+    private static void fillInt(int value, @NotNull byte[] array, int offset) {
+        for (int shift = 24; shift >= 0; shift -= 8) {
+            array[offset++] = (byte) (value >>> shift);
+        }
+    }
+
     @Override
     public byte[] toByteArray() {
-        return new byte[0];
+        final NumberSegment[] segments = getSegments();
+        final int segmentCount = segments.length;
+        final int zeroLength = zero.length();
+        int position = zeroLength * 3 + 1;
+        final int[] segmentByteCounts = new int[segmentCount];
+        for (int index = 0; index < segmentCount; index++) {
+            int byteCount = segments[index].byteCount();
+            position += 4 + byteCount;
+            segmentByteCounts[index] = byteCount;
+        }
+        position += 1 + 4 * segmentCount;
+        final byte[] array = new byte[position];
+        position = 0;
+        {
+            int index = 0;
+            while (true) {
+                if (index >= zeroLength) {
+                    array[position++] = 0;
+                    break;
+                }
+                int ch = zero.charAt(index++);
+                array[position++] = 1;
+                array[position++] = (byte) (ch >> 8);
+                array[position++] = (byte) (ch);
+            }
+        }
+        for (int index = 0; index < segmentCount; index++) {
+            int byteCount = segmentByteCounts[index];
+            fillInt(byteCount, array, position);
+            position += 4;
+            segments[index].fillBytes(array, position, byteCount);
+            position += byteCount;
+        }
+        array[position++] = (byte) radix;
+        for (NumberSegment segment : segments) {
+            fillInt(segment.charCount, array, position);
+        }
+        return array;
     }
 }

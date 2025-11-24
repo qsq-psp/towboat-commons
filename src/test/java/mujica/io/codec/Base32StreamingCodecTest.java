@@ -11,10 +11,7 @@ import org.junit.Test;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-/**
- * Created in UltraIO on 2025/4/28.
- * Recreated on 2025/4/30.
- */
+@SuppressWarnings("SpellCheckingInspection")
 @CodeHistory(date = "2025/4/28", project = "UltraIO")
 @CodeHistory(date = "2025/4/30")
 public class Base32StreamingCodecTest {

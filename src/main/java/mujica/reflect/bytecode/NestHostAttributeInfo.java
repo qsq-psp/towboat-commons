@@ -9,9 +9,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-/**
- * Created on 2025/10/2.
- */
 @CodeHistory(date = "2025/10/2")
 @ReferencePage(title = "JVMS12 The NestHost Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.28")
 public class NestHostAttributeInfo extends AttributeInfo {

@@ -6,10 +6,6 @@ import java.io.Serializable;
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
-/**
- * Created in existence on 2018/6/7, named SimpleBoundI.
- * Created on 2025/3/9.
- */
 @CodeHistory(date = "2018/6/7", project = "existence", name = "SimpleBoundI")
 @CodeHistory(date = "2025/3/9")
 public class PublicIntInterval implements IntInterval, IntPredicate, IntConsumer, Cloneable, Serializable {

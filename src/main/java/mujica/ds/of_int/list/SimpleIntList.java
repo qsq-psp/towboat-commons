@@ -1,8 +1,8 @@
 package mujica.ds.of_int.list;
 
-/**
- * Created on 2025/5/31.
- */
+import mujica.reflect.modifier.CodeHistory;
+
+@CodeHistory(date = "2025/5/31")
 public class SimpleIntList extends AbstractIntList {
 
     private static final long serialVersionUID = 0xe52d308dc20935dcL;

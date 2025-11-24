@@ -3,11 +3,10 @@ package mujica.reflect.bytecode;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 
-/**
- * According to JVMS, 'opcode' is one word
- */
+@SuppressWarnings("unused")
+@CodeHistory(date = "2022/6/30", project = "infrastructure", name = "ByteCode")
 @CodeHistory(date = "2025/8/31")
-public interface Opcode {
+public interface Opcode { // according to JVMS, 'opcode' is one word
 
     @Name(value = "no operation", language = "en")
     int NOP = 0x00;

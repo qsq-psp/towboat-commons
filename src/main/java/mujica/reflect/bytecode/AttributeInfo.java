@@ -67,30 +67,32 @@ public abstract class AttributeInfo implements ClassFileNode.Dependent, BiConsum
 
     @NotNull
     public static AttributeInfo readNew(@NotNull ConstantPool context, @NotNull LimitedDataInput in) throws IOException {
-        final AttributeInfo attributeInfo = createByName(context.getUtf8(in.readUnsignedShort()));
+        final String name = context.getUtf8(in.readUnsignedShort());
+        final AttributeInfo attributeInfo = createByName(name);
         final long newLength = 0xffffffffL & in.readInt();
         final long oldLength = in.setRemaining(newLength);
         attributeInfo.read(context, in);
         final long remaining = in.setRemaining(oldLength - newLength);
         if (remaining != 0L) {
-            throw new BytecodeException("byte size");
+            throw new BytecodeException(name);
         }
-        assert newLength == attributeInfo.byteSize();
+        assert newLength == attributeInfo.byteSize() : name;
         return attributeInfo;
     }
 
     @NotNull
     public static AttributeInfo readNew(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
-        final AttributeInfo attributeInfo = createByName(context.getUtf8(0xffff & buffer.getShort()));
+        final String name = context.getUtf8(0xffff & buffer.getShort());
+        final AttributeInfo attributeInfo = createByName(name);
         final int oldLimit = buffer.limit();
         final int newLimit = buffer.getInt();
         buffer.limit(buffer.position() + newLimit);
         attributeInfo.read(context, buffer);
         if (buffer.remaining() != 0) {
-            throw new BytecodeException("byte size");
+            throw new BytecodeException(name);
         }
         buffer.limit(oldLimit);
-        assert newLimit == attributeInfo.byteSize();
+        assert newLimit == attributeInfo.byteSize() : name;
         return attributeInfo;
     }
 
@@ -173,18 +175,18 @@ public abstract class AttributeInfo implements ClassFileNode.Dependent, BiConsum
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
         throw new IndexOutOfBoundsException();
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         return 0;
     }
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         throw new IndexOutOfBoundsException();
     }
 
@@ -314,7 +316,7 @@ public abstract class AttributeInfo implements ClassFileNode.Dependent, BiConsum
     public void remapConstant(@NotNull IntUnaryOperator remap) {
         final int groupCount = groupCount();
         for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-            Class<?> group = getGroup(groupIndex);
+            Class<? extends ClassFileNode> group = getGroup(groupIndex);
             int nodeCount = nodeCount(group);
             for (int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++) {
                 getNode(group, nodeIndex).remapConstant(remap);

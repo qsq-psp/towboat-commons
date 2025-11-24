@@ -1,5 +1,7 @@
 package mujica.io.nest;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.concurrent.TimeUnit;
@@ -17,16 +19,19 @@ public class EmptyFileAttributes implements BasicFileAttributes {
         super();
     }
 
+    @NotNull
     @Override
     public FileTime lastModifiedTime() {
         return EPOCH;
     }
 
+    @NotNull
     @Override
     public FileTime lastAccessTime() {
         return EPOCH;
     }
 
+    @NotNull
     @Override
     public FileTime creationTime() {
         return EPOCH;

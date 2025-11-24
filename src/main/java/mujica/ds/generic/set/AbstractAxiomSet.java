@@ -11,9 +11,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-/**
- * Created on 2025/6/5.
- */
 @CodeHistory(date = "2025/6/5")
 public abstract class AbstractAxiomSet<E> extends AbstractCollection<E> implements AxiomSet<E> {
 

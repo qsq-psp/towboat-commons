@@ -18,7 +18,7 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
     private static final long serialVersionUID = 0xBA27CD966BC157F7L;
 
     @CodeHistory(date = "2025/9/15")
-    private static class InnerClassEntry implements ClassFileNode.Independent {
+    private static class InnerClassEntry extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
         private static final long serialVersionUID = 0xAB333D9BE3F93997L;
 
@@ -35,28 +35,6 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
 
         InnerClassEntry() {
             super();
-        }
-
-        @Override
-        public int groupCount() {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public Class<?> getGroup(int groupIndex) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        @Override
-        public int nodeCount(@NotNull Class<?> group) {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
-            throw new IndexOutOfBoundsException();
         }
 
         @Override
@@ -166,7 +144,7 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
         if (groupIndex == 0) {
             return InnerClassEntry.class;
         } else {
@@ -175,7 +153,7 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == InnerClassEntry.class) {
             return entries.length;
         } else {
@@ -185,7 +163,7 @@ public class InnerClassesAttributeInfo extends AttributeInfo {
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == InnerClassEntry.class) {
             return entries[nodeIndex];
         } else {

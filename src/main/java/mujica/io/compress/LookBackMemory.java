@@ -7,13 +7,13 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2025/10/31", name = "LookBackMemory")
 public interface LookBackMemory { // maybe named RunBuffer
 
-    void write(int data);
+    void write(int data); // byte is better
 
     int write(@NotNull byte[] array, @Index(of = "array") int offset, int length);
 
-    int copyAndWrite(int distance);
+    byte copyAndWrite(int distance);
 
     int copyAndWrite(int distance, @NotNull byte[] array, @Index(of = "array") int offset, int length);
 
-    void release();
+    boolean release();
 }

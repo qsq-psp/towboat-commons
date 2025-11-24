@@ -1,7 +1,7 @@
 package mujica.math.algebra.symbol;
 
-/**
- * Created on 2025/3/23.
- */
+import mujica.reflect.modifier.CodeHistory;
+
+@CodeHistory(date = "2025/3/23")
 public class Natural {
 }

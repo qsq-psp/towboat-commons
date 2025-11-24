@@ -18,7 +18,7 @@ public class LocalVariableTableAttributeInfo extends AttributeInfo {
     private static final long serialVersionUID = 0xB459F74DD30BA246L;
 
     @CodeHistory(date = "2025/9/17")
-    private static class LocalVariableEntry implements ClassFileNode.Independent {
+    private static class LocalVariableEntry extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
         private static final long serialVersionUID = 0xD1664378176A5AFBL;
 
@@ -36,28 +36,6 @@ public class LocalVariableTableAttributeInfo extends AttributeInfo {
 
         LocalVariableEntry() {
             super();
-        }
-
-        @Override
-        public int groupCount() {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public Class<?> getGroup(int groupIndex) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        @Override
-        public int nodeCount(@NotNull Class<?> group) {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
-            throw new IndexOutOfBoundsException();
         }
 
         @Override
@@ -124,7 +102,7 @@ public class LocalVariableTableAttributeInfo extends AttributeInfo {
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
         if (groupIndex == 0) {
             return LocalVariableEntry.class;
         } else {
@@ -133,7 +111,7 @@ public class LocalVariableTableAttributeInfo extends AttributeInfo {
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == LocalVariableEntry.class) {
             return entries.length;
         } else {
@@ -143,7 +121,7 @@ public class LocalVariableTableAttributeInfo extends AttributeInfo {
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == LocalVariableEntry.class) {
             return entries[nodeIndex];
         } else {

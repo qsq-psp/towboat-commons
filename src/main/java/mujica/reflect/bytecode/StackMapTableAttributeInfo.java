@@ -18,7 +18,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
     private static final long serialVersionUID = 0xECE64000722FC308L;
 
     @CodeHistory(date = "2025/9/14")
-    private static class VerificationTypeInfo implements ClassFileNode.Independent {
+    private static class VerificationTypeInfo extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
         private static final long serialVersionUID = 0x96CA6590D0241D72L;
 
@@ -48,7 +48,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
                 case ITEM_UNINITIALIZED:
                     return new UninitializedVariableInfo(tag);
                 default:
-                    throw new BytecodeException("StackMapTable VerificationTypeInfo tag = " + tag);
+                    throw new ClassFormatError("tag = " + tag);
             }
         }
 
@@ -72,28 +72,6 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
         VerificationTypeInfo(int tag) {
             super();
             this.tag = tag;
-        }
-
-        @Override
-        public int groupCount() {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public Class<?> getGroup(int groupIndex) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        @Override
-        public int nodeCount(@NotNull Class<?> group) {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
-            throw new IndexOutOfBoundsException();
         }
 
         int byteSize() {
@@ -149,7 +127,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
                 case ITEM_UNINITIALIZED:
                     return "uninitialized";
                 default:
-                    throw new BytecodeException("StackMapTable VerificationTypeInfo tag = " + tag);
+                    return "(" + tag + ")";
             }
         }
 
@@ -276,18 +254,18 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public Class<?> getGroup(int groupIndex) {
+        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
             throw new IndexOutOfBoundsException();
         }
 
         @Override
-        public int nodeCount(@NotNull Class<?> group) {
+        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
             return 0;
         }
 
         @NotNull
         @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
             throw new IndexOutOfBoundsException();
         }
 

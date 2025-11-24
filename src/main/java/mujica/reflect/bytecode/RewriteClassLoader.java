@@ -93,7 +93,7 @@ public abstract class RewriteClassLoader extends ProjectClassLoader {
                 buffer = ByteBufferUtil.read((Consumer<ByteBuffer>) classFile::write, buffer.capacity());
                 return defineClass(name, buffer, null);
             } catch (Exception e) {
-                throw new ClassNotFoundException(e.toString());
+                throw new ClassNotFoundException(name, e);
             }
         }
     }

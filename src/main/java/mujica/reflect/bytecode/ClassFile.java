@@ -60,26 +60,30 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
         return constantPool;
     }
 
-    private static final Class<?>[] GROUPS = {
-            ConstantPool.class,
-            MemberInfo.FieldInfo.class,
-            MemberInfo.MethodInfo.class,
-            AttributeInfo.class
-    };
-
     @Override
     public int groupCount() {
-        return GROUPS.length;
+        return 4;
     }
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
-        return GROUPS[groupIndex];
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
+        switch (groupIndex) {
+            case 0:
+                return ConstantPool.class;
+            case 1:
+                return MemberInfo.FieldInfo.class;
+            case 2:
+                return MemberInfo.MethodInfo.class;
+            case 3:
+                return AttributeInfo.class;
+            default:
+                throw new IndexOutOfBoundsException();
+        }
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == AttributeInfo.class) {
             return attributes.length;
         } else if (group == MemberInfo.MethodInfo.class) {
@@ -95,7 +99,7 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == AttributeInfo.class) {
             return attributes[nodeIndex];
         } else if (group == MemberInfo.MethodInfo.class) {
@@ -114,7 +118,7 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
         {
             int magic = in.readInt();
             if (magic != MAGIC) {
-                throw new IOException("magic");
+                throw new ClassFormatError("magic");
             }
         }
         minorVersion = in.readUnsignedShort();
@@ -154,6 +158,44 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
     @Override
     public void read(@NotNull ByteBuffer buffer) {
         buffer.order(ByteOrder.BIG_ENDIAN);
+        {
+            int magic = buffer.getInt();
+            if (magic != MAGIC) {
+                throw new ClassFormatError("magic");
+            }
+        }
+        minorVersion = 0xffff & buffer.getShort();
+        majorVersion = 0xffff & buffer.getShort();
+        constantPool.read(buffer);
+        accessFlags = 0xffff & buffer.getShort();
+        thisClass = constantPool.getClassName(0xffff & buffer.getShort());
+        superClass = constantPool.getClassName(0xffff & buffer.getShort());
+        {
+            int interfaceCount = 0xffff & buffer.getShort();
+            superInterfaces = new String[interfaceCount];
+            for (int index = 0; index < interfaceCount; index++) {
+                superInterfaces[index] = constantPool.getClassName(0xffff & buffer.getShort());
+            }
+        }
+        {
+            int fieldCount = 0xffff & buffer.getShort();
+            fields = new MemberInfo.FieldInfo[fieldCount];
+            for (int index = 0; index < fieldCount; index++) {
+                MemberInfo.FieldInfo fieldInfo = new MemberInfo.FieldInfo();
+                fieldInfo.read(constantPool, buffer);
+                fields[index] = fieldInfo;
+            }
+        }
+        {
+            int methodCount = 0xffff & buffer.getShort();
+            methods = new MemberInfo.MethodInfo[methodCount];
+            for (int index = 0; index < methodCount; index++) {
+                MemberInfo.MethodInfo methodInfo = new MemberInfo.MethodInfo();
+                methodInfo.read(constantPool, buffer);
+                methods[index] = methodInfo;
+            }
+        }
+        attributes = AttributeInfo.readArray(constantPool, buffer);
     }
 
     @Override
@@ -183,6 +225,26 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
     @Override
     public void write(@NotNull ByteBuffer buffer) {
         buffer.order(ByteOrder.BIG_ENDIAN);
+        buffer.putInt(MAGIC);
+        buffer.putShort((short) minorVersion);
+        buffer.putShort((short) majorVersion);
+        constantPool.write(buffer);
+        buffer.putShort((short) accessFlags);
+        buffer.putShort((short) constantPool.putClassName(thisClass));
+        buffer.putShort((short) constantPool.putClassName(superClass));
+        buffer.putShort((short) superInterfaces.length);
+        for (String superInterface : superInterfaces) {
+            buffer.putShort((short) constantPool.putClassName(superInterface));
+        }
+        buffer.putShort((short) fields.length);
+        for (MemberInfo fieldInfo : fields) {
+            fieldInfo.write(constantPool, buffer);
+        }
+        buffer.putShort((short) methods.length);
+        for (MemberInfo methodInfo : methods) {
+            methodInfo.write(constantPool, buffer);
+        }
+        AttributeInfo.writeArray(attributes, constantPool, buffer);
     }
 
     public void write(@NotNull IndentWriter writer) throws IOException {
@@ -194,7 +256,7 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
         boolean firstChild = true;
         final int groupCount = node.groupCount();
         for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-            Class<?> group = node.getGroup(groupIndex);
+            Class<? extends ClassFileNode> group = node.getGroup(groupIndex);
             int nodeCount = node.nodeCount(group);
             for (int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++) {
                 if (firstChild) {

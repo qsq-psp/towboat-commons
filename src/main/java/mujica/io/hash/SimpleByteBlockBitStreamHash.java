@@ -409,17 +409,21 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
     @NotNull
     @Override
     public DataView finish() {
-        core.finish(concatBuffer, padBitCount);
-        return resultView;
+        if (state != HashState.STARTED) {
+            throw new IllegalHashStateException();
+        }
+        try {
+            core.finish(concatBuffer, padBitCount);
+            return resultView;
+        } finally {
+            state = HashState.FINISHED;
+        }
     }
 
     public void ensureFinished() {
         if (state != HashState.FINISHED) {
             throw new IllegalHashStateException();
         }
-        assert padBitCount == 0;
-        assert concatBuffer.position() == 0;
-        assert concatBuffer.limit() == core.resultBytes();
     }
 
     @NotNull

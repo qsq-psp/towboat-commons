@@ -1,13 +1,13 @@
 package mujica.math.geometry.g2d;
 
 import mujica.math.geometry.GeometryOperationResult;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-/**
- * Created on 2024/2/17.
- */
+@CodeHistory(date = "2024/2/17", project = "Ultramarine")
+@CodeHistory(date = "2025/3/2")
 public class Hyperbola<P extends Point, Q extends Point> extends ConicSection<P, Q> {
 
     private static final long serialVersionUID = 0x8c090ed58b8565d9L;

@@ -42,7 +42,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
         if (groupIndex == 0) {
             return ConstantInfo.class;
         } else {
@@ -51,7 +51,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == ConstantInfo.class) {
             return list.size();
         }  else {
@@ -61,7 +61,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == ConstantInfo.class) {
             return list.get(nodeIndex);
         } else {
@@ -146,7 +146,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
             case CONSTANT_INVOKEDYNAMIC:
                 return new InvokeDynamicConstantInfo();
             default:
-                throw new BytecodeException();
+                throw new ClassFormatError("tag = " + tag);
         }
     }
 
@@ -157,7 +157,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
             throw new RuntimeException();
         }
         list.clear();
-        list.add(new ConstantInfo());
+        list.add(new ConstantSlot());
         map.clear();
         for (int index = 1; index < occupiedSize; index++) {
             ConstantInfo info = createByTag(in.readUnsignedByte());
@@ -167,7 +167,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
             list.add(info);
             map.putIfAbsent(info, index);
             if (info instanceof Large) {
-                list.add(new ConstantInfo());
+                list.add(new ConstantSlot());
                 index++;
             }
         }
@@ -180,7 +180,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
             throw new RuntimeException();
         }
         list.clear();
-        list.add(new ConstantInfo());
+        list.add(new ConstantSlot());
         map.clear();
         for (int index = 1; index < occupiedSize; index++) {
             ConstantInfo info = createByTag(0xff & buffer.get());
@@ -190,7 +190,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
             list.add(info);
             map.putIfAbsent(info, index);
             if (info instanceof Large) {
-                list.add(new ConstantInfo());
+                list.add(new ConstantSlot());
                 index++;
             }
         }
@@ -357,7 +357,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
         for (ConstantInfo info : map.keySet()) {
             list.set(info.newIndex, info);
             if (info instanceof Large) {
-                list.set(info.newIndex + 1, new ConstantInfo());
+                list.set(info.newIndex + 1, new ConstantSlot());
             }
         }
     }

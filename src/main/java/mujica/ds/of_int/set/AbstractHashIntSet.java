@@ -2,12 +2,14 @@ package mujica.ds.of_int.set;
 
 import mujica.ds.of_int.list.ResizePolicy;
 import mujica.ds.of_int.list.TwiceResizePolicy;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Created on 2025/6/26.
  */
+@CodeHistory(date = "2025/6/26")
 public abstract class AbstractHashIntSet extends AbstractIntSet {
 
     private static final long serialVersionUID = 0xbd78ffd9afc07400L;

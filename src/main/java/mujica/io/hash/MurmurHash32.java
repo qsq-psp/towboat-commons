@@ -2,15 +2,15 @@ package mujica.io.hash;
 
 import mujica.ds.of_int.list.IntSequence;
 import mujica.io.view.*;
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-/**
- * Created on 2025/5/17.
- */
+@CodeHistory(date = "2025/5/4", project = "Ultramarine")
+@CodeHistory(date = "2025/5/17")
 @ReferencePage(title = "MurmurHash3", href = "https://github.com/aappleby/smhasher/blob/master/src/MurmurHash3.cpp")
 public class MurmurHash32 extends ByteBlockByteHashCore implements IntSequence {
 
@@ -64,8 +64,7 @@ public class MurmurHash32 extends ByteBlockByteHashCore implements IntSequence {
 
     @Override
     public void step(@NotNull ByteBuffer buffer) {
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-        int value = buffer.getInt();
+        int value = buffer.order(ByteOrder.LITTLE_ENDIAN).getInt();
         value *= 0xcc9e2d51;
         value = Integer.rotateLeft(value, 15);
         value *= 0x1b873593;
@@ -76,7 +75,7 @@ public class MurmurHash32 extends ByteBlockByteHashCore implements IntSequence {
 
     @Override
     public void finish(@NotNull ByteBuffer buffer) {
-        if (buffer.hasRemaining()) {
+        if (buffer.flip().hasRemaining()) {
             int value = 0;
             for (int shift = 0; shift < Integer.SIZE; shift += Byte.SIZE) {
                 value |= (0xff & buffer.get()) << shift;

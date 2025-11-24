@@ -41,7 +41,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
                 case '[':
                     return new ArrayElementValue(tag);
                 default:
-                    throw new BytecodeException("RuntimeVisibleAnnotations ElementValue tag = " + tag);
+                    throw new ClassFormatError("tag = " + tag);
             }
         }
 
@@ -74,18 +74,18 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public Class<?> getGroup(int groupIndex) {
+        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
             throw new IndexOutOfBoundsException();
         }
 
         @Override
-        public int nodeCount(@NotNull Class<?> group) {
+        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
             return 0;
         }
 
         @NotNull
         @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -245,7 +245,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public Class<?> getGroup(int groupIndex) {
+        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
             if (groupIndex == 0) {
                 return Annotation.class;
             } else {
@@ -254,7 +254,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
         }
 
         @Override
-        public int nodeCount(@NotNull Class<?> group) {
+        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
             if (group == Annotation.class) {
                 return 1;
             } else {
@@ -264,7 +264,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
             if (group == Annotation.class) {
                 return annotation;
             } else {
@@ -391,7 +391,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public Class<?> getGroup(int groupIndex) {
+        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
             if (groupIndex == 0) {
                 return ElementValue.class;
             } else {
@@ -400,7 +400,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
         }
 
         @Override
-        public int nodeCount(@NotNull Class<?> group) {
+        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
             if (group == ElementValue.class) {
                 return 1;
             } else {
@@ -410,7 +410,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
             if (group == ElementValue.class && nodeIndex == 0) {
                 return elementValue;
             } else {
@@ -480,7 +480,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public Class<?> getGroup(int groupIndex) {
+        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
             if (groupIndex == 0) {
                 return ElementEntry.class;
             } else {
@@ -489,7 +489,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
         }
 
         @Override
-        public int nodeCount(@NotNull Class<?> group) {
+        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
             if (group == ElementEntry.class) {
                 return entries.length;
             } else {
@@ -499,7 +499,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
             if (group == ElementEntry.class) {
                 return entries[nodeIndex];
             } else {
@@ -584,7 +584,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public Class<?> getGroup(int groupIndex) {
+        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
             if (groupIndex == 0) {
                 return Annotation.class;
             } else {
@@ -593,7 +593,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
         }
 
         @Override
-        public int nodeCount(@NotNull Class<?> group) {
+        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
             if (group == Annotation.class) {
                 return annotations.length;
             } else {
@@ -603,7 +603,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
             if (group == Annotation.class) {
                 return annotations[nodeIndex];
             } else {
@@ -668,6 +668,63 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
             for (Annotation annotation : annotations) {
                 annotation.remapConstant(remap);
             }
+        }
+    }
+
+    @CodeHistory(date = "2025/11/3")
+    static class TypeAnnotation implements ClassFileNode.Independent {
+
+        @Override
+        public int groupCount() {
+            return 0;
+        }
+
+        @NotNull
+        @Override
+        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        @Override
+        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
+            return 0;
+        }
+
+        @NotNull
+        @Override
+        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        @Override
+        public void read(@NotNull LimitedDataInput in) throws IOException {
+
+        }
+
+        @Override
+        public void read(@NotNull ByteBuffer buffer) {
+
+        }
+
+        @Override
+        public void write(@NotNull DataOutput out) throws IOException {
+
+        }
+
+        @Override
+        public void write(@NotNull ByteBuffer buffer) {
+
+        }
+
+        @NotNull
+        @Override
+        public String toString(@NotNull ClassFile context) {
+            return "";
+        }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+
         }
     }
 

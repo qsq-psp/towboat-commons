@@ -8,9 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.invoke.TypeDescriptor;
 import java.util.function.Consumer;
 
-/**
- * Created on 2025/9/13.
- */
+@CodeHistory(date = "2022/6/30", project = "infrastructure", name = "GuestType")
 @CodeHistory(date = "2025/9/13")
 public interface NotLoadedFieldType<F extends NotLoadedFieldType<F>> extends HealthAware, TypeDescriptor.OfField<F> {
 

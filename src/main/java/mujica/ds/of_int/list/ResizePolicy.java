@@ -49,6 +49,14 @@ public abstract class ResizePolicy extends AbstractIntList {
         return getInt(index);
     }
 
+    public int nextLargerCapacity(int currentCapacity) {
+        final int newCapacity = nextCapacity(currentCapacity);
+        if (newCapacity <= currentCapacity) {
+            throw new IllegalArgumentException();
+        }
+        return newCapacity;
+    }
+
     /**
      * for rehash policy
      * @return true if the loaded size is too big for the current capacity

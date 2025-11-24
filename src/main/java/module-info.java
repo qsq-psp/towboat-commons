@@ -6,9 +6,9 @@ module CDP {
     requires java.base;
 
     requires annotations;
-    requires io.netty.all;
-
-    exports org.slf4j;
+    requires org.slf4j;
+    requires io.netty.buffer;
+    requires io.netty.codec;
 
     exports mujica.reflect.modifier;
     exports mujica.reflect.function;

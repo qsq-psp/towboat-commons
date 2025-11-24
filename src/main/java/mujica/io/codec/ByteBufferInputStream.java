@@ -1,5 +1,6 @@
 package mujica.io.codec;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -9,6 +10,7 @@ import java.nio.ByteBuffer;
  * Created on 2025/4/23.
  * Found in org.eclipse.jgit.util.io.ByteBufferInputStream, since 6.8.
  */
+@CodeHistory(date = "2025/4/23")
 public class ByteBufferInputStream extends InputStream {
 
     @NotNull

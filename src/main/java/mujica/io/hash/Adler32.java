@@ -4,6 +4,7 @@ import mujica.io.view.ByteFillPolicy;
 import mujica.io.view.DataView;
 import mujica.io.view.IntDataView;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.util.function.IntSupplier;
 
 @CodeHistory(date = "2024/12/11", project = "Ultramarine")
 @CodeHistory(date = "2025/4/14")
+@ReferencePage(title = "ZLIB Compressed Data Format Specification version 3.3", href = "https://www.rfc-editor.org/rfc/rfc1950.html")
 public class Adler32 extends EachByteStreamHash implements IntSupplier, Serializable {
 
     private static final long serialVersionUID = 0xc4dc856ffe5918fbL;
@@ -34,14 +36,14 @@ public class Adler32 extends EachByteStreamHash implements IntSupplier, Serializ
 
     @Override
     public void clear() {
-        a = 1;
-        b = 0;
+        a = 0; // s1
+        b = 0; // s2
     }
 
     @Override
     public void start() {
-        a = 1;
-        b = 0;
+        a = 1; // s1
+        b = 0; // s2
     }
 
     @Override

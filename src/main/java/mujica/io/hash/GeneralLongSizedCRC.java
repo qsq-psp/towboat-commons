@@ -3,6 +3,7 @@ package mujica.io.hash;
 import mujica.io.view.ByteFillPolicy;
 import mujica.io.view.DataView;
 import mujica.io.view.LongDataView;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.function.LongSupplier;
 /**
  * Created on 2025/4/27.
  */
+@CodeHistory(date = "2025/4/27")
 public class GeneralLongSizedCRC extends EachBitStreamHash implements LongSupplier, Serializable {
 
     @NotNull

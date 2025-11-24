@@ -1,6 +1,7 @@
 package mujica.io.codec;
 
 import mujica.math.algebra.random.FuzzyContext;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import java.util.Base64;
 /**
  * Created on 2025/4/27.
  */
+@CodeHistory(date = "2025/4/27")
 public class Base64StreamingCodecTest {
 
     private void caseEncodeOutputStream(@NotNull byte[] message, @NotNull byte[] code) throws IOException {

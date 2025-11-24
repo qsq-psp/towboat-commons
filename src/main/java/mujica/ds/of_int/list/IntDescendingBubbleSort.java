@@ -10,14 +10,16 @@ import org.jetbrains.annotations.NotNull;
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
 public class IntDescendingBubbleSort implements SortingAlgorithm<int[]> {
 
+    public static final IntDescendingBubbleSort INSTANCE = new IntDescendingBubbleSort();
+
     @Override
     public boolean stable() {
         return true;
     }
 
     @Override
-    public boolean order() {
-        return DESCENDING;
+    public int orderingComposition() {
+        return COMPOSITION_DESCENDING;
     }
 
     @Override

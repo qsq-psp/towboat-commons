@@ -2,13 +2,11 @@ package mujica.io.view;
 
 import mujica.math.algebra.discrete.ClampedMath;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntSupplier;
 
-/**
- * Created on 2025/5/14.
- */
 @CodeHistory(date = "2025/5/14")
 public class IntDataView implements DataView {
 
@@ -88,10 +86,10 @@ public class IntDataView implements DataView {
         }
         switch (byteFillPolicy) {
             case LEFT_TO_MIDDLE:
-                index = Long.SIZE - Byte.SIZE - index;
+                index = Integer.SIZE - Byte.SIZE - index;
                 break;
             case MIDDLE_TO_LEFT:
-                index += Long.SIZE - bitLength;
+                index += Integer.SIZE - bitLength;
                 break;
             case RIGHT_TO_MIDDLE:
                 break;
@@ -106,7 +104,15 @@ public class IntDataView implements DataView {
 
     @Override
     public byte getByteAll() {
-        return 0;
+        if (bitLength > Byte.SIZE) {
+            throw new DataSizeMismatchException();
+        }
+        final int value = intSupplier.getAsInt();
+        if (byteFillPolicy.align == ByteAlign.LEFT) {
+            return (byte) (value >>> (Integer.SIZE - Byte.SIZE));
+        } else {
+            return (byte) value;
+        }
     }
 
     @Override
@@ -124,12 +130,39 @@ public class IntDataView implements DataView {
 
     @Override
     public short getUnsignedByte(int index) {
-        return 0;
+        index = ClampedMath.INSTANCE.multiply(index, Byte.SIZE);
+        if (index < 0 || index >= bitLength) {
+            throw new IndexOutOfBoundsException();
+        }
+        switch (byteFillPolicy) {
+            case LEFT_TO_MIDDLE:
+                index = Integer.SIZE - Byte.SIZE - index;
+                break;
+            case MIDDLE_TO_LEFT:
+                index += Integer.SIZE - bitLength;
+                break;
+            case RIGHT_TO_MIDDLE:
+                break;
+            case MIDDLE_TO_RIGHT:
+                index = bitLength - Byte.SIZE - index;
+                break;
+            default:
+                throw new RuntimeException();
+        }
+        return (short) (0xff & (intSupplier.getAsInt() >>> index));
     }
 
     @Override
     public short getUnsignedByteAll() {
-        return 0;
+        if (bitLength > Byte.SIZE) {
+            throw new DataSizeMismatchException();
+        }
+        final int value = intSupplier.getAsInt();
+        if (byteFillPolicy.align == ByteAlign.LEFT) {
+            return (short) (value >>> (Integer.SIZE - Byte.SIZE));
+        } else {
+            return (short) (0xff & value);
+        }
     }
 
     @Override
@@ -237,7 +270,7 @@ public class IntDataView implements DataView {
 
     @Override
     public int getIntExact() {
-        if (bitLength == Long.SIZE) {
+        if (bitLength == Integer.SIZE) {
             return intSupplier.getAsInt();
         } else {
             throw new DataSizeMismatchException();
@@ -261,7 +294,7 @@ public class IntDataView implements DataView {
 
     @Override
     public long getUnsignedIntExact() {
-        if (bitLength == Long.SIZE) {
+        if (bitLength == Integer.SIZE) {
             return 0xffffffffL & intSupplier.getAsInt();
         } else {
             throw new DataSizeMismatchException();
@@ -314,10 +347,10 @@ public class IntDataView implements DataView {
         if (byteFillPolicy.align == ByteAlign.LEFT) {
             value >>>= Integer.SIZE - bitLength;
         }
-        String string = Integer.toHexString(value);
         if (upperCase) {
-            string = string.toUpperCase();
+            return HexEncoder.UPPER_ENCODER.hex32(value);
+        } else {
+            return HexEncoder.LOWER_ENCODER.hex32(value);
         }
-        return string;
     }
 }

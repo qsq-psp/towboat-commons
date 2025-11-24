@@ -11,42 +11,19 @@ import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 import java.util.function.IntUnaryOperator;
 
-/**
- * Created on 2025/9/20.
- */
 @CodeHistory(date = "2025/9/20")
 @ReferencePage(title = "JVMS12 The MethodParameters Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.24")
 public class MethodParametersAttributeInfo extends AttributeInfo {
 
-    public static final String NAME = "MethodParameters";
-
-    static class MethodParameter implements ClassFileNode.Independent {
+    static class MethodParameter extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
         @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
         int nameIndex;
 
         int accessFlags;
 
-        @Override
-        public int groupCount() {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public Class<?> getGroup(int groupIndex) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        @Override
-        public int nodeCount(@NotNull Class<?> group) {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
-            throw new IndexOutOfBoundsException();
+        MethodParameter() {
+            super();
         }
 
         @Override
@@ -94,6 +71,12 @@ public class MethodParametersAttributeInfo extends AttributeInfo {
     }
 
     private MethodParameter[] parameters;
+
+    public MethodParametersAttributeInfo() {
+        super();
+    }
+
+    public static final String NAME = "MethodParameters";
 
     @NotNull
     @Override

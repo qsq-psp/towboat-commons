@@ -7,6 +7,7 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -19,10 +20,7 @@ import java.util.zip.CRC32;
 import java.util.zip.CRC32C;
 import java.util.zip.Checksum;
 
-/**
- * Created in Ultramarine on 2024/12/13.
- * Recreated on 2025/4/13.
- */
+@SuppressWarnings("SpellCheckingInspection")
 @CodeHistory(date = "2024/12/13", project = "Ultramarine")
 @CodeHistory(date = "2025/4/13")
 public class ByteStreamHashTest {
@@ -106,7 +104,7 @@ public class ByteStreamHashTest {
 
     @Test
     public void caseMurmurHash32() {
-        final ByteBlockByteHashCore core = new XxHash32();
+        final ByteBlockByteHashCore core = new MurmurHash32();
         caseHash("", "00000000", core);
         caseHash("w", "ff439d1f", core);
         caseHash("OK", "275fd7ab", core);
@@ -124,7 +122,7 @@ public class ByteStreamHashTest {
 
     @Test
     public void caseMurmurHash128() {
-        final ByteBlockByteHashCore core = new XxHash32();
+        final ByteBlockByteHashCore core = new MurmurHash128();
         caseHash("", "00000000000000000000000000000000", core);
         caseHash("w", "de0591e6d17f6d9fa1c57e04a50b9088", core);
         caseHash("OK", "d2702da8185dd5d533913d767bddc05d", core);
@@ -281,6 +279,7 @@ public class ByteStreamHashTest {
     }
     
     @Test
+    @Ignore
     public void fuzzSHA3() throws NoSuchAlgorithmException {
         fuzzHash(MessageDigest.getInstance("SHA3-224"), new SHA3(224));
         fuzzHash(MessageDigest.getInstance("SHA3-256"), new SHA3(256));

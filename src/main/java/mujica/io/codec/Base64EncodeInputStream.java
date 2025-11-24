@@ -10,10 +10,6 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created in UltraIO on 2025/4/22.
- * Moved here on 2025/4/26.
- */
 @CodeHistory(date = "2025/4/22", project = "UltraIO")
 @CodeHistory(date = "2025/4/26")
 public class Base64EncodeInputStream extends FilterInputStream implements Base64StreamingEncoder {
@@ -38,7 +34,7 @@ public class Base64EncodeInputStream extends FilterInputStream implements Base64
 
     private int state;
 
-    private int flags; // remove it
+    private int char62, char63;
 
     @NotNull
     private BufferingPolicy policy;
@@ -98,9 +94,10 @@ public class Base64EncodeInputStream extends FilterInputStream implements Base64
         } else if (value < 62) {
             return '0' - 52 + value;
         } else if (value == 62) {
-            return 0xff & (flags >> 16);
+            return CHAR_62;
         } else { // value == 63
-            return 0xff & (flags >> 24);
+            // no need to assert
+            return CHAR_63;
         }
     }
 
@@ -170,19 +167,18 @@ public class Base64EncodeInputStream extends FilterInputStream implements Base64
 
     @Override
     public void setFlags(int newFlags) {
-        boolean url = (newFlags & FLAG_URL) != 0;
-        newFlags &= 0xffff;
-        if (url) {
-            newFlags |= ('-' << 16) | ('_' << 24); // '-' for 62, '_' for 63
+        if ((newFlags & FLAG_URL) != 0) {
+            char62 = URL_CHAR_62;
+            char63 = URL_CHAR_63;
         } else {
-            newFlags |= ('+' << 16) | ('/' << 24); // '+' for 62, '/' for 63
+            char62 = CHAR_62;
+            char63 = CHAR_63;
         }
-        this.flags = newFlags;
     }
 
     @Override
     public boolean hasFlag(int testFlag) {
-        return (flags & testFlag) != 0;
+        return (testFlag & FLAG_URL) != 0 && char62 == URL_CHAR_62 && char63 == URL_CHAR_63; // the only flag supported
     }
 
     @Override

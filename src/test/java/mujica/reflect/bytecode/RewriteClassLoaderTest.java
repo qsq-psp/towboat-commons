@@ -58,7 +58,7 @@ public class RewriteClassLoaderTest {
 
     private void assertOperator(@NotNull UnaryOperator<ClassFile> operator) throws Exception {
         assertLoader(new RewriteClassLoader.UsingStream(operator));
-        // assertLoader(new RewriteClassLoader.UsingBuffer(operator)); // constant pool utf8 writer is not ready
+        assertLoader(new RewriteClassLoader.UsingBuffer(operator));
     }
 
     @Test

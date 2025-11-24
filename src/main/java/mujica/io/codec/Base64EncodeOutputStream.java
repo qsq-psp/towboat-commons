@@ -3,6 +3,7 @@ package mujica.io.codec;
 import mujica.io.view.ByteFillPolicy;
 import mujica.io.view.DataView;
 import mujica.io.view.IntDataView;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterOutputStream;
@@ -15,6 +16,10 @@ import java.io.OutputStream;
  * Recreated in UltraIO on 2025/4/16.
  * Moved here on 2025/4/26.
  */
+@CodeHistory(date = "2021/6/1", project = "webbiton", name = "Base64OutputStream")
+@CodeHistory(date = "2025/4/14", project = "omnidirectional", name = "Base64OutputStream")
+@CodeHistory(date = "2025/4/16", project = "UltraIO")
+@CodeHistory(date = "2025/4/26")
 public class Base64EncodeOutputStream extends FilterOutputStream implements Base64StreamingEncoder {
 
     private int buffer;
@@ -135,9 +140,9 @@ public class Base64EncodeOutputStream extends FilterOutputStream implements Base
         boolean url = (newFlags & FLAG_URL) != 0;
         newFlags &= 0xffff;
         if (url) {
-            newFlags |= ('-' << 16) | ('_' << 24); // '-' for 62, '_' for 63
+            newFlags |= (URL_CHAR_62 << 16) | (URL_CHAR_63 << 24);
         } else {
-            newFlags |= ('+' << 16) | ('/' << 24); // '+' for 62, '/' for 63
+            newFlags |= (CHAR_62 << 16) | (CHAR_63 << 24); // the default config
         }
         flags = newFlags;
     }

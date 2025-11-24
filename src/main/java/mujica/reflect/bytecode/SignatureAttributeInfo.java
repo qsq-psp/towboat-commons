@@ -9,9 +9,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-/**
- * Created on 2025/9/16.
- */
 @CodeHistory(date = "2025/9/16")
 @ReferencePage(title = "JVMS12 The Signature Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.9")
 public class SignatureAttributeInfo extends AttributeInfo {

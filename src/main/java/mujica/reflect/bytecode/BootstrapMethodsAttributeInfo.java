@@ -44,24 +44,36 @@ class BootstrapMethodsAttributeInfo extends AttributeInfo {
 
         @Override
         public int groupCount() {
-            return 0;
+            return 1;
         }
 
         @NotNull
         @Override
-        public Class<?> getGroup(int groupIndex) {
-            throw new IndexOutOfBoundsException();
+        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
+            if (groupIndex == 0) {
+                return ConstantReferenceNodeAdapter.class;
+            } else {
+                throw new IndexOutOfBoundsException();
+            }
         }
 
         @Override
-        public int nodeCount(@NotNull Class<?> group) {
-            return 0;
+        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
+            if (group == ConstantReferenceNodeAdapter.class) {
+                return argumentIndexes.length;
+            } else {
+                return 0;
+            }
         }
 
         @NotNull
         @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
-            throw new IndexOutOfBoundsException();
+        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
+            if (group == ConstantReferenceNodeAdapter.class) {
+                return new ConstantReferenceNodeAdapter(argumentIndexes[nodeIndex]);
+            } else {
+                throw new IndexOutOfBoundsException();
+            }
         }
 
         public int byteSize() {
@@ -109,17 +121,7 @@ class BootstrapMethodsAttributeInfo extends AttributeInfo {
         @NotNull
         @Override
         public String toString(@NotNull ClassFile context) {
-            final StringBuilder sb = new StringBuilder();
-            sb.append(context.constantPool.getToString(context, methodReferenceIndex)).append("(");
-            boolean subsequent = false;
-            for (int argumentIndex : argumentIndexes) {
-                if (subsequent) {
-                    sb.append(", ");
-                }
-                sb.append(context.constantPool.getToString(context, argumentIndex));
-                subsequent = true;
-            }
-            return sb.append(")").toString();
+            return context.constantPool.getToString(context, methodReferenceIndex);
         }
 
         @Override
@@ -145,7 +147,7 @@ class BootstrapMethodsAttributeInfo extends AttributeInfo {
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
         if (groupIndex == 0) {
             return BootstrapMethod.class;
         } else {
@@ -154,7 +156,7 @@ class BootstrapMethodsAttributeInfo extends AttributeInfo {
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == BootstrapMethod.class) {
             return methods.length;
         } else {
@@ -164,7 +166,7 @@ class BootstrapMethodsAttributeInfo extends AttributeInfo {
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == BootstrapMethod.class) {
             return methods[nodeIndex];
         } else {

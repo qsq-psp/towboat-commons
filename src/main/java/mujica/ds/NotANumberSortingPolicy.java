@@ -2,9 +2,6 @@ package mujica.ds;
 
 import mujica.reflect.modifier.CodeHistory;
 
-/**
- * Created on 2025/10/28.
- */
 @CodeHistory(date = "2025/10/28")
 public enum NotANumberSortingPolicy {
 

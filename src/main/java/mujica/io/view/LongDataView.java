@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.LongSupplier;
 
-/**
- * Created on 2025/5/15.
- */
 @CodeHistory(date = "2025/5/15")
 public class LongDataView implements DataView {
 
@@ -106,7 +103,15 @@ public class LongDataView implements DataView {
 
     @Override
     public byte getByteAll() {
-        return 0;
+        if (bitLength > Byte.SIZE) {
+            throw new DataSizeMismatchException();
+        }
+        final long value = longSupplier.getAsLong();
+        if (byteFillPolicy.align == ByteAlign.LEFT) {
+            return (byte) (value >>> (Long.SIZE - Byte.SIZE));
+        } else {
+            return (byte) value;
+        }
     }
 
     @Override
@@ -124,12 +129,39 @@ public class LongDataView implements DataView {
 
     @Override
     public short getUnsignedByte(int index) {
-        return 0;
+        index = ClampedMath.INSTANCE.multiply(index, Byte.SIZE);
+        if (index < 0 || index >= bitLength) {
+            throw new IndexOutOfBoundsException();
+        }
+        switch (byteFillPolicy) {
+            case LEFT_TO_MIDDLE:
+                index = Long.SIZE - Byte.SIZE - index;
+                break;
+            case MIDDLE_TO_LEFT:
+                index += Long.SIZE - bitLength;
+                break;
+            case RIGHT_TO_MIDDLE:
+                break;
+            case MIDDLE_TO_RIGHT:
+                index = bitLength - Byte.SIZE - index;
+                break;
+            default:
+                throw new RuntimeException();
+        }
+        return (short) (0xff & (longSupplier.getAsLong() >>> index));
     }
 
     @Override
     public short getUnsignedByteAll() {
-        return 0;
+        if (bitLength > Byte.SIZE) {
+            throw new DataSizeMismatchException();
+        }
+        final long value = longSupplier.getAsLong();
+        if (byteFillPolicy.align == ByteAlign.LEFT) {
+            return (short) (value >>> (Long.SIZE - Byte.SIZE));
+        } else {
+            return (short) (0xff & value);
+        }
     }
 
     @Override
@@ -147,7 +179,7 @@ public class LongDataView implements DataView {
 
     @Override
     public int shortLength() {
-        return 0;
+        return (bitLength + (Short.SIZE - 1)) >>> 4;
     }
 
     @Override
@@ -208,7 +240,7 @@ public class LongDataView implements DataView {
 
     @Override
     public int intLength() {
-        return 0;
+        return (bitLength + (Integer.SIZE - 1)) >>> 5;
     }
 
     @Override

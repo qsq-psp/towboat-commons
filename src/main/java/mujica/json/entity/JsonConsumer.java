@@ -17,21 +17,57 @@ public interface JsonConsumer extends ClassifiedJsonConsumer {
     @Override
     void closeArray();
 
+    void emptyArrayValue();
+
+    void arrayValue(@NotNull boolean[] array);
+
+    void arrayValue(@NotNull int[] array);
+
+    void arrayValue(@NotNull long[] array);
+
+    void arrayValue(@NotNull float[] array);
+
+    void arrayValue(@NotNull double[] array);
+
+    void arrayValue(@NotNull String[] array);
+
+    void arrayValue(@NotNull Object[] array);
+
+    void arrayValue(@NotNull Iterable<?> array);
+
+    void multipleDimensionArrayValue(@NotNull int[][] array);
+
+    void multipleDimensionArrayValue(@NotNull long[][] array);
+
+    void multipleDimensionArrayValue(@NotNull float[][] array);
+
+    void multipleDimensionArrayValue(@NotNull double[][] array);
+
+    void multipleDimensionArrayValue(@NotNull Object[] array);
+
+    void multipleDimensionArrayValue(@NotNull Iterable<?> array);
+
     @Override
     void openObject();
 
     @Override
     void closeObject();
 
-    @Override
-    void key(@NotNull String key);
+    void emptyObjectValue();
+
+    void intKey(int key);
+
+    void optionalIntKey(int key);
 
     @Override
-    void key(@NotNull FastString key);
+    void stringKey(@NotNull String key);
 
-    void optionalKey(@Nullable String key);
+    @Override
+    void stringKey(@NotNull FastString key);
 
-    void optionalKey(@Nullable FastString key);
+    void optionalStringKey(@Nullable String key);
+
+    void optionalStringKey(@Nullable FastString key);
 
     @Override
     void jsonValue(@NotNull String value);
@@ -44,6 +80,9 @@ public interface JsonConsumer extends ClassifiedJsonConsumer {
 
     @Override
     void numberValue(long value);
+
+    @Override
+    void numberValue(double value);
 
     @Override
     void numberValue(@NotNull FastNumber value);

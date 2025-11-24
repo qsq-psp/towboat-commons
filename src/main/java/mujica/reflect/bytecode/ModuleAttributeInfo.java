@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.function.IntUnaryOperator;
 
-/**
- * Created on 2025/10/23.
- */
 @CodeHistory(date = "2025/10/23")
 @ReferencePage(title = "JVMS12 The Module Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.25")
 public class ModuleAttributeInfo extends AttributeInfo {
@@ -31,7 +28,7 @@ public class ModuleAttributeInfo extends AttributeInfo {
     private int[] usesIndexes; // service interface
 
     @CodeHistory(date = "2025/10/23")
-    private static class Require implements ClassFileNode.Independent {
+    private static class Require extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
         private static final long serialVersionUID = 0x58DC34A8EADBA0E0L;
 
@@ -45,28 +42,6 @@ public class ModuleAttributeInfo extends AttributeInfo {
 
         Require() {
             super();
-        }
-
-        @Override
-        public int groupCount() {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public Class<?> getGroup(int groupIndex) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        @Override
-        public int nodeCount(@NotNull Class<?> group) {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
-            throw new IndexOutOfBoundsException();
         }
 
         @Override
@@ -114,7 +89,7 @@ public class ModuleAttributeInfo extends AttributeInfo {
     private Require[] requires;
 
     @CodeHistory(date = "2025/10/23")
-    private static class ExportOrOpen implements ClassFileNode.Independent {
+    private static class Export extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
         private static final long serialVersionUID = 0xFC19DA983C170D4DL;
 
@@ -126,30 +101,8 @@ public class ModuleAttributeInfo extends AttributeInfo {
         @ConstantType(tags = ConstantPool.CONSTANT_MODULE)
         int[] toModuleIndexes;
 
-        ExportOrOpen() {
+        Export() {
             super();
-        }
-
-        @Override
-        public int groupCount() {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public Class<?> getGroup(int groupIndex) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        @Override
-        public int nodeCount(@NotNull Class<?> group) {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
-            throw new IndexOutOfBoundsException();
         }
 
         @Override
@@ -197,7 +150,7 @@ public class ModuleAttributeInfo extends AttributeInfo {
         @NotNull
         @Override
         public String toString(@NotNull ClassFile context) {
-            return "export/open";
+            return "export";
         }
 
         @Override
@@ -210,9 +163,84 @@ public class ModuleAttributeInfo extends AttributeInfo {
         }
     }
 
-    private ExportOrOpen[] exports;
+    private Export[] exports;
 
-    private ExportOrOpen[] opens;
+    @CodeHistory(date = "2025/11/13")
+    private static class Open extends ClassFileNodeAdapter implements ClassFileNode.Independent {
+
+        private static final long serialVersionUID = 0xFD0FF69094437FCCL;
+
+        @ConstantType(tags = ConstantPool.CONSTANT_PACKAGE)
+        int packageIndex;
+
+        int flags;
+
+        @ConstantType(tags = ConstantPool.CONSTANT_MODULE)
+        int[] toModuleIndexes;
+
+        Open() {
+            super();
+        }
+
+        @Override
+        public void read(@NotNull LimitedDataInput in) throws IOException {
+            packageIndex = in.readUnsignedShort();
+            flags = in.readUnsignedShort();
+            final int toCount = in.readUnsignedShort();
+            toModuleIndexes = new int[toCount];
+            for (int index = 0; index < toCount; index++) {
+                toModuleIndexes[index] = in.readUnsignedShort();
+            }
+        }
+
+        @Override
+        public void read(@NotNull ByteBuffer buffer) {
+            packageIndex = 0xffff & buffer.getShort();
+            flags = 0xffff & buffer.getShort();
+            final int toCount = 0xffff & buffer.getShort();
+            toModuleIndexes = new int[toCount];
+            for (int index = 0; index < toCount; index++) {
+                toModuleIndexes[index] = 0xffff & buffer.getShort();
+            }
+        }
+
+        @Override
+        public void write(@NotNull DataOutput out) throws IOException {
+            out.writeShort(packageIndex);
+            out.writeShort(flags);
+            out.writeShort(toModuleIndexes.length);
+            for (int moduleIndex : toModuleIndexes) {
+                out.writeShort(moduleIndex);
+            }
+        }
+
+        @Override
+        public void write(@NotNull ByteBuffer buffer) {
+            buffer.putShort((short) packageIndex);
+            buffer.putShort((short) flags);
+            buffer.putShort((short) toModuleIndexes.length);
+            for (int moduleIndex : toModuleIndexes) {
+                buffer.putShort((short) moduleIndex);
+            }
+        }
+
+        @NotNull
+        @Override
+        public String toString(@NotNull ClassFile context) {
+            return "open";
+        }
+
+        @Override
+        public void remapConstant(@NotNull IntUnaryOperator remap) {
+            packageIndex = remap.applyAsInt(packageIndex);
+            final int toCount = toModuleIndexes.length;
+            for (int index = 0; index < toCount; index++) {
+                toModuleIndexes[index] = remap.applyAsInt(toModuleIndexes[index]);
+            }
+        }
+    }
+
+    private Open[] opens;
 
     @CodeHistory(date = "2025/10/24")
     private static class Provide implements ClassFileNode.Independent {
@@ -234,18 +262,18 @@ public class ModuleAttributeInfo extends AttributeInfo {
 
         @NotNull
         @Override
-        public Class<?> getGroup(int groupIndex) {
+        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
             throw new IndexOutOfBoundsException();
         }
 
         @Override
-        public int nodeCount(@NotNull Class<?> group) {
+        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
             return 0;
         }
 
         @NotNull
         @Override
-        public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -305,6 +333,65 @@ public class ModuleAttributeInfo extends AttributeInfo {
 
     private Provide[] provides;
 
+    @Override
+    public int groupCount() {
+        return 5;
+    }
+
+    @NotNull
+    @Override
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
+        switch (groupIndex) {
+            case 0:
+                return Require.class;
+            case 1:
+                return Export.class;
+            case 2:
+                return Open.class;
+            case 3:
+                return ConstantReferenceNodeAdapter.class; // uses
+            case 4:
+                return Provide.class;
+            default:
+                throw new IndexOutOfBoundsException();
+        }
+    }
+
+    @Override
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
+        if (group == Require.class) {
+            return requires.length;
+        } else if (group == Export.class) {
+            return exports.length;
+        } else if (group == Open.class) {
+            return opens.length;
+        } else if (group == ConstantReferenceNodeAdapter.class) {
+            return usesIndexes.length;
+        } else if (group == Provide.class) {
+            return provides.length;
+        } else {
+            return 0;
+        }
+    }
+
+    @NotNull
+    @Override
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
+        if (group == Require.class) {
+            return requires[nodeIndex];
+        } else if (group == Export.class) {
+            return exports[nodeIndex];
+        } else if (group == Open.class) {
+            return opens[nodeIndex];
+        } else if (group == ConstantReferenceNodeAdapter.class) {
+            return new ConstantReferenceNodeAdapter(usesIndexes[nodeIndex]);
+        } else if (group == Provide.class) {
+            return provides[nodeIndex];
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
     public static final String NAME = "Module";
 
     @NotNull
@@ -331,16 +418,16 @@ public class ModuleAttributeInfo extends AttributeInfo {
             requires[index] = require;
         }
         count = in.readUnsignedShort();
-        exports = new ExportOrOpen[count];
+        exports = new Export[count];
         for (int index = 0; index < count; index++) {
-            ExportOrOpen export = new ExportOrOpen();
+            Export export = new Export();
             export.read(in);
             exports[index] = export;
         }
         count = in.readUnsignedShort();
-        opens = new ExportOrOpen[count];
+        opens = new Open[count];
         for (int index = 0; index < count; index++) {
-            ExportOrOpen open = new ExportOrOpen();
+            Open open = new Open();
             open.read(in);
             opens[index] = open;
         }
@@ -388,10 +475,10 @@ public class ModuleAttributeInfo extends AttributeInfo {
         for (Require require : requires) {
             require.remapConstant(remap);
         }
-        for (ExportOrOpen export : exports) {
+        for (Export export : exports) {
             export.remapConstant(remap);
         }
-        for (ExportOrOpen open : opens) {
+        for (Open open : opens) {
             open.remapConstant(remap);
         }
         for (Provide provide : provides) {

@@ -10,7 +10,7 @@ public interface FloatingPointSortingAlgorithm<T> extends SortingAlgorithm<T> {
     boolean stable();
 
     @Override
-    boolean order();
+    int orderingComposition();
 
     @NotNull
     NotANumberSortingPolicy nanPolicy();

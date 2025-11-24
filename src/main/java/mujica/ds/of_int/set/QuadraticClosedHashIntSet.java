@@ -3,6 +3,7 @@ package mujica.ds.of_int.set;
 import mujica.ds.generic.set.CollectionConstant;
 import mujica.ds.of_int.list.QuadraticProbingList;
 import mujica.ds.of_int.list.ResizePolicy;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,7 @@ import java.util.function.Consumer;
 /**
  * Created on 2025/7/3.
  */
+@CodeHistory(date = "2025/7/3")
 public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
 
     private static final long serialVersionUID = 0x456bae8f76784505L;

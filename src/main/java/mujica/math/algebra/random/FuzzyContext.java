@@ -812,9 +812,9 @@ public class FuzzyContext extends FreeFloatingPointContext {
         expandedBitShift = nextInt(exponentBits0) + mantissaBits0;
         dst |= (src & ((1L << expandedBitShift) - (1L << mantissaBits0))) << (mantissaBits1 - mantissaBits0);
         if ((src & (1L << expandedBitShift)) != 0L) {
-            dst |= ((1L << (exponentBits1 - exponentBits0)) - 1L) << expandedBitShift;
+            dst |= ((1L << (exponentBits1 - exponentBits0)) - 1L) << (expandedBitShift - mantissaBits0 + mantissaBits1);
         }
-        dst |= (src & ((1L << exponentBits0) - (1L  << expandedBitShift))) << ((exponentBits1 + mantissaBits1) - (exponentBits0 + mantissaBits0));
+        dst |= (src & ((1L << (exponentBits0 + mantissaBits0)) - (1L << expandedBitShift))) << ((exponentBits1 + mantissaBits1) - (exponentBits0 + mantissaBits0));
         if ((src & (1L << (exponentBits0 + mantissaBits0))) != 0L) {
             dst |= 1L << (exponentBits1 + mantissaBits1);
         }

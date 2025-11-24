@@ -93,6 +93,7 @@ public class Base32EncodeInputStream extends FilterInputStream implements Base32
     @Override
     public void setPolicyImmediately(@NotNull BufferingPolicy policy) throws IOException {
         this.policy = policy;
+        // todo
     }
 
     private boolean readOne() throws IOException {

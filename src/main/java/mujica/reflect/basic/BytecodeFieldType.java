@@ -12,12 +12,11 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-/**
- * According to JVMS, 'bytecode' is one word
- */
+@SuppressWarnings("SpellCheckingInspection")
 @CodeHistory(date = "2025/9/10")
 @ReferencePage(title = "JVMS12 The class File Format", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.3")
-public class BytecodeFieldType implements NotLoadedFieldType<BytecodeFieldType>, Serializable {
+public class BytecodeFieldType // according to JVMS, 'bytecode' is one word
+        implements NotLoadedFieldType<BytecodeFieldType>, Serializable {
 
     private static final long serialVersionUID = 0x359F3A80059FCF6AL;
 

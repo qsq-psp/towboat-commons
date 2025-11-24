@@ -9,9 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteOrder;
 
-/**
- * Created on 2025/5/10.
- */
 @CodeHistory(date = "2025/5/10")
 public class LongSequenceDataView implements DataView {
 

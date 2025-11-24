@@ -91,7 +91,7 @@ public class XxHash32 extends ByteBlockByteHashCore {
 
     @Override
     public void finish(@NotNull ByteBuffer buffer) {
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        buffer.order(ByteOrder.LITTLE_ENDIAN).flip();
         if (length != 0) {
             result = 0;
             for (int i = 0; i < 4; i++) {

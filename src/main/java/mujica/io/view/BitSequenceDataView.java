@@ -7,9 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteOrder;
 
-/**
- * Created on 2025/4/15.
- */
 @CodeHistory(date = "2025/4/15")
 public class BitSequenceDataView implements DataView {
 
@@ -833,7 +830,26 @@ public class BitSequenceDataView implements DataView {
     @Override
     public long getLongExact() {
         guard.run();
-        return 0;
+        final int bitLength = bitSequence.bitLength();
+        if (bitLength != Long.SIZE) {
+            throw new DataSizeMismatchException();
+        }
+        long value = 0L;
+        if (byteOrder == ByteOrder.BIG_ENDIAN) {
+            for (int shift = 0; shift < bitLength; shift++) {
+                value <<= 1;
+                if (bitSequence.getBit(shift)) {
+                    value |= 1L;
+                }
+            }
+        } else {
+            for (int shift = 0; shift < bitLength; shift++) {
+                if (bitSequence.getBit(shift)) {
+                    value |= 1L << shift;
+                }
+            }
+        }
+        return value;
     }
 
     @NotNull

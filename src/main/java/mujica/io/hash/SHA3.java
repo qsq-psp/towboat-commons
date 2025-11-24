@@ -3,6 +3,7 @@ package mujica.io.hash;
 import mujica.io.view.DataView;
 import mujica.ds.of_long.LongSequence;
 import mujica.io.view.LongSequenceDataView;
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,9 +11,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-/**
- * Created on 2025/5/17.
- */
+@CodeHistory(date = "2025/1/17", project = "Ultramarine", name = "SHA3CoreYXZ")
+@CodeHistory(date = "2025/5/17")
 @ReferencePage(title = "FIPS PUB 202", href = "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf")
 public class SHA3 extends ByteBlockBitHashCore implements LongSequence {
 
@@ -178,6 +178,7 @@ public class SHA3 extends ByteBlockBitHashCore implements LongSequence {
     @Override
     public void finish(@NotNull ByteBuffer buffer, int paddingBits) {
         buffer.order(ByteOrder.LITTLE_ENDIAN);
+        // todo: pad
     }
 
     @Override

@@ -3,6 +3,7 @@ package mujica.io.codec;
 import mujica.io.view.ByteFillPolicy;
 import mujica.io.view.DataView;
 import mujica.io.view.IntDataView;
+import mujica.reflect.modifier.CodeHistory;
 import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,9 @@ import java.io.InputStream;
  * Recreated in UltraIO on 2025/4/21.
  * Moved here on 2025/4/26.
  */
+@CodeHistory(date = "2025/4/14", project = "omnidirectional", name = "Base64InputStream")
+@CodeHistory(date = "2025/4/21", project = "UltraIO")
+@CodeHistory(date = "2025/4/26")
 public class Base64DecodeInputStream extends FilterInputStream implements Base64StreamingCodec {
 
     private int buffer;

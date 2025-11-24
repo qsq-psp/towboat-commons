@@ -11,9 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import java.math.BigInteger;
 import java.util.Objects;
 
-/**
- * Created on 2025/3/3.
- */
 @CodeHistory(date = "2025/3/3")
 public class DataSizeStyle extends HexEncoder implements IntegralToStringFunction {
 

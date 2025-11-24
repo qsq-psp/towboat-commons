@@ -53,8 +53,7 @@ public class FreeFloatingPointContext extends RandomContext {
         return ((long) source.next(1)) << shiftDistance;
     }
 
-    protected long nextIEEE754(int exponentBits, int mantissaBits, int flags) {
-        final long sign = nextBit(exponentBits + mantissaBits);
+    protected long nextUnsignedIEEE754(int exponentBits, int mantissaBits, int flags) {
         final long maxExponent = (1L << exponentBits) - 1L;
         switch (flags) {
             case FP_NORMAL:
@@ -63,7 +62,7 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == 0L || exponent == maxExponent) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | nextBlock(mantissaBits);
+                    return (exponent << mantissaBits) | nextBlock(mantissaBits);
                 }
             case FP_SUBNORMAL:
                 while (true) {
@@ -71,7 +70,7 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (mantissa == 0L) {
                         continue;
                     }
-                    return sign | mantissa;
+                    return mantissa;
                 }
             case FP_NORMAL | FP_SUBNORMAL:
                 while (true) {
@@ -80,10 +79,10 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == 0L && mantissa == 0L || exponent == maxExponent) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_ZERO:
-                return sign;
+                return 0L;
             case FP_NORMAL | FP_ZERO:
                 while (true) {
                     long exponent = nextBlock(exponentBits);
@@ -91,20 +90,20 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == 0L && mantissa != 0L || exponent == maxExponent) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_SUBNORMAL | FP_ZERO:
-                return sign | nextBlock(mantissaBits);
+                return nextBlock(mantissaBits);
             case FP_NORMAL | FP_SUBNORMAL | FP_ZERO:
                 while (true) {
                     long exponent = nextBlock(exponentBits);
                     if (exponent == maxExponent) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | nextBlock(mantissaBits);
+                    return (exponent << mantissaBits) | nextBlock(mantissaBits);
                 }
             case FP_INFINITY:
-                return sign | (maxExponent << mantissaBits);
+                return maxExponent << mantissaBits;
             case FP_NORMAL | FP_INFINITY:
                 while (true) {
                     long exponent = nextBlock(exponentBits);
@@ -112,14 +111,14 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == 0L || exponent == maxExponent && mantissa != 0L) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_SUBNORMAL | FP_INFINITY: {
                 long mantissa = nextBlock(mantissaBits);
                 if (mantissa == 0L) {
-                    return sign | (maxExponent << mantissaBits);
+                    return maxExponent << mantissaBits;
                 } else {
-                    return sign | mantissa;
+                    return mantissa;
                 }
             }
             case FP_NORMAL | FP_SUBNORMAL | FP_INFINITY:
@@ -129,10 +128,14 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == 0L && mantissa == 0L || exponent == maxExponent && mantissa != 0L) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_ZERO | FP_INFINITY:
-                return sign | ((nextBit(exponentBits) - 1L) << mantissaBits); // wrong
+                if (nextBoolean()) {
+                    return 0L;
+                } else {
+                    return maxExponent << mantissaBits;
+                }
             case FP_NORMAL | FP_ZERO | FP_INFINITY:
                 while (true) {
                     long exponent = nextBlock(exponentBits);
@@ -140,13 +143,13 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == 0L && mantissa != 0L || exponent == maxExponent && mantissa != 0L) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_SUBNORMAL | FP_ZERO | FP_INFINITY:
                 if (nextBlock(mantissaBits) == 0L) {
-                    return sign | (maxExponent << mantissaBits);
+                    return (maxExponent << mantissaBits);
                 } else {
-                    return sign | nextBlock(mantissaBits);
+                    return nextBlock(mantissaBits);
                 }
             case FP_NORMAL | FP_SUBNORMAL | FP_ZERO | FP_INFINITY:
                 while (true) {
@@ -155,7 +158,7 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == maxExponent && mantissa != 0L) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_NAN:
                 while (true) {
@@ -163,7 +166,7 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (mantissa == 0L) {
                         continue;
                     }
-                    return sign | (maxExponent << mantissaBits) | mantissa;
+                    return (maxExponent << mantissaBits) | mantissa;
                 }
             case FP_NORMAL | FP_NAN:
                 while (true) {
@@ -172,7 +175,7 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == 0L || exponent == maxExponent && mantissa == 0L) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_SUBNORMAL | FP_NAN:
                 while (true) {
@@ -180,7 +183,7 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (mantissa == 0L) {
                         continue;
                     }
-                    return sign | ((nextBit(exponentBits) - 1L) << mantissaBits) | mantissa; // wrong
+                    return ((nextBit(exponentBits) - 1L) << mantissaBits) | mantissa; // wrong
                 }
             case FP_NORMAL | FP_SUBNORMAL | FP_NAN:
                 while (true) {
@@ -189,14 +192,14 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == 0L && mantissa == 0L || exponent == maxExponent && mantissa == 0L) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_ZERO | FP_NAN: {
                 long mantissa = nextBlock(mantissaBits);
                 if (mantissa == 0L) {
-                    return sign;
+                    return 0L;
                 } else {
-                    return sign | (maxExponent << mantissaBits) | mantissa;
+                    return (maxExponent << mantissaBits) | mantissa;
                 }
             }
             case FP_NORMAL | FP_ZERO | FP_NAN:
@@ -206,7 +209,7 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == 0L && mantissa != 0L || exponent == maxExponent && mantissa == 0L) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_SUBNORMAL | FP_ZERO | FP_NAN:
                 if (nextBlock(exponentBits) == 0L) { // todo
@@ -215,10 +218,10 @@ public class FreeFloatingPointContext extends RandomContext {
                         if (mantissa == 0L) {
                             continue;
                         }
-                        return sign | (maxExponent << mantissaBits) | mantissa;
+                        return (maxExponent << mantissaBits) | mantissa;
                     }
                 } else {
-                    return sign | nextBlock(mantissaBits);
+                    return nextBlock(mantissaBits);
                 }
             case FP_NORMAL | FP_SUBNORMAL | FP_ZERO | FP_NAN:
                 while (true) {
@@ -227,17 +230,17 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == maxExponent && mantissa == 0L) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_INFINITY | FP_NAN:
-                return sign | (maxExponent << mantissaBits) | nextBlock(mantissaBits);
+                return (maxExponent << mantissaBits) | nextBlock(mantissaBits);
             case FP_NORMAL | FP_INFINITY | FP_NAN:
                 while (true) {
                     long exponent = nextBlock(exponentBits);
                     if (exponent == 0L) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | nextBlock(mantissaBits);
+                    return (exponent << mantissaBits) | nextBlock(mantissaBits);
                 }
             case FP_SUBNORMAL | FP_INFINITY | FP_NAN:
                 if (nextBlock(1) == 0L) {
@@ -246,10 +249,10 @@ public class FreeFloatingPointContext extends RandomContext {
                         if (mantissa == 0L) {
                             continue;
                         }
-                        return sign | mantissa;
+                        return mantissa;
                     }
                 } else {
-                    return sign | (maxExponent << mantissaBits) | nextBlock(mantissaBits);
+                    return (maxExponent << mantissaBits) | nextBlock(mantissaBits);
                 }
             case FP_NORMAL | FP_SUBNORMAL | FP_INFINITY | FP_NAN:
                 while (true) {
@@ -257,13 +260,13 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponentAndMantissa == 0L) {
                         continue;
                     }
-                    return sign | exponentAndMantissa;
+                    return exponentAndMantissa;
                 }
             case FP_ZERO | FP_INFINITY | FP_NAN:
                 if (nextBlock(mantissaBits) == 0L) {
-                    return sign;
+                    return 0L;
                 } else {
-                    return sign | (maxExponent << mantissaBits) | nextBlock(mantissaBits);
+                    return (maxExponent << mantissaBits) | nextBlock(mantissaBits);
                 }
             case FP_NORMAL | FP_ZERO | FP_INFINITY | FP_NAN:
                 while (true) {
@@ -272,15 +275,23 @@ public class FreeFloatingPointContext extends RandomContext {
                     if (exponent == 0L && mantissa != 0L) {
                         continue;
                     }
-                    return sign | (exponent << mantissaBits) | mantissa;
+                    return (exponent << mantissaBits) | mantissa;
                 }
             case FP_SUBNORMAL | FP_ZERO | FP_INFINITY | FP_NAN:
-                return sign | ((nextBit(exponentBits) - 1L) << mantissaBits) | nextBlock(mantissaBits); // wrong
+                return ((nextBit(exponentBits) - 1L) << mantissaBits) | nextBlock(mantissaBits); // wrong
             case FP_NORMAL | FP_SUBNORMAL | FP_ZERO | FP_INFINITY | FP_NAN:
-                return sign | nextBlock(mantissaBits + exponentBits);
+                return nextBlock(mantissaBits + exponentBits);
             default:
                 throw new IllegalStateException();
         }
+    }
+
+    protected long nextIEEE754(int exponentBits, int mantissaBits, int flags) {
+        long value = nextUnsignedIEEE754(exponentBits, mantissaBits, flags);
+        if (nextBoolean()) {
+            value |= 1L << (exponentBits + mantissaBits);
+        }
+        return value;
     }
 
     protected long nextFloatBits() {

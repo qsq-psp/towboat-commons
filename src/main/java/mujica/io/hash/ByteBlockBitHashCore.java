@@ -107,7 +107,7 @@ public abstract class ByteBlockBitHashCore extends ByteBlockByteHashCore {
         final int blockSize = blockBytes() << 3;
         final int leftSize = (buffer.position() << 3) - paddingBits;
         assert leftSize < blockSize;
-        int steps = (leftSize + (lengthFieldBytes << 3) + blockSize) / blockSize;
+        int steps = (leftSize + (lengthFieldBytes << 3) + blockSize + 1) / blockSize;
         assert steps == 1 || steps == 2;
         if (paddingBits > 0) {
             int position = buffer.position() - 1;
@@ -122,21 +122,22 @@ public abstract class ByteBlockBitHashCore extends ByteBlockByteHashCore {
         for (int count = ((steps * blockSize + (Byte.SIZE - 1)) >> 3) - buffer.position(); count > 0; count--) {
             buffer.put((byte) 0x00);
         }
-        final long blockCount = blockCount();
-        assert blockCount >= 0;
-        if (buffer.order() == ByteOrder.BIG_ENDIAN) {
+        {
+            long blockCount = blockCount();
+            assert blockCount >= 0;
             long totalBits = blockCount * blockSize + leftSize;
             int position = buffer.position();
-            for (int i = 0; i < lengthFieldBytes; i++) {
-                buffer.put(--position, (byte) totalBits);
-                totalBits >>= Byte.SIZE;
-            }
-        } else {
-            long totalBits = blockCount * blockSize + leftSize;
-            int position = buffer.position() - lengthFieldBytes;
-            for (int i = 0; i < lengthFieldBytes; i++) {
-                buffer.put(position++, (byte) totalBits);
-                totalBits >>= Byte.SIZE;
+            if (buffer.order() == ByteOrder.BIG_ENDIAN) {
+                for (int i = 0; i < lengthFieldBytes; i++) {
+                    buffer.put(--position, (byte) totalBits);
+                    totalBits >>= Byte.SIZE;
+                }
+            } else {
+                position -= lengthFieldBytes;
+                for (int i = 0; i < lengthFieldBytes; i++) {
+                    buffer.put(position++, (byte) totalBits);
+                    totalBits >>= Byte.SIZE;
+                }
             }
         }
         buffer.flip();

@@ -65,6 +65,27 @@ public class SourceMethodType implements NotLoadedMethodType<SourceFieldType, So
     }
 
     @Override
+    public void checkHealth() throws RuntimeException {
+        returnType.checkReturnTypeHealth();
+        for (SourceFieldType parameterType : parameterTypes) {
+            parameterType.checkHealth();
+        }
+    }
+
+    @Override
+    public boolean isHealthy() {
+        if (!returnType.isReturnTypeHealthy()) {
+            return false;
+        }
+        for (SourceFieldType parameterType : parameterTypes) {
+            if (!parameterType.isHealthy()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public int parameterCount() {
         return parameterTypes.length;
     }

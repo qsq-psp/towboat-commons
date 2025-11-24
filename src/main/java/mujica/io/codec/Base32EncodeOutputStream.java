@@ -11,10 +11,6 @@ import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * Created in UltraIO on 2025/4/27.
- * Moved here on 2025/4/30.
- */
 @CodeHistory(date = "2025/4/27", project = "UltraIO")
 @CodeHistory(date = "2025/4/30")
 public class Base32EncodeOutputStream extends FilterOutputStream implements Base32StreamingEncoder {
@@ -95,6 +91,7 @@ public class Base32EncodeOutputStream extends FilterOutputStream implements Base
     @Override
     public void setPolicyImmediately(@NotNull BufferingPolicy policy) throws IOException {
         this.policy = policy;
+        // todo
     }
 
     private void encode(int value) throws IOException {

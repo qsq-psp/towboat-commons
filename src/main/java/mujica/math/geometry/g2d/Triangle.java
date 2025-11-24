@@ -2,6 +2,7 @@ package mujica.math.geometry.g2d;
 
 import mujica.math.geometry.GeometryOperationResult;
 import mujica.math.algebra.random.RandomContext;
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
@@ -9,10 +10,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-/**
- * Created in va on 2020/7/10, named TriangleModel.
- * Recreated on 2022/9/16.
- */
+@CodeHistory(date = "2020/7/10", project = "va", name = "TriangleModel")
+@CodeHistory(date = "2022/9/16", project = "Ultramarine")
+@CodeHistory(date = "2025/3/2")
 public class Triangle<G extends Point> extends Jordan2 {
 
     private static final long serialVersionUID = 0x0e3a49955bf60e00L;

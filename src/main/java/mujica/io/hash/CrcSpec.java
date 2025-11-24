@@ -1,10 +1,13 @@
 package mujica.io.hash;
 
+import mujica.reflect.modifier.CodeHistory;
+
 import java.io.Serializable;
 
 /**
  * Created on 2025/4/27.
  */
+@CodeHistory(date = "2025/4/27")
 public class CrcSpec implements Serializable {
 
     private static final long serialVersionUID = 0xdb99a5914d2ba81fL;

@@ -45,7 +45,7 @@ public abstract class MemberInfo implements ClassFileNode.Dependent, BiConsumer<
 
     @NotNull
     @Override
-    public Class<?> getGroup(int groupIndex) {
+    public Class<? extends ClassFileNode> getGroup(int groupIndex) {
         if (groupIndex == 0) {
             return AttributeInfo.class;
         } else {
@@ -54,7 +54,7 @@ public abstract class MemberInfo implements ClassFileNode.Dependent, BiConsumer<
     }
 
     @Override
-    public int nodeCount(@NotNull Class<?> group) {
+    public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == AttributeInfo.class) {
             return attributes.length;
         } else {
@@ -64,7 +64,7 @@ public abstract class MemberInfo implements ClassFileNode.Dependent, BiConsumer<
 
     @NotNull
     @Override
-    public ClassFileNode getNode(@NotNull Class<?> group, int nodeIndex) {
+    public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == AttributeInfo.class) {
             return attributes[nodeIndex];
         } else {
