@@ -16,5 +16,5 @@ public interface FloatingPointSortingAlgorithm<T> extends SortingAlgorithm<T> {
     NotANumberSortingPolicy nanPolicy();
 
     @Override
-    long apply(@NotNull T target, int fromIndex, int toIndex);
+    long apply(@NotNull T target, int startIndex, int endIndex);
 }

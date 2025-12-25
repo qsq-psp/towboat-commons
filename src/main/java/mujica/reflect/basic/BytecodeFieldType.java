@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 public class BytecodeFieldType // according to JVMS, 'bytecode' is one word
         implements NotLoadedFieldType<BytecodeFieldType>, Serializable {
 
-    private static final long serialVersionUID = 0x359F3A80059FCF6AL;
+    private static final long serialVersionUID = 0x359f3a80059fcf6aL;
 
     /**
      * For example:

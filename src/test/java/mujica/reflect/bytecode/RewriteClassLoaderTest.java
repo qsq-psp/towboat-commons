@@ -12,11 +12,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.charset.Charset;
+import java.util.Comparator;
 import java.util.function.UnaryOperator;
 
-/**
- * Created on 2025/9/29.
- */
 @CodeHistory(date = "2025/9/29")
 public class RewriteClassLoaderTest {
 
@@ -64,6 +62,22 @@ public class RewriteClassLoaderTest {
     @Test
     public void testIdentity() throws Exception {
         assertOperator(UnaryOperator.identity());
+    }
+
+    @Test
+    public void testSimplyAttributeInfo() throws Exception {
+        assertOperator(classFile -> {
+            classFile.simplifyAttributeInfo();
+            return classFile;
+        });
+    }
+
+    @Test
+    public void testSortAttributeInfo() throws Exception {
+        assertOperator(classFile -> {
+            classFile.sortAttributeInfo(Comparator.comparing(AttributeInfo::attributeName));
+            return classFile;
+        });
     }
 
     @Test

@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +30,7 @@ class MethodHandleConstantInfo extends ConstantInfo {
             "invoke-interface"
     };
 
+    @DataType("u8")
     int kind; // from 1 to 9
 
     @NotNull
@@ -40,10 +42,11 @@ class MethodHandleConstantInfo extends ConstantInfo {
         }
     }
 
+    @DataType("u16-{0}")
     @ConstantType(tags = {
-            ConstantPool.CONSTANT_FIELDREF,
-            ConstantPool.CONSTANT_METHODREF,
-            ConstantPool.CONSTANT_INTERFACEMETHODREF
+            MemberReferenceConstantInfo.TAG_FIELDREF,
+            MemberReferenceConstantInfo.TAG_METHODREF,
+            MemberReferenceConstantInfo.TAG_INTERFACEMETHODREF
     })
     int referenceIndex;
 

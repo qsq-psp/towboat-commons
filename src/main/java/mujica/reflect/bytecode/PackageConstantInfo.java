@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 @ReferencePage(title = "JVMS12 The CONSTANT_Package_info Structure", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.12")
 class PackageConstantInfo extends IndirectUtf8ConstantInfo {
 
-    private static final long serialVersionUID = 0xE9BEA60FADFC2140L;
+    private static final long serialVersionUID = 0xe9bea60fadfc2140L;
 
     PackageConstantInfo() {
         super();

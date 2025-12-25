@@ -3,7 +3,9 @@ package mujica.io.compress;
 import io.netty.handler.codec.CodecException;
 import mujica.io.hash.SimpleIntSizedCRC;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
+import mujica.reflect.modifier.Stable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @CodeHistory(date = "2025/10/7")
+@Stable(date = "2025/11/28")
 @ReferencePage(title = "GZIP file format specification version 4.3", href = "https://www.rfc-editor.org/rfc/rfc1952.html")
 public class WrapperGzipInputStream extends FilterInputStream {
 
@@ -107,6 +110,7 @@ public class WrapperGzipInputStream extends FilterInputStream {
     }
 
     @Override
+    @DataType("u8+{-1}")
     public int read() throws IOException {
         if (crc != null) {
             int value = in.read();

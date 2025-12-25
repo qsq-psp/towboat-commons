@@ -12,7 +12,7 @@ import java.lang.invoke.MethodType;
 @ReferencePage(title = "JVMS12 The CONSTANT_MethodType_info Structure", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.9")
 class MethodTypeConstantInfo extends IndirectUtf8ConstantInfo {
 
-    private static final long serialVersionUID = 0xC40C7EA10D586134L;
+    private static final long serialVersionUID = 0xc40c7ea10d586134L;
 
     MethodTypeConstantInfo() {
         super();

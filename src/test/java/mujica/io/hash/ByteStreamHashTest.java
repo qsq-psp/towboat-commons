@@ -1,13 +1,11 @@
 package mujica.io.hash;
 
 import io.netty.buffer.ByteBufUtil;
-import mujica.io.view.ByteSequence;
 import mujica.math.algebra.random.FuzzyContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -22,6 +20,7 @@ import java.util.zip.Checksum;
 
 @SuppressWarnings("SpellCheckingInspection")
 @CodeHistory(date = "2024/12/13", project = "Ultramarine")
+@CodeHistory(date = "2025/1/24", project = "OSHI", name = "SimpleBytesDigestTest")
 @CodeHistory(date = "2025/4/13")
 public class ByteStreamHashTest {
 
@@ -189,11 +188,13 @@ public class ByteStreamHashTest {
         caseHash("abcdefghijklmnopqrstuvwxyz", "c3fcd3d76192e4007dfb496cca67e13b", core);
         caseHash(
                 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
-                "d174ab98d277d9f5a5611c2c9f419d9f", core
+                "d174ab98d277d9f5a5611c2c9f419d9f",
+                core
         );
         caseHash(
                 "12345678901234567890123456789012345678901234567890123456789012345678901234567890",
-                "57edf4a22be3c955ac49da2e2107b67a", core
+                "57edf4a22be3c955ac49da2e2107b67a",
+                core
         );
     }
     
@@ -212,11 +213,13 @@ public class ByteStreamHashTest {
         final ByteBlockByteHashCore core = new SHA224();
         caseHash(
                 filledByteArray(0x41, 1000),
-                "a8d0c66b5c6fdfd836eb3c6d04d32dfe66c3b1f168b488bf4c9c66ce", core
+                "a8d0c66b5c6fdfd836eb3c6d04d32dfe66c3b1f168b488bf4c9c66ce",
+                core
         );
         caseHash(
                 filledByteArray(0x99, 1005),
-                "cb00ecd03788bf6c0908401e0eb053ac61f35e7e20a2cfd7bd96d640", core
+                "cb00ecd03788bf6c0908401e0eb053ac61f35e7e20a2cfd7bd96d640",
+                core
         );
     }
     
@@ -230,11 +233,13 @@ public class ByteStreamHashTest {
         final ByteBlockByteHashCore core = new SHA256();
         caseHash(
                 filledByteArray(0x41, 1000),
-                "c2e686823489ced2017f6059b8b239318b6364f6dcd835d0a519105a1eadd6e4", core
+                "c2e686823489ced2017f6059b8b239318b6364f6dcd835d0a519105a1eadd6e4",
+                core
         );
         caseHash(
                 filledByteArray(0x55, 1005),
-                "f4d62ddec0f3dd90ea1380fa16a5ff8dc4c54b21740650f24afc4120903552b0", core
+                "f4d62ddec0f3dd90ea1380fa16a5ff8dc4c54b21740650f24afc4120903552b0",
+                core
         );
     }
     
@@ -249,12 +254,14 @@ public class ByteStreamHashTest {
         caseHash(
                 filledByteArray(0x41, 1000),
                 "7df01148677b7f18617eee3a23104f0eed6bb8c90a6046f715c9445ff43c30d6" +
-                "9e9e7082de39c3452fd1d3afd9ba0689", core
+                "9e9e7082de39c3452fd1d3afd9ba0689",
+                core
         );
         caseHash(
                 filledByteArray(0x55, 1005),
                 "1bb8e256da4a0d1e87453528254f223b4cb7e49c4420dbfa766bba4adba44eec" +
-                "a392ff6a9f565bc347158cc970ce44ec", core
+                "a392ff6a9f565bc347158cc970ce44ec",
+                core
         );
     }
     
@@ -269,7 +276,8 @@ public class ByteStreamHashTest {
         caseHash(
                 new byte[1000000],
                 "ce044bc9fd43269d5bbc946cbebc3bb711341115cc4abdf2edbc3ff2c57ad4b1" +
-                "5deb699bda257fea5aef9c6e55fcf4cf9dc25a8c3ce25f2efe90908379bff7ed", core
+                "5deb699bda257fea5aef9c6e55fcf4cf9dc25a8c3ce25f2efe90908379bff7ed",
+                core
         );
     }
     
@@ -277,14 +285,65 @@ public class ByteStreamHashTest {
     public void fuzzSHA512() throws NoSuchAlgorithmException {
         fuzzHash(MessageDigest.getInstance("SHA-512"), new SHA512());
     }
+
+    @Test
+    public void caseSHA3Special0() {
+        final byte[] input = new byte[0];
+        ByteBlockBitHashCore core = new SHA3(224);
+        caseHash(
+                input,
+                "6b4e03423667dbb73b6e15454f0eb1abd4597f9a1b078e3f5b5a6bc7",
+                core
+        );
+        core = new SHA3(512);
+        caseHash(
+                input,
+                "a69f73cca23a9ac5c8b567dc185a756e97c982164fe25859e0d1dcc1475c80a6" +
+                "15b2123af1f5f94c11e3e9402c3ac558f500199d95b6d3e301758586281dcd26",
+                core
+        );
+    }
+
+    @Test
+    public void caseSHA3Special1600() {
+        final byte[] input = new byte[200];
+        Arrays.fill(input, (byte) 0xa3);
+        ByteBlockBitHashCore core = new SHA3(224);
+        caseHash(
+                input,
+                "9376816aba503f72f96ce7eb65ac095deee3be4bf9bbc2a1cb7e11e0",
+                core
+        );
+        core = new SHA3(512);
+        caseHash(
+                input,
+                "e76dfad22084a8b1467fcf2ffa58361bec7628edf5f3fdc0e4805dc48caeeca8" +
+                "1b7c13c30adf52a3659584739a2df46be589c51ca1a4a8416df6545a1ce8ba00",
+                core
+        );
+    }
     
     @Test
-    @Ignore
     public void fuzzSHA3() throws NoSuchAlgorithmException {
         fuzzHash(MessageDigest.getInstance("SHA3-224"), new SHA3(224));
         fuzzHash(MessageDigest.getInstance("SHA3-256"), new SHA3(256));
         fuzzHash(MessageDigest.getInstance("SHA3-384"), new SHA3(384));
         fuzzHash(MessageDigest.getInstance("SHA3-512"), new SHA3(512));
+    }
+
+    @Test
+    public void caseSM3() {
+        final ByteBlockBitHashCore core = new SM3();
+        caseHash(
+                "abc",
+                "66c7f0f462eeedd9d1f2d46bdc10e4e24167c4875cf2f7a2297da02b8f4ba8e0",
+                core
+        );
+        caseHash(
+                "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                "debe9ff92275b8a138604889c18e5a4d6fdb70e5387e5765293dcba39c0c5732",
+                core
+        );
     }
 
     private void fuzzHash(@NotNull Checksum expectedAlgorithm, @NotNull ByteStreamHash actualAlgorithm) {

@@ -1,8 +1,6 @@
 package mujica.io.hash;
 
-import mujica.io.view.DataView;
 import mujica.ds.of_int.list.IntSequence;
-import mujica.io.view.IntSequenceDataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
@@ -19,8 +17,6 @@ public class SM3 extends ByteBlockBitHashCore implements IntSequence {
 
     private static final long serialVersionUID = 0xa8df5a9ab740af24L;
 
-    private static final int INITIAL_VECTOR_LENGTH = 8;
-
     private static final int[] INITIAL_VECTOR = {
             0x7380166f,
             0x4914b2b9,
@@ -30,13 +26,13 @@ public class SM3 extends ByteBlockBitHashCore implements IntSequence {
             0x163138aa,
             0xe38dee4d,
             0xb0fb0e4e
-    };
+    }; // length = 8
 
     @NotNull
     private final transient int[] in = new int[68];
 
     @NotNull
-    private final int[] out = new int[INITIAL_VECTOR_LENGTH];
+    private final int[] out = new int[INITIAL_VECTOR.length];
 
     private int blockCount;
 
@@ -171,7 +167,7 @@ public class SM3 extends ByteBlockBitHashCore implements IntSequence {
 
     @Override
     public int intLength() {
-        return INITIAL_VECTOR_LENGTH;
+        return INITIAL_VECTOR.length;
     }
 
     @Override

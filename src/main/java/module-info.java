@@ -4,6 +4,7 @@ import mujica.reflect.modifier.CodeHistory;
 @CodeHistory(date = "2023/12/12", name = "CDP")
 module CDP {
     requires java.base;
+    requires java.desktop;
 
     requires annotations;
     requires org.slf4j;
@@ -14,8 +15,8 @@ module CDP {
     exports mujica.reflect.function;
     exports mujica.reflect.basic;
     exports mujica.reflect.bytecode;
+    exports mujica.reflect.source;
     exports mujica.io.function;
-    exports mujica.io.view;
     exports mujica.io.codec;
     exports mujica.io.buffer;
     exports mujica.io.hash;
@@ -32,15 +33,18 @@ module CDP {
     exports mujica.ds.of_int.map;
     exports mujica.ds.of_int.heap;
     exports mujica.ds.of_long;
+    exports mujica.ds.of_long.list;
     exports mujica.ds.of_double;
+    exports mujica.ds.of_double.list;
     exports mujica.text.number;
     exports mujica.text.escape;
     exports mujica.text.word;
     exports mujica.text.format;
-    exports mujica.text.pattern;
     exports mujica.text.collation;
-    exports mujica.math.algebra;
-    exports mujica.math.algebra.discrete; // expand math package next year
+    exports mujica.text.bnf;
+    exports mujica.text.regex;
+    exports mujica.math.algebra; // expand math package next year
+    exports mujica.math.algebra.discrete;
     exports mujica.math.algebra.prime;
     exports mujica.math.algebra.random;
     exports mujica.math.algebra.symbol;
@@ -48,9 +52,7 @@ module CDP {
     exports mujica.math.geometry.g2d;
     exports mujica.json.io;
     exports mujica.json.entity;
-    exports mujica.grammar;
-    exports mujica.grammar.regex;
-    exports mujica.grammar.bnf;
+    exports mujica.test;
 
     provides java.nio.charset.spi.CharsetProvider with TowboatCharsetProvider;
 }

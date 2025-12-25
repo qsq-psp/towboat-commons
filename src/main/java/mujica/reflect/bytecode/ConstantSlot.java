@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 @CodeHistory(date = "2025/11/15")
 class ConstantSlot extends ConstantInfo {
 
-    private static final long serialVersionUID = 0x7783B830A7701947L;
+    private static final long serialVersionUID = 0x7783b830a7701947L;
 
     protected int tag() {
         return 0;

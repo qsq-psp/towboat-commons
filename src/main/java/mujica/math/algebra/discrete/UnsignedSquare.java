@@ -36,18 +36,18 @@ public class UnsignedSquare implements DimensionCodec {
     }
 
     @Override
-    public void decode2(long code, @NotNull int[] out) {
+    public void decode2(long in, @NotNull int[] out) {
         long low = 0L;
         long high = MASK;
         while (low < high) {
             long mid = (low + high + 1L) >> 1;
-            if (mid * mid <= code) {
+            if (mid * mid <= in) {
                 low = mid;
             } else {
                 high = mid - 1L;
             }
         }
-        high = code - low * low;
+        high = in - low * low;
         assert 0 <= high;
         assert high <= 2L * low;
         if (high <= low) {
@@ -65,7 +65,7 @@ public class UnsignedSquare implements DimensionCodec {
     }
 
     @Override
-    public void decode4(int code, @NotNull byte[] out) {
+    public void decode4(int in, @NotNull byte[] out) {
         //
     }
 
@@ -75,7 +75,7 @@ public class UnsignedSquare implements DimensionCodec {
     }
 
     @Override
-    public void decode8(long code, @NotNull byte[] out) {
+    public void decode8(long in, @NotNull byte[] out) {
         //
     }
 
@@ -86,7 +86,7 @@ public class UnsignedSquare implements DimensionCodec {
     }
 
     @Override
-    public void decodeN(@NotNull BigInteger code, @NotNull BigInteger[] out) {
+    public void decodeN(@NotNull BigInteger in, @NotNull BigInteger[] out) {
         //
     }
 }

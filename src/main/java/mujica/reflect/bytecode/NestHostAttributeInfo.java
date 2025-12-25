@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,9 +14,10 @@ import java.nio.ByteBuffer;
 @ReferencePage(title = "JVMS12 The NestHost Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.28")
 public class NestHostAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0xE8C2F4A1AA2347FAL;
+    private static final long serialVersionUID = 0xe8c2f4a1aa2347faL;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+    @DataType("u16-{0}")
+    @ConstantType(tags = ClassConstantInfo.TAG)
     private int hostClassIndex;
 
     NestHostAttributeInfo() {

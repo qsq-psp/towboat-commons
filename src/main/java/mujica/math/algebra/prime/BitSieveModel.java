@@ -13,7 +13,7 @@ import java.util.Arrays;
  */
 public class BitSieveModel implements Serializable {
 
-    private static final long serialVersionUID = 0x7BE1AA3CFC711235L;
+    private static final long serialVersionUID = 0x7be1aa3cfc711235L;
 
     final int period;
 

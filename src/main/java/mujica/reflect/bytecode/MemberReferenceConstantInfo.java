@@ -2,6 +2,8 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
+import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
@@ -19,21 +21,33 @@ import java.util.function.IntUnaryOperator;
 @ReferencePage(title = "JVMS12 The CONSTANT_Fieldref_info, CONSTANT_Methodref_info, and CONSTANT_InterfaceMethodref_info Structures", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.2")
 class MemberReferenceConstantInfo extends ConstantInfo {
 
-    private static final long serialVersionUID = 0x91460FF49A925505L;
+    private static final long serialVersionUID = 0x91460ff49a925505L;
 
-    @MagicConstant(intValues = {ConstantPool.CONSTANT_FIELDREF, ConstantPool.CONSTANT_METHODREF, ConstantPool.CONSTANT_INTERFACEMETHODREF})
+    @DataType("u8")
+    @MagicConstant(intValues = {TAG_FIELDREF, TAG_METHODREF, TAG_INTERFACEMETHODREF})
     final int tag;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+    @DataType("u16-{0}")
+    @ConstantType(tags = ClassConstantInfo.TAG)
     int classIndex;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_NAMEANDTYPE)
+    @DataType("u16-{0}")
+    @ConstantType(tags = NameAndTypeConstantInfo.TAG)
     int nameAndTypeIndex;
 
-    MemberReferenceConstantInfo(@MagicConstant(intValues = {ConstantPool.CONSTANT_FIELDREF, ConstantPool.CONSTANT_METHODREF, ConstantPool.CONSTANT_INTERFACEMETHODREF}) int tag) {
+    MemberReferenceConstantInfo(@MagicConstant(intValues = {TAG_FIELDREF, TAG_METHODREF, TAG_INTERFACEMETHODREF}) int tag) {
         super();
         this.tag = tag;
     }
+
+    @Name(value = "field reference", language = "en")
+    public static final int TAG_FIELDREF = 9;
+
+    @Name(value = "method reference", language = "en")
+    public static final int TAG_METHODREF = 10;
+
+    @Name(value = "interface method reference", language = "en")
+    public static final int TAG_INTERFACEMETHODREF = 11;
 
     @Override
     protected int tag() {
@@ -51,12 +65,12 @@ class MemberReferenceConstantInfo extends ConstantInfo {
     @Nullable
     protected Class<?> loadedClass() {
         switch (tag) {
-            case ConstantPool.CONSTANT_FIELDREF:
+            case TAG_FIELDREF:
                 return Field.class;
-            case ConstantPool.CONSTANT_METHODREF:
-            case ConstantPool.CONSTANT_INTERFACEMETHODREF:
+            case TAG_METHODREF:
+            case TAG_INTERFACEMETHODREF:
                 return Method.class;
-            default:
+            default: // never
                 return Member.class;
         }
     }
@@ -90,13 +104,13 @@ class MemberReferenceConstantInfo extends ConstantInfo {
     public String toString(@NotNull ClassFile context) {
         String tagString;
         switch (tag) {
-            case ConstantPool.CONSTANT_FIELDREF:
+            case TAG_FIELDREF:
                 tagString = " field-reference ";
                 break;
-            case ConstantPool.CONSTANT_METHODREF:
+            case TAG_METHODREF:
                 tagString = " method-reference ";
                 break;
-            case ConstantPool.CONSTANT_INTERFACEMETHODREF:
+            case TAG_INTERFACEMETHODREF:
                 tagString = " interface-method-reference ";
                 break;
             default:

@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,12 +13,13 @@ import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/9/23")
 @ReferencePage(title = "JVMS12 The Exceptions Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.5")
-public class ExceptionsAttributeInfo extends AttributeInfo {
+class ExceptionsAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0xD2E64B8B77CB428FL;
+    private static final long serialVersionUID = 0xd2e64b8b77cb428fL;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
-    private int[] indexes;
+    @DataType("u16-{0}")
+    @ConstantType(tags = ClassConstantInfo.TAG)
+    private short[] indexes;
 
     ExceptionsAttributeInfo() {
         super();
@@ -51,7 +53,7 @@ public class ExceptionsAttributeInfo extends AttributeInfo {
     @Override
     public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == ConstantReferenceNodeAdapter.class) {
-            return new ConstantReferenceNodeAdapter(indexes[nodeIndex]);
+            return new ConstantReferenceNodeAdapter(0xffff & indexes[nodeIndex]);
         } else {
             throw new IndexOutOfBoundsException();
         }
@@ -84,25 +86,25 @@ public class ExceptionsAttributeInfo extends AttributeInfo {
     @Override
     public void read(@NotNull ConstantPool context, @NotNull LimitedDataInput in) throws IOException {
         final int count = in.readUnsignedShort();
-        indexes = new int[count];
+        indexes = new short[count];
         for (int index = 0; index < count; index++) {
-            indexes[index] = in.readUnsignedShort();
+            indexes[index] = in.readShort();
         }
     }
 
     @Override
     public void read(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
         final int count = 0xffff & buffer.getShort();
-        indexes = new int[count];
+        indexes = new short[count];
         for (int index = 0; index < count; index++) {
-            indexes[index] = 0xffff & buffer.getShort();
+            indexes[index] = buffer.getShort();
         }
     }
 
     @Override
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
         out.writeShort(indexes.length);
-        for (int index : indexes) {
+        for (short index : indexes) {
             out.writeShort(index);
         }
     }
@@ -110,8 +112,8 @@ public class ExceptionsAttributeInfo extends AttributeInfo {
     @Override
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
         buffer.putShort((short) indexes.length);
-        for (int index : indexes) {
-            buffer.putShort((short) index);
+        for (short index : indexes) {
+            buffer.putShort(index);
         }
     }
 

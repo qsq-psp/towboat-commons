@@ -23,7 +23,7 @@ public class JsonObject extends HashMap<String, Object> implements JsonContainer
     @CodeHistory(date = "2025/10/2")
     private class NamedSlot implements Slot<Object>, Serializable {
 
-        private static final long serialVersionUID = 0xEC1ECF6F2A21B14FL;
+        private static final long serialVersionUID = 0xec1ecf6f2a21b14fL;
 
         @NotNull
         final String name;

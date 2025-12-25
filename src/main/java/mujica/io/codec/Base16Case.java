@@ -1,9 +1,6 @@
 package mujica.io.codec;
 
-import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.ConstantComposition;
-import mujica.reflect.modifier.ConstantInterface;
-import mujica.reflect.modifier.Stable;
+import mujica.reflect.modifier.*;
 
 @CodeHistory(date = "2022/3/23", project = "Ultramarine", name = "HexCase")
 @CodeHistory(date = "2025/3/2")
@@ -11,6 +8,9 @@ import mujica.reflect.modifier.Stable;
 @ConstantInterface(composition = ConstantComposition.NEVER)
 public interface Base16Case {
 
+    @DataType("u8")
     int UPPER = 'A' - 0xA;
+
+    @DataType("u8")
     int LOWER = 'a' - 0xa;
 }

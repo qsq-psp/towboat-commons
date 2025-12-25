@@ -12,9 +12,9 @@ import java.nio.ByteBuffer;
 @CodeHistory(date = "2025/9/17")
 @ReferencePage(title = "JVMS12 The RuntimeVisibleAnnotations Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.16")
 @ReferencePage(title = "JVMS12 The RuntimeInvisibleAnnotations Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.17")
-public class MemberAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
+class MemberAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
 
-    private static final long serialVersionUID = 0x2841B67A2A148719L;
+    private static final long serialVersionUID = 0x2841b67a2a148719L;
 
     private Annotation[] annotations;
 

@@ -17,21 +17,21 @@ import java.util.function.IntUnaryOperator;
 @ReferencePage(title = "JVMS12 The BootstrapMethods Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.23")
 class BootstrapMethodsAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0xEF6FB4A1403D9A98L;
+    private static final long serialVersionUID = 0xef6fb4a1403d9a98L;
 
     private static class BootstrapMethod implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0x228D7825FA59893EL;
+        private static final long serialVersionUID = 0x228d7825fa59893eL;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_METHODREF)
+        @ConstantType(tags = MemberReferenceConstantInfo.TAG_METHODREF)
         int methodReferenceIndex;
 
         @ConstantType(tags = {
-                ConstantPool.CONSTANT_INTEGER,
-                ConstantPool.CONSTANT_FLOAT,
-                ConstantPool.CONSTANT_LONG,
-                ConstantPool.CONSTANT_DOUBLE,
-                ConstantPool.CONSTANT_STRING,
+                IntegerConstantInfo.TAG,
+                FloatConstantInfo.TAG,
+                LongConstantInfo.TAG,
+                DoubleConstantInfo.TAG,
+                StringConstantInfo.TAG,
                 ConstantPool.CONSTANT_METHODHANDLE,
                 ConstantPool.CONSTANT_METHODTYPE,
                 ConstantPool.CONSTANT_DYNAMIC

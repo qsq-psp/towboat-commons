@@ -53,13 +53,13 @@ public class UnsignedTriangle implements DimensionCodec {
     private static final long NEGATIVE_LIMIT = (1L << (Long.SIZE - 1)) + (1L << Integer.SIZE);
 
     @Override
-    public void decode2(long code, @NotNull int[] out) {
-        if (code >= 0) {
-            if (code < POSITIVE_LIMIT) {
+    public void decode2(long in, @NotNull int[] out) {
+        if (in >= 0) {
+            if (in < POSITIVE_LIMIT) {
                 //
             }
         } else {
-            if (NEGATIVE_LIMIT <= code) {
+            if (NEGATIVE_LIMIT <= in) {
                 //
             }
         }
@@ -71,7 +71,7 @@ public class UnsignedTriangle implements DimensionCodec {
     }
 
     @Override
-    public void decode4(int code, @NotNull byte[] out) {
+    public void decode4(int in, @NotNull byte[] out) {
 
     }
 
@@ -81,7 +81,7 @@ public class UnsignedTriangle implements DimensionCodec {
     }
 
     @Override
-    public void decode8(long code, @NotNull byte[] out) {
+    public void decode8(long in, @NotNull byte[] out) {
 
     }
 
@@ -92,7 +92,7 @@ public class UnsignedTriangle implements DimensionCodec {
     }
 
     @Override
-    public void decodeN(@NotNull BigInteger code, @NotNull BigInteger[] out) {
+    public void decodeN(@NotNull BigInteger in, @NotNull BigInteger[] out) {
 
     }
 }

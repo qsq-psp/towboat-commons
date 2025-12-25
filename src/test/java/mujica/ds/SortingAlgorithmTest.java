@@ -1,9 +1,9 @@
 package mujica.ds;
 
-import mujica.ds.of_int.IntOrdering;
+import mujica.ds.of_int.list.IntOrdering;
 import mujica.ds.of_int.list.*;
 import mujica.ds.of_int.map.CompatibleIntSlotMap;
-import mujica.ds.of_long.LongOrdering;
+import mujica.ds.of_long.list.LongOrdering;
 import mujica.ds.of_long.list.*;
 import mujica.math.algebra.random.FuzzyContext;
 import mujica.reflect.modifier.CodeHistory;
@@ -55,6 +55,12 @@ public class SortingAlgorithmTest {
         fuzzInt(IntDescendingHeapSort.INSTANCE);
         fuzzInt(new IntAscendingMergeSort());
         fuzzInt(new IntDescendingMergeSort());
+        fuzzInt(new IntAscendingQuickSort(new SelectFirstIntAsPivot()));
+        fuzzInt(new IntAscendingQuickSort(new SelectTwoIntMeanAsPivot()));
+        fuzzInt(new IntAscendingQuickSort(new SelectThreeIntMedianAsPivot()));
+        fuzzInt(new IntDescendingQuickSort(new SelectFirstIntAsPivot()));
+        fuzzInt(new IntDescendingQuickSort(new SelectTwoIntMeanAsPivot()));
+        fuzzInt(new IntDescendingQuickSort(new SelectThreeIntMedianAsPivot()));
     }
 
     private void fuzzLong(@NotNull SortingAlgorithm<long[]> algorithm) {

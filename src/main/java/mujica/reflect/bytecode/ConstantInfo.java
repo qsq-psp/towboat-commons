@@ -1,6 +1,7 @@
 package mujica.reflect.bytecode;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,13 +13,15 @@ import java.util.function.IntUnaryOperator;
 @ReferencePage(title = "JVMS12 The Constant Pool", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4")
 abstract class ConstantInfo extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-    private static final long serialVersionUID = 0x80A41766D5EA67C0L;
+    private static final long serialVersionUID = 0x80a41766d5ea67c0L;
 
+    @DataType("u16")
     @ConstantType(zero = true)
     protected int newIndex;
 
     protected int referenceCount;
 
+    @DataType("u8")
     protected abstract int tag();
 
     /**

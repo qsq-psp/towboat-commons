@@ -1,6 +1,7 @@
 package mujica.ds.generic;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandle;

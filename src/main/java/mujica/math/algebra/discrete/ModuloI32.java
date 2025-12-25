@@ -1,7 +1,7 @@
 package mujica.math.algebra.discrete;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Unsigned;
+import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -98,7 +98,7 @@ public class ModuloI32 extends ModularMath {
     }
 
     @Override
-    @Unsigned
+    @DataType("u32")
     public int multiply(int x, int y) {
         return x * y;
     }
@@ -165,7 +165,7 @@ public class ModuloI32 extends ModularMath {
     }
 
     @Override
-    @Unsigned
+    @DataType("u32")
     public int power(int base, int exponent) {
         if (exponent <= 0) {
             if (exponent == 0) {
@@ -231,7 +231,7 @@ public class ModuloI32 extends ModularMath {
     private static final BigInteger BIG_FACTORIAL_THRESHOLD = BigInteger.valueOf(FACTORIAL_THRESHOLD);
 
     @Override
-    @Unsigned
+    @DataType("u32")
     public int factorial(int a) {
         if (a < 0) {
             throw new ArithmeticException("Factorial negative");

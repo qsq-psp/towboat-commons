@@ -1,8 +1,6 @@
 package mujica.io.hash;
 
 import mujica.ds.of_boolean.BitSequence;
-import mujica.io.view.ByteSequence;
-import mujica.io.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
@@ -11,10 +9,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-/**
- * Created in OSHI on 2025/1/27, named SimpleBitsDigest.
- * Recreated on 2025/4/29.
- */
 @CodeHistory(date = "2025/1/27", project = "OSHI", name = "SimpleBitsDigest")
 @CodeHistory(date = "2025/4/29")
 public class SimpleByteBlockBitStreamHash implements BitStreamHash {
@@ -393,11 +387,11 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
         if (state != HashState.STARTED) {
             throw new IllegalHashStateException();
         }
-        if (padBitCount == 0) {
-            updateAlignedBits(input);
-        } else {
+        if (padBitCount != 0) {
             updateNotAlignedBits(ByteSequence.relative(input));
             input.position(input.limit());
+        } else {
+            updateAlignedBits(input);
         }
     }
 

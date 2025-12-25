@@ -7,5 +7,5 @@ public enum ProtoOperationPreference {
 
     DERIVE, REDUCE, REMAIN;
 
-    private static final long serialVersionUID = 0x46C8647363A0E028L;
+    private static final long serialVersionUID = 0x46c8647363a0e028L;
 }

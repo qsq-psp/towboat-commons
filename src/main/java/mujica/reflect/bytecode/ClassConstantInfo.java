@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 @ReferencePage(title = "JVMS12 The CONSTANT_Class_info Structure", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.1")
 class ClassConstantInfo extends IndirectUtf8ConstantInfo {
 
-    private static final long serialVersionUID = 0x8F53B690656E7D58L;
+    private static final long serialVersionUID = 0x8f53b690656e7d58L;
 
     ClassConstantInfo() {
         super();
@@ -21,9 +21,11 @@ class ClassConstantInfo extends IndirectUtf8ConstantInfo {
         this.utf8Index = utf8Index;
     }
 
+    public static final int TAG = 7;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_CLASS;
+        return TAG;
     }
 
     protected int section() {

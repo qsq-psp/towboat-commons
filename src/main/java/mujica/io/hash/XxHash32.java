@@ -1,8 +1,5 @@
 package mujica.io.hash;
 
-import mujica.io.view.ByteFillPolicy;
-import mujica.io.view.DataView;
-import mujica.io.view.IntDataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
-import java.util.function.IntSupplier;
 
 @CodeHistory(date = "2025/5/17")
 @ReferencePage(title = "xxHash", href = "https://cyan4973.github.io/xxHash/")

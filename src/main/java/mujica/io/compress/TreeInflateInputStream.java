@@ -41,7 +41,7 @@ public class TreeInflateInputStream extends ResidueInflateInputStream {
 
     private int bsBaseIndex;
 
-    public TreeInflateInputStream(@NotNull InputStream in, @NotNull LookBackMemory runBuffer) {
+    public TreeInflateInputStream(@NotNull InputStream in, @NotNull RunBuffer runBuffer) {
         super(in, runBuffer);
         codeLengthDecodeRoot = new HuffmanNode();
         literalLengthDecodeRoot = new HuffmanNode();
@@ -66,7 +66,7 @@ public class TreeInflateInputStream extends ResidueInflateInputStream {
                         }
                         remainingLength--;
                         blockStatistics[BS_NO_COMPRESSION_COPY_BYTES]++;
-                        runBuffer.write(data);
+                        runBuffer.put((byte) data);
                         return data;
                     } else {
                         state &= STATE_LAST_BLOCK_FREE;
@@ -79,7 +79,7 @@ public class TreeInflateInputStream extends ResidueInflateInputStream {
                     if (remainingLength > 0) {
                         remainingLength--;
                         blockStatistics[bsBaseIndex + BS_FIXED_HUFFMAN_COPY_BYTES]++;
-                        return 0xff & runBuffer.copyAndWrite(copyDistance);
+                        return 0xff & runBuffer.copy(copyDistance);
                     } else {
                         int symbol = readSymbol(literalLengthDecodeRoot);
                         if (symbol > 0x100) {
@@ -91,7 +91,7 @@ public class TreeInflateInputStream extends ResidueInflateInputStream {
                             copyDistance += readBits(DISTANCE_EXTRA_BITS[symbol]);
                         } else if (symbol < 0x100) {
                             blockStatistics[bsBaseIndex + BS_FIXED_HUFFMAN_DECODE_BYTES]++;
-                            runBuffer.write(symbol);
+                            runBuffer.put((byte) symbol);
                             return symbol;
                         } else {
                             state &= STATE_LAST_BLOCK_FREE;

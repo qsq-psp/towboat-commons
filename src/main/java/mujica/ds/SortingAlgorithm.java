@@ -20,5 +20,5 @@ public interface SortingAlgorithm<T> extends OrderingConstants {
 
     int orderingComposition();
 
-    long apply(@NotNull T target, @Index(of = "target") int fromIndex, @Index(of = "target", inclusive = false) int toIndex);
+    long apply(@NotNull T target, @Index(of = "target") int startIndex, @Index(of = "target", inclusive = false) int endIndex);
 }

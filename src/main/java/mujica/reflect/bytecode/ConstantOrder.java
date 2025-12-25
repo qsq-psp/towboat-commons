@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 
-/**
- * Created on 2025/10/17.
- */
 @CodeHistory(date = "2025/10/17")
 public enum ConstantOrder implements Comparator<ConstantInfo> {
 
@@ -72,5 +69,5 @@ public enum ConstantOrder implements Comparator<ConstantInfo> {
         }
     };
 
-    private static final long serialVersionUID = 0x4E7774A2599DA446L;
+    private static final long serialVersionUID = 0x4e7774a2599da446L;
 }

@@ -1,8 +1,6 @@
 package mujica.io.hash;
 
 import mujica.ds.of_boolean.BitSequence;
-import mujica.io.view.BitSequenceDataView;
-import mujica.io.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,12 +58,12 @@ public class BigBooleanCRC extends EachBitStreamHash implements BitSequence, Ser
         }
         this.current = new boolean[length];
         for (int index : indexes) {
-            if (current[index]) { // Index checked inside
+            if (current[index]) { // index checked inside
                 throw new IllegalArgumentException("Duplicate index");
             }
             current[index] = true;
         }
-        this.indexes = indexes; // Ascending order not checked
+        this.indexes = indexes; // ascending order not checked
         this.initial = initial;
     }
 
@@ -95,13 +93,13 @@ public class BigBooleanCRC extends EachBitStreamHash implements BitSequence, Ser
         } else {
             initialLength = initial.length;
         }
-        if (initialLength < 2) { // Use array fill
+        if (initialLength <= 1) { // use array fill
             boolean fillValue = false;
             if (initialLength == 1) {
                 fillValue = initial[0];
             }
             Arrays.fill(current, fillValue);
-        } else { // Use array copy
+        } else { // use array copy
             int currentLength = current.length;
             for (int position = 0; position < currentLength; position += initialLength) {
                 System.arraycopy(initial, 0, current, position, Math.min(initialLength, currentLength - position));
@@ -112,17 +110,17 @@ public class BigBooleanCRC extends EachBitStreamHash implements BitSequence, Ser
 
     @Override
     public void update(boolean input) {
-        final int mod = current.length;
+        final int modulo = current.length;
         if (current[offset]) {
             input = !input;
             current[offset] = false;
         }
-        if (++offset == mod) {
+        if (++offset == modulo) {
             offset = 0;
         }
         if (input) {
             for (int index : indexes) {
-                index = (offset + index) % mod;
+                index = (offset + index) % modulo;
                 current[index] = !current[index];
             }
         }

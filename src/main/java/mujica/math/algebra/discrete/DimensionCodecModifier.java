@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
+/**
+ * the base modifier class remains unchanged (identity transform)
+ */
 @CodeHistory(date = "2025/3/1")
 public class DimensionCodecModifier implements DimensionCodec {
 
@@ -32,8 +35,8 @@ public class DimensionCodecModifier implements DimensionCodec {
     }
 
     @Override
-    public void decode2(long code, @NotNull int[] out) {
-        codec.decode2(code, out);
+    public void decode2(long in, @NotNull int[] out) {
+        codec.decode2(in, out);
     }
 
     @Override
@@ -42,8 +45,8 @@ public class DimensionCodecModifier implements DimensionCodec {
     }
 
     @Override
-    public void decode4(int code, @NotNull byte[] out) {
-        codec.decode4(code, out);
+    public void decode4(int in, @NotNull byte[] out) {
+        codec.decode4(in, out);
     }
 
     @Override
@@ -52,8 +55,8 @@ public class DimensionCodecModifier implements DimensionCodec {
     }
 
     @Override
-    public void decode8(long code, @NotNull byte[] out) {
-        codec.decode8(code, out);
+    public void decode8(long in, @NotNull byte[] out) {
+        codec.decode8(in, out);
     }
 
     @NotNull
@@ -63,7 +66,7 @@ public class DimensionCodecModifier implements DimensionCodec {
     }
 
     @Override
-    public void decodeN(@NotNull BigInteger code, @NotNull BigInteger[] out) {
-        codec.decodeN(code, out);
+    public void decodeN(@NotNull BigInteger in, @NotNull BigInteger[] out) {
+        codec.decodeN(in, out);
     }
 }

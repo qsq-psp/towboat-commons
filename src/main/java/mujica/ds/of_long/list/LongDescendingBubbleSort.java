@@ -21,10 +21,10 @@ public class LongDescendingBubbleSort implements SortingAlgorithm<long[]> {
     }
 
     @Override
-    public long apply(@NotNull long[] array, int fromIndex, int toIndex) {
+    public long apply(@NotNull long[] array, int startIndex, int endIndex) {
         long operation = 0L;
-        while (fromIndex < toIndex) {
-            for (int index = fromIndex + 1; index < toIndex; index++) {
+        while (startIndex < endIndex) {
+            for (int index = startIndex + 1; index < endIndex; index++) {
                 if (array[index - 1] < array[index]) {
                     long temp = array[index - 1];
                     array[index - 1] = array[index];
@@ -32,7 +32,7 @@ public class LongDescendingBubbleSort implements SortingAlgorithm<long[]> {
                     operation++;
                 }
             }
-            toIndex--;
+            endIndex--;
         }
         return operation;
     }

@@ -3,6 +3,7 @@ package mujica.reflect.bytecode;
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.basic.BytecodeFieldType;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,25 +14,30 @@ import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/9/17")
 @ReferencePage(title = "JVMS12 The LocalVariableTable Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.13")
-public class LocalVariableTableAttributeInfo extends AttributeInfo {
+class LocalVariableTableAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0xB459F74DD30BA246L;
+    private static final long serialVersionUID = 0xb459f74dd30ba246L;
 
     @CodeHistory(date = "2025/9/17")
     private static class LocalVariableEntry extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0xD1664378176A5AFBL;
+        private static final long serialVersionUID = 0xd1664378176a5afbL;
 
+        @DataType("u16")
         int startPC;
 
+        @DataType("u16")
         int endPC;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        @DataType("u16-{0}")
+        @ConstantType(tags = Utf8ConstantInfo.TAG)
         int nameIndex;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        @DataType("u16-{0}")
+        @ConstantType(tags = Utf8ConstantInfo.TAG)
         int descriptorIndex;
 
+        @DataType("u16")
         int localVariableIndex; // long or double occupy 2 indexes
 
         LocalVariableEntry() {

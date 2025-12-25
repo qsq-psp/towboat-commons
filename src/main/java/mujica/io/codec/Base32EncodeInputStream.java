@@ -1,8 +1,8 @@
 package mujica.io.codec;
 
-import mujica.io.view.ByteFillPolicy;
-import mujica.io.view.DataView;
-import mujica.io.view.LongDataView;
+import mujica.io.hash.ByteFillPolicy;
+import mujica.io.hash.DataView;
+import mujica.io.hash.LongDataView;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
@@ -70,7 +70,6 @@ public class Base32EncodeInputStream extends FilterInputStream implements Base32
     }
 
     @NotNull
-    @Override
     public DataView getDataView() {
         return new LongDataView(this::getBuffer, ByteFillPolicy.MIDDLE_TO_RIGHT, START_SHIFT);
     }

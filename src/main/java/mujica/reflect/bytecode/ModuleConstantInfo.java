@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 @ReferencePage(title = "JVMS12 The CONSTANT_Module_info Structure", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.11")
 class ModuleConstantInfo extends IndirectUtf8ConstantInfo {
 
-    private static final long serialVersionUID = 0x923FA73AB1D799DDL;
+    private static final long serialVersionUID = 0x923fa73ab1d799ddL;
 
     ModuleConstantInfo() {
         super();

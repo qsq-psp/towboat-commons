@@ -5,10 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created in Ultramarine on 2023/10/6.
- * Recreated on 2025/2/28.
- */
 @CodeHistory(date = "2023/10/6", project = "Ultramarine")
 @CodeHistory(date = "2025/2/28")
 public interface DimensionCodec {
@@ -25,7 +21,7 @@ public interface DimensionCodec {
     /**
      * @param out length = 2 to put method return value
      */
-    void decode2(long code, @NotNull int[] out);
+    void decode2(long in, @NotNull int[] out);
 
     /**
      * @param in length = 4
@@ -35,7 +31,7 @@ public interface DimensionCodec {
     /**
      * @param out length = 4 to put method return value
      */
-    void decode4(int code, @NotNull byte[] out);
+    void decode4(int in, @NotNull byte[] out);
 
     /**
      * @param in length = 8
@@ -45,7 +41,7 @@ public interface DimensionCodec {
     /**
      * @param out length = 8 to put method return value
      */
-    void decode8(long code, @NotNull byte[] out);
+    void decode8(long in, @NotNull byte[] out);
 
     /**
      * @param in length known, content not null
@@ -56,5 +52,5 @@ public interface DimensionCodec {
     /**
      * @param out length known to put method return value
      */
-    void decodeN(@NotNull BigInteger code, @NotNull BigInteger[] out);
+    void decodeN(@NotNull BigInteger in, @NotNull BigInteger[] out);
 }

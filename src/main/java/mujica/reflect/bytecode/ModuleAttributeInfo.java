@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,32 +13,36 @@ import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/10/23")
 @ReferencePage(title = "JVMS12 The Module Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.25")
-public class ModuleAttributeInfo extends AttributeInfo {
+class ModuleAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0x5CB98421479A38A7L;
+    private static final long serialVersionUID = 0x5cb98421479a38a7L;
 
     @ConstantType(tags = ConstantPool.CONSTANT_MODULE)
     private int moduleIndex;
 
+    @NotNull
+    public String getModuleName(@NotNull ClassFile context) {
+        return context.getConstantPool().getModuleName(moduleIndex);
+    }
+
     private int flags;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+    @ConstantType(tags = Utf8ConstantInfo.TAG)
     private int versionIndex;
-
-    @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
-    private int[] usesIndexes; // service interface
 
     @CodeHistory(date = "2025/10/23")
     private static class Require extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0x58DC34A8EADBA0E0L;
+        private static final long serialVersionUID = 0x58dc34a8eadba0e0L;
 
+        @DataType("u16-{0}")
         @ConstantType(tags = ConstantPool.CONSTANT_MODULE)
         private int moduleIndex;
 
         private int flags;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        @DataType("u16")
+        @ConstantType(tags = Utf8ConstantInfo.TAG, zero = true)
         private int versionIndex;
 
         Require() {
@@ -75,7 +80,26 @@ public class ModuleAttributeInfo extends AttributeInfo {
         @NotNull
         @Override
         public String toString(@NotNull ClassFile context) {
-            return "require";
+            final StringBuilder sb = new StringBuilder();
+            sb.append("requires ");
+            if ((flags & 0x0020) != 0) {
+                sb.append("transitive ");
+            }
+            if ((flags & 0x0040) != 0) {
+                sb.append("static ");
+            }
+            if ((flags & 0x1000) != 0) {
+                sb.append("synthetic ");
+            }
+            if ((flags & 0x8000) != 0) {
+                sb.append("mandated ");
+            }
+            sb.append(context.getConstantPool().getModuleName(moduleIndex));
+            if (versionIndex != 0) {
+                sb.append(" @ ");
+                sb.append(context.getConstantPool().getUtf8(versionIndex));
+            }
+            return sb.append(";").toString();
         }
 
         @Override
@@ -91,18 +115,25 @@ public class ModuleAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/10/23")
     private static class Export extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0xFC19DA983C170D4DL;
+        private static final long serialVersionUID = 0xfc19da983c170d4dL;
 
+        @DataType("u16")
         @ConstantType(tags = ConstantPool.CONSTANT_PACKAGE)
         int packageIndex;
 
+        @DataType("u16")
         int flags;
 
+        @DataType("u16")
         @ConstantType(tags = ConstantPool.CONSTANT_MODULE)
-        int[] toModuleIndexes;
+        short[] toModuleIndexes;
 
         Export() {
             super();
+        }
+
+        public int byteSize() {
+            return 6 + 2 * toModuleIndexes.length;
         }
 
         @Override
@@ -110,9 +141,9 @@ public class ModuleAttributeInfo extends AttributeInfo {
             packageIndex = in.readUnsignedShort();
             flags = in.readUnsignedShort();
             final int toCount = in.readUnsignedShort();
-            toModuleIndexes = new int[toCount];
+            toModuleIndexes = new short[toCount];
             for (int index = 0; index < toCount; index++) {
-                toModuleIndexes[index] = in.readUnsignedShort();
+                toModuleIndexes[index] = in.readShort();
             }
         }
 
@@ -121,9 +152,9 @@ public class ModuleAttributeInfo extends AttributeInfo {
             packageIndex = 0xffff & buffer.getShort();
             flags = 0xffff & buffer.getShort();
             final int toCount = 0xffff & buffer.getShort();
-            toModuleIndexes = new int[toCount];
+            toModuleIndexes = new short[toCount];
             for (int index = 0; index < toCount; index++) {
-                toModuleIndexes[index] = 0xffff & buffer.getShort();
+                toModuleIndexes[index] = buffer.getShort();
             }
         }
 
@@ -132,7 +163,7 @@ public class ModuleAttributeInfo extends AttributeInfo {
             out.writeShort(packageIndex);
             out.writeShort(flags);
             out.writeShort(toModuleIndexes.length);
-            for (int moduleIndex : toModuleIndexes) {
+            for (short moduleIndex : toModuleIndexes) {
                 out.writeShort(moduleIndex);
             }
         }
@@ -142,24 +173,41 @@ public class ModuleAttributeInfo extends AttributeInfo {
             buffer.putShort((short) packageIndex);
             buffer.putShort((short) flags);
             buffer.putShort((short) toModuleIndexes.length);
-            for (int moduleIndex : toModuleIndexes) {
-                buffer.putShort((short) moduleIndex);
+            for (short moduleIndex : toModuleIndexes) {
+                buffer.putShort(moduleIndex);
             }
         }
 
         @NotNull
         @Override
         public String toString(@NotNull ClassFile context) {
-            return "export";
+            final StringBuilder sb = new StringBuilder();
+            sb.append("exports ");
+            if ((flags & 0x1000) != 0) {
+                sb.append("synthetic ");
+            }
+            if ((flags & 0x8000) != 0) {
+                sb.append("mandated ");
+            }
+            sb.append(context.getConstantPool().getSourcePackageName(packageIndex));
+            if (toModuleIndexes.length != 0) {
+                sb.append(" to ");
+                boolean subsequent = false;
+                for (short moduleIndex : toModuleIndexes) {
+                    if (subsequent) {
+                        sb.append(", ");
+                    }
+                    sb.append(context.getConstantPool().getModuleName(moduleIndex));
+                    subsequent = true;
+                }
+            }
+            return sb.append(";").toString();
         }
 
         @Override
         public void remapConstant(@NotNull IntUnaryOperator remap) {
             packageIndex = remap.applyAsInt(packageIndex);
-            final int toCount = toModuleIndexes.length;
-            for (int index = 0; index < toCount; index++) {
-                toModuleIndexes[index] = remap.applyAsInt(toModuleIndexes[index]);
-            }
+            ModuleAttributeInfo.remapConstant(remap, toModuleIndexes);
         }
     }
 
@@ -168,18 +216,25 @@ public class ModuleAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/11/13")
     private static class Open extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0xFD0FF69094437FCCL;
+        private static final long serialVersionUID = 0xfd0ff69094437fccL;
 
+        @DataType("u16")
         @ConstantType(tags = ConstantPool.CONSTANT_PACKAGE)
         int packageIndex;
 
+        @DataType("u16")
         int flags;
 
+        @DataType("u16")
         @ConstantType(tags = ConstantPool.CONSTANT_MODULE)
-        int[] toModuleIndexes;
+        short[] toModuleIndexes;
 
         Open() {
             super();
+        }
+
+        public int byteSize() {
+            return 6 + 2 * toModuleIndexes.length;
         }
 
         @Override
@@ -187,9 +242,9 @@ public class ModuleAttributeInfo extends AttributeInfo {
             packageIndex = in.readUnsignedShort();
             flags = in.readUnsignedShort();
             final int toCount = in.readUnsignedShort();
-            toModuleIndexes = new int[toCount];
+            toModuleIndexes = new short[toCount];
             for (int index = 0; index < toCount; index++) {
-                toModuleIndexes[index] = in.readUnsignedShort();
+                toModuleIndexes[index] = in.readShort();
             }
         }
 
@@ -198,9 +253,9 @@ public class ModuleAttributeInfo extends AttributeInfo {
             packageIndex = 0xffff & buffer.getShort();
             flags = 0xffff & buffer.getShort();
             final int toCount = 0xffff & buffer.getShort();
-            toModuleIndexes = new int[toCount];
+            toModuleIndexes = new short[toCount];
             for (int index = 0; index < toCount; index++) {
-                toModuleIndexes[index] = 0xffff & buffer.getShort();
+                toModuleIndexes[index] = buffer.getShort();
             }
         }
 
@@ -209,7 +264,7 @@ public class ModuleAttributeInfo extends AttributeInfo {
             out.writeShort(packageIndex);
             out.writeShort(flags);
             out.writeShort(toModuleIndexes.length);
-            for (int moduleIndex : toModuleIndexes) {
+            for (short moduleIndex : toModuleIndexes) {
                 out.writeShort(moduleIndex);
             }
         }
@@ -219,37 +274,75 @@ public class ModuleAttributeInfo extends AttributeInfo {
             buffer.putShort((short) packageIndex);
             buffer.putShort((short) flags);
             buffer.putShort((short) toModuleIndexes.length);
-            for (int moduleIndex : toModuleIndexes) {
-                buffer.putShort((short) moduleIndex);
+            for (short moduleIndex : toModuleIndexes) {
+                buffer.putShort(moduleIndex);
             }
         }
 
         @NotNull
         @Override
         public String toString(@NotNull ClassFile context) {
-            return "open";
+            final StringBuilder sb = new StringBuilder();
+            sb.append("opens ");
+            if ((flags & 0x1000) != 0) {
+                sb.append("synthetic ");
+            }
+            if ((flags & 0x8000) != 0) {
+                sb.append("mandated ");
+            }
+            sb.append(context.getConstantPool().getSourcePackageName(packageIndex));
+            if (toModuleIndexes.length != 0) {
+                sb.append(" to ");
+                boolean subsequent = false;
+                for (short moduleIndex : toModuleIndexes) {
+                    if (subsequent) {
+                        sb.append(", ");
+                    }
+                    sb.append(context.getConstantPool().getModuleName(moduleIndex));
+                    subsequent = true;
+                }
+            }
+            return sb.append(";").toString();
         }
 
         @Override
         public void remapConstant(@NotNull IntUnaryOperator remap) {
             packageIndex = remap.applyAsInt(packageIndex);
-            final int toCount = toModuleIndexes.length;
-            for (int index = 0; index < toCount; index++) {
-                toModuleIndexes[index] = remap.applyAsInt(toModuleIndexes[index]);
-            }
+            ModuleAttributeInfo.remapConstant(remap, toModuleIndexes);
         }
     }
 
     private Open[] opens;
 
+    @CodeHistory(date = "2025/12/12")
+    private static class Use extends ConstantReferenceNodeAdapter {
+
+        private static final long serialVersionUID = 0x19F3CD1C0DEC0366L;
+
+        Use(int index) {
+            super(index);
+        }
+
+        @NotNull
+        @Override
+        public String toString(@NotNull ClassFile context) {
+            return "uses " + context.getConstantPool().getSourceClassName(referenceIndex);
+        }
+    }
+
+    @ConstantType(tags = ClassConstantInfo.TAG)
+    private short[] usesIndexes;
+
     @CodeHistory(date = "2025/10/24")
     private static class Provide implements ClassFileNode.Independent {
 
-        @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+        @DataType("u16")
+        @ConstantType(tags = ClassConstantInfo.TAG)
         int provideIndex; // service interface
 
-        @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
-        int[] withIndexes; // service implementation
+        @DataType("u16")
+        @ConstantType(tags = ClassConstantInfo.TAG)
+        short[] withIndexes; // service implementation
 
         Provide() {
             super();
@@ -277,13 +370,17 @@ public class ModuleAttributeInfo extends AttributeInfo {
             throw new IndexOutOfBoundsException();
         }
 
+        public int byteSize() {
+            return 4 + 2 * withIndexes.length;
+        }
+
         @Override
         public void read(@NotNull LimitedDataInput in) throws IOException {
             provideIndex = in.readUnsignedShort();
             final int withCount = in.readUnsignedShort();
-            withIndexes = new int[withCount];
+            withIndexes = new short[withCount];
             for (int index = 0; index < withCount; index++) {
-                withIndexes[index] = in.readUnsignedShort();
+                withIndexes[index] = in.readShort();
             }
         }
 
@@ -291,9 +388,9 @@ public class ModuleAttributeInfo extends AttributeInfo {
         public void read(@NotNull ByteBuffer buffer) {
             provideIndex = 0xffff & buffer.getShort();
             final int withCount = 0xffff & buffer.getShort();
-            withIndexes = new int[withCount];
+            withIndexes = new short[withCount];
             for (int index = 0; index < withCount; index++) {
-                withIndexes[index] = 0xffff & buffer.getShort();
+                withIndexes[index] = buffer.getShort();
             }
         }
 
@@ -301,7 +398,7 @@ public class ModuleAttributeInfo extends AttributeInfo {
         public void write(@NotNull DataOutput out) throws IOException {
             out.writeShort(provideIndex);
             out.writeShort(withIndexes.length);
-            for (int withIndex : withIndexes) {
+            for (short withIndex : withIndexes) {
                 out.writeShort(withIndex);
             }
         }
@@ -310,24 +407,35 @@ public class ModuleAttributeInfo extends AttributeInfo {
         public void write(@NotNull ByteBuffer buffer) {
             buffer.putShort((short) provideIndex);
             buffer.putShort((short) withIndexes.length);
-            for (int withIndex : withIndexes) {
-                buffer.putShort((short) withIndex);
+            for (short withIndex : withIndexes) {
+                buffer.putShort(withIndex);
             }
         }
 
         @NotNull
         @Override
         public String toString(@NotNull ClassFile context) {
-            return "provide";
+            final StringBuilder sb = new StringBuilder();
+            sb.append("provides ");
+            sb.append(context.getConstantPool().getSourceClassName(provideIndex));
+            if (withIndexes.length != 0) {
+                sb.append(" with ");
+                boolean subsequent = false;
+                for (short moduleIndex : withIndexes) {
+                    if (subsequent) {
+                        sb.append(", ");
+                    }
+                    sb.append(context.getConstantPool().getSourceClassName(moduleIndex));
+                    subsequent = true;
+                }
+            }
+            return sb.append(";").toString();
         }
 
         @Override
         public void remapConstant(@NotNull IntUnaryOperator remap) {
             provideIndex = remap.applyAsInt(provideIndex);
-            final int withCount = withIndexes.length;
-            for (int index = 0; index < withCount; index++) {
-                withIndexes[index] = remap.applyAsInt(withIndexes[index]);
-            }
+            ModuleAttributeInfo.remapConstant(remap, withIndexes);
         }
     }
 
@@ -349,7 +457,7 @@ public class ModuleAttributeInfo extends AttributeInfo {
             case 2:
                 return Open.class;
             case 3:
-                return ConstantReferenceNodeAdapter.class; // uses
+                return Use.class;
             case 4:
                 return Provide.class;
             default:
@@ -365,7 +473,7 @@ public class ModuleAttributeInfo extends AttributeInfo {
             return exports.length;
         } else if (group == Open.class) {
             return opens.length;
-        } else if (group == ConstantReferenceNodeAdapter.class) {
+        } else if (group == Use.class) {
             return usesIndexes.length;
         } else if (group == Provide.class) {
             return provides.length;
@@ -383,8 +491,8 @@ public class ModuleAttributeInfo extends AttributeInfo {
             return exports[nodeIndex];
         } else if (group == Open.class) {
             return opens[nodeIndex];
-        } else if (group == ConstantReferenceNodeAdapter.class) {
-            return new ConstantReferenceNodeAdapter(usesIndexes[nodeIndex]);
+        } else if (group == Use.class) {
+            return new Use(usesIndexes[nodeIndex]);
         } else if (group == Provide.class) {
             return provides[nodeIndex];
         } else {
@@ -402,7 +510,17 @@ public class ModuleAttributeInfo extends AttributeInfo {
 
     @Override
     public int byteSize() {
-        return 0;
+        int size = 16 + 6 * requires.length + 2 * usesIndexes.length;
+        for (Export export : exports) {
+            size += export.byteSize();
+        }
+        for (Open open : opens) {
+            size += open.byteSize();
+        }
+        for (Provide provide : provides) {
+            size += provide.byteSize();
+        }
+        return size;
     }
 
     @Override
@@ -432,9 +550,9 @@ public class ModuleAttributeInfo extends AttributeInfo {
             opens[index] = open;
         }
         count = in.readUnsignedShort();
-        usesIndexes = new int[count];
+        usesIndexes = new short[count];
         for (int index = 0; index < count; index++) {
-            usesIndexes[index] = in.readUnsignedShort();
+            usesIndexes[index] = in.readShort();
         }
         count = in.readUnsignedShort();
         provides = new Provide[count];
@@ -450,6 +568,39 @@ public class ModuleAttributeInfo extends AttributeInfo {
         moduleIndex = 0xffff & buffer.getShort();
         flags = 0xffff & buffer.getShort();
         versionIndex = 0xffff & buffer.getShort();
+        int count = 0xffff & buffer.getShort();
+        requires = new Require[count];
+        for (int index = 0; index < count; index++) {
+            Require require = new Require();
+            require.read(buffer);
+            requires[index] = require;
+        }
+        count = 0xffff & buffer.getShort();
+        exports = new Export[count];
+        for (int index = 0; index < count; index++) {
+            Export export = new Export();
+            export.read(buffer);
+            exports[index] = export;
+        }
+        count = 0xffff & buffer.getShort();
+        opens = new Open[count];
+        for (int index = 0; index < count; index++) {
+            Open open = new Open();
+            open.read(buffer);
+            opens[index] = open;
+        }
+        count = 0xffff & buffer.getShort();
+        usesIndexes = new short[count];
+        for (int index = 0; index < count; index++) {
+            usesIndexes[index] = buffer.getShort();
+        }
+        count = 0xffff & buffer.getShort();
+        provides = new Provide[count];
+        for (int index = 0; index < count; index++) {
+            Provide provide = new Provide();
+            provide.read(buffer);
+            provides[index] = provide;
+        }
     }
 
     @Override
@@ -457,6 +608,26 @@ public class ModuleAttributeInfo extends AttributeInfo {
         out.writeShort(moduleIndex);
         out.writeShort(flags);
         out.writeShort(versionIndex);
+        out.writeShort(requires.length);
+        for (Require require : requires) {
+            require.write(out);
+        }
+        out.writeShort(exports.length);
+        for (Export export : exports) {
+            export.write(out);
+        }
+        out.writeShort(opens.length);
+        for (Open open : opens) {
+            open.write(out);
+        }
+        out.writeShort(usesIndexes.length);
+        for (short useIndex : usesIndexes) {
+            out.writeShort(useIndex);
+        }
+        out.writeShort(provides.length);
+        for (Provide provide : provides) {
+            provide.write(out);
+        }
     }
 
     @Override
@@ -464,6 +635,26 @@ public class ModuleAttributeInfo extends AttributeInfo {
         buffer.putShort((short) moduleIndex);
         buffer.putShort((short) flags);
         buffer.putShort((short) versionIndex);
+        buffer.putShort((short) requires.length);
+        for (Require require : requires) {
+            require.write(buffer);
+        }
+        buffer.putShort((short) exports.length);
+        for (Export export : exports) {
+            export.write(buffer);
+        }
+        buffer.putShort((short) opens.length);
+        for (Open open : opens) {
+            open.write(buffer);
+        }
+        buffer.putShort((short) usesIndexes.length);
+        for (short useIndex : usesIndexes) {
+            buffer.putShort(useIndex);
+        }
+        buffer.putShort((short) provides.length);
+        for (Provide provide : provides) {
+            provide.write(buffer);
+        }
     }
 
     @Override
@@ -471,7 +662,6 @@ public class ModuleAttributeInfo extends AttributeInfo {
         moduleIndex = remap.applyAsInt(moduleIndex);
         flags = remap.applyAsInt(flags);
         versionIndex = remap.applyAsInt(versionIndex);
-        remapConstant(remap, usesIndexes);
         for (Require require : requires) {
             require.remapConstant(remap);
         }
@@ -481,6 +671,7 @@ public class ModuleAttributeInfo extends AttributeInfo {
         for (Open open : opens) {
             open.remapConstant(remap);
         }
+        remapConstant(remap, usesIndexes);
         for (Provide provide : provides) {
             provide.remapConstant(remap);
         }

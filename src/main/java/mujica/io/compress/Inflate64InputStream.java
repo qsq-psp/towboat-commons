@@ -5,6 +5,7 @@ import mujica.ds.of_boolean.BitSequence;
 import mujica.ds.of_int.map.CompatibleIntMap;
 import mujica.ds.of_int.map.IntMap;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
@@ -62,6 +63,7 @@ public class Inflate64InputStream extends FilterInputStream implements BitSequen
         return value;
     }
 
+    @DataType("{-1,0,1}")
     private int readTrailingBit() {
         if (bitSize > 0) {
             boolean bit = (buffer & 1) != 0;
@@ -73,6 +75,7 @@ public class Inflate64InputStream extends FilterInputStream implements BitSequen
         }
     }
 
+    @DataType("u8+{-1}")
     private int readTrailingByte() throws IOException {
         if (bitSize >= Byte.SIZE) {
             int alignShift = bitSize & 0x7;
@@ -91,6 +94,7 @@ public class Inflate64InputStream extends FilterInputStream implements BitSequen
         }
     }
 
+    @DataType("u16")
     private int readNoCompressionLength() throws IOException {
         int length = readTrailingByte() | (readTrailingByte() << Byte.SIZE);
         if (length < 0) {
@@ -127,7 +131,7 @@ public class Inflate64InputStream extends FilterInputStream implements BitSequen
     }
 
     @NotNull
-    protected final LookBackMemory runBuffer;
+    protected final RunBuffer runBuffer;
 
     private static final int MAX_SYMBOL = 286;
 
@@ -217,7 +221,7 @@ public class Inflate64InputStream extends FilterInputStream implements BitSequen
     @NotNull
     private final IntMap codeLengthDecodeMap, literalLengthDecodeMap, distanceDecodeMap;
 
-    public Inflate64InputStream(@NotNull InputStream in, @NotNull LookBackMemory runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+    public Inflate64InputStream(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
         super(in);
         this.runBuffer = runBuffer;
         this.codeLengthDecodeMap = decodeMapSupplier.get();
@@ -226,7 +230,7 @@ public class Inflate64InputStream extends FilterInputStream implements BitSequen
     }
 
     public Inflate64InputStream(@NotNull InputStream in) {
-        this(in, new CyclicLookBackMemory(MAX_RUN_BUFFER_DISTANCE), CompatibleIntMap::new);
+        this(in, new CyclicArrayRunBuffer(MAX_RUN_BUFFER_DISTANCE), CompatibleIntMap::new);
     }
 
     private static final byte[] REORDER = {
@@ -331,6 +335,7 @@ public class Inflate64InputStream extends FilterInputStream implements BitSequen
             32769, 49153
     }; // 32
 
+    @DataType("u8+{-1}")
     @Override
     public int read() throws IOException {
         while (true) {
@@ -348,7 +353,7 @@ public class Inflate64InputStream extends FilterInputStream implements BitSequen
                             throw new EOFException();
                         }
                         remainingLength--;
-                        runBuffer.write(data);
+                        runBuffer.put((byte) data);
                         return data;
                     } else {
                         state &= STATE_LAST_BLOCK_FREE;
@@ -360,7 +365,7 @@ public class Inflate64InputStream extends FilterInputStream implements BitSequen
                 case STATE_LAST_BLOCK_DYNAMIC_HUFFMAN:
                     if (remainingLength > 0) {
                         remainingLength--;
-                        return 0xff & runBuffer.copyAndWrite(copyDistance);
+                        return 0xff & runBuffer.copy(copyDistance);
                     } else {
                         int symbol = readSymbol(literalLengthDecodeMap);
                         if (symbol > 0x100) {
@@ -371,7 +376,7 @@ public class Inflate64InputStream extends FilterInputStream implements BitSequen
                             copyDistance = DISTANCE_BASE[symbol];
                             copyDistance += readBits(DISTANCE_EXTRA_BITS[symbol]);
                         } else if (symbol < 0x100) {
-                            runBuffer.write(symbol);
+                            runBuffer.put((byte) symbol);
                             return symbol;
                         } else {
                             state &= STATE_LAST_BLOCK_FREE;

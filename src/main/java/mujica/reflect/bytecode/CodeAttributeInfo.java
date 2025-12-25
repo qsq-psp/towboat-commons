@@ -3,6 +3,7 @@ package mujica.reflect.bytecode;
 import mujica.io.codec.IndentWriter;
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import mujica.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 
@@ -117,25 +117,35 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
 
     private static final long serialVersionUID = 0x526ebb1319642acbL;
 
+    @DataType("u16")
     int maxStack;
 
+    @DataType("u16")
     int maxLocals;
 
-    byte[] code; // wrap on need
+    ByteBuffer code;
+
+    transient int[] instructionStarts;
+
+    transient int[] instructionReferenceCounts;
 
     @CodeHistory(date = "2025/9/5")
     private static class CodeException implements Independent {
 
         private static final long serialVersionUID = 0x4f5e8887fd9f3da5L;
 
+        @DataType("u16")
         int startPC;
 
+        @DataType("u16")
         int endPC;
 
+        @DataType("u16")
         int handlerPC;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
-        int catchType;
+        @DataType("u16")
+        @ConstantType(tags = ClassConstantInfo.TAG, zero = true)
+        int catchType; // this exception handler is called for all exceptions if catchType is zero
 
         CodeException() {
             super();
@@ -198,7 +208,13 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
         @NotNull
         @Override
         public String toString(@NotNull ClassFile context) {
-            return "try from " + startPC + " to " + endPC + " catch " + context.constantPool.getSourceClassName(catchType) + " goto " + handlerPC;
+            String catchTypeName;
+            if (catchType != 0) {
+                catchTypeName = context.constantPool.getSourceClassName(catchType);
+            } else {
+                catchTypeName = "all";
+            }
+            return "try from " + startPC + " to " + endPC + " catch " + catchTypeName + " goto " + handlerPC;
         }
 
         @Override
@@ -217,24 +233,38 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
 
     @Override
     public int groupCount() {
-        return 2;
+        return instructionStarts != null ? 3 : 2;
     }
 
     @NotNull
     @Override
     public Class<? extends ClassFileNode> getGroup(int groupIndex) {
-        if (groupIndex == 0) {
-            return CodeException.class;
-        } else if (groupIndex == 1) {
-            return AttributeInfo.class;
+        if (instructionStarts != null) {
+            if (groupIndex == 0) {
+                return Instruction.class;
+            } else if (groupIndex == 1) {
+                return CodeException.class;
+            } else if (groupIndex == 2) {
+                return AttributeInfo.class;
+            } else {
+                throw new IndexOutOfBoundsException(); // separate line number
+            }
         } else {
-            throw new IndexOutOfBoundsException();
+            if (groupIndex == 0) {
+                return CodeException.class;
+            } else if (groupIndex == 1) {
+                return AttributeInfo.class;
+            } else {
+                throw new IndexOutOfBoundsException(); // separate line number
+            }
         }
     }
 
     @Override
     public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
-        if (group == CodeException.class) {
+        if (group == Instruction.class) {
+            return instructionStarts.length;
+        } else if (group == CodeException.class) {
             return exceptions.length;
         } else if (group == AttributeInfo.class) {
             return attributes.length;
@@ -246,7 +276,13 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
     @NotNull
     @Override
     public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
-        if (group == CodeException.class) {
+        if (group == Instruction.class) {
+            if (instructionStarts != null) {
+                return new Instruction(this, nodeIndex);
+            } else {
+                throw new IndexOutOfBoundsException();
+            }
+        } else if (group == CodeException.class) {
             return exceptions[nodeIndex];
         } else if (group == AttributeInfo.class) {
             return attributes[nodeIndex];
@@ -277,7 +313,7 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
     @Override
     public int byteSize() {
         int size = 12;
-        size += code.length;
+        size += code.limit();
         size += 8 * exceptions.length;
         for (AttributeInfo attribute : attributes) {
             size += 6 + attribute.byteSize();
@@ -289,8 +325,9 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
     public void read(@NotNull ConstantPool context, @NotNull LimitedDataInput in) throws IOException {
         maxStack = in.readUnsignedShort();
         maxLocals = in.readUnsignedShort();
-        code = new byte[in.readInt()];
-        in.readFully(code);
+        final byte[] codeArray = new byte[in.readInt()];
+        in.readFully(codeArray);
+        code = ByteBuffer.wrap(codeArray); // position = 0, limit = codeArray.length, order = BIG_ENDIAN
         final int exceptionTableLength = in.readUnsignedShort();
         exceptions = new CodeException[exceptionTableLength];
         for (int index = 0; index < exceptionTableLength; index++) {
@@ -305,8 +342,11 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
     public void read(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
         maxStack = 0xffff & buffer.getShort();
         maxLocals = 0xffff & buffer.getShort();
-        code = new byte[buffer.getInt()];
-        buffer.get(code);
+        final int codeLength = buffer.getInt();
+        code = ByteBuffer.allocate(codeLength); // order = BIG_ENDIAN
+        final int limit = buffer.limit();
+        code.put(buffer.limit(buffer.position() + codeLength)).flip(); // position = 0, limit = codeLength
+        buffer.limit(limit);
         final int exceptionTableLength = 0xffff & buffer.getShort();
         exceptions = new CodeException[exceptionTableLength];
         for (int index = 0; index < exceptionTableLength; index++) {
@@ -321,8 +361,8 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
     public void write(@NotNull ConstantPool context, @NotNull DataOutput out) throws IOException {
         out.writeShort(maxStack);
         out.writeShort(maxLocals);
-        out.writeInt(code.length);
-        out.write(code);
+        out.writeInt(code.limit());
+        out.write(code.array());
         out.writeShort(exceptions.length);
         for (CodeException exception : exceptions) {
             exception.write(out);
@@ -334,7 +374,7 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
     public void write(@NotNull ConstantPool context, @NotNull ByteBuffer buffer) {
         buffer.putShort((short) maxStack);
         buffer.putShort((short) maxLocals);
-        buffer.putInt(code.length);
+        buffer.putInt(code.limit());
         buffer.put(code);
         buffer.putShort((short) exceptions.length);
         for (CodeException exception : exceptions) {
@@ -346,7 +386,7 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
     @NotNull
     @Override
     public String toString(@NotNull ClassFile context) {
-        return NAME + " " + code.length;
+        return NAME + " " + code.limit();
     }
 
     @Override
@@ -458,10 +498,9 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
 
     @Override
     public void accept(Statistics statistics) {
-        final ByteBuffer buffer = ByteBuffer.wrap(code);
-        buffer.order(ByteOrder.BIG_ENDIAN);
-        while (buffer.hasRemaining()) {
-            statistics.opcodeCount[next(buffer)]++;
+        code.rewind(); // position = 0
+        while (code.hasRemaining()) {
+            statistics.opcodeCount[next(code)]++;
         }
     }
 
@@ -477,11 +516,10 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
     }
 
     public void writeAssemble(@NotNull ClassFile context, @NotNull IndentWriter writer) throws IOException {
-        final ByteBuffer buffer = ByteBuffer.wrap(code);
-        buffer.order(ByteOrder.BIG_ENDIAN);
-        while (buffer.hasRemaining()) {
+        code.rewind(); // position = 0
+        while (code.hasRemaining()) {
             writer.newLine();
-            int opcode = next(buffer);
+            int opcode = next(code);
             StringBuilder sb = new StringBuilder();
             sb.append("0x");
             HexEncoder.LOWER_ENCODER.hex8(sb, opcode);

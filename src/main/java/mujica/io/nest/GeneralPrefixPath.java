@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2025/10/15")
 public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implements HealthAware, Path, Serializable {
 
-    private static final long serialVersionUID = 0x9E00691FA3997846L;
+    private static final long serialVersionUID = 0x9e00691fa3997846L;
 
     @Nullable
     protected final P parent;

@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,11 +12,12 @@ import java.nio.ByteBuffer;
 
 @CodeHistory(date = "2025/9/16")
 @ReferencePage(title = "JVMS12 The Signature Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.9")
-public class SignatureAttributeInfo extends AttributeInfo {
+class SignatureAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0x30E93CFD17675433L;
+    private static final long serialVersionUID = 0x30e93cfd17675433L;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+    @DataType("u16-{0}")
+    @ConstantType(tags = Utf8ConstantInfo.TAG)
     int signatureIndex;
 
     SignatureAttributeInfo() {
@@ -26,6 +28,11 @@ public class SignatureAttributeInfo extends AttributeInfo {
     @Override
     public ImportanceLevel importanceLevel() {
         return ImportanceLevel.HIGH;
+    }
+
+    @Override
+    public boolean isNecessary() {
+        return true; // needed in generic reflection
     }
 
     public static final String NAME = "Signature";

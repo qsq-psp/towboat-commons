@@ -12,7 +12,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2025/10/13")
 public class LimitedInputHandle implements LimitedInput, Serializable {
 
-    private static final long serialVersionUID = 0xB3DA61E76429543CL;
+    private static final long serialVersionUID = 0xb3da61e76429543cL;
 
     private Behavior behavior = Behavior.END;
 

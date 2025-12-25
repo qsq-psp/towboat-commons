@@ -17,7 +17,7 @@ public class FuzzyStringContext extends FuzzyContext {
             + "\ufffc\ufffd\ufffe\uffff"; // Undefined characters
 
     public char nextChar() {
-        switch (source.next(4)) { // from 0x0 to 0xf
+        switch ((int) source.next(4)) { // from 0x0 to 0xf
             case 0x0:
             case 0x1:
             case 0x2:

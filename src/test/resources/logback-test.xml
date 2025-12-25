@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- created on 2025/12/3 -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false" packagingData="true">
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%yellow(%d{HH:mm:ss}) %highlight(%-5level) %cyan(%logger{50}) - %msg %n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <root level="info">
+        <appender-ref ref="console"/>
+    </root>
+</configuration>

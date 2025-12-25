@@ -43,12 +43,12 @@ public class IntDescendingMergeSort implements SortingAlgorithm<int[]> {
     }
 
     @Override
-    public long apply(@NotNull int[] target, int fromIndex, int toIndex) {
-        final int length = toIndex - fromIndex;
+    public long apply(@NotNull int[] target, int startIndex, int endIndex) {
+        final int length = endIndex - startIndex;
         if (length < 2) {
             return 0L;
         }
-        return apply(target, fromIndex, getTempArray(length), 0, length);
+        return apply(target, startIndex, getTempArray(length), 0, length);
     }
 
     private long apply(@NotNull int[] target, @Index(of = "target") int targetOffset,

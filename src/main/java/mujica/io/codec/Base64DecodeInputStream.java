@@ -1,8 +1,8 @@
 package mujica.io.codec;
 
-import mujica.io.view.ByteFillPolicy;
-import mujica.io.view.DataView;
-import mujica.io.view.IntDataView;
+import mujica.io.hash.ByteFillPolicy;
+import mujica.io.hash.DataView;
+import mujica.io.hash.IntDataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
@@ -182,7 +182,6 @@ public class Base64DecodeInputStream extends FilterInputStream implements Base64
     }
 
     @NotNull
-    @Override
     public DataView getDataView() {
         return new IntDataView(this::getBuffer, ByteFillPolicy.MIDDLE_TO_RIGHT, 24);
     }

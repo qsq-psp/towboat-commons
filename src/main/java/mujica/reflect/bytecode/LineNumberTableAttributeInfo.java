@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,17 +13,19 @@ import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/9/17")
 @ReferencePage(title = "JVMS12 The LineNumberTable Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.12")
-public class LineNumberTableAttributeInfo extends AttributeInfo {
+class LineNumberTableAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0xBE372F5329355F0DL;
+    private static final long serialVersionUID = 0xbe372f5329355f0dL;
 
     @CodeHistory(date = "2025/9/17")
     private static class LineNumberEntry extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0x3400DFA459BFA386L;
+        private static final long serialVersionUID = 0x3400dfa459bfa386L;
 
-        int startPC; // u2
+        @DataType("u16")
+        int startPC;
 
+        @DataType("u16")
         int lineNumber;
 
         LineNumberEntry() {

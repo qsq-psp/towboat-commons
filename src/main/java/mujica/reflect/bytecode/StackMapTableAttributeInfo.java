@@ -2,7 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.InterpretAsByte;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,14 +13,14 @@ import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/9/14")
 @ReferencePage(title = "JVMS12 The StackMapTable Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.4")
-public class StackMapTableAttributeInfo extends AttributeInfo {
+class StackMapTableAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0xECE64000722FC308L;
+    private static final long serialVersionUID = 0xece64000722fc308L;
 
     @CodeHistory(date = "2025/9/14")
     private static class VerificationTypeInfo extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0x96CA6590D0241D72L;
+        private static final long serialVersionUID = 0x96ca6590d0241d72L;
 
         static final int ITEM_TOP = 0;
         static final int ITEM_INTEGER = 1;
@@ -33,7 +33,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
         static final int ITEM_UNINITIALIZED = 8;
 
         @NotNull
-        static VerificationTypeInfo createByTag(int tag) {
+        static VerificationTypeInfo createByTag(@DataType("u8") int tag) {
             switch (tag) {
                 case ITEM_TOP:
                 case ITEM_INTEGER:
@@ -66,7 +66,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
             return verificationTypeInfo;
         }
 
-        @InterpretAsByte(unsigned = true)
+        @DataType("u8")
         final int tag;
 
         VerificationTypeInfo(int tag) {
@@ -140,9 +140,9 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/14")
     private static class ObjectVariableInfo extends VerificationTypeInfo {
 
-        private static final long serialVersionUID = 0x5B1F6398ECD93414L;
+        private static final long serialVersionUID = 0x5b1f6398ecd93414L;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+        @ConstantType(tags = ClassConstantInfo.TAG)
         int classIndex;
 
         ObjectVariableInfo(int tag) {
@@ -190,7 +190,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/14")
     private static class UninitializedVariableInfo extends VerificationTypeInfo {
 
-        private static final long serialVersionUID = 0x8DDBBD032DEA1B4BL;
+        private static final long serialVersionUID = 0x8ddbbd032dea1b4bL;
 
         int newCP; // the PC (program counter) value of the corresponding new instruction
 
@@ -237,9 +237,9 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/14")
     private static class StackMapFrame implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0x8DDBBD032DEA1B4BL;
+        private static final long serialVersionUID = 0x8ddbbd032dea1b4bL;
 
-        @InterpretAsByte(unsigned = true)
+        @DataType("u8")
         final int frameType;
 
         StackMapFrame(int frameType) {
@@ -311,7 +311,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/14")
     private static class SameLocalsOneStackItemFrame extends StackMapFrame {
 
-        private static final long serialVersionUID = 0x8D5692A62C622B6DL;
+        private static final long serialVersionUID = 0x8d5692a62c622b6dL;
 
         VerificationTypeInfo stack;
 
@@ -364,7 +364,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/14")
     private static class SameLocalsOneStackItemFrameExtended extends SameLocalsOneStackItemFrame {
 
-        private static final long serialVersionUID = 0x7EABE48E44C503DAL;
+        private static final long serialVersionUID = 0x7eabe48e44c503daL;
 
         int offsetDelta;
 
@@ -417,7 +417,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/14")
     private static class ChopFrameOrSameFrameExtended extends StackMapFrame {
 
-        private static final long serialVersionUID = 0xF31C986FBE577603L;
+        private static final long serialVersionUID = 0xf31c986fbe577603L;
 
         int offsetDelta;
 
@@ -468,7 +468,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/14")
     private static class AppendFrame extends StackMapFrame {
 
-        private static final long serialVersionUID = 0x4F4DFFC2D3B0C00DL;
+        private static final long serialVersionUID = 0x4f4dffc2d3b0c00dL;
 
         final VerificationTypeInfo[] locals;
 
@@ -536,7 +536,7 @@ public class StackMapTableAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/14")
     private static class FullFrame extends StackMapFrame {
 
-        private static final long serialVersionUID = 0x1CAE38435F2A1568L;
+        private static final long serialVersionUID = 0x1cae38435f2a1568L;
 
         int offsetDelta;
 

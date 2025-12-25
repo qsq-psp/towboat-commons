@@ -1,17 +1,11 @@
 package mujica.io.hash;
 
-import mujica.io.view.ByteSequence;
-import mujica.io.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-/**
- * Created in OSHI on 2025/1/22, named SimpleBytesDigest.
- * Recreated on 2025/4/29.
- */
 @CodeHistory(date = "2025/1/22", project = "OSHI", name = "SimpleBytesDigest")
 @CodeHistory(date = "2025/4/29")
 public class SimpleByteBlockByteStreamHash implements ByteStreamHash {

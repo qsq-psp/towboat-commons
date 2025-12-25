@@ -10,15 +10,17 @@ import org.jetbrains.annotations.Nullable;
 @ReferencePage(title = "JVMS12 The CONSTANT_String_info Structure", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.3")
 class StringConstantInfo extends IndirectUtf8ConstantInfo {
 
-    private static final long serialVersionUID = 0x6AD502A11703BE44L;
+    private static final long serialVersionUID = 0x6ad502a11703be44L;
 
     StringConstantInfo() {
         super();
     }
 
+    public static final int TAG = 8;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_STRING;
+        return TAG;
     }
 
     protected int section() {

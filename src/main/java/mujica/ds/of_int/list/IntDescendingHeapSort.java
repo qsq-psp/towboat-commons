@@ -20,12 +20,12 @@ public class IntDescendingHeapSort implements SortingAlgorithm<int[]> {
     }
 
     @Override
-    public long apply(@NotNull int[] array, int fromIndex, int toIndex) {
+    public long apply(@NotNull int[] array, int startIndex, int endIndex) {
         long operation = 0L;
-        for (int start = fromIndex + 1; start < toIndex; start++) {
+        for (int start = startIndex + 1; start < endIndex; start++) {
             int current = start;
-            while (current > fromIndex) {
-                int parent = fromIndex + ((current - fromIndex - 1) >> 1);
+            while (current > startIndex) {
+                int parent = startIndex + ((current - startIndex - 1) >> 1);
                 if (array[parent] <= array[current]) {
                     break;
                 }
@@ -36,12 +36,12 @@ public class IntDescendingHeapSort implements SortingAlgorithm<int[]> {
                 operation++;
             }
         }
-        for (int end = toIndex - 1; end > fromIndex; end--) {
-            int smallest = array[fromIndex];
+        for (int end = endIndex - 1; end > startIndex; end--) {
+            int smallest = array[startIndex];
             int value = array[end];
-            int index = fromIndex;
+            int index = startIndex;
             while (true) {
-                int left = ((index - fromIndex) << 1) + fromIndex + 1;
+                int left = ((index - startIndex) << 1) + startIndex + 1;
                 int right = left + 1;
                 if (left < end) {
                     int smaller;

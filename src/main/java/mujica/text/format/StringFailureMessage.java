@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 @CodeHistory(date = "2025/9/11")
 class StringFailureMessage implements LocalizedFailureMessage {
 
-    private static final long serialVersionUID = 0x9DB8A2D64FA4E809L;
+    private static final long serialVersionUID = 0x9db8a2d64fa4e809L;
 
     @NotNull
     String string;

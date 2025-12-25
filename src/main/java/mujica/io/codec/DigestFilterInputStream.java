@@ -1,5 +1,8 @@
 package mujica.io.codec;
 
+import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
+import mujica.reflect.modifier.Stable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterInputStream;
@@ -8,10 +11,11 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 
 /**
- * Created in Ultramarine on 2023/10/9.
- * Moved here on 2025/3/11.
- * Same with java.security.DigestInputStream
+ * same with java.security.DigestInputStream
  */
+@CodeHistory(date = "2023/10/9", project = "Ultramarine")
+@CodeHistory(date = "2025/3/11")
+@Stable(date = "2025/11/28")
 public class DigestFilterInputStream extends FilterInputStream implements DigestStream {
 
     @NotNull
@@ -29,12 +33,13 @@ public class DigestFilterInputStream extends FilterInputStream implements Digest
     }
 
     @Override
+    @DataType("u8+{-1}")
     public int read() throws IOException {
-        final int b = in.read();
-        if (b != -1) {
-            digest.update((byte) b);
+        final int data = in.read();
+        if (data != -1) {
+            digest.update((byte) data);
         }
-        return b;
+        return data;
     }
 
     /**

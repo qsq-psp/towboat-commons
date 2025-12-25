@@ -81,7 +81,7 @@ public class NumberSegmentsCollationKey extends CollationKey {
     @CodeHistory(date = "2025/11/1")
     private abstract class NumberSegment implements Comparable<NumberSegment>, Serializable {
 
-        private static final long serialVersionUID = 0xCD15B301952ADBBBL;
+        private static final long serialVersionUID = 0xcd15b301952adbbbL;
 
         final int charCount;
 
@@ -106,7 +106,7 @@ public class NumberSegmentsCollationKey extends CollationKey {
     @CodeHistory(date = "2025/11/1")
     private class IntNumberSegment extends NumberSegment {
 
-        private static final long serialVersionUID = 0x4DAE4F9D9EFBA05BL;
+        private static final long serialVersionUID = 0x4dae4f9d9efba05bL;
 
         final int intValue;
 
@@ -158,7 +158,7 @@ public class NumberSegmentsCollationKey extends CollationKey {
     @CodeHistory(date = "2025/11/1")
     private class LongNumberSegment extends NumberSegment {
 
-        private static final long serialVersionUID = 0xEFB27B05CD6BEAE1L;
+        private static final long serialVersionUID = 0xefb27b05cd6beae1L;
 
         final long longValue;
 
@@ -210,7 +210,7 @@ public class NumberSegmentsCollationKey extends CollationKey {
     @CodeHistory(date = "2025/11/1")
     private class BigIntegerNumberSegment extends NumberSegment {
 
-        private static final long serialVersionUID = 0x3058FB127B447BFBL;
+        private static final long serialVersionUID = 0x3058fb127b447bfbL;
 
         @NotNull
         final BigInteger bigIntegerValue;

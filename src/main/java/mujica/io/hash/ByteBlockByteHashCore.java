@@ -1,6 +1,5 @@
 package mujica.io.hash;
 
-import mujica.io.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

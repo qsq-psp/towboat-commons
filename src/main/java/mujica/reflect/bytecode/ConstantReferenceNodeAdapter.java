@@ -1,22 +1,17 @@
 package mujica.reflect.bytecode;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntUnaryOperator;
 
-/**
- * Created on 2025/11/11.
- */
 @CodeHistory(date = "2025/11/11")
-public class ConstantReferenceNodeAdapter extends ClassFileNodeAdapter {
+class ConstantReferenceNodeAdapter extends ClassFileNodeAdapter {
 
+    @DataType("u16")
     @ConstantType(zero = true)
     protected int referenceIndex;
-
-    public ConstantReferenceNodeAdapter() {
-        super();
-    }
 
     public ConstantReferenceNodeAdapter(int referenceIndex) {
         super();

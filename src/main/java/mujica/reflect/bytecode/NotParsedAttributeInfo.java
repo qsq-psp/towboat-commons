@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 @ReferencePage(title = "JVMS12 Attributes", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7")
 public class NotParsedAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0x1A562EF5C401B03DL;
+    private static final long serialVersionUID = 0x1a562ef5c401b03dL;
 
     @NotNull
     final String name;

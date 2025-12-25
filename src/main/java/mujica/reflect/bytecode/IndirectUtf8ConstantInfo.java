@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
@@ -9,15 +10,13 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.function.IntUnaryOperator;
 
-/**
- * Created on 2025/10/18.
- */
 @CodeHistory(date = "2025/10/18")
 abstract class IndirectUtf8ConstantInfo extends ConstantInfo {
 
-    private static final long serialVersionUID = 0x08F978BD495E0F62L;
+    private static final long serialVersionUID = 0x08f978bd495e0f62L;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+    @DataType("u16-{0}")
+    @ConstantType(tags = Utf8ConstantInfo.TAG)
     protected int utf8Index;
 
     IndirectUtf8ConstantInfo() {

@@ -5,7 +5,7 @@ package mujica.ds.of_int.list;
  */
 public class NaturalIntList extends AbstractIntList {
 
-    private static final long serialVersionUID = 0x8F13C2C70799AD85L;
+    private static final long serialVersionUID = 0x8f13c2c70799ad85L;
 
     public final int n;
 

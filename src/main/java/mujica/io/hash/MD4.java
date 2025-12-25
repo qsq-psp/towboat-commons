@@ -1,8 +1,6 @@
 package mujica.io.hash;
 
-import mujica.io.view.DataView;
 import mujica.ds.of_int.list.IntSequence;
-import mujica.io.view.IntSequenceDataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;

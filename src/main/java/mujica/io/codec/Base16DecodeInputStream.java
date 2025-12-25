@@ -1,6 +1,7 @@
 package mujica.io.codec;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,7 @@ public class Base16DecodeInputStream extends FilterInputStream implements Base16
     }
 
     @Override
+    @DataType("u8+{-1}")
     public int read() throws IOException {
         return decode(true) | decode(false);
     }

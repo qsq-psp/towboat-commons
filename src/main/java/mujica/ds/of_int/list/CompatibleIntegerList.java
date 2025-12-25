@@ -11,7 +11,7 @@ import java.util.*;
 @CodeHistory(date = "2025/6/1")
 public class CompatibleIntegerList implements List<Integer>, RandomAccess, Serializable {
 
-    private static final long serialVersionUID = 0xE7511E2571F6575EL;
+    private static final long serialVersionUID = 0xe7511e2571f6575eL;
 
     @NotNull
     private final IntList intList;

@@ -1,8 +1,5 @@
 package mujica.io.hash;
 
-import mujica.io.view.DataView;
-import mujica.ds.of_long.LongSequence;
-import mujica.io.view.LongSequenceDataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
@@ -11,10 +8,11 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
+@CodeHistory(date = "2024/12/22", project = "OSHI", name = "SHA3Core")
 @CodeHistory(date = "2025/1/17", project = "Ultramarine", name = "SHA3CoreYXZ")
 @CodeHistory(date = "2025/5/17")
 @ReferencePage(title = "FIPS PUB 202", href = "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf")
-public class SHA3 extends ByteBlockBitHashCore implements LongSequence {
+public class SHA3 extends ByteBlockBitHashCore implements ByteSequence {
 
     private static final long serialVersionUID = 0x3c72f8005f09e481L;
 
@@ -172,22 +170,85 @@ public class SHA3 extends ByteBlockBitHashCore implements LongSequence {
     @NotNull
     @Override
     public DataView getDataView(@NotNull Runnable guard) {
-        return new LongSequenceDataView(this, ByteOrder.LITTLE_ENDIAN, guard);
+        return new ByteSequenceDataView(this, ByteOrder.LITTLE_ENDIAN, guard);
     }
 
     @Override
     public void finish(@NotNull ByteBuffer buffer, int paddingBits) {
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        // todo: pad
+        final int remainingBits = rateBits - ((buffer.position() << 3) - paddingBits);
+        switch (remainingBits) {
+            case 1:
+                paddingBits = putBits(buffer, 0x00, 1, paddingBits);
+                step(buffer.flip());
+                paddingBits = putBits(buffer.clear(), 0x03, rateBits - 1, paddingBits);
+                putBits(buffer, 0x1, 1, paddingBits);
+                step(buffer.flip());
+                break;
+            case 2:
+                paddingBits = putBits(buffer, 0x02, 2, paddingBits);
+                step(buffer.flip());
+                paddingBits = putBits(buffer.clear(), 0x01, rateBits - 1, paddingBits);
+                putBits(buffer, 0x1, 1, paddingBits);
+                step(buffer.flip());
+                break;
+            case 3:
+                paddingBits = putBits(buffer, 0x06, 3, paddingBits);
+                step(buffer.flip());
+                paddingBits = putBits(buffer.clear(), 0x00, rateBits - 1, paddingBits);
+                putBits(buffer, 0x1, 1, paddingBits);
+                step(buffer.flip());
+                break;
+            default:
+                assert remainingBits >= 4;
+                paddingBits = putBits(buffer, 0x06, remainingBits - 1, paddingBits);
+                putBits(buffer, 0x01, 1, paddingBits);
+                step(buffer.flip());
+                break;
+        }
+    }
+
+    private static int putBits(ByteBuffer buffer, int value, int bitCount, int paddingBits) {
+        // the bit order is from LSB to MSB
+        while (bitCount > 0) {
+            if (paddingBits == 0) {
+                if (bitCount > Byte.SIZE) {
+                    buffer.put((byte) value);
+                    value >>= Byte.SIZE;
+                    bitCount -= Byte.SIZE;
+                    continue;
+                } else {
+                    if ((value & 1) != 0) {
+                        buffer.put((byte) 0x01);
+                    } else {
+                        buffer.put((byte) 0x00);
+                    }
+                    paddingBits = Byte.SIZE - 1;
+                }
+            } else {
+                int last = buffer.position() - 1;
+                int oldValue = buffer.get(last);
+                int mask = 1 << (Byte.SIZE - paddingBits);
+                if ((value & 1) != 0) {
+                    buffer.put(last, (byte) (oldValue | mask));
+                } else {
+                    buffer.put(last, (byte) (oldValue & ~mask));
+                }
+                paddingBits--;
+            }
+            value >>= 1;
+            bitCount--;
+        }
+        return paddingBits;
     }
 
     @Override
-    public int longLength() {
-        return digestBits >>> 6;
+    public int byteLength() {
+        return digestBits >>> 3;
     }
 
     @Override
-    public long getLong(int index) {
-        return state0[index];
+    public byte getByte(int index) {
+        return (byte) (state0[index >>> 3] >>> (index << 3));
     }
 }

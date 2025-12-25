@@ -11,7 +11,7 @@ import java.util.Objects;
 @CodeHistory(date = "2025/10/20")
 public class HexDumpBuilder implements Serializable {
 
-    private static final long serialVersionUID = 0xF0851F1C4EDBD4C0L;
+    private static final long serialVersionUID = 0xf0851f1c4edbd4c0L;
 
     private boolean upperCase;
 

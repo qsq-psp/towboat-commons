@@ -36,21 +36,11 @@ public class FreeFloatingPointContext extends RandomContext {
     }
 
     private long nextBlock(int bitCount) {
-        if (bitCount >= Integer.SIZE) {
-            int lowBitCount = bitCount >> 1;
-            int highBitCount = bitCount - lowBitCount;
-            long high = source.next(highBitCount);
-            high &= (1L << highBitCount) -1L;
-            long low = source.next(lowBitCount);
-            low &= (1L << lowBitCount) -1L;
-            return (high << lowBitCount) | low;
-        } else {
-            return source.next(bitCount);
-        }
+        return source.next(bitCount);
     }
     
     private long nextBit(int shiftDistance) {
-        return ((long) source.next(1)) << shiftDistance;
+        return source.next(1) << shiftDistance;
     }
 
     protected long nextUnsignedIEEE754(int exponentBits, int mantissaBits, int flags) {

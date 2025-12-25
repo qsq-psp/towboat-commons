@@ -50,6 +50,10 @@ public abstract class AttributeInfo implements ClassFileNode.Dependent, BiConsum
                 return new ParameterAnnotationsAttributeInfo(true);
             case ParameterAnnotationsAttributeInfo.INVISIBLE_NAME:
                 return new ParameterAnnotationsAttributeInfo(false);
+            case TypeAnnotationsAttributeInfo.VISIBLE_NAME:
+                return new TypeAnnotationsAttributeInfo(true);
+            case TypeAnnotationsAttributeInfo.INVISIBLE_NAME:
+                return new TypeAnnotationsAttributeInfo(false);
             case NestHostAttributeInfo.NAME:
                 return new NestHostAttributeInfo();
             case NestMembersAttributeInfo.NAME:
@@ -245,7 +249,7 @@ public abstract class AttributeInfo implements ClassFileNode.Dependent, BiConsum
 
         LOW;
 
-        private static final long serialVersionUID = 0xC4AD5E7ECF8BCDC0L;
+        private static final long serialVersionUID = 0xc4ad5e7ecf8bcdc0L;
     }
 
     @NotNull
@@ -254,7 +258,7 @@ public abstract class AttributeInfo implements ClassFileNode.Dependent, BiConsum
     }
 
     public boolean isNecessary() {
-        return false; // can be converted into an interface
+        return false;
     }
 
     @NotNull
@@ -328,6 +332,13 @@ public abstract class AttributeInfo implements ClassFileNode.Dependent, BiConsum
         final int length = array.length;
         for (int index = 0; index < length; index++) {
             array[index] = remap.applyAsInt(array[index]);
+        }
+    }
+
+    protected static void remapConstant(@NotNull IntUnaryOperator remap, @NotNull short[] array) {
+        final int length = array.length;
+        for (int index = 0; index < length; index++) {
+            array[index] = (short) remap.applyAsInt(0xffff & array[index]);
         }
     }
 }

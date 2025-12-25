@@ -25,7 +25,7 @@ public class JsonArray extends TruncateList<Object> implements JsonContainer<Int
     @CodeHistory(date = "2025/9/26")
     private class IndexedSlot implements Slot<Object>, Serializable {
 
-        private static final long serialVersionUID = 0xB83CCB1367E96DEEL;
+        private static final long serialVersionUID = 0xb83ccb1367e96deeL;
 
         final int index;
 

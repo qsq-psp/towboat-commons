@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,16 +11,14 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.function.IntUnaryOperator;
 
-/**
- * Created on 2025/9/16.
- */
 @CodeHistory(date = "2025/9/16")
 @ReferencePage(title = "JVMS12 The SourceFile Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.9")
-public class SourceFileAttributeInfo extends AttributeInfo {
+class SourceFileAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0x8326D0B801E6B67BL;
+    private static final long serialVersionUID = 0x8326d0b801e6b67bL;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+    @DataType("u16-{0}")
+    @ConstantType(tags = Utf8ConstantInfo.TAG)
     int sourceFileIndex;
 
     public static final String NAME = "SourceFile";

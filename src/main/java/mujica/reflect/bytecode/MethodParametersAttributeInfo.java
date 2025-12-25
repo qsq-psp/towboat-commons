@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,11 +14,12 @@ import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/9/20")
 @ReferencePage(title = "JVMS12 The MethodParameters Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.24")
-public class MethodParametersAttributeInfo extends AttributeInfo {
+class MethodParametersAttributeInfo extends AttributeInfo {
 
     static class MethodParameter extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        @DataType("u16-{0}")
+        @ConstantType(tags = Utf8ConstantInfo.TAG)
         int nameIndex;
 
         int accessFlags;

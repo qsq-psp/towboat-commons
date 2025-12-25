@@ -8,12 +8,13 @@ import org.jetbrains.annotations.NotNull;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 
 @CodeHistory(date = "2025/10/20")
 public class TowboatInflateOutputStream extends FilterOutputStream implements BitSequence {
 
-    private int bitSize, buffer;
+    private int bitSize, bitPosition, buffer;
 
     @Override
     public int bitLength() {
@@ -36,7 +37,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
         update();
     }
 
-    private int getBits(int bitCount) {
+    private int readBits(int bitCount) {
         assert bitCount <= bitSize;
         final int value = buffer & ((1 << bitCount) - 1);
         bitSize -= bitCount;
@@ -73,15 +74,27 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
         return 0;
     }
 
+    private void resetAhead() {
+        bitPosition = 0;
+    }
+
+    private boolean getSymbolAhead(@NotNull IntConsumer symbolOut) {
+        return false;
+    }
+
+    private boolean getBitsAhead(@NotNull IntConsumer bitsOut) {
+        return false;
+    }
+
     public static final int MAX_RUN_BUFFER_DISTANCE = 1 << 16;
 
     @NotNull
-    protected final LookBackMemory runBuffer;
+    protected final RunBuffer runBuffer;
 
     @NotNull
     private final IntMap codeLengthDecodeMap, literalLengthDecodeMap, distanceDecodeMap;
 
-    public TowboatInflateOutputStream(@NotNull OutputStream out, @NotNull LookBackMemory runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+    public TowboatInflateOutputStream(@NotNull OutputStream out, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
         super(out);
         this.runBuffer = runBuffer;
         this.codeLengthDecodeMap = decodeMapSupplier.get();
@@ -120,7 +133,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                         return;
                     }
                     if (bitSize >= 1) {
-                        isLastBlock = getBits(1) != 0;
+                        isLastBlock = readBits(1) != 0;
                         state = STATE_COMPRESSION_TYPE;
                         break;
                     } else {
@@ -128,7 +141,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                     }
                 case STATE_COMPRESSION_TYPE:
                     if (bitSize >= 2) {
-                        int compressionType = getBits(2);
+                        int compressionType = readBits(2);
                         if (compressionType == 0) { // no compression
                             align();
                             state = STATE_LENGTH;
@@ -146,7 +159,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                     }
                 case STATE_LENGTH:
                     if (bitSize >= 16) {
-                        remainingLength = getBits(16);
+                        remainingLength = readBits(16);
                         state = STATE_NOT_LENGTH;
                         break;
                     } else {
@@ -154,7 +167,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                     }
                 case STATE_NOT_LENGTH:
                     if (bitSize >= 16) {
-                        int notLength = getBits(16);
+                        int notLength = readBits(16);
                         if ((remainingLength ^ notLength) != 0xffff) {
                             throw new CompressAlgorithmException();
                         }
@@ -170,7 +183,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                     }
                     symbol = ~symbol;
                     if (symbol < 0x100) {
-                        runBuffer.write(symbol);
+                        runBuffer.put((byte) symbol);
                         out.write(symbol);
                     } else if (symbol > 0x100) {
                         symbol -= 0x101;
@@ -190,7 +203,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                 case STATE_LENGTH_EXTRA: {
                     int extraBits = remainingLength >>> (Integer.SIZE - Byte.SIZE);
                     if (bitSize >= extraBits) {
-                        remainingLength = (0xffff & remainingLength) + getBits(extraBits);
+                        remainingLength = (0xffff & remainingLength) + readBits(extraBits);
                         state = STATE_DISTANCE;
                         break;
                     } else {
@@ -217,7 +230,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                 case STATE_DISTANCE_EXTRA: {
                     int extraBits = copyDistance >>> (Integer.SIZE - Byte.SIZE);
                     if (bitSize >= extraBits) {
-                        copyDistance = (0xffff & copyDistance) + getBits(extraBits);
+                        copyDistance = (0xffff & copyDistance) + readBits(extraBits);
                         writeCopy();
                         state = STATE_LITERAL_LENGTH;
                         break;
@@ -227,7 +240,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                 }
                 case STATE_LITERAL_LENGTH_CODE_COUNT:
                     if (bitSize >= 5) {
-                        literalLengthDecodeMap.putInt(0, getBits(5) + 257);
+                        literalLengthDecodeMap.putInt(0, readBits(5) + 257);
                         state = STATE_DISTANCE_CODE_COUNT;
                         break;
                     } else {
@@ -235,7 +248,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                     }
                 case STATE_DISTANCE_CODE_COUNT:
                     if (bitSize >= 5) {
-                        distanceDecodeMap.putInt(0, getBits(5) + 1);
+                        distanceDecodeMap.putInt(0, readBits(5) + 1);
                         state = STATE_CODE_LENGTH_CODE_COUNT;
                         break;
                     } else {
@@ -243,7 +256,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                     }
                 case STATE_CODE_LENGTH_CODE_COUNT:
                     if (bitSize >= 4) {
-                        codeLengthDecodeMap.putInt(0, getBits(4) + 4);
+                        codeLengthDecodeMap.putInt(0, readBits(4) + 4);
                         state = STATE_CODE_LENGTH_CODE;
                         break;
                     } else {
@@ -278,7 +291,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
                 int codeLengthCodeCount = codeLengthDecodeMap.getInt(0);
                 int index = state - STATE_CODE_LENGTH_CODE;
                 assert index < codeLengthCodeCount;
-                commonAlphabet[ResidueInflateInputStream.REORDER[index++]] = (byte) getBits(3);
+                commonAlphabet[ResidueInflateInputStream.REORDER[index++]] = (byte) readBits(3);
                 if (index < codeLengthCodeCount) {
                     state++;
                 } else {
@@ -326,7 +339,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bi
 
     private void writeCopy() throws IOException {
         while (remainingLength > 0) {
-            out.write(runBuffer.copyAndWrite(copyDistance));
+            out.write(runBuffer.copy(copyDistance));
             remainingLength--;
         }
     }

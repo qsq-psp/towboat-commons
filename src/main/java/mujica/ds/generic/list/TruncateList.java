@@ -191,8 +191,8 @@ public class TruncateList<E> extends ArrayList<E> implements DataStructure {
     }
 
     @Override
-    public void removeRange(@Index(of = "this") int fromIndex, @Index(of = "this", inclusive = false) int toIndex) {
-        super.removeRange(fromIndex, toIndex);
+    public void removeRange(@Index(of = "this") int startIndex, @Index(of = "this", inclusive = false) int endIndex) {
+        super.removeRange(startIndex, endIndex);
     }
 
     public void removeNull() {

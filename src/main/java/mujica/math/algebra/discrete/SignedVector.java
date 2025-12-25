@@ -5,8 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-@CodeHistory(date = "2025/3/1")
-public class SignedVector extends DimensionCodecModifier {
+@CodeHistory(date = "2025/3/1", name = "SignedVector")
+public class SignedVector extends DimensionCodecModifier { // SignedVectorModifier
 
     public SignedVector(DimensionCodec codec) {
         super(codec);
@@ -29,8 +29,8 @@ public class SignedVector extends DimensionCodecModifier {
     }
 
     @Override
-    public void decode2(long code, @NotNull int[] out) {
-        codec.decode2(code, out);
+    public void decode2(long in, @NotNull int[] out) {
+        codec.decode2(in, out);
         for (int i = 0; i < 2; i++) {
             out[i] = BitInterleave.unsignedToSigned(out[i]);
         }
@@ -45,8 +45,8 @@ public class SignedVector extends DimensionCodecModifier {
     }
 
     @Override
-    public void decode4(int code, @NotNull byte[] out) {
-        codec.decode4(code, out);
+    public void decode4(int in, @NotNull byte[] out) {
+        codec.decode4(in, out);
         for (int i = 0; i < 4; i++) {
             out[i] = BitInterleave.unsignedToSigned(out[i]);
         }
@@ -61,8 +61,8 @@ public class SignedVector extends DimensionCodecModifier {
     }
 
     @Override
-    public void decode8(long code, @NotNull byte[] out) {
-        codec.decode8(code, out);
+    public void decode8(long in, @NotNull byte[] out) {
+        codec.decode8(in, out);
         for (int i = 0; i < 8; i++) {
             out[i] = BitInterleave.unsignedToSigned(out[i]);
         }
@@ -79,8 +79,8 @@ public class SignedVector extends DimensionCodecModifier {
     }
 
     @Override
-    public void decodeN(@NotNull BigInteger code, @NotNull BigInteger[] out) {
-        codec.decodeN(code, out);
+    public void decodeN(@NotNull BigInteger in, @NotNull BigInteger[] out) {
+        codec.decodeN(in, out);
         final int size = out.length;
         for (int i = 0; i < size; i++) {
             out[i] = BitInterleave.unsignedToSigned(out[i]);

@@ -39,7 +39,7 @@ public class RandomContext implements Serializable {
     }
 
     public boolean nextBoolean() {
-        return source.next(1) != 0;
+        return source.next(1) != 0L;
     }
 
     public byte nextByte() {
@@ -69,16 +69,16 @@ public class RandomContext implements Serializable {
     }
 
     public int nextInt() {
-        return source.next(Integer.SIZE);
+        return (int) source.next(Integer.SIZE);
     }
 
     public int nextNonNegativeInt() {
-        return source.next(Integer.SIZE - 1);
+        return (int) source.next(Integer.SIZE - 1);
     }
 
-    public int nextInt(int to) {
-        if (to < 2) {
-            if (to < 1) {
+    public int nextInt(int end) {
+        if (end < 2) {
+            if (end < 1) {
                 throw new ArithmeticException("random range");
             }
             return 0;
@@ -86,25 +86,25 @@ public class RandomContext implements Serializable {
         int x;
         while (true) {
             x = nextNonNegativeInt();
-            if (x + to > 0) {
+            if (x + end > 0) {
                 break;
             }
-            if (x + (Integer.MAX_VALUE % to + 1) % to > 0) {
+            if (x + (Integer.MAX_VALUE % end + 1) % end > 0) {
                 break;
             }
         }
-        return x % to;
+        return x % end;
     }
 
-    public int nextInt(int from, int to) {
-        if (from < to) {
-            final int range = to - from;
+    public int nextInt(int start, int end) {
+        if (start < end) {
+            final int range = end - start;
             if (range > 0) {
-                return from + nextInt(range);
+                return start + nextInt(range);
             } else {
                 while (true) {
                     int x = nextInt();
-                    if (from <= x && x < to) {
+                    if (start <= x && x < end) {
                         return x;
                     }
                 }
@@ -125,11 +125,11 @@ public class RandomContext implements Serializable {
         int x = 0;
         if (Math.abs(p - 0.5) < EPS) {
             while (n > Integer.SIZE) {
-                x += Integer.bitCount(nextInt());
-                n -= Integer.SIZE;
+                x += Long.bitCount(nextLong());
+                n -= Long.SIZE;
             }
             if (n > 0) {
-                x += Integer.bitCount(source.next(n));
+                x += Long.bitCount(source.next(n));
             }
         } else {
             while (n > 0) {
@@ -191,22 +191,22 @@ public class RandomContext implements Serializable {
         return x;
     }
 
-    public int nextMinInt(int to, int count) {
+    public int nextMinInt(int end, int count) {
         if (count <= 0) {
             return Integer.MAX_VALUE;
         }
-        if (to < 1) {
+        if (end < 1) {
             throw new ArithmeticException("random range");
         }
-        if (to > 1) {
+        if (end > 1) {
             int min = Integer.MAX_VALUE;
-            int g = (Integer.MAX_VALUE % to + 1) % to;
+            int g = (Integer.MAX_VALUE % end + 1) % end;
             for (int i = 0; i < count; i++) {
                 int x;
                 do {
                     x = nextNonNegativeInt();
                 } while (x + g <= 0);
-                min = Math.min(min, x % to);
+                min = Math.min(min, x % end);
             }
             return min;
         } else {
@@ -224,43 +224,43 @@ public class RandomContext implements Serializable {
     }
 
     @NotNull
-    public int[] nextIntArray(int to, int length) {
-        if (to < 1) {
+    public int[] nextIntArray(int end, int length) {
+        if (end < 1) {
             throw new ArithmeticException("random range");
         }
         final int[] array = new int[length];
-        if (to > 1) {
-            int g = (Integer.MAX_VALUE % to + 1) % to;
+        if (end > 1) {
+            int g = (Integer.MAX_VALUE % end + 1) % end;
             for (int i = 0; i < length; i++) {
                 int x;
                 do {
                     x = nextNonNegativeInt();
                 } while (x + g <= 0);
-                array[i] = x % to;
+                array[i] = x % end;
             }
         }
         return array;
     }
 
     @NotNull
-    public int[] nextIntArray(int from, int to, int length) {
-        if (from < to) {
+    public int[] nextIntArray(int start, int end, int length) {
+        if (start < end) {
             final int[] array = new int[length];
-            final int range = to - from;
+            final int range = end - start;
             if (range > 1) {
-                int g = (Integer.MAX_VALUE % to + 1) % to;
+                int g = (Integer.MAX_VALUE % end + 1) % end;
                 for (int i = 0; i < length; i++) {
                     int x;
                     do {
                         x = nextNonNegativeInt();
                     } while (x + g <= 0);
-                    array[i] = x % to;
+                    array[i] = x % end;
                 }
             } else if (range < 0) {
                 for (int i = 0; i < length; i++) {
                     while (true) {
                         int x = nextInt();
-                        if (from <= x && x < to) {
+                        if (start <= x && x < end) {
                             array[i] = x;
                             break;
                         }
@@ -293,20 +293,20 @@ public class RandomContext implements Serializable {
     }
 
     public void distribute(@NotNull int[] array, int sum) {
-        final int to = array.length;
-        if (to < 1) {
+        final int end = array.length;
+        if (end < 1) {
             if (sum > 0) {
                 throw new IllegalArgumentException();
             }
-        } else if (to > 1) {
+        } else if (end > 1) {
             if (sum > 0) {
-                int g = (Integer.MAX_VALUE % to + 1) % to;
+                int g = (Integer.MAX_VALUE % end + 1) % end;
                 do {
                     int x;
                     do {
                         x = nextNonNegativeInt();
                     } while (x + g <= 0);
-                    array[x % to]++;
+                    array[x % end]++;
                 } while (--sum > 0);
             }
         } else {
@@ -331,16 +331,16 @@ public class RandomContext implements Serializable {
     }
 
     public long nextLong() {
-        return (((long) source.next(Integer.SIZE)) << Integer.SIZE) | (source.next(Integer.SIZE) & 0xffffffffL);
+        return source.next(Long.SIZE);
     }
 
     public long nextNonNegativeLong() {
-        return (((long) source.next(Integer.SIZE - 1)) << Integer.SIZE) | (source.next(Integer.SIZE) & 0xffffffffL);
+        return source.next(Long.SIZE - 1);
     }
 
-    public long nextLong(long to) {
-        if (to < 2) {
-            if (to < 1) {
+    public long nextLong(long end) {
+        if (end < 2) {
+            if (end < 1) {
                 throw new ArithmeticException("random range");
             }
             return 0;
@@ -348,25 +348,25 @@ public class RandomContext implements Serializable {
         long x;
         while (true) {
             x = nextNonNegativeLong();
-            if (x + to > 0) {
+            if (x + end > 0) {
                 break;
             }
-            if (x + (Long.MAX_VALUE % to + 1) % to > 0) {
+            if (x + (Long.MAX_VALUE % end + 1) % end > 0) {
                 break;
             }
         }
-        return x % to;
+        return x % end;
     }
 
-    public long nextLong(long from, long to) {
-        if (from < to) {
-            final long range = to - from;
+    public long nextLong(long start, long end) {
+        if (start < end) {
+            final long range = end - start;
             if (range > 0) {
-                return from + nextLong(range);
+                return start + nextLong(range);
             } else {
                 while (true) {
                     long x = nextLong();
-                    if (from <= x && x < to) {
+                    if (start <= x && x < end) {
                         return x;
                     }
                 }
@@ -385,43 +385,43 @@ public class RandomContext implements Serializable {
     }
 
     @NotNull
-    public long[] nextLongArray(long to, int length) {
-        if (to < 1) {
+    public long[] nextLongArray(long end, int length) {
+        if (end < 1) {
             throw new ArithmeticException("random range");
         }
         final long[] array = new long[length];
-        if (to > 1) {
-            long g = (Long.MAX_VALUE % to + 1) % to;
+        if (end > 1) {
+            long g = (Long.MAX_VALUE % end + 1) % end;
             for (int i = 0; i < length; i++) {
                 long x;
                 do {
                     x = nextNonNegativeLong();
                 } while (x + g <= 0);
-                array[i] = x % to;
+                array[i] = x % end;
             }
         }
         return array;
     }
 
     @NotNull
-    public long[] nextLongArray(long from, long to, int length) {
-        if (from < to) {
+    public long[] nextLongArray(long start, long end, int length) {
+        if (start < end) {
             final long[] array = new long[length];
-            final long range = to - from;
+            final long range = end - start;
             if (range > 1) {
-                long g = (Long.MAX_VALUE % to + 1) % to;
+                long g = (Long.MAX_VALUE % end + 1) % end;
                 for (int i = 0; i < length; i++) {
                     long x;
                     do {
                         x = nextNonNegativeLong();
                     } while (x + g <= 0);
-                    array[i] = x % to;
+                    array[i] = x % end;
                 }
             } else if (range < 0) {
                 for (int i = 0; i < length; i++) {
                     while (true) {
                         long x = nextLong();
-                        if (from <= x && x < to) {
+                        if (start <= x && x < end) {
                             array[i] = x;
                             break;
                         }
@@ -434,7 +434,7 @@ public class RandomContext implements Serializable {
     }
 
     private int nextFloatMantissa() {
-        return source.next(24);
+        return (int) source.next(24);
     }
 
     private static final float UNIT_FLOAT = 0x1.0p-24f;
@@ -443,8 +443,8 @@ public class RandomContext implements Serializable {
         return UNIT_FLOAT * nextFloatMantissa();
     }
 
-    public float nextFloat(float from, float to) {
-        return from + (to - from) * UNIT_FLOAT * nextFloatMantissa(); // inline is good
+    public float nextFloat(float start, float end) {
+        return start + (end - start) * UNIT_FLOAT * nextFloatMantissa(); // inline is good
     }
 
     @NotNull
@@ -457,7 +457,7 @@ public class RandomContext implements Serializable {
     }
 
     private long nextDoubleMantissa() {
-        return ((long) (source.next(26)) << 27) + source.next(27);
+        return source.next(53);
     }
 
     private static final double UNIT_DOUBLE = 0x1.0p-53d;
@@ -469,8 +469,8 @@ public class RandomContext implements Serializable {
         return UNIT_DOUBLE * nextDoubleMantissa();
     }
 
-    public double nextDouble(double from, double to) {
-        return from + (to - from) * UNIT_DOUBLE * nextDoubleMantissa(); // inline is good
+    public double nextDouble(double start, double end) {
+        return start + (end - start) * UNIT_DOUBLE * nextDoubleMantissa(); // inline is good
     }
 
     /**
@@ -560,29 +560,29 @@ public class RandomContext implements Serializable {
         final int byteCount = (bitLength + Byte.SIZE - 1) >> 3;
         final byte[] bytes = new byte[byteCount];
         for (int index = 0; index < byteCount; index++) {
-            bytes[index] = (byte) source.next(Byte.SIZE); // inline nextByteArray(int length)
+            bytes[index] = (byte) source.next(Byte.SIZE); // nextByteArray(int length) is override, so put it inline
         }
         bytes[0] &= 0xff >> ((byteCount << 3) - bitLength); // 0 <= shift < 8
         return new BigInteger(1, bytes);
     }
 
     @NotNull
-    public BigInteger nextBigInteger(@NotNull BigInteger to) {
-        if (to.signum() <= 0) {
+    public BigInteger nextBigInteger(@NotNull BigInteger end) {
+        if (end.signum() <= 0) {
             throw new ArithmeticException("random range");
         }
-        final int bitLength = to.bitLength();
+        final int bitLength = end.bitLength();
         while (true) {
             BigInteger value = nextBigInteger(bitLength);
-            if (value.compareTo(to) < 0) {
+            if (value.compareTo(end) < 0) {
                 return value;
             }
         }
     }
 
     @NotNull
-    public BigInteger nextBigInteger(@NotNull BigInteger from, @NotNull BigInteger to) {
-        return from.add(nextBigInteger(to.subtract(from)));
+    public BigInteger nextBigInteger(@NotNull BigInteger start, @NotNull BigInteger end) {
+        return start.add(nextBigInteger(end.subtract(start)));
     }
     
     public <T> void rotateList(@NotNull List<T> list) {

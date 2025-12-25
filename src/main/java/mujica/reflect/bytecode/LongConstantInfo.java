@@ -21,9 +21,11 @@ class LongConstantInfo extends ConstantInfo implements ConstantPool.Large {
         super();
     }
 
+    public static final int TAG = 5;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_LONG;
+        return TAG;
     }
 
     protected int section() {

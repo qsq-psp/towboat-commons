@@ -6,9 +6,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/11/9")
-public class ClassFileNodeAdapter implements ClassFileNode {
+class ClassFileNodeAdapter implements ClassFileNode {
 
-    private static final long serialVersionUID = 0xFDE60B3660E3FA1BL;
+    private static final long serialVersionUID = 0xfde60b3660e3fa1bL;
+
+    ClassFileNodeAdapter() {
+        super();
+    }
 
     @Override
     public int groupCount() {

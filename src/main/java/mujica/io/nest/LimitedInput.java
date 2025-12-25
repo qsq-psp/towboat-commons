@@ -11,7 +11,7 @@ public interface LimitedInput {
 
         END, PAD, THROW;
 
-        private static final long serialVersionUID = 0x419074C2BE92FEC4L;
+        private static final long serialVersionUID = 0x419074c2be92fec4L;
     }
 
     @NotNull

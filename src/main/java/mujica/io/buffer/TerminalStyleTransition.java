@@ -9,7 +9,7 @@ import java.util.Objects;
 @CodeHistory(date = "2025/10/21")
 public class TerminalStyleTransition implements Serializable {
 
-    private static final long serialVersionUID = 0xAD09F24ABCF225AFL;
+    private static final long serialVersionUID = 0xad09f24abcf225afL;
 
     @NotNull
     private TerminalStyle src, dst;
@@ -49,34 +49,34 @@ public class TerminalStyleTransition implements Serializable {
     }
 
     @NotNull
+    public TerminalStyleTransition reset() {
+        return setDst(TerminalStyle.RESET_STYLE);
+    }
+
+    @NotNull
     public TerminalStyleTransition copy() {
         src = dst;
         return this;
     }
 
     public boolean isEmpty() {
-        return src == dst || src.mode == dst.mode && src.foreground == dst.foreground && src.background == dst.background;
+        return src.equals(dst);
     }
 
     public boolean needReset() {
         return src != dst && (
-                src.mode != null && dst.mode == null ||
                 src.foreground != null && dst.foreground == null ||
-                src.background != null && dst.background == null
+                src.background != null && dst.background == null ||
+                src.bold != null && dst.bold == null ||
+                src.underline != null && dst.underline == null ||
+                src.through != null && dst.through == null
         );
     }
 
     private void stringifyNoReset(@NotNull StringBuilder out) {
         boolean subsequent = false;
         out.append(TerminalStyle.COMMAND_PREFIX);
-        if (dst.mode != null && src.mode != dst.mode) {
-            out.append(dst.mode.code);
-            subsequent = true;
-        }
         if (dst.foreground != null && src.foreground != dst.foreground) {
-            if (subsequent) {
-                out.append(';');
-            }
             out.append(dst.foreground.foregroundCode);
             subsequent = true;
         }
@@ -85,6 +85,27 @@ public class TerminalStyleTransition implements Serializable {
                 out.append(';');
             }
             out.append(dst.background.backgroundCode);
+            subsequent = true;
+        }
+        if (dst.bold != null && !dst.bold.equals(src.bold)) {
+            if (subsequent) {
+                out.append(';');
+            }
+            out.append(TerminalDisplayMode.BOLD.getCode(dst.bold));
+            subsequent = true;
+        }
+        if (dst.underline != null && !dst.underline.equals(src.underline)) {
+            if (subsequent) {
+                out.append(';');
+            }
+            out.append(TerminalDisplayMode.UNDERLINE.getCode(dst.underline));
+            subsequent = true;
+        }
+        if (dst.through != null && !dst.through.equals(src.through)) {
+            if (subsequent) {
+                out.append(';');
+            }
+            out.append(TerminalDisplayMode.THROUGH.getCode(dst.through));
         }
         out.append('m');
     }

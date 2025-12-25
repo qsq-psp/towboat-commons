@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,11 +16,13 @@ import java.util.function.IntUnaryOperator;
 @ReferencePage(title = "JVMS12 The CONSTANT_Dynamic_info and CONSTANT_InvokeDynamic_info Structures", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.10")
 class DynamicConstantInfo extends ConstantInfo {
 
-    private static final long serialVersionUID = 0x89D0C75C6F9C9EB6L;
+    private static final long serialVersionUID = 0x89d0c75c6f9c9eb6L;
 
+    @DataType("u16")
     protected int bootstrapMethodAttributeIndex;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_NAMEANDTYPE)
+    @DataType("u16-{0}")
+    @ConstantType(tags = NameAndTypeConstantInfo.TAG)
     protected int nameAndTypeIndex;
 
     DynamicConstantInfo() {

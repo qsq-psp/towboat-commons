@@ -1,16 +1,13 @@
 package mujica.io.hash;
 
-import mujica.io.view.DataView;
 import mujica.ds.of_long.LongSequence;
-import mujica.io.view.LongSequenceDataView;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-/**
- * Created on 2025/5/17.
- */
+@CodeHistory(date = "2025/5/17")
 public class MurmurHash128 extends ByteBlockByteHashCore implements LongSequence {
 
     private static final long serialVersionUID = 0xe5c9c053858bf205L;

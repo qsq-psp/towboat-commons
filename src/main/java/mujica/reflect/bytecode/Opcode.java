@@ -1,11 +1,15 @@
 package mujica.reflect.bytecode;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.Name;
+import mujica.reflect.modifier.ReferencePage;
 
 @SuppressWarnings("unused")
 @CodeHistory(date = "2022/6/30", project = "infrastructure", name = "ByteCode")
 @CodeHistory(date = "2025/8/31")
+@ReferencePage(title = "JVMS12 Instructions", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-6.html#jvms-6.5")
+@DataType("u8")
 public interface Opcode { // according to JVMS, 'opcode' is one word
 
     @Name(value = "no operation", language = "en")

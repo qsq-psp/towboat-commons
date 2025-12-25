@@ -1,6 +1,5 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.buffer.ByteBufferUtil;
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
@@ -19,7 +18,7 @@ import java.nio.ByteBuffer;
 @ReferencePage(title = "JVMS12 The CONSTANT_Utf8_info Structure", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.7")
 class Utf8ConstantInfo extends ConstantInfo {
 
-    private static final long serialVersionUID = 0xCE9EA2B9C2469887L;
+    private static final long serialVersionUID = 0xce9ea2b9c2469887L;
 
     String string;
 
@@ -32,9 +31,11 @@ class Utf8ConstantInfo extends ConstantInfo {
         this.string = string;
     }
 
+    public static final int TAG = 1;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_UTF8;
+        return TAG;
     }
 
     protected int section() {

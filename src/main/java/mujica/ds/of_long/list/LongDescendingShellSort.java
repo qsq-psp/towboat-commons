@@ -24,8 +24,8 @@ public class LongDescendingShellSort implements SortingAlgorithm<long[]> {
     }
 
     @Override
-    public long apply(@NotNull long[] array, int fromIndex, int toIndex) {
-        return apply(array, fromIndex, toIndex, 1);
+    public long apply(@NotNull long[] array, int startIndex, int endIndex) {
+        return apply(array, startIndex, endIndex, 1);
     }
 
     private long apply(@NotNull long[] array, int fromIndex, int toIndex, int stride) {

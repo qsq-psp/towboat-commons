@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2025/9/10")
 public class SourceFieldType implements NotLoadedFieldType<SourceFieldType>, Serializable {
 
-    private static final long serialVersionUID = 0xA026EFF285E73602L;
+    private static final long serialVersionUID = 0xa026eff285e73602L;
 
     @ReferencePage(title = "JVMS12 The class File Format", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.3")
     private static char primitiveTag(@NotNull String name) {

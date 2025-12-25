@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,14 +15,15 @@ import java.util.function.IntUnaryOperator;
 @ReferencePage(title = "JVMS12 The ConstantValue Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.2")
 class ConstantValueAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0xB6343F1560711CF1L;
+    private static final long serialVersionUID = 0xb6343f1560711cf1L;
 
+    @DataType("u16-{0}")
     @ConstantType(tags = {
-            ConstantPool.CONSTANT_INTEGER,
-            ConstantPool.CONSTANT_FLOAT,
-            ConstantPool.CONSTANT_LONG,
-            ConstantPool.CONSTANT_DOUBLE,
-            ConstantPool.CONSTANT_STRING
+            IntegerConstantInfo.TAG,
+            FloatConstantInfo.TAG,
+            LongConstantInfo.TAG,
+            DoubleConstantInfo.TAG,
+            StringConstantInfo.TAG
     }) // constant value
     private int constantValueIndex;
 

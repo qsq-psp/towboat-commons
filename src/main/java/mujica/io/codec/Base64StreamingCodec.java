@@ -1,6 +1,5 @@
 package mujica.io.codec;
 
-import mujica.io.view.DataViewOwner;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 
@@ -13,7 +12,7 @@ import mujica.reflect.modifier.ReferencePage;
  */
 @CodeHistory(date = "2025/4/16")
 @ReferencePage(title = "RFC4648: The Base16, Base32, and Base64 Data Encodings", href = "https://www.rfc-editor.org/rfc/inline-errata/rfc4648.html")
-public interface Base64StreamingCodec extends DataViewOwner, BufferingPolicyOwner {
+public interface Base64StreamingCodec extends BufferingPolicyOwner {
 
     int getBuffer();
 }

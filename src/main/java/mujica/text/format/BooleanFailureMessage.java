@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 @CodeHistory(date = "2025/9/11")
 class BooleanFailureMessage implements LocalizedFailureMessage {
 
-    private static final long serialVersionUID = 0x508B4BA193B5AA30L;
+    private static final long serialVersionUID = 0x508b4ba193b5aa30L;
 
     static final BooleanFailureMessage SUCCESS = new BooleanFailureMessage(true);
 

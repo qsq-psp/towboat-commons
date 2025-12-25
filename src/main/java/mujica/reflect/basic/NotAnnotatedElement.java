@@ -18,7 +18,7 @@ public class NotAnnotatedElement implements AnnotatedElement, Serializable {
 
     private static final Annotation[] EMPTY = new Annotation[0];
 
-    private static final long serialVersionUID = 0xF3E0B8099FBF583BL;
+    private static final long serialVersionUID = 0xf3e0b8099fbf583bL;
 
     @Override
     public boolean isAnnotationPresent(@NotNull Class<? extends Annotation> annotationClass) {

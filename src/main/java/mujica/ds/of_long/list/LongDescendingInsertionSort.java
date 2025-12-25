@@ -23,13 +23,13 @@ public class LongDescendingInsertionSort implements SortingAlgorithm<long[]> {
     }
 
     @Override
-    public long apply(@NotNull long[] array, int fromIndex, int toIndex) {
+    public long apply(@NotNull long[] array, int startIndex, int endIndex) {
         long operation = 0L;
-        int readIndex = fromIndex;
-        while (readIndex < toIndex) {
+        int readIndex = startIndex;
+        while (readIndex < endIndex) {
             long key = array[readIndex];
             int writeIndex = readIndex - 1;
-            while (writeIndex >= fromIndex && array[writeIndex] < key) {
+            while (writeIndex >= startIndex && array[writeIndex] < key) {
                 array[writeIndex + 1] = array[writeIndex];
                 writeIndex--;
                 operation++;

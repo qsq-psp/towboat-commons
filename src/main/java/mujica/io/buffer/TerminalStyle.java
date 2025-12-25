@@ -18,45 +18,40 @@ public class TerminalStyle implements Serializable {
 
     private static final long serialVersionUID = 0xf0fd49fd765051f0L;
 
-    public static final TerminalStyle RESET_STYLE = new TerminalStyle(null, null, null);
+    public static final TerminalStyle RESET_STYLE = new TerminalStyle(null, null, null, null, null);
 
     static final String COMMAND_PREFIX = "\u001b[";
 
     static final String RESET_COMMAND = COMMAND_PREFIX + "0m";
 
     @Nullable
-    public final TerminalDisplayMode mode;
-
-    @Nullable
     public final TerminalDisplayColor foreground, background;
 
-    public TerminalStyle(@Nullable TerminalDisplayMode mode,
-                         @Nullable TerminalDisplayColor foreground, @Nullable TerminalDisplayColor background) {
+    @Nullable
+    public final Boolean bold, underline, through;
+
+    public TerminalStyle(@Nullable TerminalDisplayColor foreground, @Nullable TerminalDisplayColor background,
+                         @Nullable Boolean bold, @Nullable Boolean underline, @Nullable Boolean through) {
         super();
-        this.mode = mode;
         this.foreground = foreground;
         this.background = background;
+        this.bold = bold;
+        this.underline = underline;
+        this.through = through;
     }
 
     public boolean needReset() {
-        return mode == null || foreground == null || background == null;
+        return foreground == null || background == null || bold == null || underline == null || through == null;
     }
 
     public boolean isReset() {
-        return this == RESET_STYLE || mode == null && foreground == null && background == null;
+        return this == RESET_STYLE || foreground == null && background == null && bold == null && underline == null && through == null;
     }
 
     private void stringifyNoReset(@NotNull StringBuilder out) {
         boolean subsequent = false;
         out.append(COMMAND_PREFIX);
-        if (mode != null) {
-            out.append(mode.code);
-            subsequent = true;
-        }
         if (foreground != null) {
-            if (subsequent) {
-                out.append(';');
-            }
             out.append(foreground.foregroundCode);
             subsequent = true;
         }
@@ -65,6 +60,27 @@ public class TerminalStyle implements Serializable {
                 out.append(';');
             }
             out.append(background.backgroundCode);
+            subsequent = true;
+        }
+        if (bold != null) {
+            if (subsequent) {
+                out.append(';');
+            }
+            out.append(TerminalDisplayMode.BOLD.getCode(bold));
+            subsequent = true;
+        }
+        if (underline != null) {
+            if (subsequent) {
+                out.append(';');
+            }
+            out.append(TerminalDisplayMode.UNDERLINE.getCode(underline));
+            subsequent = true;
+        }
+        if (through != null) {
+            if (subsequent) {
+                out.append(';');
+            }
+            out.append(TerminalDisplayMode.THROUGH.getCode(through));
         }
         out.append('m');
     }
@@ -89,7 +105,7 @@ public class TerminalStyle implements Serializable {
     }
 
     public void stringify(@NotNull String string, @NotNull StringBuilder out) {
-        if (mode == null || foreground == null || background == null) {
+        if (needReset()) {
             out.append(RESET_COMMAND);
             if (isReset()) {
                 out.append(string);
@@ -109,14 +125,7 @@ public class TerminalStyle implements Serializable {
     private void printNoReset(@NotNull PrintStream out) {
         boolean subsequent = false;
         out.print(COMMAND_PREFIX);
-        if (mode != null) {
-            out.print(mode.code);
-            subsequent = true;
-        }
         if (foreground != null) {
-            if (subsequent) {
-                out.print(";");
-            }
             out.print(foreground.foregroundCode);
             subsequent = true;
         }
@@ -125,6 +134,27 @@ public class TerminalStyle implements Serializable {
                 out.print(";");
             }
             out.print(background.backgroundCode);
+            subsequent = true;
+        }
+        if (bold != null) {
+            if (subsequent) {
+                out.print(";");
+            }
+            out.print(TerminalDisplayMode.BOLD.getCode(bold));
+            subsequent = true;
+        }
+        if (underline != null) {
+            if (subsequent) {
+                out.print(";");
+            }
+            out.print(TerminalDisplayMode.UNDERLINE.getCode(underline));
+            subsequent = true;
+        }
+        if (through != null) {
+            if (subsequent) {
+                out.print(";");
+            }
+            out.print(TerminalDisplayMode.THROUGH.getCode(through));
         }
         out.print("m");
     }
@@ -178,14 +208,7 @@ public class TerminalStyle implements Serializable {
         boolean subsequent = false;
         out.write(0x1b);
         out.write('[');
-        if (mode != null) {
-            writeNumber(mode.code, out);
-            subsequent = true;
-        }
         if (foreground != null) {
-            if (subsequent) {
-                out.write(';');
-            }
             writeNumber(foreground.foregroundCode, out);
             subsequent = true;
         }
@@ -194,6 +217,27 @@ public class TerminalStyle implements Serializable {
                 out.write(';');
             }
             writeNumber(background.backgroundCode, out);
+            subsequent = true;
+        }
+        if (bold != null) {
+            if (subsequent) {
+                out.write(';');
+            }
+            writeNumber(TerminalDisplayMode.BOLD.getCode(bold), out);
+            subsequent = true;
+        }
+        if (underline != null) {
+            if (subsequent) {
+                out.write(';');
+            }
+            writeNumber(TerminalDisplayMode.UNDERLINE.getCode(underline), out);
+            subsequent = true;
+        }
+        if (through != null) {
+            if (subsequent) {
+                out.write(';');
+            }
+            writeNumber(TerminalDisplayMode.THROUGH.getCode(through), out);
         }
         out.write('m');
     }
@@ -228,9 +272,16 @@ public class TerminalStyle implements Serializable {
         writeReset(out);
     }
 
+    private static final int M = 59;
+
     @Override
     public int hashCode() {
-        return (Objects.hashCode(mode) * 59 + Objects.hashCode(foreground)) * 59 + Objects.hashCode(background);
+        int hash = Objects.hashCode(foreground);
+        hash = hash * M + Objects.hashCode(background);
+        hash = hash * M + Objects.hashCode(bold);
+        hash = hash * M + Objects.hashCode(underline);
+        hash = hash * M + Objects.hashCode(through);
+        return hash;
     }
 
     @Override
@@ -242,11 +293,14 @@ public class TerminalStyle implements Serializable {
             return false;
         }
         final TerminalStyle that = (TerminalStyle) obj;
-        return this.mode == that.mode && this.foreground == that.foreground && this.background == that.background;
+        return this.foreground == that.foreground && this.background == that.background
+                && Objects.equals(this.bold, that.bold) && Objects.equals(this.underline, that.underline)
+                && Objects.equals(this.through, that.through);
     }
 
     @Override
     public String toString() {
-        return "TerminalStyle[mode = " + mode + ", foreground = " + foreground + ", background = " + background + "]";
+        return "TerminalStyle[foreground = " + foreground + ", background = " + background
+                + ", bold = " + bold + ", underline = " + underline + ", through = " + through + "]";
     }
 }

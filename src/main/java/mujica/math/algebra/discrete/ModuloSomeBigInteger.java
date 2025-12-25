@@ -1,5 +1,6 @@
 package mujica.math.algebra.discrete;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -7,6 +8,7 @@ import java.math.BigInteger;
 /**
  * Created on 2025/4/3.
  */
+@CodeHistory(date = "2025/4/3")
 public class ModuloSomeBigInteger extends ModularMath {
 
     protected static final BigInteger BIG_MAX_LONG = BigInteger.valueOf(Long.MAX_VALUE);

@@ -17,7 +17,7 @@ public class ObjectMapInflateInputStream extends ResidueInflateInputStream {
     @CodeHistory(date = "2025/10/6")
     private static class HuffmanCode extends TruncateList<Boolean> implements Comparable<TruncateList<Boolean>> {
 
-        private static final long serialVersionUID = 0xC274DB34F616E2A6L;
+        private static final long serialVersionUID = 0xc274db34f616e2a6L;
 
         HuffmanCode(int initialCapacity) {
             super(initialCapacity);
@@ -32,7 +32,7 @@ public class ObjectMapInflateInputStream extends ResidueInflateInputStream {
     @NotNull
     private final HashMap<HuffmanCode, Character> codeLengthDecodeMap, literalLengthDecodeMap, distanceDecodeMap;
 
-    public ObjectMapInflateInputStream(@NotNull InputStream in, @NotNull LookBackMemory runBuffer) {
+    public ObjectMapInflateInputStream(@NotNull InputStream in, @NotNull RunBuffer runBuffer) {
         super(in, runBuffer);
         codeLengthDecodeMap = new HashMap<>();
         literalLengthDecodeMap = new HashMap<>();
@@ -56,7 +56,7 @@ public class ObjectMapInflateInputStream extends ResidueInflateInputStream {
                             throw new EOFException();
                         }
                         remainingLength--;
-                        runBuffer.write(data);
+                        runBuffer.put((byte) data);
                         return data;
                     } else {
                         state &= STATE_LAST_BLOCK_FREE;
@@ -68,7 +68,7 @@ public class ObjectMapInflateInputStream extends ResidueInflateInputStream {
                 case STATE_LAST_BLOCK_DYNAMIC_HUFFMAN:
                     if (remainingLength > 0) {
                         remainingLength--;
-                        return 0xff & runBuffer.copyAndWrite(copyDistance);
+                        return 0xff & runBuffer.copy(copyDistance);
                     } else {
                         int symbol = readSymbol(literalLengthDecodeMap);
                         if (symbol > 0x100) {
@@ -79,7 +79,7 @@ public class ObjectMapInflateInputStream extends ResidueInflateInputStream {
                             copyDistance = DISTANCE_BASE[symbol];
                             copyDistance += readBits(DISTANCE_EXTRA_BITS[symbol]);
                         } else if (symbol < 0x100) {
-                            runBuffer.write(symbol);
+                            runBuffer.put((byte) symbol);
                             return symbol;
                         } else {
                             state &= STATE_LAST_BLOCK_FREE;
@@ -91,7 +91,98 @@ public class ObjectMapInflateInputStream extends ResidueInflateInputStream {
                 case STATE_TRAILING_BYTES:
                     return readTrailingByte();
                 default:
-                    throw new CodecException();
+                    throw new CompressAlgorithmException("state = " + state);
+            }
+        }
+    }
+
+    @Override
+    public int read(@NotNull byte[] array, int offset, int length) throws IOException {
+        if (length <= 0) {
+            return 0;
+        }
+        while (true) {
+            switch (state) {
+                case STATE_FREE:
+                    readBlock();
+                    break;
+                case STATE_LAST_BLOCK_FREE:
+                    return -1;
+                case STATE_NO_COMPRESSION:
+                case STATE_LAST_BLOCK_NO_COMPRESSION:
+                    if (remainingLength > 0) {
+                        if (bitLength() != 0) {
+                            int data = readTrailingByte();
+                            if (data == -1) {
+                                throw new EOFException();
+                            }
+                            remainingLength--;
+                            array[offset] = (byte) data;
+                            runBuffer.put((byte) data);
+                            return 1;
+                        } else {
+                            length = Math.min(length, remainingLength);
+                            length = in.read(array, offset, length);
+                            if (length == -1) {
+                                throw new EOFException();
+                            }
+                            remainingLength -= length;
+                            runBuffer.putFully(array, offset, length);
+                            return length;
+                        }
+                    } else {
+                        state &= STATE_LAST_BLOCK_FREE;
+                    }
+                    break;
+                case STATE_FIXED_HUFFMAN:
+                case STATE_LAST_BLOCK_FIXED_HUFFMAN:
+                case STATE_DYNAMIC_HUFFMAN:
+                case STATE_LAST_BLOCK_DYNAMIC_HUFFMAN:
+                    if (remainingLength > 0) {
+                        length = Math.min(length, remainingLength);
+                        length = runBuffer.copy(copyDistance, array, offset, length);
+                        remainingLength -= length;
+                        return length;
+                    } else {
+                        int symbol = readSymbol(literalLengthDecodeMap);
+                        if (symbol > 0x100) {
+                            symbol -= 0x101;
+                            remainingLength = LENGTH_BASE[symbol];
+                            remainingLength += readBits(LENGTH_EXTRA_BITS[symbol]);
+                            symbol = readSymbol(distanceDecodeMap);
+                            copyDistance = DISTANCE_BASE[symbol];
+                            copyDistance += readBits(DISTANCE_EXTRA_BITS[symbol]);
+                        } else if (symbol < 0x100) {
+                            array[offset] = (byte) symbol;
+                            runBuffer.put((byte) symbol);
+                            return 1;
+                        } else {
+                            state &= STATE_LAST_BLOCK_FREE;
+                        }
+                    }
+                    break;
+                case STATE_TRAILING_BITS: {
+                    int data = readTrailingBit();
+                    if (data == -1) {
+                        return -1;
+                    }
+                    array[offset] = (byte) data;
+                    return 1;
+                }
+                case STATE_TRAILING_BYTES:
+                    if (bitLength() != 0) {
+                        int data = readTrailingByte();
+                        if (data == -1) {
+                            return -1;
+                        }
+                        array[offset] = (byte) data;
+                        return 1;
+                    } else {
+                        length = in.read(array, offset, length);
+                        return length;
+                    }
+                default:
+                    throw new CompressAlgorithmException("state = " + state);
             }
         }
     }

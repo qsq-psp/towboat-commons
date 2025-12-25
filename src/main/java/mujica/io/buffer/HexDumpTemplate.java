@@ -9,7 +9,7 @@ import java.io.Serializable;
 @CodeHistory(date = "2025/5/2")
 public class HexDumpTemplate implements Base16Case, Serializable {
 
-    private static final long serialVersionUID = 0xEBD07B75FB319109L;
+    private static final long serialVersionUID = 0xebd07b75fb319109L;
 
     protected final long byteOffsetStart;
     protected final int byteOffsetShiftStart;

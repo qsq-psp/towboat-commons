@@ -20,7 +20,7 @@ import java.util.function.IntUnaryOperator;
 @ReferencePage(title = "JVMS12 The Constant Pool", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4")
 public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator {
 
-    private static final long serialVersionUID = 0x3E9BA0CFA68B44ADL;
+    private static final long serialVersionUID = 0x3e9ba0cfa68b44adL;
 
     /**
      * Occupy two slots
@@ -69,32 +69,6 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
         }
     }
 
-    public static final int CONSTANT_UTF8 = 1;
-
-    public static final int CONSTANT_INTEGER = 3;
-
-    public static final int CONSTANT_FLOAT = 4;
-
-    public static final int CONSTANT_LONG = 5;
-
-    public static final int CONSTANT_DOUBLE = 6;
-
-    public static final int CONSTANT_CLASS = 7;
-
-    public static final int CONSTANT_STRING = 8;
-
-    @Name(value = "field reference", language = "en")
-    public static final int CONSTANT_FIELDREF = 9;
-
-    @Name(value = "method reference", language = "en")
-    public static final int CONSTANT_METHODREF = 10;
-
-    @Name(value = "interface method reference", language = "en")
-    public static final int CONSTANT_INTERFACEMETHODREF = 11;
-
-    @Name(value = "name and type", language = "en")
-    public static final int CONSTANT_NAMEANDTYPE = 12;
-
     @Name(value = "method handle", language = "en")
     public static final int CONSTANT_METHODHANDLE = 15;
 
@@ -113,25 +87,25 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
     @NotNull
     private static ConstantInfo createByTag(int tag) {
         switch (tag) {
-            case CONSTANT_UTF8:
+            case Utf8ConstantInfo.TAG:
                 return new Utf8ConstantInfo();
-            case CONSTANT_INTEGER:
+            case IntegerConstantInfo.TAG:
                 return new IntegerConstantInfo();
-            case CONSTANT_FLOAT:
+            case FloatConstantInfo.TAG:
                 return new FloatConstantInfo();
-            case CONSTANT_LONG:
+            case LongConstantInfo.TAG:
                 return new LongConstantInfo();
-            case CONSTANT_DOUBLE:
+            case DoubleConstantInfo.TAG:
                 return new DoubleConstantInfo();
-            case CONSTANT_CLASS:
+            case ClassConstantInfo.TAG:
                 return new ClassConstantInfo();
-            case CONSTANT_STRING:
+            case StringConstantInfo.TAG:
                 return new StringConstantInfo();
-            case CONSTANT_FIELDREF:
-            case CONSTANT_METHODREF:
-            case CONSTANT_INTERFACEMETHODREF:
+            case MemberReferenceConstantInfo.TAG_FIELDREF:
+            case MemberReferenceConstantInfo.TAG_METHODREF:
+            case MemberReferenceConstantInfo.TAG_INTERFACEMETHODREF:
                 return new MemberReferenceConstantInfo(tag);
-            case CONSTANT_NAMEANDTYPE:
+            case NameAndTypeConstantInfo.TAG:
                 return new NameAndTypeConstantInfo();
             case CONSTANT_METHODHANDLE:
                 return new MethodHandleConstantInfo();
@@ -253,7 +227,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
 
     @NotNull
     public String getUtf8(int index) {
-        return ((Utf8ConstantInfo) list.get(index)).string;
+        return ((Utf8ConstantInfo) list.get(0xffff & index)).string;
     }
 
     public int putUtf8(@NotNull String string) {
@@ -262,7 +236,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
 
     @NotNull
     public String getClassName(int index) {
-        return getUtf8(((ClassConstantInfo) list.get(index)).utf8Index);
+        return getUtf8(((ClassConstantInfo) list.get(0xffff & index)).utf8Index);
     }
 
     public int putClassName(@NotNull String className) {
@@ -275,17 +249,32 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
     }
 
     @NotNull
+    public String getPackageName(int index) {
+        return getUtf8(((PackageConstantInfo) list.get(0xffff & index)).utf8Index);
+    }
+
+    @NotNull
+    public String getSourcePackageName(int index) {
+        return getPackageName(index).replace('/', '.');
+    }
+
+    @NotNull
+    public String getModuleName(int index) {
+        return getUtf8(((ModuleConstantInfo) list.get(0xffff & index)).utf8Index);
+    }
+
+    @NotNull
     public String constantValueToString(@NotNull ClassFile context, int index) {
-        return list.get(index).constantValueToString(context);
+        return list.get(0xffff & index).constantValueToString(context);
     }
 
     @NotNull
     public String getToString(@NotNull ClassFile context, int index) {
-        return list.get(index).toString(context);
+        return list.get(0xffff & index).toString(context);
     }
 
     public void getAndRetain(@NotNull ClassFile context, int index) {
-        list.get(index).retain(context);
+        list.get(0xffff & index).retain(context);
     }
 
     public void writeReference(@NotNull ClassFile context, @NotNull IndentWriter writer) throws IOException {

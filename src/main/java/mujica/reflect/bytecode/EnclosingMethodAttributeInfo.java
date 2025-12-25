@@ -2,6 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,16 +14,18 @@ import java.nio.ByteBuffer;
 @ReferencePage(title = "JVMS12 The EnclosingMethod Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.7")
 class EnclosingMethodAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0x72EA6F64A3D9179DL;
+    private static final long serialVersionUID = 0x72ea6f64a3d9179dL;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+    @DataType("u16-{0}")
+    @ConstantType(tags = ClassConstantInfo.TAG)
     int classIndex;
 
     /**
      * If the current class is not immediately enclosed by a method or constructor, then the value of the method_index
      * item must be zero.
      */
-    @ConstantType(tags = ConstantPool.CONSTANT_NAMEANDTYPE, zero = true)
+    @DataType("u16")
+    @ConstantType(tags = NameAndTypeConstantInfo.TAG, zero = true)
     int methodIndex;
 
     @NotNull

@@ -132,7 +132,7 @@ class ZipSample {
 
     @NotNull
     private long[] testDeflate(@NotNull InputStream is) throws IOException {
-        is = new TableInflateInputStream(is, new CyclicLookBackMemory(AbstractInflateInputStream.MAX_RUN_BUFFER_DISTANCE));
+        is = new TableInflateInputStream(is, new CyclicArrayRunBuffer(AbstractInflateInputStream.MAX_RUN_BUFFER_DISTANCE));
         return readUncompressedStream(is);
     }
 

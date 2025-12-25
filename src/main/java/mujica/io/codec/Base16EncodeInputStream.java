@@ -2,6 +2,7 @@ package mujica.io.codec;
 
 import mujica.math.algebra.discrete.ClampedMath;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,6 +43,7 @@ public class Base16EncodeInputStream extends FilterInputStream implements Base16
     }
 
     @Override
+    @DataType("u8+{-1}")
     public int read() throws IOException {
         int digit;
         if (nibble == -1) {

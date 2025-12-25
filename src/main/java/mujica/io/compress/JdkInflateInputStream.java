@@ -1,6 +1,7 @@
 package mujica.io.compress;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
@@ -77,6 +78,7 @@ public class JdkInflateInputStream extends AbstractInflateInputStream {
     }
 
     @Override
+    @DataType("u8+{-1}")
     public int read() throws IOException {
         switch (state) {
             case STATE_NORMAL: {

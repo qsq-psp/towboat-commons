@@ -1,11 +1,14 @@
 package mujica.math.algebra.discrete;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created in Ultramarine on 2023/12/13, named IntegralCast.Cumulative.
  * Recreated on 2025/3/3.
  */
+@CodeHistory(date = "2023/12/13", project = "Ultramarine", name = "IntegralCast.Cumulative")
+@CodeHistory(date = "2025/3/3")
 public class CumulatedCast implements IntegralCast {
 
     @NotNull

@@ -8,7 +8,7 @@ import java.io.Serializable;
 @CodeHistory(date = "2025/4/16")
 class FailureMessage implements Serializable {
 
-    private static final long serialVersionUID = 0x68BEBE5540E556D9L;
+    private static final long serialVersionUID = 0x68bebe5540e556d9L;
 
     @NotNull
     final String en, zh;

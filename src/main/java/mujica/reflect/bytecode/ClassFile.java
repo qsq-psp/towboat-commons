@@ -5,6 +5,7 @@ import mujica.io.nest.LimitedDataInput;
 import mujica.io.nest.LimitedInput;
 import mujica.math.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
@@ -23,32 +24,38 @@ import java.util.function.Predicate;
 @CodeHistory(date = "2025/9/9")
 public class ClassFile implements ClassFileNode.Independent, BiConsumer<AttributeInfo.Statistics, String>, Consumer<CodeAttributeInfo.Statistics> {
 
-    private static final long serialVersionUID = 0xD029789AF7932A07L;
+    private static final long serialVersionUID = 0xd029789af7932a07L;
 
     static final int MAGIC = 0xcafebabe;
 
     @NotNull
     final ConstantPool constantPool = new ConstantPool();
 
-    MemberInfo.FieldInfo[] fields;
+    FieldInfo[] fields;
 
-    MemberInfo.MethodInfo[] methods;
+    MethodInfo[] methods;
 
     AttributeInfo[] attributes;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
-    String thisClass;
+    @DataType("u16-{0}")
+    @ConstantType(tags = ClassConstantInfo.TAG)
+    int thisClass;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_CLASS, zero = true)
-    String superClass;
+    @DataType("u16")
+    @ConstantType(tags = ClassConstantInfo.TAG, zero = true)
+    int superClass;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
-    String[] superInterfaces;
+    @DataType("u16-{0}")
+    @ConstantType(tags = ClassConstantInfo.TAG)
+    short[] superInterfaces;
 
+    @DataType("u16")
     int accessFlags;
 
+    @DataType("u16")
     int majorVersion;
 
+    @DataType("u16")
     int minorVersion;
 
     public ClassFile() {
@@ -72,9 +79,9 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
             case 0:
                 return ConstantPool.class;
             case 1:
-                return MemberInfo.FieldInfo.class;
+                return FieldInfo.class;
             case 2:
-                return MemberInfo.MethodInfo.class;
+                return MethodInfo.class;
             case 3:
                 return AttributeInfo.class;
             default:
@@ -86,9 +93,9 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
     public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
         if (group == AttributeInfo.class) {
             return attributes.length;
-        } else if (group == MemberInfo.MethodInfo.class) {
+        } else if (group == MethodInfo.class) {
             return methods.length;
-        } else if (group == MemberInfo.FieldInfo.class) {
+        } else if (group == FieldInfo.class) {
             return fields.length;
         } else if (group == ConstantPool.class) {
             return 1;
@@ -102,9 +109,9 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
     public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
         if (group == AttributeInfo.class) {
             return attributes[nodeIndex];
-        } else if (group == MemberInfo.MethodInfo.class) {
+        } else if (group == MethodInfo.class) {
             return methods[nodeIndex];
-        } else if (group == MemberInfo.FieldInfo.class) {
+        } else if (group == FieldInfo.class) {
             return fields[nodeIndex];
         } else if (group == ConstantPool.class && nodeIndex == 0) {
             return constantPool;
@@ -125,29 +132,29 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
         majorVersion = in.readUnsignedShort();
         constantPool.read(in);
         accessFlags = in.readUnsignedShort();
-        thisClass = constantPool.getClassName(in.readUnsignedShort());
-        superClass = constantPool.getClassName(in.readUnsignedShort());
+        thisClass = in.readUnsignedShort();
+        superClass = in.readUnsignedShort();
         {
             int interfaceCount = in.readUnsignedShort();
-            superInterfaces = new String[interfaceCount];
+            superInterfaces = new short[interfaceCount];
             for (int index = 0; index < interfaceCount; index++) {
-                superInterfaces[index] = constantPool.getClassName(in.readUnsignedShort());
+                superInterfaces[index] = in.readShort();
             }
         }
         {
             int fieldCount = in.readUnsignedShort();
-            fields = new MemberInfo.FieldInfo[fieldCount];
+            fields = new FieldInfo[fieldCount];
             for (int index = 0; index < fieldCount; index++) {
-                MemberInfo.FieldInfo fieldInfo = new MemberInfo.FieldInfo();
+                FieldInfo fieldInfo = new FieldInfo();
                 fieldInfo.read(constantPool, in);
                 fields[index] = fieldInfo;
             }
         }
         {
             int methodCount = in.readUnsignedShort();
-            methods = new MemberInfo.MethodInfo[methodCount];
+            methods = new MethodInfo[methodCount];
             for (int index = 0; index < methodCount; index++) {
-                MemberInfo.MethodInfo methodInfo = new MemberInfo.MethodInfo();
+                MethodInfo methodInfo = new MethodInfo();
                 methodInfo.read(constantPool, in);
                 methods[index] = methodInfo;
             }
@@ -168,29 +175,29 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
         majorVersion = 0xffff & buffer.getShort();
         constantPool.read(buffer);
         accessFlags = 0xffff & buffer.getShort();
-        thisClass = constantPool.getClassName(0xffff & buffer.getShort());
-        superClass = constantPool.getClassName(0xffff & buffer.getShort());
+        thisClass = 0xffff & buffer.getShort();
+        superClass = 0xffff & buffer.getShort();
         {
             int interfaceCount = 0xffff & buffer.getShort();
-            superInterfaces = new String[interfaceCount];
+            superInterfaces = new short[interfaceCount];
             for (int index = 0; index < interfaceCount; index++) {
-                superInterfaces[index] = constantPool.getClassName(0xffff & buffer.getShort());
+                superInterfaces[index] = buffer.getShort();
             }
         }
         {
             int fieldCount = 0xffff & buffer.getShort();
-            fields = new MemberInfo.FieldInfo[fieldCount];
+            fields = new FieldInfo[fieldCount];
             for (int index = 0; index < fieldCount; index++) {
-                MemberInfo.FieldInfo fieldInfo = new MemberInfo.FieldInfo();
+                FieldInfo fieldInfo = new FieldInfo();
                 fieldInfo.read(constantPool, buffer);
                 fields[index] = fieldInfo;
             }
         }
         {
             int methodCount = 0xffff & buffer.getShort();
-            methods = new MemberInfo.MethodInfo[methodCount];
+            methods = new MethodInfo[methodCount];
             for (int index = 0; index < methodCount; index++) {
-                MemberInfo.MethodInfo methodInfo = new MemberInfo.MethodInfo();
+                MethodInfo methodInfo = new MethodInfo();
                 methodInfo.read(constantPool, buffer);
                 methods[index] = methodInfo;
             }
@@ -205,11 +212,11 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
         out.writeShort(majorVersion);
         constantPool.write(out);
         out.writeShort(accessFlags);
-        out.writeShort(constantPool.putClassName(thisClass));
-        out.writeShort(constantPool.putClassName(superClass));
+        out.writeShort(thisClass);
+        out.writeShort(superClass);
         out.writeShort(superInterfaces.length);
-        for (String superInterface : superInterfaces) {
-            out.writeShort(constantPool.putClassName(superInterface));
+        for (short superInterface : superInterfaces) {
+            out.writeShort(superInterface);
         }
         out.writeShort(fields.length);
         for (MemberInfo fieldInfo : fields) {
@@ -230,11 +237,11 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
         buffer.putShort((short) majorVersion);
         constantPool.write(buffer);
         buffer.putShort((short) accessFlags);
-        buffer.putShort((short) constantPool.putClassName(thisClass));
-        buffer.putShort((short) constantPool.putClassName(superClass));
+        buffer.putShort((short) thisClass);
+        buffer.putShort((short) superClass);
         buffer.putShort((short) superInterfaces.length);
-        for (String superInterface : superInterfaces) {
-            buffer.putShort((short) constantPool.putClassName(superInterface));
+        for (short superInterface : superInterfaces) {
+            buffer.putShort(superInterface);
         }
         buffer.putShort((short) fields.length);
         for (MemberInfo fieldInfo : fields) {
@@ -249,6 +256,33 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
 
     public void write(@NotNull IndentWriter writer) throws IOException {
         write(this, writer, this);
+    }
+
+    @NotNull
+    ModuleAttributeInfo getModuleAttributeInfo() {
+        ModuleAttributeInfo moduleAttribute = null;
+        for (AttributeInfo attribute : attributes) {
+            if (attribute instanceof ModuleAttributeInfo) {
+                if (moduleAttribute == null) {
+                    moduleAttribute = (ModuleAttributeInfo) attribute;
+                } else {
+                    throw new RuntimeException("multiple module attribute info");
+                }
+            }
+        }
+        if (moduleAttribute == null) {
+            throw new RuntimeException("no module attribute info");
+        }
+        return moduleAttribute;
+    }
+
+    @NotNull
+    public String getModuleName() {
+        return getModuleAttributeInfo().getModuleName(this);
+    }
+
+    public void writeModule(@NotNull IndentWriter writer) throws IOException {
+        write(this, writer, getModuleAttributeInfo());
     }
 
     private static void write(@NotNull ClassFile context, @NotNull IndentWriter writer, @NotNull ClassFileNode node) throws IOException {
@@ -277,7 +311,7 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
     }
 
     public void writeAssemble(@NotNull IndentWriter writer) throws IOException {
-        for (MemberInfo.MethodInfo method : methods) {
+        for (MethodInfo method : methods) {
             method.writeAssemble(this, writer);
         }
     }
@@ -316,23 +350,28 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
             }
             sb.append("class ");
         }
-        sb.append(thisClass.replace('/', '.')).append(' ');
-        if (!superClass.equals("java/lang/Object")) {
-            sb.append("extends ").append(superClass.replace('/', '.')).append(' ');
+        sb.append(context.constantPool.getSourceClassName(thisClass)).append(' ');
+        if (superClass != 0) {
+            String superClassName = context.constantPool.getSourceClassName(superClass);
+            if (!superClassName.equals("java.lang.Object")) {
+                sb.append("extends ").append(superClassName).append(' ');
+            }
         }
         if (superInterfaces.length != 0) {
             sb.append("implements ");
-            for (String superInterface : superInterfaces) {
-                sb.append(superInterface.replace('/', '.')).append(", ");
+            for (short superInterface : superInterfaces) {
+                sb.append(context.constantPool.getSourceClassName(superInterface)).append(", ");
             }
         }
-        int last = sb.length() - 1;
-        if (last >= 0 && sb.charAt(last) == ' ') {
-            sb.deleteCharAt(last);
-            last--;
-        }
-        if (last >= 0 && sb.charAt(last) == ',') {
-            sb.deleteCharAt(last);
+        {
+            int last = sb.length() - 1;
+            if (last >= 0 && sb.charAt(last) == ' ') {
+                sb.deleteCharAt(last);
+                last--;
+            }
+            if (last >= 0 && sb.charAt(last) == ',') {
+                sb.deleteCharAt(last);
+            }
         }
         return sb.append(';').toString();
     }
@@ -362,7 +401,7 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
 
     @Override
     public void accept(@NotNull CodeAttributeInfo.Statistics statistics) {
-        for (MemberInfo.MethodInfo method : methods) {
+        for (MethodInfo method : methods) {
             method.accept(statistics);
         }
     }
@@ -397,6 +436,9 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
 
     @Override
     public void remapConstant(@NotNull IntUnaryOperator remap) {
+        thisClass = remap.applyAsInt(thisClass);
+        superClass = remap.applyAsInt(superClass);
+        AttributeInfo.remapConstant(remap, superInterfaces);
         for (MemberInfo memberInfo : fields) {
             memberInfo.remapConstant(remap);
         }

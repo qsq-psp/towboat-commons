@@ -1,6 +1,7 @@
 package mujica.io.compress;
 
 import io.netty.handler.codec.CodecException;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,13 +15,14 @@ import java.util.function.IntConsumer;
 /**
  * Created on 2025/11/10.
  */
+@CodeHistory(date = "2025/11/10")
 public class TableInflateInputStream extends ResidueInflateInputStream {
 
     private int codeLengthMaxLength, literalLengthMaxLength, distanceMaxLength;
 
     private short[] codeLengthDecodeTable, literalLengthDecodeTable, distanceDecodeTable;
 
-    public TableInflateInputStream(@NotNull InputStream in, @NotNull LookBackMemory runBuffer) {
+    public TableInflateInputStream(@NotNull InputStream in, @NotNull RunBuffer runBuffer) {
         super(in, runBuffer);
     }
 
@@ -41,7 +43,7 @@ public class TableInflateInputStream extends ResidueInflateInputStream {
                             throw new EOFException();
                         }
                         remainingLength--;
-                        runBuffer.write(data);
+                        runBuffer.put((byte) data);
                         return data;
                     } else {
                         state &= STATE_LAST_BLOCK_FREE;
@@ -53,7 +55,7 @@ public class TableInflateInputStream extends ResidueInflateInputStream {
                 case STATE_LAST_BLOCK_DYNAMIC_HUFFMAN:
                     if (remainingLength > 0) {
                         remainingLength--;
-                        return 0xff & runBuffer.copyAndWrite(copyDistance);
+                        return 0xff & runBuffer.copy(copyDistance);
                     } else {
                         int symbol = readSymbol(literalLengthMaxLength, literalLengthDecodeTable);
                         if (symbol > 0x100) {
@@ -64,7 +66,7 @@ public class TableInflateInputStream extends ResidueInflateInputStream {
                             copyDistance = DISTANCE_BASE[symbol];
                             copyDistance += readBits(DISTANCE_EXTRA_BITS[symbol]);
                         } else if (symbol < 0x100) {
-                            runBuffer.write(symbol);
+                            runBuffer.put((byte) symbol);
                             return symbol;
                         } else {
                             state &= STATE_LAST_BLOCK_FREE;
@@ -242,7 +244,7 @@ public class TableInflateInputStream extends ResidueInflateInputStream {
 
     private int readSymbol(int maxLength, short[] decodeTable) throws IOException {
         try {
-            int symbol = decodeTable[readBitsAhead(maxLength)];
+            int symbol = decodeTable[getBits(maxLength)];
             if (symbol == 0) {
                 throw new CodecException();
             }

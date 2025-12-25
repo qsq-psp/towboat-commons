@@ -16,12 +16,12 @@ public interface ClassFileNode extends Serializable {
     int groupCount();
 
     @NotNull
-    Class<? extends ClassFileNode> getGroup(int groupIndex);
+    Class<? extends ClassFileNode> getGroup(int groupIndex) throws IndexOutOfBoundsException;
 
     int nodeCount(@NotNull Class<? extends ClassFileNode> group);
 
     @NotNull
-    ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex);
+    ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) throws IndexOutOfBoundsException;
 
     @NotNull
     String toString(@NotNull ClassFile context);

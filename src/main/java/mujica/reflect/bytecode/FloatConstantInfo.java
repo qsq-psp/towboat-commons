@@ -23,9 +23,11 @@ class FloatConstantInfo extends ConstantInfo {
         super();
     }
 
+    public static final int TAG = 4;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_FLOAT;
+        return TAG;
     }
 
     protected int section() {

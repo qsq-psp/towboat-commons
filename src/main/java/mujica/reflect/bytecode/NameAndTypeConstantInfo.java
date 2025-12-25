@@ -2,6 +2,8 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
+import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,21 +17,25 @@ import java.util.function.IntUnaryOperator;
 @ReferencePage(title = "JVMS12 The CONSTANT_NameAndType_info Structure", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.6")
 class NameAndTypeConstantInfo extends ConstantInfo {
 
-    private static final long serialVersionUID = 0xBF311DDBE2FD62BFL;
+    private static final long serialVersionUID = 0xbf311ddbe2fd62bfL;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+    @DataType("u16-{0}")
+    @ConstantType(tags = Utf8ConstantInfo.TAG)
     private int nameIndex;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+    @DataType("u16-{0}")
+    @ConstantType(tags = Utf8ConstantInfo.TAG)
     private int typeIndex;
 
     NameAndTypeConstantInfo() {
         super();
     }
 
+    public static final int TAG = 12;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_NAMEANDTYPE;
+        return TAG;
     }
 
     protected int section() {

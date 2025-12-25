@@ -23,13 +23,13 @@ public class IntDescendingSelectionSort implements SortingAlgorithm<int[]> {
     }
 
     @Override
-    public long apply(@NotNull int[] array, int fromIndex, int toIndex) {
+    public long apply(@NotNull int[] array, int startIndex, int endIndex) {
         long operation = 0L;
-        while (fromIndex < toIndex) {
-            int selectedIndex = fromIndex;
+        while (startIndex < endIndex) {
+            int selectedIndex = startIndex;
             int selectedValue = array[selectedIndex];
             operation++;
-            for (int index = fromIndex + 1; index < toIndex; index++) {
+            for (int index = startIndex + 1; index < endIndex; index++) {
                 int value = array[index];
                 if (value < selectedValue) {
                     selectedIndex = index;
@@ -37,10 +37,10 @@ public class IntDescendingSelectionSort implements SortingAlgorithm<int[]> {
                     operation++;
                 }
             }
-            toIndex--;
-            if (selectedIndex != toIndex) {
-                array[selectedIndex] = array[toIndex];
-                array[toIndex] = selectedValue;
+            endIndex--;
+            if (selectedIndex != endIndex) {
+                array[selectedIndex] = array[endIndex];
+                array[endIndex] = selectedValue;
             }
         }
         return operation;

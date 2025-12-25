@@ -11,16 +11,13 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-/**
- * Created on 2025/11/12.
- */
 @CodeHistory(date = "2025/11/12")
 public abstract class IntMapInflateInputStream extends ResidueInflateInputStream {
 
     @NotNull
     private final IntMap codeLengthDecodeMap, literalLengthDecodeMap, distanceDecodeMap;
 
-    protected IntMapInflateInputStream(@NotNull InputStream in, @NotNull LookBackMemory runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+    protected IntMapInflateInputStream(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
         super(in, runBuffer);
         codeLengthDecodeMap = decodeMapSupplier.get();
         literalLengthDecodeMap = decodeMapSupplier.get();
@@ -44,7 +41,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                             throw new EOFException();
                         }
                         remainingLength--;
-                        runBuffer.write(data);
+                        runBuffer.put((byte) data);
                         return data;
                     } else {
                         state &= STATE_LAST_BLOCK_FREE;
@@ -56,7 +53,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                 case STATE_LAST_BLOCK_DYNAMIC_HUFFMAN:
                     if (remainingLength > 0) {
                         remainingLength--;
-                        return 0xff & runBuffer.copyAndWrite(copyDistance);
+                        return 0xff & runBuffer.copy(copyDistance);
                     } else {
                         int symbol = readSymbol(literalLengthDecodeMap);
                         if (symbol > 0x101) {
@@ -68,7 +65,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                             copyDistance += readBits(DISTANCE_EXTRA_BITS[symbol]);
                         } else if (symbol < 0x101) {
                             symbol--;
-                            runBuffer.write(symbol);
+                            runBuffer.put((byte) symbol);
                             return symbol;
                         } else {
                             state &= STATE_LAST_BLOCK_FREE;
@@ -79,6 +76,94 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                     return readTrailingBit();
                 case STATE_TRAILING_BYTES:
                     return readTrailingByte();
+                default:
+                    throw new CompressAlgorithmException("state = " + state);
+            }
+        }
+    }
+
+    @Override
+    public int read(@NotNull byte[] array, int offset, int length) throws IOException {
+        if (length <= 0) {
+            return 0;
+        }
+        while (true) {
+            switch (state) {
+                case STATE_FREE:
+                    readBlock();
+                    break;
+                case STATE_LAST_BLOCK_FREE:
+                    return -1;
+                case STATE_NO_COMPRESSION:
+                case STATE_LAST_BLOCK_NO_COMPRESSION:
+                    if (remainingLength > 0) {
+                        if (bitLength() != 0) {
+                            int data = readTrailingByte();
+                            if (data == -1) {
+                                throw new EOFException();
+                            }
+                            remainingLength--;
+                            array[offset] = (byte) data;
+                            runBuffer.put((byte) data);
+                            return 1;
+                        } else {
+                            length = in.read(array, offset, Math.min(length, remainingLength));
+                            if (length < 0) {
+                                throw new EOFException();
+                            }
+                            runBuffer.putFully(array, offset, length);
+                            remainingLength -= length;
+                            return length;
+                        }
+                    } else {
+                        state &= STATE_LAST_BLOCK_FREE;
+                    }
+                    break;
+                case STATE_FIXED_HUFFMAN:
+                case STATE_LAST_BLOCK_FIXED_HUFFMAN:
+                case STATE_DYNAMIC_HUFFMAN:
+                case STATE_LAST_BLOCK_DYNAMIC_HUFFMAN:
+                    if (remainingLength > 0) {
+                        length = runBuffer.copy(copyDistance, array, offset, Math.min(length, remainingLength));
+                        remainingLength -= length;
+                        return length;
+                    } else {
+                        int symbol = readSymbol(literalLengthDecodeMap);
+                        if (symbol > 0x101) {
+                            symbol -= 0x102;
+                            remainingLength = LENGTH_BASE[symbol];
+                            remainingLength += readBits(LENGTH_EXTRA_BITS[symbol]);
+                            symbol = readSymbol(distanceDecodeMap) - 1;
+                            copyDistance = DISTANCE_BASE[symbol];
+                            copyDistance += readBits(DISTANCE_EXTRA_BITS[symbol]);
+                        } else if (symbol < 0x101) {
+                            symbol--;
+                            runBuffer.put((byte) symbol);
+                            array[offset] = (byte) symbol;
+                            return 1;
+                        } else {
+                            state &= STATE_LAST_BLOCK_FREE;
+                        }
+                    }
+                case STATE_TRAILING_BITS: {
+                    int data = readTrailingBit();
+                    if (data == -1) {
+                        return -1;
+                    }
+                    array[offset] = (byte) data;
+                    return 1;
+                }
+                case STATE_TRAILING_BYTES:
+                    if (bitLength() != 0) {
+                        int data = readTrailingByte();
+                        if (data == -1) {
+                            return -1;
+                        }
+                        array[offset] = (byte) data;
+                        return 1;
+                    } else {
+                        return in.read(array, offset, length);
+                    }
                 default:
                     throw new CompressAlgorithmException("state = " + state);
             }
@@ -224,7 +309,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
     @CodeHistory(date = "2025/11/8")
     public static class Prefix extends IntMapInflateInputStream {
 
-        public Prefix(@NotNull InputStream in, @NotNull LookBackMemory runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+        public Prefix(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
             super(in, runBuffer, decodeMapSupplier);
         }
 
@@ -256,7 +341,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
     @CodeHistory(date = "2025/11/6")
     public static class LengthValue extends IntMapInflateInputStream {
 
-        public LengthValue(@NotNull InputStream in, @NotNull LookBackMemory runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+        public LengthValue(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
             super(in, runBuffer, decodeMapSupplier);
         }
 
@@ -291,7 +376,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
     @CodeHistory(date = "2025/11/14")
     public static class ValueLength extends IntMapInflateInputStream {
 
-        public ValueLength(@NotNull InputStream in, @NotNull LookBackMemory runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+        public ValueLength(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
             super(in, runBuffer, decodeMapSupplier);
         }
 

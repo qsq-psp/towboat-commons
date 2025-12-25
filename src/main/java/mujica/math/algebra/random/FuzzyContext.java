@@ -34,7 +34,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
 
     @Override
     public byte nextByte() {
-        switch (source.next(4)) { // from 0x0 to 0xf
+        switch ((int) source.next(4)) { // from 0x0 to 0xf
             case 0x0:
             case 0x1:
             case 0x2:
@@ -73,21 +73,21 @@ public class FuzzyContext extends FreeFloatingPointContext {
         return array;
     }
 
-    public void fillByteArray(@NotNull byte[] array, @Index(of = "array") int fromIndex, @Index(of = "array", inclusive = false) int toIndex) {
-        fillByteArray(array, fromIndex, toIndex, 0);
+    public void fillByteArray(@NotNull byte[] array, @Index(of = "array") int startIndex, @Index(of = "array", inclusive = false) int endIndex) {
+        fillByteArray(array, startIndex, endIndex, 0);
     }
 
-    private void fillByteArray(@NotNull byte[] array, int fromIndex, int toIndex, int flag) {
-        switch (source.next(4)) { // from 0x0 to 0xf
+    private void fillByteArray(@NotNull byte[] array, int startIndex, int endIndex, int flag) {
+        switch ((int) source.next(4)) { // from 0x0 to 0xf
             case 0x0:
-                fillGray(array, fromIndex, toIndex);
+                fillGray(array, startIndex, endIndex);
                 break;
             case 0x1:
             case 0x2:
-                fillLinear(array, fromIndex, toIndex);
+                fillLinear(array, startIndex, endIndex);
                 break;
             case 0x3:
-                fillGeometric(array, fromIndex, toIndex);
+                fillGeometric(array, startIndex, endIndex);
                 break;
             case 0x4:
                 flag |= IN_SEGMENT;
@@ -95,7 +95,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0x5:
             case 0x6:
             case 0x7:
-                fillSegmented(array, fromIndex, toIndex, flag);
+                fillSegmented(array, startIndex, endIndex, flag);
                 break;
             case 0x8:
                 flag |= IN_PERIODIC;
@@ -103,7 +103,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0x9:
             case 0xa:
             case 0xb:
-                fillPeriodic(array, fromIndex, toIndex, flag);
+                fillPeriodic(array, startIndex, endIndex, flag);
                 break;
             case 0xc:
                 flag |= IN_MAPPED;
@@ -111,43 +111,43 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0xd:
             case 0xe:
             case 0xf:
-                fillMapped(array, fromIndex, toIndex, flag);
+                fillMapped(array, startIndex, endIndex, flag);
                 break;
             default:
                 throw new IllegalStateException();
         }
     }
 
-    private void fillGray(@NotNull byte[] array, int fromIndex, int toIndex) {
+    private void fillGray(@NotNull byte[] array, int startIndex, int endIndex) {
         int value = 0xff & nextByte();
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = (byte) ((value >> 1) ^ value); // binary to gray
             value++;
         }
     }
 
-    private void fillLinear(@NotNull byte[] array, int fromIndex, int toIndex) {
+    private void fillLinear(@NotNull byte[] array, int startIndex, int endIndex) {
         int value = nextByte();
         final int addend = nextByte();
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = (byte) value;
             value += addend;
         }
     }
 
-    private void fillGeometric(@NotNull byte[] array, int fromIndex, int toIndex) {
+    private void fillGeometric(@NotNull byte[] array, int startIndex, int endIndex) {
         int value = nextByte();
         final int multiplier = nextByte() | 0x1;
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = (byte) value;
             value *= multiplier;
         }
     }
 
-    private void fillSegmented(@NotNull byte[] array, int fromIndex, int toIndex, int flag) {
-        final int length = toIndex - fromIndex;
+    private void fillSegmented(@NotNull byte[] array, int startIndex, int endIndex, int flag) {
+        final int length = endIndex - startIndex;
         if (length < 3 || (flag & IN_SEGMENT) != 0) {
-            for (int index = fromIndex; index < toIndex; index++) {
+            for (int index = startIndex; index < endIndex; index++) {
                 array[index] = super.nextByte(); // fillUniform
             }
             return;
@@ -160,46 +160,46 @@ public class FuzzyContext extends FreeFloatingPointContext {
         for (int segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++) {
             int index1 = segments[segmentIndex];
             if (index0 < index1) {
-                fillByteArray(array, fromIndex + index0, fromIndex + index1, flag | IN_SEGMENT);
+                fillByteArray(array, startIndex + index0, startIndex + index1, flag | IN_SEGMENT);
             }
             index0 = index1;
         }
         assert index0 == length;
     }
 
-    private void fillPeriodic(@NotNull byte[] array, int fromIndex, int toIndex, int flag) {
-        final int length = toIndex - fromIndex;
+    private void fillPeriodic(@NotNull byte[] array, int startIndex, int endIndex, int flag) {
+        final int length = endIndex - startIndex;
         if (length < 3 || (flag & IN_PERIODIC) != 0) {
-            for (int index = fromIndex; index < toIndex; index++) {
+            for (int index = startIndex; index < endIndex; index++) {
                 array[index] = nextByte(); // fillEach
             }
             return;
         }
         final int period = nextInt(2, length);
-        int midIndex = fromIndex + period;
-        fillByteArray(array, fromIndex, midIndex, flag | IN_PERIODIC);
-        final int copyIndex = fromIndex + period;
+        int midIndex = startIndex + period;
+        fillByteArray(array, startIndex, midIndex, flag | IN_PERIODIC);
+        final int copyIndex = startIndex + period;
         for (int index0 = 0; index0 < period; index0++) {
-            byte value = array[fromIndex + index0];
-            for (int index1 = copyIndex + index0; index1 < toIndex; index1 += period) {
+            byte value = array[startIndex + index0];
+            for (int index1 = copyIndex + index0; index1 < endIndex; index1 += period) {
                 array[index1] = value;
             }
         }
     }
 
-    private void fillMapped(@NotNull byte[] array, int fromIndex, int toIndex, int flag) {
-        final int length = toIndex - fromIndex;
+    private void fillMapped(@NotNull byte[] array, int startIndex, int endIndex, int flag) {
+        final int length = endIndex - startIndex;
         final int shift = nextInt(Byte.SIZE) + 1;
         final int mapSize = 1 << shift;
         if (length <= mapSize || (flags & IN_MAPPED) != 0) {
-            Arrays.fill(array, fromIndex, toIndex, nextByte()); // fillSame
+            Arrays.fill(array, startIndex, endIndex, nextByte()); // fillSame
             return;
         }
         final byte[] map = new byte[mapSize];
         fillByteArray(map, 0, mapSize, IN_MAPPED);
-        fillByteArray(array, fromIndex, toIndex, flag | IN_MAPPED);
+        fillByteArray(array, startIndex, endIndex, flag | IN_MAPPED);
         final int mask = mapSize - 1;
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = map[mask & array[index]];
         }
     }
@@ -212,7 +212,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
 
     @Override
     public short nextShort() {
-        switch (source.next(4)) { // from 0x0 to 0xf
+        switch ((int) source.next(4)) { // from 0x0 to 0xf
             case 0x0:
             case 0x1:
                 return 0;
@@ -346,7 +346,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
 
     private int specialInt() {
         final int value = SPECIAL_INT[nextInt(SPECIAL_INT.length)];
-        switch (source.next(4)) { // from 0x0 to 0xf
+        switch ((int) source.next(4)) { // from 0x0 to 0xf
             case 0x0:
             case 0x1:
             case 0x2:
@@ -357,7 +357,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0x5:
                 return Integer.reverse(Integer.reverseBytes(value));
             case 0x6:
-                return Integer.rotateRight(value, source.next(5));
+                return Integer.rotateRight(value, (int) source.next(5));
             default: // 9 values
                 return value;
         }
@@ -365,7 +365,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
 
     @Override
     public int nextInt() {
-        switch (source.next(4)) { // from 0x00 to 0x1f
+        switch ((int) source.next(4)) { // from 0x00 to 0x1f
             case 0x00:
             case 0x01:
             case 0x02:
@@ -426,21 +426,21 @@ public class FuzzyContext extends FreeFloatingPointContext {
         return array;
     }
 
-    public void fillIntArray(@NotNull int[] array, @Index(of = "array") int fromIndex, @Index(of = "array", inclusive = false) int toIndex) {
-        fillIntArray(array, fromIndex, toIndex, 0);
+    public void fillIntArray(@NotNull int[] array, @Index(of = "array") int startIndex, @Index(of = "array", inclusive = false) int endIndex) {
+        fillIntArray(array, startIndex, endIndex, 0);
     }
 
-    private void fillIntArray(@NotNull int[] array, int fromIndex, int toIndex, int flag) {
-        switch (source.next(4)) { // from 0x0 to 0xf
+    private void fillIntArray(@NotNull int[] array, int startIndex, int endIndex, int flag) {
+        switch ((int) source.next(4)) { // from 0x0 to 0xf
             case 0x0:
-                fillGray(array, fromIndex, toIndex);
+                fillGray(array, startIndex, endIndex);
                 break;
             case 0x1:
             case 0x2:
-                fillLinear(array, fromIndex, toIndex);
+                fillLinear(array, startIndex, endIndex);
                 break;
             case 0x3:
-                fillGeometric(array, fromIndex, toIndex);
+                fillGeometric(array, startIndex, endIndex);
                 break;
             case 0x4:
                 flag |= IN_SEGMENT;
@@ -448,7 +448,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0x5:
             case 0x6:
             case 0x7:
-                fillSegmented(array, fromIndex, toIndex, flag);
+                fillSegmented(array, startIndex, endIndex, flag);
                 break;
             case 0x8:
                 flag |= IN_PERIODIC;
@@ -456,7 +456,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0x9:
             case 0xa:
             case 0xb:
-                fillPeriodic(array, fromIndex, toIndex, flag);
+                fillPeriodic(array, startIndex, endIndex, flag);
                 break;
             case 0xc:
                 flag |= IN_MAPPED;
@@ -464,43 +464,43 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0xd:
             case 0xe:
             case 0xf:
-                fillMapped(array, fromIndex, toIndex, flag);
+                fillMapped(array, startIndex, endIndex, flag);
                 break;
             default:
                 throw new IllegalStateException();
         }
     }
 
-    private void fillGray(@NotNull int[] array, int fromIndex, int toIndex) {
+    private void fillGray(@NotNull int[] array, int startIndex, int endIndex) {
         int value = super.nextInt();
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = ((value >> 1) ^ value); // binary to gray
             value++;
         }
     }
 
-    private void fillLinear(@NotNull int[] array, int fromIndex, int toIndex) {
+    private void fillLinear(@NotNull int[] array, int startIndex, int endIndex) {
         int value = nextInt();
         final int addend = nextInt();
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = value;
             value += addend;
         }
     }
 
-    private void fillGeometric(@NotNull int[] array, int fromIndex, int toIndex) {
+    private void fillGeometric(@NotNull int[] array, int startIndex, int endIndex) {
         int value = nextInt();
         final int multiplier = nextInt() | 0x1;
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = value;
             value *= multiplier;
         }
     }
 
-    private void fillSegmented(@NotNull int[] array, int fromIndex, int toIndex, int flag) {
-        final int length = toIndex - fromIndex;
+    private void fillSegmented(@NotNull int[] array, int startIndex, int endIndex, int flag) {
+        final int length = endIndex - startIndex;
         if (length < 3 || (flag & IN_SEGMENT) != 0) {
-            for (int index = fromIndex; index < toIndex; index++) {
+            for (int index = startIndex; index < endIndex; index++) {
                 array[index] = super.nextInt(); // fillUniform
             }
             return;
@@ -513,46 +513,46 @@ public class FuzzyContext extends FreeFloatingPointContext {
         for (int segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++) {
             int index1 = segments[segmentIndex];
             if (index0 < index1) {
-                fillIntArray(array, fromIndex + index0, fromIndex + index1, flag | IN_SEGMENT);
+                fillIntArray(array, startIndex + index0, startIndex + index1, flag | IN_SEGMENT);
             }
             index0 = index1;
         }
         assert index0 == length;
     }
 
-    private void fillPeriodic(@NotNull int[] array, int fromIndex, int toIndex, int flag) {
-        final int length = toIndex - fromIndex;
+    private void fillPeriodic(@NotNull int[] array, int startIndex, int endIndex, int flag) {
+        final int length = endIndex - startIndex;
         if (length < 3 || (flag & IN_PERIODIC) != 0) {
-            for (int index = fromIndex; index < toIndex; index++) {
+            for (int index = startIndex; index < endIndex; index++) {
                 array[index] = nextInt(); // fillEach
             }
             return;
         }
         final int period = nextInt(2, length);
-        int midIndex = fromIndex + period;
-        fillIntArray(array, fromIndex, midIndex, flag | IN_PERIODIC);
-        final int copyIndex = fromIndex + period;
+        int midIndex = startIndex + period;
+        fillIntArray(array, startIndex, midIndex, flag | IN_PERIODIC);
+        final int copyIndex = startIndex + period;
         for (int index0 = 0; index0 < period; index0++) {
-            int value = array[fromIndex + index0];
-            for (int index1 = copyIndex + index0; index1 < toIndex; index1 += period) {
+            int value = array[startIndex + index0];
+            for (int index1 = copyIndex + index0; index1 < endIndex; index1 += period) {
                 array[index1] = value;
             }
         }
     }
 
-    private void fillMapped(@NotNull int[] array, int fromIndex, int toIndex, int flag) {
-        final int length = toIndex - fromIndex;
+    private void fillMapped(@NotNull int[] array, int startIndex, int endIndex, int flag) {
+        final int length = endIndex - startIndex;
         final int shift = nextInt(10) + 1;
         final int mapSize = 1 << shift;
         if (length <= mapSize || (flag & IN_MAPPED) != 0) {
-            Arrays.fill(array, fromIndex, toIndex, nextInt()); // fillSame
+            Arrays.fill(array, startIndex, endIndex, nextInt()); // fillSame
             return;
         }
         final int[] map = new int[mapSize];
         fillIntArray(map, 0, mapSize, IN_MAPPED);
-        fillIntArray(array, fromIndex, toIndex, flag | IN_MAPPED);
+        fillIntArray(array, startIndex, endIndex, flag | IN_MAPPED);
         final int mask = mapSize - 1;
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = map[mask & array[index]];
         }
     }
@@ -579,7 +579,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
 
     private long specialLong() {
         final long value = SPECIAL_LONG[nextInt(SPECIAL_LONG.length)];
-        switch (source.next(4)) { // from 0x0 to 0xf
+        switch ((int) source.next(4)) { // from 0x0 to 0xf
             case 0x0:
             case 0x1:
             case 0x2:
@@ -590,7 +590,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0x5:
                 return Long.reverse(Long.reverseBytes(value));
             case 0x6:
-                return Long.rotateLeft(value, source.next(6));
+                return Long.rotateLeft(value, (int) source.next(6));
             default: // 9 values
                 return value;
         }
@@ -598,7 +598,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
 
     @Override
     public long nextLong() {
-        switch (source.next(5)) { // from 0x00 to 0x1f
+        switch ((int) source.next(5)) { // from 0x00 to 0x1f
             case 0x00:
             case 0x01:
             case 0x02:
@@ -669,21 +669,21 @@ public class FuzzyContext extends FreeFloatingPointContext {
         return array;
     }
 
-    public void fillLongArray(@NotNull long[] array, @Index(of = "array") int fromIndex, @Index(of = "array", inclusive = false) int toIndex) {
-        fillLongArray(array, fromIndex, toIndex, 0);
+    public void fillLongArray(@NotNull long[] array, @Index(of = "array") int startIndex, @Index(of = "array", inclusive = false) int endIndex) {
+        fillLongArray(array, startIndex, endIndex, 0);
     }
 
-    private void fillLongArray(@NotNull long[] array, int fromIndex, int toIndex, int flag) {
-        switch (source.next(4)) { // from 0x0 to 0xf
+    private void fillLongArray(@NotNull long[] array, int startIndex, int endIndex, int flag) {
+        switch ((int) source.next(4)) { // from 0x0 to 0xf
             case 0x0:
-                fillGray(array, fromIndex, toIndex);
+                fillGray(array, startIndex, endIndex);
                 break;
             case 0x1:
             case 0x2:
-                fillLinear(array, fromIndex, toIndex);
+                fillLinear(array, startIndex, endIndex);
                 break;
             case 0x3:
-                fillGeometric(array, fromIndex, toIndex);
+                fillGeometric(array, startIndex, endIndex);
                 break;
             case 0x4:
                 flag |= IN_SEGMENT;
@@ -691,7 +691,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0x5:
             case 0x6:
             case 0x7:
-                fillSegmented(array, fromIndex, toIndex, flag);
+                fillSegmented(array, startIndex, endIndex, flag);
                 break;
             case 0x8:
                 flag |= IN_PERIODIC;
@@ -699,7 +699,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0x9:
             case 0xa:
             case 0xb:
-                fillPeriodic(array, fromIndex, toIndex, flag);
+                fillPeriodic(array, startIndex, endIndex, flag);
                 break;
             case 0xc:
                 flag |= IN_MAPPED;
@@ -707,43 +707,43 @@ public class FuzzyContext extends FreeFloatingPointContext {
             case 0xd:
             case 0xe:
             case 0xf:
-                fillMapped(array, fromIndex, toIndex, flag);
+                fillMapped(array, startIndex, endIndex, flag);
                 break;
             default:
                 throw new IllegalStateException();
         }
     }
 
-    private void fillGray(@NotNull long[] array, int fromIndex, int toIndex) {
+    private void fillGray(@NotNull long[] array, int startIndex, int endIndex) {
         long value = super.nextLong();
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = ((value >> 1) ^ value); // binary to gray
             value++;
         }
     }
 
-    private void fillLinear(@NotNull long[] array, int fromIndex, int toIndex) {
+    private void fillLinear(@NotNull long[] array, int startIndex, int endIndex) {
         long value = nextLong();
         final long addend = nextLong();
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = value;
             value += addend;
         }
     }
 
-    private void fillGeometric(@NotNull long[] array, int fromIndex, int toIndex) {
+    private void fillGeometric(@NotNull long[] array, int startIndex, int endIndex) {
         long value = nextInt();
         final long multiplier = nextLong() | 0x1L;
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = value;
             value *= multiplier;
         }
     }
 
-    private void fillSegmented(@NotNull long[] array, int fromIndex, int toIndex, int flag) {
-        final int length = toIndex - fromIndex;
+    private void fillSegmented(@NotNull long[] array, int startIndex, int endIndex, int flag) {
+        final int length = endIndex - startIndex;
         if (length < 3 || (flag & IN_SEGMENT) != 0) {
-            for (int index = fromIndex; index < toIndex; index++) {
+            for (int index = startIndex; index < endIndex; index++) {
                 array[index] = super.nextLong(); // fillUniform
             }
             return;
@@ -756,46 +756,46 @@ public class FuzzyContext extends FreeFloatingPointContext {
         for (int segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++) {
             int index1 = segments[segmentIndex];
             if (index0 < index1) {
-                fillLongArray(array, fromIndex + index0, fromIndex + index1, flag | IN_SEGMENT);
+                fillLongArray(array, startIndex + index0, startIndex + index1, flag | IN_SEGMENT);
             }
             index0 = index1;
         }
         assert index0 == length;
     }
 
-    private void fillPeriodic(@NotNull long[] array, int fromIndex, int toIndex, int flag) {
-        final int length = toIndex - fromIndex;
+    private void fillPeriodic(@NotNull long[] array, int startIndex, int endIndex, int flag) {
+        final int length = endIndex - startIndex;
         if (length < 3 || (flag & IN_PERIODIC) != 0) {
-            for (int index = fromIndex; index < toIndex; index++) {
+            for (int index = startIndex; index < endIndex; index++) {
                 array[index] = nextLong(); // fillEach
             }
             return;
         }
         final int period = nextInt(2, length);
-        int midIndex = fromIndex + period;
-        fillLongArray(array, fromIndex, midIndex, flag | IN_PERIODIC);
-        final int copyIndex = fromIndex + period;
+        int midIndex = startIndex + period;
+        fillLongArray(array, startIndex, midIndex, flag | IN_PERIODIC);
+        final int copyIndex = startIndex + period;
         for (int index0 = 0; index0 < period; index0++) {
-            long value = array[fromIndex + index0];
-            for (int index1 = copyIndex + index0; index1 < toIndex; index1 += period) {
+            long value = array[startIndex + index0];
+            for (int index1 = copyIndex + index0; index1 < endIndex; index1 += period) {
                 array[index1] = value;
             }
         }
     }
 
-    private void fillMapped(@NotNull long[] array, int fromIndex, int toIndex, int flag) {
-        final int length = toIndex - fromIndex;
+    private void fillMapped(@NotNull long[] array, int startIndex, int endIndex, int flag) {
+        final int length = endIndex - startIndex;
         final int shift = nextInt(11) + 1;
         final int mapSize = 1 << shift;
         if (length <= mapSize || (flag & IN_MAPPED) != 0) {
-            Arrays.fill(array, fromIndex, toIndex, nextLong()); // fillSame
+            Arrays.fill(array, startIndex, endIndex, nextLong()); // fillSame
             return;
         }
         final long[] map = new long[mapSize];
         fillLongArray(map, 0, mapSize, IN_MAPPED);
-        fillLongArray(array, fromIndex, toIndex, flag | IN_MAPPED);
+        fillLongArray(array, startIndex, endIndex, flag | IN_MAPPED);
         final int mask = mapSize - 1;
-        for (int index = fromIndex; index < toIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             array[index] = map[mask & (int) array[index]];
         }
     }
@@ -823,7 +823,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
 
     @Override
     protected long nextFloatBits() {
-        switch (source.next(2)) { // from 0x0 to 0x3
+        switch ((int) source.next(2)) { // from 0x0 to 0x3
             case 0x0:
                 return nextIEEE754(8, 23, flags);
             case 0x1:
@@ -839,7 +839,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
 
     @Override
     protected long nextDoubleBits() {
-        switch (source.next(2)) { // from 0x0 to 0x3
+        switch ((int) source.next(2)) { // from 0x0 to 0x3
             case 0x0:
                 return nextIEEE754(11, 52, flags);
             case 0x1:

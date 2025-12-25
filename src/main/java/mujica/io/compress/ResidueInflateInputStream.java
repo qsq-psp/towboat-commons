@@ -64,9 +64,9 @@ public abstract class ResidueInflateInputStream extends AbstractInflateInputStre
     };
 
     @NotNull
-    protected final LookBackMemory runBuffer;
+    protected final RunBuffer runBuffer;
 
-    protected ResidueInflateInputStream(@NotNull InputStream in, @NotNull LookBackMemory runBuffer) {
+    protected ResidueInflateInputStream(@NotNull InputStream in, @NotNull RunBuffer runBuffer) {
         super(in);
         this.runBuffer = runBuffer;
     }
@@ -124,7 +124,7 @@ public abstract class ResidueInflateInputStream extends AbstractInflateInputStre
         return bit;
     }
 
-    protected int readBitsAhead(int bitCount) throws IOException {
+    protected int getBits(int bitCount) throws IOException {
         assert bitCount <= Integer.SIZE - Byte.SIZE;
         while (bitSize < bitCount) {
             int value = in.read();
@@ -138,7 +138,7 @@ public abstract class ResidueInflateInputStream extends AbstractInflateInputStre
     }
 
     protected int readBits(int bitCount) throws IOException {
-        final int value = readBitsAhead(bitCount);
+        final int value = getBits(bitCount);
         bitSize -= bitCount;
         buffer >>>= bitCount;
         return value;

@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 @ReferencePage(title = "JVMS12 The CONSTANT_Integer_info and CONSTANT_Float_info Structures", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.4")
 class IntegerConstantInfo extends ConstantInfo {
 
-    private static final long serialVersionUID = 0x68F480567150BA16L;
+    private static final long serialVersionUID = 0x68f480567150ba16L;
 
     int value;
 
@@ -22,9 +22,11 @@ class IntegerConstantInfo extends ConstantInfo {
         super();
     }
 
+    public static final int TAG = 3;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_INTEGER;
+        return TAG;
     }
 
     protected int section() {

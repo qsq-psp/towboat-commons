@@ -7,5 +7,7 @@ import mujica.reflect.modifier.CodeHistory;
 @CodeHistory(date = "2022/1/3", project = "infrastructure")
 @CodeHistory(date = "2022/7/12", project = "Ultramarine")
 @CodeHistory(date = "2025/10/28")
-public class JsonParser { // no longer implements JsonConsumer, but via an inner class
+public class JsonParser { // no longer implements JsonConsumer
+
+    final JsonParserStack stack = new JsonParserStack();
 }

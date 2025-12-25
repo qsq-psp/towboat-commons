@@ -5,8 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-@CodeHistory(date = "2025/3/1")
-public class ReverseEndian extends VectorExchangeModifier {
+@CodeHistory(date = "2025/3/1", name = "ReverseEndian")
+public class ReverseEndian extends VectorExchangeModifier { // ReverseModifier
 
     public ReverseEndian(@NotNull DimensionCodec codec) {
         super(codec);
@@ -25,8 +25,8 @@ public class ReverseEndian extends VectorExchangeModifier {
     }
 
     @Override
-    public void decode2(long code, @NotNull int[] out) {
-        codec.decode2(code, out);
+    public void decode2(long in, @NotNull int[] out) {
+        codec.decode2(in, out);
         reverse2(out);
     }
 
@@ -49,8 +49,8 @@ public class ReverseEndian extends VectorExchangeModifier {
     }
 
     @Override
-    public void decode4(int code, @NotNull byte[] out) {
-        codec.decode4(code, out);
+    public void decode4(int in, @NotNull byte[] out) {
+        codec.decode4(in, out);
         reverse(out, 4);
     }
 
@@ -61,8 +61,8 @@ public class ReverseEndian extends VectorExchangeModifier {
     }
 
     @Override
-    public void decode8(long code, @NotNull byte[] out) {
-        codec.decode8(code, out);
+    public void decode8(long in, @NotNull byte[] out) {
+        codec.decode8(in, out);
         reverse(out, 8);
     }
 
@@ -86,8 +86,8 @@ public class ReverseEndian extends VectorExchangeModifier {
     }
 
     @Override
-    public void decodeN(@NotNull BigInteger code, @NotNull BigInteger[] out) {
-        codec.decodeN(code, out);
+    public void decodeN(@NotNull BigInteger in, @NotNull BigInteger[] out) {
+        codec.decodeN(in, out);
         reverse(out);
     }
 }

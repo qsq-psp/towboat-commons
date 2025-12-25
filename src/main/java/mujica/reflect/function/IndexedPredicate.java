@@ -3,9 +3,6 @@ package mujica.reflect.function;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 
-/**
- * Created on 2025/3/9.
- */
 @CodeHistory(date = "2025/3/9")
 @FunctionalInterface
 public interface IndexedPredicate<C, T> {

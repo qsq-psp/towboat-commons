@@ -10,7 +10,7 @@ import java.io.Serializable;
 @CodeHistory(date = "2025/3/27")
 class SimpleIntMapEntry implements IntMapEntry, Serializable {
 
-    private static final long serialVersionUID = 0xF306C658F3EC17B5L;
+    private static final long serialVersionUID = 0xf306c658f3ec17b5L;
 
     int key, value;
 

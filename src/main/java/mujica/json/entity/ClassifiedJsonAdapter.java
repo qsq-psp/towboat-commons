@@ -4,9 +4,6 @@ import mujica.reflect.modifier.CodeHistory;
 import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/11/7.
- */
 @CodeHistory(date = "2025/11/7")
 public abstract class ClassifiedJsonAdapter implements ClassifiedJsonConsumer {
 

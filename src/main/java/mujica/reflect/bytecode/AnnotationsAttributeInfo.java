@@ -2,7 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.InterpretAsByte;
+import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
@@ -13,12 +13,12 @@ import java.util.function.IntUnaryOperator;
 @CodeHistory(date = "2025/11/1")
 abstract class AnnotationsAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0x311F63EC02F4B228L;
+    private static final long serialVersionUID = 0x311f63ec02f4b228L;
 
     @CodeHistory(date = "2025/9/17")
     static abstract class ElementValue implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0x3B7FF66278629B3CL;
+        private static final long serialVersionUID = 0x3b7ff66278629b3cL;
 
         @NotNull
         static ElementValue createByTag(int tag) {
@@ -59,7 +59,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
             return elementValue;
         }
 
-        @InterpretAsByte(unsigned = true)
+        @DataType("u8")
         final int tag;
 
         ElementValue(int tag) {
@@ -112,15 +112,15 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/21")
     static class SimpleElementValue extends ElementValue {
 
-        private static final long serialVersionUID = 0xB16DD2DFB858DC40L;
+        private static final long serialVersionUID = 0xb16dd2dfb858dc40L;
 
         @ConstantType(tags = {
-                ConstantPool.CONSTANT_UTF8,
-                ConstantPool.CONSTANT_INTEGER,
-                ConstantPool.CONSTANT_FLOAT,
-                ConstantPool.CONSTANT_LONG,
-                ConstantPool.CONSTANT_DOUBLE,
-                ConstantPool.CONSTANT_CLASS
+                Utf8ConstantInfo.TAG,
+                IntegerConstantInfo.TAG,
+                FloatConstantInfo.TAG,
+                LongConstantInfo.TAG,
+                DoubleConstantInfo.TAG,
+                ClassConstantInfo.TAG
         }) // simple value
                 int constantPoolIndex;
 
@@ -170,12 +170,12 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/21")
     static class EnumElementValue extends ElementValue {
 
-        private static final long serialVersionUID = 0xC5B49118935F6241L;
+        private static final long serialVersionUID = 0xc5b49118935f6241L;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        @ConstantType(tags = Utf8ConstantInfo.TAG)
         int typeNameIndex;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        @ConstantType(tags = Utf8ConstantInfo.TAG)
         int constantNameIndex;
 
         EnumElementValue(int tag) {
@@ -229,7 +229,7 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/19")
     static class AnnotationElementValue extends ElementValue {
 
-        private static final long serialVersionUID = 0x33189945B5EA768CL;
+        private static final long serialVersionUID = 0x33189945b5ea768cL;
 
         @NotNull
         final Annotation annotation = new Annotation();
@@ -373,9 +373,9 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/19")
     static class ElementEntry implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0x1E564E6845872B5EL;
+        private static final long serialVersionUID = 0x1e564e6845872b5eL;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        @ConstantType(tags = Utf8ConstantInfo.TAG)
         int nameIndex;
 
         ElementValue elementValue;
@@ -462,9 +462,10 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/9/17")
     static class Annotation implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0xAC7A9BE7CCFA7B8FL;
+        private static final long serialVersionUID = 0xac7a9be7ccfa7b8fL;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        @ConstantType(tags = Utf8ConstantInfo.TAG)
+        @DataType("u16-{0}")
         private int typeIndex;
 
         private ElementEntry[] entries;
@@ -569,162 +570,6 @@ abstract class AnnotationsAttributeInfo extends AttributeInfo {
             for (ElementEntry elementEntry : entries) {
                 elementEntry.remapConstant(remap);
             }
-        }
-    }
-
-    @CodeHistory(date = "2025/11/3")
-    static class ParameterAnnotation implements ClassFileNode.Independent {
-
-        Annotation[] annotations;
-
-        @Override
-        public int groupCount() {
-            return 1;
-        }
-
-        @NotNull
-        @Override
-        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
-            if (groupIndex == 0) {
-                return Annotation.class;
-            } else {
-                throw new IndexOutOfBoundsException();
-            }
-        }
-
-        @Override
-        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
-            if (group == Annotation.class) {
-                return annotations.length;
-            } else {
-                return 0;
-            }
-        }
-
-        @NotNull
-        @Override
-        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
-            if (group == Annotation.class) {
-                return annotations[nodeIndex];
-            } else {
-                throw new IndexOutOfBoundsException();
-            }
-        }
-
-        int byteSize() {
-            int size = 2;
-            for (Annotation annotation : annotations) {
-                size += annotation.byteSize();
-            }
-            return size;
-        }
-
-        @Override
-        public void read(@NotNull LimitedDataInput in) throws IOException {
-            final int length = in.readUnsignedShort();
-            annotations = new Annotation[length];
-            for (int index = 0; index < length; index++) {
-                Annotation annotation = new Annotation();
-                annotation.read(in);
-                annotations[index] = annotation;
-            }
-        }
-
-        @Override
-        public void read(@NotNull ByteBuffer buffer) {
-            final int length = 0xffff & buffer.getShort();
-            annotations = new Annotation[length];
-            for (int index = 0; index < length; index++) {
-                Annotation annotation = new Annotation();
-                annotation.read(buffer);
-                annotations[index] = annotation;
-            }
-        }
-
-        @Override
-        public void write(@NotNull DataOutput out) throws IOException {
-            out.writeShort(annotations.length);
-            for (Annotation annotation : annotations) {
-                annotation.write(out);
-            }
-        }
-
-        @Override
-        public void write(@NotNull ByteBuffer buffer) {
-            buffer.putShort((short) annotations.length);
-            for (Annotation annotation : annotations) {
-                annotation.write(buffer);
-            }
-        }
-
-        @NotNull
-        @Override
-        public String toString(@NotNull ClassFile context) {
-            return "";
-        }
-
-        @Override
-        public void remapConstant(@NotNull IntUnaryOperator remap) {
-            for (Annotation annotation : annotations) {
-                annotation.remapConstant(remap);
-            }
-        }
-    }
-
-    @CodeHistory(date = "2025/11/3")
-    static class TypeAnnotation implements ClassFileNode.Independent {
-
-        @Override
-        public int groupCount() {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public Class<? extends ClassFileNode> getGroup(int groupIndex) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        @Override
-        public int nodeCount(@NotNull Class<? extends ClassFileNode> group) {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public ClassFileNode getNode(@NotNull Class<? extends ClassFileNode> group, int nodeIndex) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        @Override
-        public void read(@NotNull LimitedDataInput in) throws IOException {
-
-        }
-
-        @Override
-        public void read(@NotNull ByteBuffer buffer) {
-
-        }
-
-        @Override
-        public void write(@NotNull DataOutput out) throws IOException {
-
-        }
-
-        @Override
-        public void write(@NotNull ByteBuffer buffer) {
-
-        }
-
-        @NotNull
-        @Override
-        public String toString(@NotNull ClassFile context) {
-            return "";
-        }
-
-        @Override
-        public void remapConstant(@NotNull IntUnaryOperator remap) {
-
         }
     }
 

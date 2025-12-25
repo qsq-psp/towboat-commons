@@ -13,22 +13,22 @@ import java.util.function.IntUnaryOperator;
 
 @CodeHistory(date = "2025/9/15")
 @ReferencePage(title = "JVMS12 The InnerClasses Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.6")
-public class InnerClassesAttributeInfo extends AttributeInfo {
+class InnerClassesAttributeInfo extends AttributeInfo {
 
-    private static final long serialVersionUID = 0xBA27CD966BC157F7L;
+    private static final long serialVersionUID = 0xba27cd966bc157f7L;
 
     @CodeHistory(date = "2025/9/15")
     private static class InnerClassEntry extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0xAB333D9BE3F93997L;
+        private static final long serialVersionUID = 0xab333d9be3f93997L;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+        @ConstantType(tags = ClassConstantInfo.TAG)
         int innerClassIndex;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_CLASS)
+        @ConstantType(tags = ClassConstantInfo.TAG)
         int outerClassIndex;
 
-        @ConstantType(tags = ConstantPool.CONSTANT_UTF8)
+        @ConstantType(tags = Utf8ConstantInfo.TAG)
         int innerNameIndex;
 
         int innerAccessFlags;

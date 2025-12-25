@@ -5,8 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-@CodeHistory(date = "2025/3/1")
-public class SignedCode extends DimensionCodecModifier {
+@CodeHistory(date = "2025/3/1", name = "SignedCode")
+public class SignedCode extends DimensionCodecModifier { // SignedCodeModifier
 
     public SignedCode(@NotNull DimensionCodec codec) {
         super(codec);
@@ -26,8 +26,8 @@ public class SignedCode extends DimensionCodecModifier {
     }
 
     @Override
-    public void decode2(long code, @NotNull int[] out) {
-        codec.decode2(BitInterleave.signedToUnsigned(code), out);
+    public void decode2(long in, @NotNull int[] out) {
+        codec.decode2(BitInterleave.signedToUnsigned(in), out);
     }
 
     @Override
@@ -36,8 +36,8 @@ public class SignedCode extends DimensionCodecModifier {
     }
 
     @Override
-    public void decode4(int code, @NotNull byte[] out) {
-        codec.decode4(BitInterleave.signedToUnsigned(code), out);
+    public void decode4(int in, @NotNull byte[] out) {
+        codec.decode4(BitInterleave.signedToUnsigned(in), out);
     }
 
     @Override
@@ -46,8 +46,8 @@ public class SignedCode extends DimensionCodecModifier {
     }
 
     @Override
-    public void decode8(long code, @NotNull byte[] out) {
-        codec.decode8(BitInterleave.signedToUnsigned(code), out);
+    public void decode8(long in, @NotNull byte[] out) {
+        codec.decode8(BitInterleave.signedToUnsigned(in), out);
     }
 
     @NotNull
@@ -57,7 +57,7 @@ public class SignedCode extends DimensionCodecModifier {
     }
 
     @Override
-    public void decodeN(@NotNull BigInteger code, @NotNull BigInteger[] out) {
-        codec.decodeN(BitInterleave.signedToUnsigned(code), out);
+    public void decodeN(@NotNull BigInteger in, @NotNull BigInteger[] out) {
+        codec.decodeN(BitInterleave.signedToUnsigned(in), out);
     }
 }
