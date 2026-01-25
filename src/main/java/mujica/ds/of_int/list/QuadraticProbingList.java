@@ -1,5 +1,6 @@
 package mujica.ds.of_int.list;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.util.PrimitiveIterator;
 /**
  * Created on 2025/6/30.
  */
+@CodeHistory(date = "2025/6/30")
 public class QuadraticProbingList extends AbstractIntList {
 
     private static final long serialVersionUID = 0x441a2613c30e8e18L;
@@ -17,7 +19,7 @@ public class QuadraticProbingList extends AbstractIntList {
 
     private int modulo;
 
-    private int hash;
+    private int base;
 
     private class ReusableIterator implements PrimitiveIterator.OfInt {
 
@@ -72,7 +74,7 @@ public class QuadraticProbingList extends AbstractIntList {
     @NotNull
     @Override
     public QuadraticProbingList duplicate() {
-        return (new QuadraticProbingList(modulo)).setHash(hash);
+        return (new QuadraticProbingList(modulo)).setBase(base);
     }
 
     public void setModulo(int modulo) {
@@ -81,8 +83,8 @@ public class QuadraticProbingList extends AbstractIntList {
     }
 
     @NotNull
-    public QuadraticProbingList setHash(int hash) {
-        this.hash = (hash & Integer.MAX_VALUE) % modulo;
+    public QuadraticProbingList setBase(int base) {
+        this.base = (base & Integer.MAX_VALUE) % modulo;
         return this;
     }
 
@@ -95,14 +97,14 @@ public class QuadraticProbingList extends AbstractIntList {
     public int getInt(int i) {
         if ((i & 1) == 0) {
             i >>= 1; // [0, 1, 2, 3, 4, ...] -> [0, _, 1, _, 2, ...]
-            i = (hash - i * i) % modulo;
+            i = (base - i * i) % modulo;
             if (i < 0) {
                 i += modulo;
             }
             return i;
         } else {
             i = (i + 1) >> 1; // [0, 1, 2, 3, 4, ...] -> [_, 1, _, 2, _, ...]
-            return (hash + i * i) % modulo;
+            return (base + i * i) % modulo;
         }
     }
 
@@ -115,6 +117,6 @@ public class QuadraticProbingList extends AbstractIntList {
     @NotNull
     @Override
     public String summaryToString() {
-        return "<modulo = " + modulo + ", hash = " + hash + ">";
+        return "<modulo = " + modulo + ", hash = " + base + ">";
     }
 }

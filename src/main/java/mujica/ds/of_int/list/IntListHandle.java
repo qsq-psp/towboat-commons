@@ -53,7 +53,7 @@ public class IntListHandle implements Slot<int[]>, Serializable {
 
         @NotNull
         @Override
-        public int[] toArray() {
+        public int[] toIntArray() {
             return array.clone();
         }
 

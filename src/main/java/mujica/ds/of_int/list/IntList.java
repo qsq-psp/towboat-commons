@@ -1,15 +1,12 @@
 package mujica.ds.of_int.list;
 
 import mujica.ds.of_int.IntCollection;
-import mujica.reflect.function.IntEntryConsumer;
-import mujica.reflect.function.IntEntryPredicate;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.ListIterator;
-import java.util.PrimitiveIterator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
@@ -59,7 +56,7 @@ public interface IntList extends IntCollection, IntSequence {
     ListIterator<Integer> listIterator(int i);
 
     @NotNull
-    int[] toArray();
+    int[] toIntArray();
 
     void getAll(@NotNull int[] dst, int dstOffset);
 
@@ -88,7 +85,7 @@ public interface IntList extends IntCollection, IntSequence {
 
     int removeLast();
 
-    void removeRange(@Index(of = "this") int fi, @Index(of = "this", inclusive = false) int ti);
+    void removeRange(@Index(of = "this") int startIndex, @Index(of = "this", inclusive = false) int endIndex);
 
     void removeIf(@NotNull IntPredicate filter);
 

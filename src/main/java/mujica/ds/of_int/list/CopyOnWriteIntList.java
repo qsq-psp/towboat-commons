@@ -45,7 +45,7 @@ public class CopyOnWriteIntList extends AbstractIntList {
 
     @NotNull
     @Override
-    public int[] toArray() {
+    public int[] toIntArray() {
         return array.clone();
     }
 
@@ -126,17 +126,17 @@ public class CopyOnWriteIntList extends AbstractIntList {
     }
 
     @Override
-    public void removeRange(int fi, int ti) {
+    public void removeRange(int startIndex, int endIndex) {
         final int oldLength = array.length;
-        if (!(0 <= fi && fi <= ti && ti <= oldLength)) {
+        if (!(0 <= startIndex && startIndex <= endIndex && endIndex <= oldLength)) {
             throw new IndexOutOfBoundsException();
         }
-        if (fi == ti) {
+        if (startIndex == endIndex) {
             return;
         }
-        final int[] newArray = new int[oldLength + fi - ti];
-        System.arraycopy(array, 0, newArray, 0, fi);
-        System.arraycopy(array, ti, newArray, fi, oldLength - ti);
+        final int[] newArray = new int[oldLength + startIndex - endIndex];
+        System.arraycopy(array, 0, newArray, 0, startIndex);
+        System.arraycopy(array, endIndex, newArray, startIndex, oldLength - endIndex);
         array = newArray;
     }
 

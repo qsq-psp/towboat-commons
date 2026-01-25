@@ -1,7 +1,7 @@
 package mujica.ds.of_int.map;
 
 import mujica.ds.of_int.PublicIntSlot;
-import mujica.reflect.function.IntEntryConsumer;
+import mujica.ds.of_int.list.IntEntryConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -170,11 +170,11 @@ public class CompatibleIntSlotMap extends IterableIntMap {
 
     @NotNull
     @Override
-    public Iterator<IntMapEntry> iterator() {
+    public Iterator<Entry> iterator() {
         return new CompatibleIntSlotIterator();
     }
 
-    private class CompatibleIntSlotIterator implements Iterator<IntMapEntry> {
+    private class CompatibleIntSlotIterator implements Iterator<Entry> {
 
         @NotNull
         final Iterator<Map.Entry<Integer, PublicIntSlot>> iterator = map.entrySet().iterator();
@@ -188,7 +188,7 @@ public class CompatibleIntSlotMap extends IterableIntMap {
         }
 
         @Override
-        public IntMapEntry next() {
+        public Entry next() {
             final Map.Entry<Integer, PublicIntSlot> entry0 = iterator.next();
             entry1.key = entry0.getKey();
             entry1.value = entry0.getValue().value;

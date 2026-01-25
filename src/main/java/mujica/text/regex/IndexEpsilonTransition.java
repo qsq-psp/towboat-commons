@@ -3,9 +3,7 @@ package mujica.text.regex;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/12/16.
- */
+@CodeHistory(date = "2022/3/28", project = "infrastructure")
 @CodeHistory(date = "2025/12/16")
 public class IndexEpsilonTransition extends EpsilonTransition {
 
@@ -19,6 +17,16 @@ public class IndexEpsilonTransition extends EpsilonTransition {
     public IndexEpsilonTransition(int s0, int s1, int index) {
         super(s0, s1);
         this.index = index;
+    }
+
+    @NotNull
+    public IndexEpsilonTransition duplicate() {
+        return new IndexEpsilonTransition(s0, s1, index);
+    }
+
+    @NotNull
+    public IndexEpsilonTransition reverse() {
+        return new IndexEpsilonTransition(s1, s0, ~index);
     }
 
     @Override

@@ -4,13 +4,14 @@ import mujica.ds.generic.Slot;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 @CodeHistory(date = "2025/9/25")
-public interface JsonContainer<K> {
+public interface JsonContainer<K> extends Serializable {
 
     @NotNull
-    Collection<K> keys();
+    Collection<K> keyCollection();
 
     @NotNull
     Slot<Object> getSlot(@NotNull K key);

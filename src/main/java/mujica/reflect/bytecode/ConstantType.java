@@ -24,10 +24,10 @@ public @interface ConstantType {
             MemberReferenceConstantInfo.TAG_METHODREF,
             MemberReferenceConstantInfo.TAG_INTERFACEMETHODREF,
             NameAndTypeConstantInfo.TAG,
-            ConstantPool.CONSTANT_METHODHANDLE,
-            ConstantPool.CONSTANT_METHODTYPE,
-            ConstantPool.CONSTANT_DYNAMIC,
-            ConstantPool.CONSTANT_INVOKEDYNAMIC,
+            MethodHandleConstantInfo.TAG,
+            MethodTypeConstantInfo.TAG,
+            DynamicConstantInfo.TAG,
+            InvokeDynamicConstantInfo.TAG,
             ConstantPool.CONSTANT_MODULE,
             ConstantPool.CONSTANT_PACKAGE
     };

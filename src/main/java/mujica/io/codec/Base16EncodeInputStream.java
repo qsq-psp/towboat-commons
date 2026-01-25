@@ -1,6 +1,6 @@
 package mujica.io.codec;
 
-import mujica.math.algebra.discrete.ClampedMath;
+import mujica.algebra.discrete.ClampedMath;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import org.intellij.lang.annotations.MagicConstant;

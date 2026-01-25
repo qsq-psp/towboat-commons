@@ -1,8 +1,10 @@
 package mujica.ds.of_int.heap;
 
 import mujica.ds.InvariantException;
+import mujica.ds.of_int.list.ResizePolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -68,22 +70,20 @@ public class BinaryAscendingFromZero extends ArrayIntHeap {
         return buildHeapDown(array, array.length);
     }
 
-    public BinaryAscendingFromZero() {
-        super();
+    public BinaryAscendingFromZero(@Nullable ResizePolicy policy) {
+        super(policy);
     }
 
-    public BinaryAscendingFromZero(int initialCapacity) {
-        super(initialCapacity);
-    }
-
-    BinaryAscendingFromZero(@NotNull int[] array) {
-        super(array);
+    BinaryAscendingFromZero(@NotNull ResizePolicy policy, @NotNull int[] array) {
+        super(policy, array);
     }
 
     @NotNull
     @Override
     public BinaryAscendingFromZero duplicate() {
-        final BinaryAscendingFromZero that = new BinaryAscendingFromZero(Arrays.copyOf(array, endIndex));
+        final BinaryAscendingFromZero that = new BinaryAscendingFromZero(
+                policy, Arrays.copyOf(array, endIndex)
+        );
         that.endIndex = this.endIndex;
         return that;
     }

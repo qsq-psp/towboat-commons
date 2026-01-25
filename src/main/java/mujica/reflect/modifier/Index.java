@@ -2,10 +2,6 @@ package mujica.reflect.modifier;
 
 import java.lang.annotation.*;
 
-/**
- * Created in Ultramarine on 2024/5/1.
- * Moved here on 2025/3/3.
- */
 @CodeHistory(date = "2024/5/1", project = "Ultramarine")
 @CodeHistory(date = "2025/3/3")
 @Documented

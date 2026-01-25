@@ -6,6 +6,7 @@ import mujica.reflect.modifier.ConstantInterface;
 @ConstantInterface
 @CodeHistory(date = "2022/5/30", project = "Ultramarine")
 @CodeHistory(date = "2025/3/4")
+@Deprecated
 public interface EscapeValueStyle {
 
     int HEX_VALUE               = 0x01;

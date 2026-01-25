@@ -122,14 +122,14 @@ public class Median<E> extends AbstractCollection<E> implements DataStructure {
         }
     }
 
-    private class IteratorForTwo implements Iterator<E> {
+    private class IteratorImpl implements Iterator<E> {
 
         @NotNull
         private Iterator<E> it;
 
         private boolean isHigh;
 
-        IteratorForTwo() {
+        IteratorImpl() {
             super();
             it = low.iterator();
         }
@@ -153,7 +153,7 @@ public class Median<E> extends AbstractCollection<E> implements DataStructure {
     @Override
     @NotNull
     public Iterator<E> iterator() {
-        return new IteratorForTwo();
+        return new IteratorImpl();
     }
 
     @NotNull

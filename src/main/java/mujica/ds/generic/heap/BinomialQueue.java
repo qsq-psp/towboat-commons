@@ -177,7 +177,7 @@ public class BinomialQueue<E> extends AbstractPriorityQueue<E> {
         return list.get(index).element;
     }
 
-    class DefaultIterator implements Iterator<E> {
+    private class IteratorImpl implements Iterator<E> {
 
         private int index;
 
@@ -186,7 +186,7 @@ public class BinomialQueue<E> extends AbstractPriorityQueue<E> {
 
         final int expectedModCount = modCount;
 
-        DefaultIterator() {
+        IteratorImpl() {
             super();
             final int listSize = list.size();
             while (index < listSize) {
@@ -230,7 +230,7 @@ public class BinomialQueue<E> extends AbstractPriorityQueue<E> {
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new DefaultIterator();
+        return new IteratorImpl();
     }
 
     void unsafeForEach(@NotNull Consumer<? super E> action) {

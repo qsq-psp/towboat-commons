@@ -1,8 +1,9 @@
 package mujica.io.hash;
 
+import mujica.ds.of_byte.ByteSequence;
 import mujica.io.codec.Base16Case;
-import mujica.math.algebra.discrete.ClampedMath;
-import mujica.math.algebra.discrete.IntegralMath;
+import mujica.algebra.discrete.ClampedMath;
+import mujica.algebra.discrete.IntegralMath;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteOrder;

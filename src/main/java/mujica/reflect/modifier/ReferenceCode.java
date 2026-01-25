@@ -6,6 +6,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR})
+@Repeatable(ReferenceSources.class)
 public @interface ReferenceCode {
 
     String groupId();

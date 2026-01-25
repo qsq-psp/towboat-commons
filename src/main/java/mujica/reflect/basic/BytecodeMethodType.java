@@ -22,6 +22,13 @@ public class BytecodeMethodType implements NotLoadedMethodType<BytecodeFieldType
 
     @Override
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
+        final int length = string.length();
+        int index = 0;
+        if (index < length && string.charAt(index) == '(') {
+            index++;
+        } else {
+            consumer.accept(new RuntimeException("bracket not found"));
+        }
         //
     }
 

@@ -52,7 +52,7 @@ public class PublicIntList extends AbstractIntList {
 
     @NotNull
     @Override
-    public int[] toArray() {
+    public int[] toIntArray() {
         return array.clone();
     }
 

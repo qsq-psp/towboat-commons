@@ -56,4 +56,10 @@ public class CharsetNameValidator extends AbstractFormatValidator.IntervalForm {
         }
         return localize(locale, message);
     }
+
+    @Nullable
+    @Override
+    public String regularExpression() {
+        return "[A-Za-z0-9][A-Za-z0-9\\-+:_.]*";
+    }
 }

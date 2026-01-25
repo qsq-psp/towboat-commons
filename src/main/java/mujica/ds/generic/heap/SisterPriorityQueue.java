@@ -128,14 +128,14 @@ public abstract class SisterPriorityQueue<E> extends AbstractPriorityQueue<E> {
         size = 0;
     }
 
-    class DefaultIterator implements Iterator<E> {
+    private class IteratorImpl implements Iterator<E> {
 
         @Nullable
         SisterNode<E>.Frame frame;
 
         final int expectedModCount = modCount;
 
-        DefaultIterator() {
+        IteratorImpl() {
             super();
             if (root != null) {
                 frame = root.new Frame(null);
@@ -164,7 +164,7 @@ public abstract class SisterPriorityQueue<E> extends AbstractPriorityQueue<E> {
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new DefaultIterator();
+        return new IteratorImpl();
     }
 
     @Override

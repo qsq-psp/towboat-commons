@@ -13,8 +13,6 @@ import java.util.function.IntConsumer;
 @CodeHistory(date = "2025/5/30")
 public interface IntCollection extends DataStructure, Iterable<Integer> {
 
-    int INITIAL_CAPACITY = 8; // todo: remove it after using ResizePolicy
-
     @NotNull
     @Override
     IntCollection duplicate();
@@ -31,7 +29,7 @@ public interface IntCollection extends DataStructure, Iterable<Integer> {
     boolean contains(int t);
 
     @NotNull
-    int[] toArray();
+    int[] toIntArray();
 
     void forEach(@NotNull IntConsumer action);
 

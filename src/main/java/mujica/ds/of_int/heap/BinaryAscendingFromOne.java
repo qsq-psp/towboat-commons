@@ -1,8 +1,10 @@
 package mujica.ds.of_int.heap;
 
 import mujica.ds.InvariantException;
+import mujica.ds.of_int.list.ResizePolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -38,12 +40,12 @@ public class BinaryAscendingFromOne extends ArrayIntHeap {
         if (endIndex < 1) {
             throw new IllegalArgumentException();
         }
-        int capacity = heap.length;
+        final int capacity = heap.length;
         if (endIndex >= capacity) {
             if (endIndex > capacity) {
                 throw new IllegalArgumentException();
             }
-            heap = Arrays.copyOf(heap, Math.max(INITIAL_CAPACITY, Math.max(endIndex, capacity << 1)));
+            heap = Arrays.copyOf(heap, Math.max(2, capacity << 1));
         }
         unsafeAdd(heap, endIndex, value);
         return heap;
@@ -136,22 +138,20 @@ public class BinaryAscendingFromOne extends ArrayIntHeap {
         return value;
     }
 
-    public BinaryAscendingFromOne() {
-        super();
+    public BinaryAscendingFromOne(@Nullable ResizePolicy policy) {
+        super(policy);
     }
 
-    public BinaryAscendingFromOne(int initialCapacity) {
-        super(initialCapacity);
-    }
-
-    BinaryAscendingFromOne(@NotNull int[] array) {
-        super(array);
+    BinaryAscendingFromOne(@NotNull ResizePolicy policy, @NotNull int[] array) {
+        super(policy, array);
     }
 
     @NotNull
     @Override
     public BinaryAscendingFromOne duplicate() {
-        final BinaryAscendingFromOne that = new BinaryAscendingFromOne(Arrays.copyOf(array, endIndex));
+        final BinaryAscendingFromOne that = new BinaryAscendingFromOne(
+                policy, Arrays.copyOf(array, endIndex)
+        );
         that.endIndex = this.endIndex;
         return that;
     }

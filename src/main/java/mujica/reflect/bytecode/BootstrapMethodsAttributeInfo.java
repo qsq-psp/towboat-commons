@@ -32,9 +32,9 @@ class BootstrapMethodsAttributeInfo extends AttributeInfo {
                 LongConstantInfo.TAG,
                 DoubleConstantInfo.TAG,
                 StringConstantInfo.TAG,
-                ConstantPool.CONSTANT_METHODHANDLE,
-                ConstantPool.CONSTANT_METHODTYPE,
-                ConstantPool.CONSTANT_DYNAMIC
+                MethodHandleConstantInfo.TAG,
+                MethodTypeConstantInfo.TAG,
+                DynamicConstantInfo.TAG
         }) // loadable
         int[] argumentIndexes;
 

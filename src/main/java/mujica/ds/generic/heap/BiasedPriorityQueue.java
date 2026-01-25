@@ -129,13 +129,13 @@ public abstract class BiasedPriorityQueue<E> extends AbstractPriorityQueue<E> {
         size = 0;
     }
 
-    class DefaultIterator implements Iterator<E> {
+    private class IteratorImpl implements Iterator<E> {
 
         BiasedNode<E>.Frame current, previous;
 
         int expectedModCount = modCount;
 
-        DefaultIterator() {
+        IteratorImpl() {
             super();
             if (root != null) {
                 current = root.new Frame(null);
@@ -180,7 +180,7 @@ public abstract class BiasedPriorityQueue<E> extends AbstractPriorityQueue<E> {
     @Override
     @NotNull
     public Iterator<E> iterator() {
-        return new DefaultIterator();
+        return new IteratorImpl();
     }
 
     @Override

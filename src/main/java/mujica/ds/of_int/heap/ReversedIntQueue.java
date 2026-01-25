@@ -13,95 +13,95 @@ public class ReversedIntQueue implements OrderedIntQueue {
     private static final long serialVersionUID = 0xb5860fc94b2dd029L;
 
     @NotNull
-    private final OrderedIntQueue ordered;
+    private final OrderedIntQueue queue;
 
-    public ReversedIntQueue(@NotNull OrderedIntQueue ordered) {
+    public ReversedIntQueue(@NotNull OrderedIntQueue queue) {
         super();
-        this.ordered = ordered;
+        this.queue = queue;
     }
 
     @NotNull
     @Override
     public ReversedIntQueue duplicate() {
-        return new ReversedIntQueue(ordered.duplicate());
+        return new ReversedIntQueue(queue.duplicate());
     }
 
     @Override
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
-        ordered.checkHealth(consumer);
+        queue.checkHealth(consumer);
     }
 
     @Override
     public void checkHealth() throws RuntimeException {
-        ordered.checkHealth();
+        queue.checkHealth();
     }
 
     @Override
     public boolean isHealthy() {
-        return ordered.isHealthy();
+        return queue.isHealthy();
     }
 
     @Override
     public boolean isDescending() {
-        return !ordered.isDescending();
+        return !queue.isDescending();
     }
 
     @Override
     public int intLength() {
-        return ordered.intLength();
+        return queue.intLength();
     }
 
     @Override
     public boolean isEmpty() {
-        return ordered.isEmpty();
+        return queue.isEmpty();
     }
 
     @Override
     public boolean isFull() {
-        return ordered.isFull();
+        return queue.isFull();
     }
 
     @Override
     public void offer(int t) {
-        ordered.offer(~t);
+        queue.offer(~t);
     }
 
     @Override
     public int remove() {
-        return ~ordered.remove();
+        return ~queue.remove();
     }
 
     @Override
     public int poll(int fallback) {
-        return ~ordered.poll(~fallback);
+        return ~queue.poll(~fallback);
     }
 
     @Override
     public int element() {
-        return ~ordered.element();
+        return ~queue.element();
     }
 
     @Override
     public int peek(int fallback) {
-        return ~ordered.peek(~fallback);
+        return ~queue.peek(~fallback);
     }
 
     @Override
     public void clear() {
-        ordered.clear();
+        queue.clear();
     }
 
     @Override
     public boolean contains(int t) {
-        return ordered.contains(~t);
+        return queue.contains(~t);
     }
 
     @NotNull
     @Override
-    public int[] toArray() {
-        final int[] array = ordered.toArray();
-        final int length = array.length;
-        for (int i = 0; i < length; i++) {
+    public int[] toIntArray() {
+        final int[] array = queue.toIntArray();
+        final int n = array.length;
+        for (int i = 0; i < n; i++) {
             array[i] = ~array[i];
         }
         return array;
@@ -109,7 +109,7 @@ public class ReversedIntQueue implements OrderedIntQueue {
 
     @Override
     public void forEach(@NotNull IntConsumer action) {
-        ordered.forEach((IntConsumer) (t -> action.accept(~t)));
+        queue.forEach((IntConsumer) (t -> action.accept(~t)));
     }
 
     private static class BitwiseNotIterator implements Iterator<Integer> {
@@ -161,7 +161,7 @@ public class ReversedIntQueue implements OrderedIntQueue {
     @NotNull
     @Override
     public Iterator<Integer> iterator() {
-        final Iterator<Integer> it = ordered.iterator();
+        final Iterator<Integer> it = queue.iterator();
         if (it instanceof PrimitiveIterator.OfInt) {
             return new BitwiseNotPrimitiveIterator(((PrimitiveIterator.OfInt) it));
         } else {
@@ -172,7 +172,7 @@ public class ReversedIntQueue implements OrderedIntQueue {
     @NotNull
     @Override
     public Spliterator<Integer> spliterator() {
-        return Spliterators.spliterator(iterator(), ordered.intLength(), Spliterator.SIZED);
+        return Spliterators.spliterator(iterator(), queue.intLength(), Spliterator.SIZED);
     }
 
     @Override
@@ -187,8 +187,8 @@ public class ReversedIntQueue implements OrderedIntQueue {
         if (this.intLength() != that.intLength() || this.isDescending() != that.isDescending()) {
             return false;
         }
-        final int[] thisArray = this.toArray();
-        final int[] thatArray = that.toArray();
+        final int[] thisArray = this.toIntArray();
+        final int[] thatArray = that.toIntArray();
         Arrays.sort(thisArray);
         Arrays.sort(thatArray);
         return Arrays.equals(thisArray, thatArray);
@@ -196,7 +196,7 @@ public class ReversedIntQueue implements OrderedIntQueue {
 
     @Override
     public int hashCode() {
-        final int[] array = toArray();
+        final int[] array = toIntArray();
         Arrays.sort(array);
         return Arrays.hashCode(array);
     }
@@ -204,7 +204,7 @@ public class ReversedIntQueue implements OrderedIntQueue {
     @NotNull
     @Override
     public String summaryToString() {
-        return "<ordered = " + ordered.summaryToString() + ">";
+        return "<reversed " + queue.summaryToString() + ">";
     }
 
     @NotNull

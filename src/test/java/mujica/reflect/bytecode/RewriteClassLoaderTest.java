@@ -2,7 +2,7 @@ package mujica.reflect.bytecode;
 
 import mujica.ds.generic.heap.HeapTest;
 import mujica.io.codec.Base16Charset;
-import mujica.math.geometry.g2d.Bound;
+import mujica.geometry.g2d.Bound;
 import mujica.reflect.basic.TypeUtilTest;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.format.FormatValidatorTest;

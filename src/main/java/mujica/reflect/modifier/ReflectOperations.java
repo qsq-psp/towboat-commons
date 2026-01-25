@@ -1,8 +1,5 @@
 package mujica.reflect.modifier;
 
-/**
- * Created on 2025/10/30.
- */
 @CodeHistory(date = "2021/12/30", project = "infrastructure", name = "UseOrder")
 @CodeHistory(date = "2022/6/11", project = "Ultramarine")
 @CodeHistory(date = "2025/10/30")

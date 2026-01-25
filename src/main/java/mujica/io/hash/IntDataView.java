@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.math.algebra.discrete.ClampedMath;
+import mujica.algebra.discrete.ClampedMath;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;

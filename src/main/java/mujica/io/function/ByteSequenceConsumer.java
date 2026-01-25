@@ -1,7 +1,7 @@
 package mujica.io.function;
 
 import io.netty.buffer.ByteBuf;
-import mujica.io.hash.ByteSequence;
+import mujica.ds.of_byte.ByteSequence;
 import mujica.reflect.function.ByteConsumer;
 import mujica.reflect.function.ByteSupplier;
 import mujica.reflect.modifier.CodeHistory;

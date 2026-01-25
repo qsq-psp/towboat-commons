@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2025/12/21")
 public class SelectThreeIntMedianAsPivot implements IntPivotSelector {
 
+    public static final IntPivotSelector INSTANCE = new SelectThreeIntMedianAsPivot();
+
     @Override
     @SuppressWarnings("ManualMinMaxCalculation")
     public int select(@NotNull int[] array, int startIndex, int endIndex) {

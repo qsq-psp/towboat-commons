@@ -2,8 +2,8 @@ package mujica.io.hash;
 
 import mujica.ds.of_int.list.IntSequence;
 import mujica.io.codec.Base16Case;
-import mujica.math.algebra.discrete.ClampedMath;
-import mujica.math.algebra.discrete.IntegralMath;
+import mujica.algebra.discrete.ClampedMath;
+import mujica.algebra.discrete.IntegralMath;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

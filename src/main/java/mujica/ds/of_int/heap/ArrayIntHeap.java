@@ -1,7 +1,10 @@
 package mujica.ds.of_int.heap;
 
+import mujica.ds.of_int.list.ResizePolicy;
+import mujica.ds.of_int.list.TwiceResizePolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -14,20 +17,26 @@ public abstract class ArrayIntHeap extends AbstractOrderedIntQueue {
     private static final long serialVersionUID = 0x1e017ba1849e7e12L;
 
     @NotNull
+    final ResizePolicy policy;
+
+    @NotNull
     int[] array;
 
-    protected ArrayIntHeap(@NotNull int[] array) {
+    public ArrayIntHeap(@Nullable ResizePolicy policy) {
         super();
-        this.array = array;
+        if (policy == null) {
+            policy = TwiceResizePolicy.INSTANCE;
+        }
+        this.policy = policy;
+        this.array = new int[policy.initialCapacity()];
         this.endIndex = startIndex();
     }
 
-    protected ArrayIntHeap(int initialCapacity) {
-        this(new int[initialCapacity]);
-    }
-
-    protected ArrayIntHeap() {
-        this(INITIAL_CAPACITY); // todo: use ResizePolicy
+    ArrayIntHeap(@NotNull ResizePolicy policy, @NotNull int[] array) {
+        super();
+        this.policy = policy;
+        this.array = array;
+        this.endIndex = array.length;
     }
 
     @NotNull
@@ -113,7 +122,7 @@ public abstract class ArrayIntHeap extends AbstractOrderedIntQueue {
 
     @NotNull
     @Override
-    public int[] toArray() {
+    public int[] toIntArray() {
         return Arrays.copyOfRange(array, startIndex(), endIndex);
     }
 

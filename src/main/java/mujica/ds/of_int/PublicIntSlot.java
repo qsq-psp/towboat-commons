@@ -1,6 +1,6 @@
 package mujica.ds.of_int;
 
-import mujica.math.algebra.discrete.IntegralMath;
+import mujica.algebra.discrete.IntegralMath;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

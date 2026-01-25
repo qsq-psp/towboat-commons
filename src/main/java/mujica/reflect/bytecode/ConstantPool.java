@@ -3,9 +3,8 @@ package mujica.reflect.bytecode;
 import mujica.ds.generic.list.TruncateList;
 import mujica.io.codec.IndentWriter;
 import mujica.io.nest.LimitedDataInput;
-import mujica.math.algebra.random.RandomContext;
+import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,17 +68,6 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
         }
     }
 
-    @Name(value = "method handle", language = "en")
-    public static final int CONSTANT_METHODHANDLE = 15;
-
-    @Name(value = "method type", language = "en")
-    public static final int CONSTANT_METHODTYPE = 16;
-
-    public static final int CONSTANT_DYNAMIC = 17;
-
-    @Name(value = "invoke dynamic", language = "en")
-    public static final int CONSTANT_INVOKEDYNAMIC = 18;
-
     public static final int CONSTANT_MODULE = 19;
 
     public static final int CONSTANT_PACKAGE = 20;
@@ -107,17 +95,17 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
                 return new MemberReferenceConstantInfo(tag);
             case NameAndTypeConstantInfo.TAG:
                 return new NameAndTypeConstantInfo();
-            case CONSTANT_METHODHANDLE:
+            case MethodHandleConstantInfo.TAG:
                 return new MethodHandleConstantInfo();
-            case CONSTANT_METHODTYPE:
+            case MethodTypeConstantInfo.TAG:
                 return new MethodTypeConstantInfo();
             case CONSTANT_MODULE:
                 return new ModuleConstantInfo();
             case CONSTANT_PACKAGE:
                 return new PackageConstantInfo();
-            case CONSTANT_DYNAMIC:
+            case DynamicConstantInfo.TAG:
                 return new DynamicConstantInfo();
-            case CONSTANT_INVOKEDYNAMIC:
+            case InvokeDynamicConstantInfo.TAG:
                 return new InvokeDynamicConstantInfo();
             default:
                 throw new ClassFormatError("tag = " + tag);

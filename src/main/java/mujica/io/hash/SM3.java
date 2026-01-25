@@ -2,6 +2,7 @@ package mujica.io.hash;
 
 import mujica.ds.of_int.list.IntSequence;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferenceCode;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +14,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2025/1/21", project = "OSHI", name = "SM3Core")
 @CodeHistory(date = "2025/5/16")
 @ReferencePage(title = "SM3", href = "https://www.oscca.gov.cn/sca/xxgk/2010-12/17/content_1002389.shtml")
+@ReferenceCode(groupId = "org.bouncycastle", artifactId = "bcprov-lts8on", fullyQualifiedName = "org.bouncycastle.crypto.digests.SM3Digest")
 public class SM3 extends ByteBlockBitHashCore implements IntSequence {
 
     private static final long serialVersionUID = 0xa8df5a9ab740af24L;

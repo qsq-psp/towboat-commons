@@ -91,10 +91,26 @@ public class LinearClosedHashIntSet extends AbstractHashIntSet {
         return c;
     }
 
+    /*
+    @Override
+    public boolean isEmpty() {
+        if (containsEmptyMark || containsRemovedMark) {
+            return false;
+        }
+        for (int v : array) {
+            if (v == EMPTY_MARK || v == REMOVED_MARK) {
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+     */
+
     @Override
     public boolean isFull() {
         final int capacity = array.length;
-        return policy.nextCapacity(capacity) == capacity;
+        return size == capacity && policy.nextCapacity(capacity) == capacity;
     }
 
     @Override
@@ -183,12 +199,12 @@ public class LinearClosedHashIntSet extends AbstractHashIntSet {
                 continue;
             }
             int i = (Integer.MAX_VALUE & t) % m;
-            int si = -1;
+            int j = -1;
             for (int k = 0; k < m; k++) {
                 int v = array[i];
                 if (v == EMPTY_MARK || v == REMOVED_MARK) {
-                    if (si == -1) {
-                        si = i;
+                    if (j == -1) {
+                        j = i;
                         if (policy.testLinkLength(k, m)) {
                             break;
                         }
@@ -264,14 +280,24 @@ public class LinearClosedHashIntSet extends AbstractHashIntSet {
 
     private class SafeIterator implements PrimitiveIterator.OfInt {
 
-        int currentIndex = 0;
+        int currentIndex;
 
-        int previousIndex = -1;
+        int previousIndex;
 
         int expectedModCount = modCount;
 
         SafeIterator() {
             super();
+            previousIndex = -3;
+            if (containsRemovedMark) {
+                currentIndex = ~REMOVED_MARK; // -2
+                return;
+            }
+            if (containsEmptyMark) {
+                currentIndex = ~EMPTY_MARK; // -1
+                return;
+            }
+            currentIndex = 0;
             while (currentIndex < array.length) {
                 int v = array[currentIndex];
                 if (v == EMPTY_MARK || v == REMOVED_MARK) {
@@ -292,8 +318,19 @@ public class LinearClosedHashIntSet extends AbstractHashIntSet {
             if (expectedModCount != modCount) {
                 throw new ConcurrentModificationException();
             }
-            final int t = array[currentIndex];
             previousIndex = currentIndex;
+            int t;
+            if (currentIndex == ~REMOVED_MARK) { // -2
+                t = REMOVED_MARK;
+                if (containsEmptyMark) {
+                    currentIndex = ~EMPTY_MARK;
+                    return t;
+                }
+            } else if (currentIndex == ~EMPTY_MARK) { // -1
+                t = EMPTY_MARK;
+            } else {
+                t = array[currentIndex];
+            }
             while (true) {
                 if (++currentIndex == array.length) {
                     break;
@@ -340,7 +377,7 @@ public class LinearClosedHashIntSet extends AbstractHashIntSet {
     @NotNull
     @Override
     public String summaryToString() {
-        return "<size = " + size + ", modification = " + modCount + ", modulo = " + array.length + ", empty = " + emptySlotCount() + ", removed = " + removedSlotCount() + ">";
+        return "<size = " + size + ", modCount = " + modCount + ", modulo = " + array.length + ", empty = " + emptySlotCount() + ", removed = " + removedSlotCount() + ">";
     }
 
     @Override

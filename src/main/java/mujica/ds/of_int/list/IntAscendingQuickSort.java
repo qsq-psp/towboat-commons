@@ -19,19 +19,38 @@ public class IntAscendingQuickSort extends IntQuickSort {
     }
 
     @Override
-    public long apply(@NotNull int[] array, int startIndex, int endIndex) {
-        int lowIndex = startIndex;
-        int highIndex = endIndex - 1;
-        if (lowIndex >= highIndex) {
-            return 0L;
+    public long apply(@NotNull int[] array, int start, int end) {
+        int startWrite = start;
+        int endWrite = end;
+        {
+            int length = endWrite - startWrite;
+            if (length <= 2) {
+                if (length == 2) {
+                    endWrite--;
+                    if (array[startWrite] > array[endWrite]) {
+                        int temp = array[startWrite];
+                        array[startWrite] = array[endWrite];
+                        array[endWrite] = temp;
+                    }
+                    return 1L;
+                } else {
+                    return 0L;
+                }
+            }
         }
+        final int pivot = pivotSelector.select(array, start, end);
+        int startRead = startWrite;
+        int endRead = endWrite;
         long operationCount = 0L;
-        final int pivot = pivotSelector.select(array, startIndex, endIndex);
         BISECT:
         while (true) {
             while (true) {
-                if (array[lowIndex] <= pivot) {
-                    if (++lowIndex >= highIndex) {
+                int value = array[startRead];
+                if (value <= pivot) {
+                    if (value < pivot) {
+                        array[startWrite++] = value;
+                    }
+                    if (++startRead >= endRead) {
                         break BISECT;
                     }
                 } else {
@@ -39,49 +58,34 @@ public class IntAscendingQuickSort extends IntQuickSort {
                 }
             }
             while (true) {
-                if (array[highIndex] >= pivot) {
-                    if (--highIndex <= lowIndex) {
+                int value = array[--endRead];
+                if (value >= pivot) {
+                    if (value > pivot) {
+                        array[--endWrite] = value;
+                    }
+                    if (startRead >= endRead) {
                         break BISECT;
                     }
                 } else {
+                    ++endRead;
                     break;
                 }
             }
-            int value = array[lowIndex];
-            array[lowIndex] = array[highIndex];
-            array[highIndex] = value;
-            lowIndex++;
-            highIndex--;
+            {
+                int value = array[startRead++];
+                array[startWrite++] = array[--endRead];
+                array[--endWrite] = value;
+            }
             operationCount++;
-            if (lowIndex >= highIndex) {
+            if (startRead >= endRead) {
                 break;
             }
         }
-        assert lowIndex - highIndex == 0 || lowIndex - highIndex == 1;
-        if (lowIndex == highIndex && array[lowIndex] <= pivot) {
-            lowIndex++;
+        operationCount += apply(array, start, startWrite);
+        operationCount += apply(array, endWrite, end);
+        while (startWrite < endWrite) {
+            array[startWrite++] = pivot;
         }
-        if (lowIndex == startIndex || lowIndex == endIndex) {
-            for (highIndex = startIndex; highIndex < endIndex; highIndex++) {
-                if (array[highIndex] == pivot) {
-                    break;
-                }
-            }
-            assert highIndex < endIndex;
-            if (lowIndex == startIndex) {
-                array[highIndex] = array[lowIndex];
-                array[lowIndex] = pivot;
-                lowIndex++;
-            } else {
-                lowIndex--;
-                array[highIndex] = array[lowIndex];
-                array[lowIndex] = pivot;
-            }
-        }
-        assert startIndex < lowIndex;
-        assert lowIndex < endIndex;
-        operationCount += apply(array, startIndex, lowIndex);
-        operationCount += apply(array, lowIndex, endIndex);
         return operationCount;
     }
 }

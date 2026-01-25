@@ -18,6 +18,22 @@ public class AlphaTransition extends Transition implements IntPredicate {
         this.predicate = predicate;
     }
 
+    @NotNull
+    @Override
+    public AlphaTransition duplicate() {
+        return new AlphaTransition(s0, s1, predicate);
+    }
+
+    @NotNull
+    @Override
+    public AlphaTransition reverse() {
+        if (s0 != s1) {
+            return new AlphaTransition(s1, s0, predicate);
+        } else {
+            return this;
+        }
+    }
+
     @Override
     public boolean test(int value) {
         return predicate.test(value);

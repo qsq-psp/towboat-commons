@@ -234,7 +234,7 @@ public class TraditionalChinese implements IntegralToStringFunction, DecimalToSt
 
     @Override
     public void append(@NotNull BigDecimal decimal, @NotNull StringBuilder out) {
-
+        // todo
     }
 
     @NotNull

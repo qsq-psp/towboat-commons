@@ -1,6 +1,6 @@
 package mujica.ds.of_long.list;
 
-import mujica.math.algebra.discrete.CastToZero;
+import mujica.algebra.discrete.CastToZero;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

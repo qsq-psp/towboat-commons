@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @RunWith(ZipSampleRunner.class)
 public class ZipSampleTest {
 
-    public static final String DIRECTORY = "/mujica/test/zip/";
+    public static final String DIRECTORY = "/mujica/io/compress/zip/";
 
     public static final String[] FILES = {
             "bzip2-area.effect.zip",

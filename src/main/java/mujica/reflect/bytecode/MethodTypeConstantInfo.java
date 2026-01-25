@@ -11,16 +11,17 @@ import java.lang.invoke.MethodType;
 @CodeHistory(date = "2025/10/17")
 @ReferencePage(title = "JVMS12 The CONSTANT_MethodType_info Structure", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.9")
 class MethodTypeConstantInfo extends IndirectUtf8ConstantInfo {
-
     private static final long serialVersionUID = 0xc40c7ea10d586134L;
 
     MethodTypeConstantInfo() {
         super();
     }
 
+    public static final int TAG = 16;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_METHODTYPE;
+        return TAG;
     }
 
     @Override

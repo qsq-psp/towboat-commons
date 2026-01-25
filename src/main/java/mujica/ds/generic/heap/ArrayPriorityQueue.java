@@ -273,7 +273,7 @@ public class ArrayPriorityQueue<E> extends AbstractPriorityQueue<E> {
         return (E) elements[head];
     }
 
-    class SafeIterator implements Iterator<E> {
+    private class IteratorImpl implements Iterator<E> {
 
         int index = head;
 
@@ -336,7 +336,7 @@ public class ArrayPriorityQueue<E> extends AbstractPriorityQueue<E> {
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new SafeIterator();
+        return new IteratorImpl();
     }
 
     @NotNull

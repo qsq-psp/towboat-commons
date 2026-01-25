@@ -7,9 +7,6 @@ import org.junit.Test;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2025/3/5.
- */
 @CodeHistory(date = "2025/3/5")
 public class DataSizeStyleTest {
 

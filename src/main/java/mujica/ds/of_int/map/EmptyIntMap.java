@@ -1,6 +1,6 @@
 package mujica.ds.of_int.map;
 
-import mujica.reflect.function.IntEntryConsumer;
+import mujica.ds.of_int.list.IntEntryConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +59,7 @@ public class EmptyIntMap extends IterableIntMap {
     }
 
     @Override
-    public void forEach(Consumer<? super IntMapEntry> action) {
+    public void forEach(Consumer<? super Entry> action) {
         // pass
     }
 
@@ -80,7 +80,7 @@ public class EmptyIntMap extends IterableIntMap {
 
     @NotNull
     @Override
-    public Iterator<IntMapEntry> iterator() {
+    public Iterator<Entry> iterator() {
         return Collections.emptyIterator();
     }
 

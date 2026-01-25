@@ -1,7 +1,5 @@
 package mujica.ds.of_int.list;
 
-import mujica.reflect.function.IntEntryConsumer;
-import mujica.reflect.function.IntEntryPredicate;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -220,7 +218,7 @@ public abstract class AbstractIntList implements IntList {
 
     @NotNull
     @Override
-    public int[] toArray() {
+    public int[] toIntArray() {
         final int[] array = new int[intLength()];
         getAll(array, 0);
         return array;
@@ -312,9 +310,9 @@ public abstract class AbstractIntList implements IntList {
     }
 
     @Override
-    public void removeRange(int fi, int ti) {
-        for (int i = ti + 1; i >= fi; i--) {
-            removeAt(i);
+    public void removeRange(int startIndex, int endIndex) {
+        for (int index = endIndex + 1; index >= startIndex; index--) {
+            removeAt(index);
         }
     }
 
@@ -445,7 +443,7 @@ public abstract class AbstractIntList implements IntList {
                 t = setInt(i, t);
             }
         } else {
-            int[] array = toArray();
+            int[] array = toIntArray();
             int b = n - d;
             for (int i = 0; i < d; i++) {
                 setInt(i, array[b + i]);
@@ -474,7 +472,7 @@ public abstract class AbstractIntList implements IntList {
             }
             return;
         }
-        final int[] array = toArray();
+        final int[] array = toIntArray();
         Arrays.sort(array);
         if (descending) {
             int i = 0;

@@ -1,7 +1,7 @@
 package mujica.ds.generic.set;
 
 import mujica.ds.DataStructure;
-import mujica.math.algebra.random.RandomContext;
+import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.Nullable;
 

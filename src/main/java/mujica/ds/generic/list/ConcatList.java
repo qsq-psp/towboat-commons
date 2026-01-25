@@ -1,0 +1,146 @@
+package mujica.ds.generic.list;
+
+import mujica.reflect.modifier.CodeHistory;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
+import java.util.*;
+
+@CodeHistory(date = "2025/5/28", project = "Ultramarine", name = "RepeatList")
+@CodeHistory(date = "2026/1/24")
+public class ConcatList<E> extends AbstractList<E> implements Serializable {
+
+    private static final long serialVersionUID = 0xE74F4D31FFED0C4EL;
+
+    @NotNull
+    final List<List<E>> segments;
+
+    int[] offsets;
+
+    public ConcatList(@NotNull List<List<E>> segments) {
+        super();
+        this.segments = segments;
+    }
+
+    public void updateOffsets() {
+        if (offsets != null) {
+            return;
+        }
+        final int length = segments.size();
+        offsets = new int[length];
+        int position = 0;
+        for (int index = 0; index < length; index++) {
+            position += segments.get(index).size();
+            offsets[index] = position;
+        }
+    }
+
+    @Override
+    public E get(int index) {
+        return null;
+    }
+
+    @Override
+    public int indexOf(Object element) {
+        for (List<E> segment : segments) {
+            int index = segment.indexOf(element);
+            if (index != -1) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public int lastIndexOf(Object element) {
+        for (int segmentIndex = segments.size() - 1; segmentIndex >= 0; segmentIndex--) {
+            int index = segments.get(segmentIndex).lastIndexOf(element);
+            if (index != -1) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public int size() {
+        updateOffsets();
+        return offsets[offsets.length - 1];
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public boolean add(E element) {
+        if (segments.add(List.of(element))) {
+            offsets = null;
+            modCount++;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean remove(Object element) {
+        for (List<E> segment : segments) {
+            if (segment.remove(element)) {
+                offsets = null;
+                modCount++;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void clear() {
+        segments.clear();
+        offsets = null;
+        modCount++;
+    }
+
+    @CodeHistory(date = "2026/1/24")
+    private static class IteratorImpl<E> implements Iterator<E> {
+
+        @NotNull
+        final Iterator<List<E>> iterator0;
+
+        Iterator<E> iterator1;
+
+        IteratorImpl(@NotNull Iterator<List<E>> iterator0) {
+            super();
+            this.iterator0 = iterator0;
+            Iterator<E> iterator1 = null;
+            while (iterator0.hasNext()) {
+                iterator1 = iterator0.next().iterator();
+                if (iterator1.hasNext()) {
+                    break;
+                }
+            }
+            if (iterator1 == null) {
+                iterator1 = Collections.emptyIterator();
+            }
+            this.iterator1 = iterator1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return iterator1.hasNext();
+        }
+
+        @Override
+        public E next() {
+            final E element = iterator1.next();
+            while (!iterator1.hasNext() && iterator0.hasNext()) {
+                iterator1 = iterator0.next().iterator();
+            }
+            return element;
+        }
+    }
+
+    @Override
+    @NotNull
+    public Iterator<E> iterator() {
+        return new IteratorImpl<>(segments.iterator());
+    }
+}

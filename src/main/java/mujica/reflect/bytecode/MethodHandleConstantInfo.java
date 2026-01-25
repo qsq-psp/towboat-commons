@@ -3,6 +3,7 @@ package mujica.reflect.bytecode;
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
+import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +29,7 @@ class MethodHandleConstantInfo extends ConstantInfo {
             "invoke-special",
             "new-invoke-special",
             "invoke-interface"
-    };
+    }; // length = 9
 
     @DataType("u8")
     int kind; // from 1 to 9
@@ -54,9 +55,11 @@ class MethodHandleConstantInfo extends ConstantInfo {
         super();
     }
 
+    public static final int TAG = 15;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_METHODHANDLE;
+        return TAG;
     }
 
     protected int section() {

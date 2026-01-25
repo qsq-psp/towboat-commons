@@ -1,7 +1,7 @@
 package mujica.ds.generic.set;
 
 import mujica.ds.of_int.list.*;
-import mujica.math.algebra.random.RandomContext;
+import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;

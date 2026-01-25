@@ -43,6 +43,16 @@ public class NFA {
         return stateCount++;
     }
 
+    public void reverse() {
+        int size = epsilon.size();
+        for (int index = 0; index < size; index++) {
+            epsilon.set(index, epsilon.get(index).reverse());
+        }
+        for (int index = 0; index < size; index++) {
+            alpha.set(index, alpha.get(index).reverse());
+        }
+    }
+
     private void reset(int[] state) {
         for (int i = stateCount - 1; i >= 0; i--) {
             state[i] = NONE;

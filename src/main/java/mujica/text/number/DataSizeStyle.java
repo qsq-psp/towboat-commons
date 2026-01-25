@@ -1,8 +1,8 @@
 package mujica.text.number;
 
 import mujica.io.codec.Base16Case;
-import mujica.math.algebra.discrete.CastToFloor;
-import mujica.math.algebra.discrete.IntegralMath;
+import mujica.algebra.discrete.CastToFloor;
+import mujica.algebra.discrete.IntegralMath;
 import mujica.reflect.modifier.CodeHistory;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;

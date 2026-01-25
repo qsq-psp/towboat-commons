@@ -1,9 +1,9 @@
 package mujica.reflect.bytecode;
 
-import mujica.json.entity.JsonArray;
-import mujica.math.algebra.random.RandomContext;
-import mujica.math.geometry.GeometryOperationResult;
-import mujica.math.geometry.g2d.Point;
+import mujica.json.entity.GeneralJsonArray;
+import mujica.algebra.random.RandomContext;
+import mujica.geometry.GeometryOperationResult;
+import mujica.geometry.g2d.Point;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.number.OrdinalTest;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +58,7 @@ public class ProjectClassLoaderTest {
 
     @Test
     public void caseProject3() throws Exception {
-        final Class<?> jsonArrayClass = assertProject(JsonArray.class);
+        final Class<?> jsonArrayClass = assertProject(GeneralJsonArray.class);
         final Class<?> truncateListClass = jsonArrayClass.getSuperclass();
         Assert.assertSame(LOADER, truncateListClass.getClassLoader());
         final Class<?> arrayListClass = truncateListClass.getSuperclass();

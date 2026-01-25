@@ -62,7 +62,7 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
             if (!set.add(item)) {
                 consumer.accept(new InvariantException("identical item " + item));
             }
-            for (int index : probingList.setHash(Objects.hashCode(item))) {
+            for (int index : probingList.setBase(Objects.hashCode(item))) {
                 if (k == index) {
                     break;
                 }
@@ -81,7 +81,7 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
         if (element instanceof CollectionConstant) {
             return false;
         }
-        for (int index : probingList.setHash(Objects.hashCode(element))) {
+        for (int index : probingList.setBase(Objects.hashCode(element))) {
             Object item = array[index];
             if (item == CollectionConstant.EMPTY) {
                 return false;
@@ -111,7 +111,7 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
             if (object instanceof CollectionConstant) {
                 continue;
             }
-            for (int index : probingList.setHash(Objects.hashCode(object))) {
+            for (int index : probingList.setBase(Objects.hashCode(object))) {
                 Object item = newArray[index];
                 if (item == CollectionConstant.EMPTY) { // only empty, no removed
                     // System.out.println("index = " + index);
@@ -140,7 +140,7 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
             }
             int linkLength = 0;
             int slotIndex = -1;
-            for (int testIndex : probingList.setHash(Objects.hashCode(element))) {
+            for (int testIndex : probingList.setBase(Objects.hashCode(element))) {
                 Object item = array[testIndex];
                 if (item instanceof CollectionConstant) {
                     if (slotIndex == -1) {
@@ -170,7 +170,7 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
         if (element instanceof CollectionConstant) {
             return false;
         }
-        for (int index : probingList.setHash(Objects.hashCode(element))) {
+        for (int index : probingList.setBase(Objects.hashCode(element))) {
             Object item = array[index];
             if (item == CollectionConstant.EMPTY) {
                 return false;

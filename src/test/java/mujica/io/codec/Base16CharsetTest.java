@@ -1,8 +1,7 @@
 package mujica.io.codec;
 
 import io.netty.buffer.ByteBufUtil;
-import mujica.io.codec.Base16Charset;
-import mujica.math.algebra.random.FuzzyContext;
+import mujica.algebra.random.FuzzyContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.junit.Assert;
 import org.junit.BeforeClass;

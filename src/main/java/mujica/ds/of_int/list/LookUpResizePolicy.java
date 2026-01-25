@@ -93,7 +93,7 @@ public class LookUpResizePolicy extends ResizePolicy {
             intList.offerLast(value1);
             initial *= multiplier;
         }
-        return new LookUpResizePolicy(intList.toArray());
+        return new LookUpResizePolicy(intList.toIntArray());
     }
 
     public static final ResizePolicy PAPER = geometric(3.0, Math.sqrt(2.0)); // 1.414...

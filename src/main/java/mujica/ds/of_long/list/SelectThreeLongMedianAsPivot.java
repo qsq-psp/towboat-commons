@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2025/12/25")
 public class SelectThreeLongMedianAsPivot implements LongPivotSelector {
 
+    public static final LongPivotSelector INSTANCE = new SelectThreeLongMedianAsPivot();
+
     @Override
     @SuppressWarnings("ManualMinMaxCalculation")
     public long select(@NotNull long[] array, int startIndex, int endIndex) {

@@ -1,6 +1,6 @@
 package mujica.io.codec;
 
-import mujica.math.algebra.discrete.IntegralMath;
+import mujica.algebra.discrete.IntegralMath;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

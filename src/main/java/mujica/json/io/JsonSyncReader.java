@@ -1,6 +1,6 @@
 package mujica.json.io;
 
-import mujica.json.entity.JsonConsumer;
+import mujica.json.entity.JsonHandler;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,5 +13,5 @@ public interface JsonSyncReader extends JsonReader {
     @Override
     void config(int config);
 
-    void read(@NotNull JsonConsumer jc);
+    void read(@NotNull JsonHandler jh);
 }

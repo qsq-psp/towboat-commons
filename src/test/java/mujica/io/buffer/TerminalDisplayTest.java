@@ -1,8 +1,8 @@
 package mujica.io.buffer;
 
-import mujica.math.algebra.random.RandomContext;
+import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.test.SwingManualTest;
+import mujica.reflect.source.SwingManualTest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.AfterClass;

@@ -3,7 +3,7 @@ package mujica.ds.generic.heap;
 import io.netty.buffer.ByteBufUtil;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.io.buffer.JdkObjectCodec;
-import mujica.math.algebra.random.RandomContext;
+import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

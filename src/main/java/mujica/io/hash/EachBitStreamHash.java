@@ -1,6 +1,7 @@
 package mujica.io.hash;
 
 import mujica.ds.of_boolean.BitSequence;
+import mujica.ds.of_byte.ByteSequence;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

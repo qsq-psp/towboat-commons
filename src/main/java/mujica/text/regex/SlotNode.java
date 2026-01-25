@@ -12,7 +12,13 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2025/12/17")
 public class SlotNode extends GrammarNode implements Slot<GrammarNode> {
 
+    @NotNull
     protected GrammarNode body;
+
+    protected SlotNode(@NotNull GrammarNode body) {
+        super();
+        this.body = body;
+    }
 
     @Override
     public GrammarNode get() {

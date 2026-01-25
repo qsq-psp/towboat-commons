@@ -10,9 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-/**
- * Created on 2025/7/3.
- */
 @CodeHistory(date = "2025/7/3")
 public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
 
@@ -79,10 +76,168 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
         return c;
     }
 
+    /*
+    @Override
+    public boolean isEmpty() {
+        if (containsEmptyMark || containsRemovedMark) {
+            return false;
+        }
+        for (int v : array) {
+            if (v == EMPTY_MARK || v == REMOVED_MARK) {
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+     */
+
     @Override
     public boolean isFull() {
         final int capacity = array.length;
-        return policy.nextCapacity(capacity) == capacity;
+        return size == capacity && policy.nextCapacity(capacity) == capacity;
+    }
+
+    @Override
+    public boolean contains(int t) {
+        if (t == EMPTY_MARK) {
+            return containsEmptyMark;
+        }
+        if (t == REMOVED_MARK) {
+            return containsRemovedMark;
+        }
+        for (int i : probingList.setBase(t)) {
+            int v = array[i];
+            if (v == EMPTY_MARK) {
+                return false;
+            }
+            if (t == v) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return true if success
+     */
+    private boolean rehash() {
+        final int m0 = array.length;
+        final int m1 = policy.nextCapacity(m0);
+        if (m1 <= m0) {
+            return false;
+        }
+        probingList.setModulo(m1);
+        final int[] newArray = new int[m1];
+        OA:
+        for (int t : array) {
+            if (t == EMPTY_MARK || t == REMOVED_MARK) {
+                continue;
+            }
+            for (int i : probingList.setBase(t)) {
+                int v = newArray[i];
+                if (v == EMPTY_MARK) { // only empty, no removed
+                    newArray[i] = t;
+                    continue OA;
+                }
+            }
+            probingList.setModulo(m0);
+            return false;
+        }
+        array = newArray;
+        modCount++;
+        return true;
+    }
+
+    @Override
+    public boolean add(int t) {
+        if (t == EMPTY_MARK) {
+            if (containsEmptyMark) {
+                return false;
+            } else {
+                containsEmptyMark = true;
+                size++;
+                modCount++;
+                return true;
+            }
+        }
+        if (t == REMOVED_MARK) {
+            if (containsRemovedMark) {
+                return false;
+            } else {
+                containsRemovedMark = true;
+                size++;
+                modCount++;
+                return true;
+            }
+        }
+        do {
+            int m = array.length;
+            if (policy.testLoadedSize(size + 1, m)) {
+                continue;
+            }
+            int j = -1;
+            int k = 0;
+            for (int i : probingList.setBase(t)) {
+                int v = array[i];
+                if (v == EMPTY_MARK || v == REMOVED_MARK) {
+                    if (j == -1) {
+                        j = i;
+                        if (policy.testLinkLength(k, m)) {
+                            break;
+                        }
+                    }
+                    if (v == EMPTY_MARK) {
+                        array[i] = t;
+                        size++;
+                        modCount++;
+                        return true;
+                    }
+                }
+                if (t == v) {
+                    return false;
+                }
+                k++;
+            }
+        } while (rehash());
+        throw new RuntimeException();
+    }
+
+    @Override
+    public boolean remove(int t) {
+        if (t == EMPTY_MARK) {
+            if (containsEmptyMark) {
+                containsEmptyMark = false;
+                size--;
+                modCount++;
+                return true;
+            } else {
+                return false;
+            }
+        }
+        if (t == REMOVED_MARK) {
+            if (containsRemovedMark) {
+                containsRemovedMark = false;
+                size--;
+                modCount++;
+                return true;
+            } else {
+                return false;
+            }
+        }
+        for (int i : probingList.setBase(t)) {
+            int v = array[i];
+            if (v == EMPTY_MARK) {
+                return false;
+            }
+            if (t == v) {
+                array[i] = REMOVED_MARK;
+                size--;
+                modCount++;
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -135,7 +290,7 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
                     break;
                 }
             }
-            return t;
+            return t; // never return EMPTY_MARK and REMOVED_MARK ?
         }
 
         @Override
@@ -172,7 +327,7 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
     @NotNull
     @Override
     public String summaryToString() {
-        return "<size = " + size + ", modification = " + modCount + ", modulo = " + array.length + ", empty = " + emptySlotCount() + ", removed = " + removedSlotCount() + ">";
+        return "<size = " + size + ", modCount = " + modCount + ", modulo = " + array.length + ", empty = " + emptySlotCount() + ", removed = " + removedSlotCount() + ">";
     }
 
     @Override

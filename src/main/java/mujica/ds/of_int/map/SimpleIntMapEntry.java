@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created on 2025/3/27.
  */
 @CodeHistory(date = "2025/3/27")
-class SimpleIntMapEntry implements IntMapEntry, Serializable {
+class SimpleIntMapEntry implements IntMap.Entry, Serializable {
 
     private static final long serialVersionUID = 0xf306c658f3ec17b5L;
 

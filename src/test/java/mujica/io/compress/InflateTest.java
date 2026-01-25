@@ -7,7 +7,7 @@ import mujica.ds.of_int.list.*;
 import mujica.ds.of_int.map.CompatibleIntMap;
 import mujica.ds.of_int.map.CompatibleIntSlotMap;
 import mujica.ds.of_int.map.IntMap;
-import mujica.math.algebra.random.FuzzyContext;
+import mujica.algebra.random.FuzzyContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;

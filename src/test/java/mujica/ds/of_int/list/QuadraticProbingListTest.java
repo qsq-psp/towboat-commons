@@ -1,6 +1,6 @@
 package mujica.ds.of_int.list;
 
-import mujica.math.algebra.random.RandomContext;
+import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class QuadraticProbingListTest {
     private final RandomContext rc = new RandomContext();
 
     private void checkUnique(int modulo) {
-        final QuadraticProbingList list = (new QuadraticProbingList(modulo)).setHash(rc.nextInt());
+        final QuadraticProbingList list = (new QuadraticProbingList(modulo)).setBase(rc.nextInt());
         final int size = Math.min(SIZE, list.intLength());
         final HashSet<Integer> set = new HashSet<>();
         try {
@@ -42,7 +42,7 @@ public class QuadraticProbingListTest {
     }
 
     private void checkCover(int modulo) {
-        final QuadraticProbingList list = (new QuadraticProbingList(modulo)).setHash(rc.nextInt());
+        final QuadraticProbingList list = (new QuadraticProbingList(modulo)).setBase(rc.nextInt());
         final int size = Math.min(SIZE, list.intLength());
         final HashSet<Integer> set = new HashSet<>();
         for (int i = 0; i < size; i++) {

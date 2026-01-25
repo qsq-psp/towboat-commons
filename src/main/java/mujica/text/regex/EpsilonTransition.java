@@ -14,6 +14,20 @@ public class EpsilonTransition extends Transition implements Predicate<CursorInt
         super(s0, s1);
     }
 
+    @NotNull
+    public EpsilonTransition duplicate() {
+        return new EpsilonTransition(s0, s1);
+    }
+
+    @NotNull
+    public EpsilonTransition reverse() {
+        if (s0 != s1) {
+            return new EpsilonTransition(s1, s0);
+        } else {
+            return this;
+        }
+    }
+
     @Override
     public boolean test(@NotNull CursorIntSequence input) {
         return true;

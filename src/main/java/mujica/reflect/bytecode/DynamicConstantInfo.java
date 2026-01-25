@@ -15,7 +15,6 @@ import java.util.function.IntUnaryOperator;
 @CodeHistory(date = "2025/10/17")
 @ReferencePage(title = "JVMS12 The CONSTANT_Dynamic_info and CONSTANT_InvokeDynamic_info Structures", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.10")
 class DynamicConstantInfo extends ConstantInfo {
-
     private static final long serialVersionUID = 0x89d0c75c6f9c9eb6L;
 
     @DataType("u16")
@@ -29,9 +28,11 @@ class DynamicConstantInfo extends ConstantInfo {
         super();
     }
 
+    public static final int TAG = 17;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_DYNAMIC;
+        return TAG;
     }
 
     @Override

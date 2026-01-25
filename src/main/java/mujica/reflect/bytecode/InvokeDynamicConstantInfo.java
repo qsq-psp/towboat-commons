@@ -7,16 +7,17 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2025/10/17")
 @ReferencePage(title = "JVMS12 The CONSTANT_Dynamic_info and CONSTANT_InvokeDynamic_info Structures", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.10")
 class InvokeDynamicConstantInfo extends DynamicConstantInfo {
-
     private static final long serialVersionUID = 0x08361c296dcec3e4L;
 
     InvokeDynamicConstantInfo() {
         super();
     }
 
+    public static final int TAG = 18;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_INVOKEDYNAMIC;
+        return TAG;
     }
 
     @Override

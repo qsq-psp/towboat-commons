@@ -3,7 +3,7 @@ package mujica.reflect.bytecode;
 import mujica.io.codec.IndentWriter;
 import mujica.io.nest.LimitedDataInput;
 import mujica.io.nest.LimitedInput;
-import mujica.math.algebra.random.RandomContext;
+import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;

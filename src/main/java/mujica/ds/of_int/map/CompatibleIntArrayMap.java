@@ -2,7 +2,7 @@ package mujica.ds.of_int.map;
 
 import mujica.ds.of_int.list.IntList;
 import mujica.ds.of_int.list.PublicIntList;
-import mujica.reflect.function.IntEntryConsumer;
+import mujica.ds.of_int.list.IntEntryConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -137,18 +137,18 @@ public class CompatibleIntArrayMap extends IterableIntMap {
 
     @NotNull
     @Override
-    public Iterator<IntMapEntry> iterator() {
+    public Iterator<Entry> iterator() {
         return new TwoPhaseIterator();
     }
 
-    private class TwoPhaseIterator implements Iterator<IntMapEntry> {
+    private class TwoPhaseIterator implements Iterator<Entry> {
 
         @NotNull
         final SimpleIntMapEntry entry = new SimpleIntMapEntry();
 
         int primaryIndex;
 
-        Iterator<IntMapEntry> secondaryIterator;
+        Iterator<Entry> secondaryIterator;
 
         TwoPhaseIterator() {
             super();
@@ -167,7 +167,7 @@ public class CompatibleIntArrayMap extends IterableIntMap {
         }
 
         @Override
-        public IntMapEntry next() {
+        public Entry next() {
             if (secondaryIterator != null) {
                 return secondaryIterator.next();
             } else {

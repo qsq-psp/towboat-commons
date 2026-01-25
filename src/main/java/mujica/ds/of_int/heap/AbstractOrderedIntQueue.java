@@ -77,7 +77,7 @@ public abstract class AbstractOrderedIntQueue implements OrderedIntQueue {
 
     @NotNull
     @Override
-    public int[] toArray() {
+    public int[] toIntArray() {
         final int[] array = new int[endIndex];
         int i = 0;
         for (int v : this) {
@@ -115,8 +115,8 @@ public abstract class AbstractOrderedIntQueue implements OrderedIntQueue {
         if (this.intLength() != that.intLength() || this.isDescending() != that.isDescending()) {
             return false;
         }
-        final int[] thisArray = this.toArray();
-        final int[] thatArray = that.toArray();
+        final int[] thisArray = this.toIntArray();
+        final int[] thatArray = that.toIntArray();
         Arrays.sort(thisArray);
         Arrays.sort(thatArray);
         return Arrays.equals(thisArray, thatArray);
@@ -124,7 +124,7 @@ public abstract class AbstractOrderedIntQueue implements OrderedIntQueue {
 
     @Override
     public int hashCode() {
-        final int[] array = toArray();
+        final int[] array = toIntArray();
         Arrays.sort(array);
         return Arrays.hashCode(array);
     }

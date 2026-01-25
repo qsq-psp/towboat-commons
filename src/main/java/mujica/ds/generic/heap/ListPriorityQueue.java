@@ -129,7 +129,7 @@ public abstract class ListPriorityQueue<E> extends AbstractPriorityQueue<E> {
         list.clear();
     }
 
-    class DefaultIterator implements Iterator<E> {
+    private class IteratorImpl implements Iterator<E> {
 
         int index;
 
@@ -173,7 +173,7 @@ public abstract class ListPriorityQueue<E> extends AbstractPriorityQueue<E> {
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new DefaultIterator();
+        return new IteratorImpl();
     }
 
     @Override

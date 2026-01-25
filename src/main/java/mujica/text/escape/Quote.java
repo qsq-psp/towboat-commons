@@ -1,6 +1,5 @@
 package mujica.text.escape;
 
-import mujica.reflect.function.StringUnaryOperator;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.number.HexEncoder;
 import org.intellij.lang.annotations.MagicConstant;
@@ -19,7 +18,8 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2022/3/23", project = "infrastructure")
 @CodeHistory(date = "2022/5/25", project = "Ultramarine")
 @CodeHistory(date = "2025/3/5")
-public class Quote extends HexEncoder implements StringUnaryOperator, QuoteBoundary, EscapeValueStyle {
+@Deprecated
+public class Quote extends HexEncoder implements QuoteBoundary, EscapeValueStyle {
 
     public static final Quote ONE = new Quote(HEX_VALUE | UNICODE_PREFIX, APOSTROPHE);
 
@@ -158,22 +158,21 @@ public class Quote extends HexEncoder implements StringUnaryOperator, QuoteBound
         }
     }
 
-    @Override
     @NotNull
-    public String apply(@NotNull String string) {
+    public String apply(@NotNull CharSequence string) {
         final StringBuilder sb = new StringBuilder(string.length() + 16);
         append(string, sb);
         return sb.toString();
     }
 
-    public String apply(@Nullable String string, String fallback) {
+    public String apply(@Nullable CharSequence string, String fallback) {
         if (string == null) {
             return fallback;
         }
         return apply(string);
     }
 
-    public void append(@NotNull StringBuilder out, @Nullable String in, String fallback) {
+    public void append(@NotNull StringBuilder out, @Nullable CharSequence in, String fallback) {
         if (in == null) {
             out.append(fallback);
         } else {
@@ -182,7 +181,7 @@ public class Quote extends HexEncoder implements StringUnaryOperator, QuoteBound
     }
 
     @NotNull
-    public String surround(@Nullable String prefix, String string, @Nullable String suffix) {
+    public String surround(@Nullable CharSequence prefix, @NotNull CharSequence string, @Nullable CharSequence suffix) {
         final StringBuilder sb = new StringBuilder();
         if (prefix != null) {
             sb.append(prefix);
@@ -194,25 +193,7 @@ public class Quote extends HexEncoder implements StringUnaryOperator, QuoteBound
         return sb.toString();
     }
 
-    @NotNull
-    public String surround(@Nullable String prefix, @Nullable String string, @Nullable String suffix, String fallback) {
-        final StringBuilder sb = new StringBuilder();
-        if (prefix != null) {
-            sb.append(prefix);
-        }
-        if (string != null) {
-            append(string, sb);
-        } else {
-            append(fallback, sb);
-        }
-        if (suffix != null) {
-            sb.append(suffix);
-        }
-        return sb.toString();
-    }
-
-    @Override
-    public void append(@NotNull String in, @NotNull StringBuilder out) {
+    public void append(@NotNull CharSequence in, @NotNull StringBuilder out) {
         switch (boundary) {
             case APOSTROPHE:
                 appendEscaped1(out, in, '\'');
@@ -224,19 +205,22 @@ public class Quote extends HexEncoder implements StringUnaryOperator, QuoteBound
                 appendEscaped1(out, in, '`');
                 break;
             case TRIPLE_APOSTROPHE:
-                if (in.contains("'''")) {
+                in = in.toString();
+                if (((String) in).contains("'''")) {
                     throw new IllegalArgumentException();
                 }
                 appendEscaped3(out, in, '\'');
                 break;
             case TRIPLE_QUOTATION:
-                if (in.contains("\"\"\"")) {
+                in = in.toString();
+                if (((String) in).contains("\"\"\"")) {
                     throw new IllegalArgumentException();
                 }
                 appendEscaped3(out, in, '"');
                 break;
             case TRIPLE_GRAVE:
-                if (in.contains("```")) {
+                in = in.toString();
+                if (((String) in).contains("```")) {
                     throw new IllegalArgumentException();
                 }
                 appendEscaped3(out, in, '`');
@@ -247,17 +231,18 @@ public class Quote extends HexEncoder implements StringUnaryOperator, QuoteBound
         }
     }
 
-    public void appendOtherCases(@NotNull StringBuilder out, @NotNull String in) {
+    public void appendOtherCases(@NotNull StringBuilder out, @NotNull CharSequence in) {
         if ((boundary & (TRIPLE_APOSTROPHE | TRIPLE_QUOTATION | TRIPLE_GRAVE)) != 0) {
-            if ((boundary & TRIPLE_APOSTROPHE) != 0 && !in.contains("'''")) {
+            in = in.toString();
+            if ((boundary & TRIPLE_APOSTROPHE) != 0 && !((String) in).contains("'''")) {
                 appendEscaped3(out, in, '\'');
                 return;
             }
-            if ((boundary & TRIPLE_QUOTATION) != 0 && !in.contains("\"\"\"")) {
+            if ((boundary & TRIPLE_QUOTATION) != 0 && !((String) in).contains("\"\"\"")) {
                 appendEscaped3(out, in, '\'');
                 return;
             }
-            if ((boundary & TRIPLE_GRAVE) != 0 && !in.contains("```")) {
+            if ((boundary & TRIPLE_GRAVE) != 0 && !((String) in).contains("```")) {
                 appendEscaped3(out, in, '\'');
                 return;
             }
@@ -373,7 +358,7 @@ public class Quote extends HexEncoder implements StringUnaryOperator, QuoteBound
         }
     }
 
-    private void appendEscaped1(@NotNull StringBuilder out, String in, int quotationMark) {
+    private void appendEscaped1(@NotNull StringBuilder out, @NotNull CharSequence in, int quotationMark) {
         out.append((char) quotationMark);
         final int length = in.length();
         for (int index = 0; index < length; index++) {
@@ -468,7 +453,7 @@ public class Quote extends HexEncoder implements StringUnaryOperator, QuoteBound
         }
     }
 
-    private void appendEscaped3(@NotNull StringBuilder out, @NotNull String in, char quotationMark) {
+    private void appendEscaped3(@NotNull StringBuilder out, @NotNull CharSequence in, char quotationMark) {
         out.append(quotationMark);
         out.append(quotationMark);
         out.append(quotationMark);
@@ -629,7 +614,7 @@ public class Quote extends HexEncoder implements StringUnaryOperator, QuoteBound
                 MAP.put(Character.class, methodHandle);
                 methodHandle = MethodHandles.lookup().findVirtual(Quote.class, "append", MethodType.methodType(void.class, char[].class, StringBuilder.class));
                 MAP.put(char[].class, methodHandle);
-                methodHandle = MethodHandles.lookup().findVirtual(Quote.class, "append", MethodType.methodType(void.class, String.class, StringBuilder.class));
+                methodHandle = MethodHandles.lookup().findVirtual(Quote.class, "append", MethodType.methodType(void.class, CharSequence.class, StringBuilder.class));
                 MAP.put(String.class, methodHandle);
             } catch (ReflectiveOperationException e) {
                 e.printStackTrace();

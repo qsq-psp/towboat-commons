@@ -3,12 +3,10 @@ package mujica.text.escape;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ConstantInterface;
 
-/**
- * Meaning of boundary: left (prefix) and right (suffix)
- */
 @CodeHistory(date = "2022/5/25", project = "Ultramarine")
 @CodeHistory(date = "2025/3/3")
 @ConstantInterface
+@Deprecated
 public interface QuoteBoundary {
 
     int APOSTROPHE          = 0x1; // 'string'

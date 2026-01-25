@@ -1,6 +1,6 @@
 package mujica.ds.of_int.map;
 
-import mujica.reflect.function.IntEntryConsumer;
+import mujica.ds.of_int.list.IntEntryConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -137,11 +137,11 @@ public class CompatibleIntMap extends IterableIntMap {
 
     @NotNull
     @Override
-    public Iterator<IntMapEntry> iterator() {
+    public Iterator<Entry> iterator() {
         return new CompatibleIntIterator();
     }
 
-    private class CompatibleIntIterator implements Iterator<IntMapEntry> {
+    private class CompatibleIntIterator implements Iterator<Entry> {
 
         @NotNull
         final Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
@@ -155,7 +155,7 @@ public class CompatibleIntMap extends IterableIntMap {
         }
 
         @Override
-        public IntMapEntry next() {
+        public Entry next() {
             final Map.Entry<Integer, Integer> entry0 = iterator.next();
             entry1.key = entry0.getKey();
             entry1.value = entry0.getValue();

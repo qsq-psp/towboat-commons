@@ -48,7 +48,7 @@ public interface OrderedIntQueue extends IntCollection {
 
     @NotNull
     @Override
-    int[] toArray();
+    int[] toIntArray();
 
     @Override
     void forEach(@NotNull IntConsumer action);

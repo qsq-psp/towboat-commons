@@ -2,6 +2,8 @@ package mujica.ds.of_int.map;
 
 import mujica.ds.DataStructure;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.Name;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -13,7 +15,15 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2025/3/25")
 public abstract class IntMap implements DataStructure {
 
-    public IntMap() {
+    @CodeHistory(date = "2025/3/27")
+    public interface Entry {
+
+        int getIntKey();
+
+        int getIntValue();
+    }
+
+    protected IntMap() {
         super();
     }
 
@@ -59,7 +69,7 @@ public abstract class IntMap implements DataStructure {
     }
 
     public void addAll(@NotNull IterableIntMap that) {
-        for (IntMapEntry entry : that) {
+        for (Entry entry : that) {
             addInt(entry.getIntKey(), entry.getIntValue());
         }
     }
@@ -93,10 +103,8 @@ public abstract class IntMap implements DataStructure {
 
     static final int TYPE_ACCEPT = 0x1 << TYPE_SHIFT;
 
-    /**
-     * TRIE = dictionary tree
-     * https://oi-wiki.org/string/trie/
-     */
+    @Name(value = "build dictionary tree", language = "en")
+    @ReferencePage(title = "trie", href = "https://oi-wiki.org/string/trie/")
     public void buildTrie(String[] patterns) {
         int nextState = 1;
         for (String pattern : patterns) {
@@ -141,10 +149,8 @@ public abstract class IntMap implements DataStructure {
 
     static final int TYPE_FAIL = 0x3 << TYPE_SHIFT;
 
-    /**
-     * AC = Aho-Corasick automaton
-     * https://oi-wiki.org/string/ac-automaton/
-     */
+    @Name(value = "build Aho-Corasick automaton", language = "en")
+    @ReferencePage(title = "AC", href = "https://oi-wiki.org/string/ac-automaton/")
     public void buildAC(@NotNull String[] patterns) {
         int charCount = 0;
         int nextState = 1;
@@ -218,10 +224,8 @@ public abstract class IntMap implements DataStructure {
         return result;
     }
 
-    /**
-     * SAM = Suffix automaton
-     * https://oi-wiki.org/string/sam/
-     */
+    @Name(value = "build suffix automaton", language = "en")
+    @ReferencePage(title = "SAM", href = "https://oi-wiki.org/string/sam/")
     public void buildSAM(String pattern) {
         //
     }
