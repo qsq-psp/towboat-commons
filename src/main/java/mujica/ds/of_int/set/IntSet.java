@@ -1,6 +1,7 @@
 package mujica.ds.of_int.set;
 
 import mujica.ds.InvariantException;
+import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.IntCollection;
 import mujica.algebra.random.RandomContext;
 import mujica.ds.of_int.list.CopyOnResizeIntList;
@@ -33,10 +34,10 @@ public abstract class IntSet implements IntCollection {
         for (int v : this) {
             intList.offerLast(v);
         }
-        intList.sort(false);
-        final int length = intList.intLength();
+        intList.sort(MonotonicityDirection.ASCENDING);
+        final int n = intList.intLength();
         int v0 = intList.getInt(0);
-        for (int i = 1; i < length; i++) {
+        for (int i = 1; i < n; i++) {
             int v1 = intList.getInt(i);
             if (v0 >= v1) {
                 consumer.accept(new InvariantException(v0 + " >= " + v1));

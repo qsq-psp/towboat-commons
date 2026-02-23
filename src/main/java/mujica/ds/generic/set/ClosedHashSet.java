@@ -3,7 +3,7 @@ package mujica.ds.generic.set;
 import mujica.ds.of_int.list.ResizePolicy;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.text.escape.Quote;
+import mujica.text.format.UniversalAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,6 +122,6 @@ public abstract class ClosedHashSet<E> extends AbstractHashSet<E> {
 
     @Override
     public void stringifyDetail(@NotNull StringBuilder sb) {
-        Quote.DEFAULT.append(array, sb);
+        UniversalAppender.createIntAll().appendArray(array, sb);
     }
 }

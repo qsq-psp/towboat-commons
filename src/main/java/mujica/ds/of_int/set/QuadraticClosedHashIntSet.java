@@ -1,6 +1,10 @@
 package mujica.ds.of_int.set;
 
+import mujica.ds.ConsistencyException;
+import mujica.ds.InvariantException;
+import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.generic.set.CollectionConstant;
+import mujica.ds.of_int.list.CopyOnResizeIntList;
 import mujica.ds.of_int.list.QuadraticProbingList;
 import mujica.ds.of_int.list.ResizePolicy;
 import mujica.reflect.modifier.CodeHistory;
@@ -53,7 +57,29 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
 
     @Override
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
-        //
+        final CopyOnResizeIntList list = new CopyOnResizeIntList(null);
+        for (int v : this) {
+            list.offerLast(v);
+        }
+        list.sort(MonotonicityDirection.ASCENDING);
+        int n = list.intLength();
+        int v0 = list.getInt(0);
+        for (int i = 1; i < n; i++) {
+            int v1 = list.getInt(i);
+            if (v0 >= v1) {
+                consumer.accept(new InvariantException(v0 + " >= " + v1));
+            }
+            v0 = v1;
+        }
+        if (containsEmptyMark) {
+            n++;
+        }
+        if (containsRemovedMark) {
+            n++;
+        }
+        if (n != size) {
+            consumer.accept(new ConsistencyException(n + " != " + size));
+        }
     }
 
     public int emptySlotCount() {
@@ -75,22 +101,6 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
         }
         return c;
     }
-
-    /*
-    @Override
-    public boolean isEmpty() {
-        if (containsEmptyMark || containsRemovedMark) {
-            return false;
-        }
-        for (int v : array) {
-            if (v == EMPTY_MARK || v == REMOVED_MARK) {
-                continue;
-            }
-            return false;
-        }
-        return true;
-    }
-     */
 
     @Override
     public boolean isFull() {

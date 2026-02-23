@@ -8,10 +8,6 @@ import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-/**
- * Created in Ultramarine on 2022/12/15.
- * Recreated on 2025/3/3.
- */
 @CodeHistory(date = "2022/12/15", project = "Ultramarine")
 @CodeHistory(date = "2025/3/3")
 public class EmptyDirectoryStream implements DirectoryStream<Path>, Iterator<Path> {

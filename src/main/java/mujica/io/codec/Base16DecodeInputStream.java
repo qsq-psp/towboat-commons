@@ -2,7 +2,6 @@ package mujica.io.codec;
 
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
-import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterInputStream;
@@ -50,7 +49,7 @@ public class Base16DecodeInputStream extends FilterInputStream implements Base16
         } else if (digit == -1) {
             return -1;
         } else {
-            throw new BadCodeException(Quote.DEFAULT.apply((byte) digit) + " not in [0-9A-Fa-f]");
+            throw new BadCodeException(digit + " not in [0-9A-Fa-f]");
         }
         if (shift) {
             digit <<= 4;

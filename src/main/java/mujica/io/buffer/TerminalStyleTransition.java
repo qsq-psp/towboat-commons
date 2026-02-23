@@ -119,4 +119,22 @@ public class TerminalStyleTransition implements Serializable {
         }
         stringifyNoReset(out);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof TerminalStyleTransition)) {
+            return false;
+        }
+        final TerminalStyleTransition that = (TerminalStyleTransition) obj;
+        return this.src.equals(that.src) && this.dst.equals(that.dst);
+    }
+
+    @Override
+    @NotNull
+    public String toString() {
+        return "TerminalStyleTransition[src = " + src + ", dst = " + dst + "]";
+    }
 }

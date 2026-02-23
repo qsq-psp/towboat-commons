@@ -1,0 +1,17 @@
+package mujica.io.misc;
+
+import mujica.ds.of_long.LongSlot;
+import mujica.reflect.modifier.CodeHistory;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+
+@CodeHistory(date = "2026/2/18")
+public interface CachedDataSize<T> extends LongSlot {
+
+    @NotNull
+    T getTarget();
+
+    @NotNull
+    CachedDataSize<T> updateCache() throws IOException;
+}

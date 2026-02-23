@@ -1,5 +1,7 @@
 package mujica.ds.of_int.list;
 
+import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.IntCollection;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
@@ -109,7 +111,13 @@ public interface IntList extends IntCollection, IntSequence {
 
     void rotate(int d);
 
-    void sort(boolean descending);
+    void sort(@NotNull MonotonicityDirection direction);
+
+    long sort(@NotNull SortingAlgorithm<int[]> algorithm);
+
+    long sortPart(@NotNull SortingAlgorithm<int[]> algorithm, int m);
+
+    long sortUnique(@NotNull SortingAlgorithm<int[]> algorithm);
 
     int min();
 

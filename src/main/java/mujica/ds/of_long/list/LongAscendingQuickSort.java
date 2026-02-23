@@ -1,26 +1,32 @@
 package mujica.ds.of_long.list;
 
+import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.MonotonicityDirection;
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/12/31.
- */
+@CodeHistory(date = "2025/12/31")
 @ReferencePage(title = "快速排序", href = "https://oi-wiki.org/basic/quick-sort/")
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
-public class LongAscendingQuickSort extends LongQuickSort {
+public class LongAscendingQuickSort extends SortingAlgorithm<long[]> {
+
+    @NotNull
+    protected final LongPivotSelector pivotSelector;
 
     public LongAscendingQuickSort(@NotNull LongPivotSelector pivotSelector) {
-        super(pivotSelector);
+        super();
+        this.pivotSelector = pivotSelector;
+    }
+
+    @NotNull
+    @Override
+    public MonotonicityDirection monotonicity() {
+        return MonotonicityDirection.ASCENDING;
     }
 
     @Override
-    public int orderingComposition() {
-        return COMPOSITION_ASCENDING;
-    }
-
-    @Override
-    public long apply(@NotNull long[] array, int startIndex, int endIndex) {
+    public long sort(@NotNull long[] array, int startIndex, int endIndex) {
         int startWrite = startIndex;
         int endWrite = endIndex - 1;
         if (startWrite >= endWrite) {
@@ -68,8 +74,8 @@ public class LongAscendingQuickSort extends LongQuickSort {
                 break;
             }
         }
-        operationCount += apply(array, startIndex, startWrite);
-        operationCount += apply(array, endWrite + 1, endIndex);
+        operationCount += sort(array, startIndex, startWrite);
+        operationCount += sort(array, endWrite + 1, endIndex);
         while (startWrite <= endWrite) {
             array[startWrite++] = pivot;
         }

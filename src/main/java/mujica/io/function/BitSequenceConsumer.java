@@ -1,6 +1,6 @@
 package mujica.io.function;
 
-import mujica.ds.of_boolean.BitSequence;
+import mujica.ds.of_boolean.list.BitSequence;
 import mujica.reflect.function.BooleanConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;

@@ -3,7 +3,6 @@ package mujica.json.io;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -141,7 +140,7 @@ public class StringBuilderJsonWriter extends StringJsonWriter {
     @Override
     public void stringKey(@NotNull String key) {
         anyKey();
-        Quote.JSON.append(key, sb);
+        // Quote.JSON.append(key, sb);
         sb.append(':');
     }
 
@@ -196,7 +195,7 @@ public class StringBuilderJsonWriter extends StringJsonWriter {
     @Override
     public void stringValue(@NotNull CharSequence value) {
         anyValue();
-        Quote.JSON.append(value, sb);
+        // Quote.JSON.append(value, sb);
     }
 
     @Override

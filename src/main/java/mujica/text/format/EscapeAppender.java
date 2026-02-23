@@ -10,56 +10,55 @@ import org.jetbrains.annotations.Nullable;
 import java.io.PrintStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created on 2026/1/9.
- */
 @CodeHistory(date = "2026/1/9")
 @ReferencePage(title = "Pattern", href = "https://docs.oracle.com/en/java/javase/12/docs/api/java.base/java/util/regex/Pattern.html")
 public class EscapeAppender extends CharSequenceAppender {
 
-    @Name(value = "null", language = "en")
-    public static final int FLAG_NUL = 1, CODE_NUL = 0x00; // 0
-    @Name(value = "bell", language = "en")
-    public static final int FLAG_BEL = 1 << 1, CODE_BEL = 0x07; // 7
-    @Name(value = "backspace", language = "en")
-    public static final int FLAG_BS = 1 << 2, CODE_BS = 0x08; // 8
-    @Name(value = "horizontal tabulation", language = "en")
-    public static final int FLAG_HT = 1 << 3, CODE_HT = 0x09; // 9
-    @Name(value = "line feed", language = "en")
-    public static final int FLAG_LF = 1 << 4, CODE_LF = 0x0a; // 10
-    @Name(value = "vertical tabulation", language = "en")
-    public static final int FLAG_VT = 1 << 5, CODE_VT = 0x0b; // 11
-    @Name(value = "form feed", language = "en")
-    public static final int FLAG_FF = 1 << 5, CODE_FF = 0x0c; // 12
-    @Name(value = "carriage return", language = "en")
-    public static final int FLAG_CR = 1 << 6, CODE_CR = 0x0d; // 13
-    @Name(value = "quotation mark", language = "en")
-    public static final int FLAG_QUOT = 1 << 7, CODE_QUOT = 0x22; // 34
-    @Name(value = "apostrophe", language = "en")
-    public static final int FLAG_APOS = 1 << 8, CODE_APOS = 0x27; // 39
-    @Name(value = "slash", language = "en")
-    public static final int FLAG_SL = 1 << 9, CODE_SL = 0x2f; // 47
-    @Name(value = "backslash", language = "en")
-    public static final int FLAG_BSL = 1 << 10, CODE_BSL = 0x5c; // 92
-    @Name(value = "grave accent", language = "en")
-    public static final int FLAG_GA = 1 << 11, CODE_GA = 0x60; // 96
-
-    @Name(value = "\\d", language = "regex")
-    @Name(value = "\\p{Digit}", language = "regex")
-    public static final int FLAG_DIGIT = 1 << 12;
+    @ReferencePage(title = "Unicode Utilities: UnicodeSet", href = "https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5Cp%7BGeneral_Category%3DControl%7D&g=&i=")
+    public static final int FLAG_UNICODE_CONTROL = 1 << 2;
+    @ReferencePage(title = "Unicode Utilities: UnicodeSet", href = "https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5Cp%7BGeneral_Category%3DFormat%7D&g=&i=")
+    public static final int FLAG_UNICODE_FORMAT = 1 << 3;
     @Name(value = "\\h", language = "regex")
-    public static final int FLAG_HORIZONTAL_WHITESPACE = 1 << 14;
+    public static final int FLAG_HORIZONTAL_WHITESPACE = 1 << 4;
     @Name(value = "\\v", language = "regex")
-    public static final int FLAG_VERTICAL_WHITESPACE = 1 << 15;
+    public static final int FLAG_VERTICAL_WHITESPACE = 1 << 5;
     @Name(value = "\\s", language = "regex")
     @Name(value = "\\p{Space}", language = "regex")
-    public static final int FLAG_WHITESPACE = 1 << 16;
-    @Name(value = "\\R", language = "regex")
-    public static final int FLAG_LINE_BREAK = 1 << 17;
-    public static final int FLAG_REGEX = 1 << 18;
+    public static final int FLAG_WHITESPACE = 1 << 6;
+    @Name(value = "\\d", language = "regex")
+    @Name(value = "\\p{Digit}", language = "regex")
+    public static final int FLAG_DIGIT = 1 << 7;
+    public static final int FLAG_REGEX = 1 << 8;
+    public static final int FLAG_SURROGATE = 1 << 9;
+    @Name(value = "null", language = "en")
+    public static final int FLAG_NUL = 1 << 10, CODE_NUL = 0x00; // 0
+    @Name(value = "bell", language = "en")
+    public static final int FLAG_BEL = 1 << 11, CODE_BEL = 0x07; // 7
+    @Name(value = "backspace", language = "en")
+    public static final int FLAG_BS = 1 << 12, CODE_BS = 0x08; // 8
+    @Name(value = "horizontal tabulation", language = "en")
+    public static final int FLAG_HT = 1 << 13, CODE_HT = 0x09; // 9
+    @Name(value = "line feed", language = "en")
+    public static final int FLAG_LF = 1 << 14, CODE_LF = 0x0a; // 10
+    @Name(value = "vertical tabulation", language = "en")
+    public static final int FLAG_VT = 1 << 15, CODE_VT = 0x0b; // 11
+    @Name(value = "form feed", language = "en")
+    public static final int FLAG_FF = 1 << 16, CODE_FF = 0x0c; // 12
+    @Name(value = "carriage return", language = "en")
+    public static final int FLAG_CR = 1 << 17, CODE_CR = 0x0d; // 13
+    @Name(value = "quotation mark", language = "en")
+    public static final int FLAG_QUOT = 1 << 18, CODE_QUOT = 0x22; // 34
+    @Name(value = "apostrophe", language = "en")
+    public static final int FLAG_APOS = 1 << 19, CODE_APOS = 0x27; // 39
+    @Name(value = "slash", language = "en")
+    public static final int FLAG_SL = 1 << 20, CODE_SL = 0x2f; // 47
+    @Name(value = "backslash", language = "en")
+    public static final int FLAG_BSL = 1 << 21, CODE_BSL = 0x5c; // 92
+    @Name(value = "grave accent", language = "en")
+    public static final int FLAG_GA = 1 << 22, CODE_GA = 0x60; // 96
+
 
     protected final int flags;
 
@@ -456,12 +455,12 @@ public class EscapeAppender extends CharSequenceAppender {
     }
 
     @Override
-    public void append(@NotNull CharSequence string, @NotNull ByteBuffer out) {
-        append(string, 0, string.length(), out);
+    public void write(@NotNull CharSequence string, @NotNull ByteBuffer out) {
+        write(string, 0, string.length(), out);
     }
 
     @Override
-    public void append(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull ByteBuffer out) {
+    public void write(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull ByteBuffer out) {
         int writeIndex = startIndex;
         for (int readIndex = startIndex; readIndex < endIndex; readIndex++) {
             int escape = escapeCodePoint(string.charAt(readIndex));
@@ -479,12 +478,12 @@ public class EscapeAppender extends CharSequenceAppender {
     }
 
     @Override
-    public void append(@NotNull CharSequence string, @NotNull ByteBuf out) {
-        append(string, 0, string.length(), out);
+    public void write(@NotNull CharSequence string, @NotNull ByteBuf out) {
+        write(string, 0, string.length(), out);
     }
 
     @Override
-    public void append(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull ByteBuf out) {
+    public void write(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull ByteBuf out) {
         int writeIndex = startIndex;
         for (int readIndex = startIndex; readIndex < endIndex; readIndex++) {
             int escape = escapeCodePoint(string.charAt(readIndex));
@@ -723,30 +722,5 @@ public class EscapeAppender extends CharSequenceAppender {
         if (writeIndex < endIndex) {
             out.add(string.subSequence(writeIndex, endIndex).toString());
         }
-    }
-
-    @NotNull
-    @Override
-    public String apply(@NotNull CharSequence string) {
-        return apply(string, 0, string.length());
-    }
-
-    @NotNull
-    @Override
-    public String apply(@NotNull CharSequence string, int startIndex, int endIndex) {
-        final ArrayList<Object> tokens = new ArrayList<>();
-        addTokens(string, startIndex, endIndex, tokens);
-        final int size = tokens.size();
-        int previousStride = 1;
-        int currentStride = 2;
-        while (previousStride < size) {
-            for (int index = previousStride; index < size; index += currentStride) {
-                int parent = index - previousStride;
-                tokens.set(parent, tokens.get(parent).toString().concat(tokens.get(index).toString()));
-            }
-            previousStride = currentStride;
-            currentStride <<= 1;
-        }
-        return tokens.get(0).toString();
     }
 }

@@ -3,7 +3,6 @@ package mujica.io.codec;
 import mujica.io.hash.ByteFillPolicy;
 import mujica.io.hash.DataView;
 import mujica.io.hash.LongDataView;
-import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterOutputStream;
@@ -102,7 +101,7 @@ public class Base32DecodeOutputStream extends FilterOutputStream implements Base
             } else if ('2' <= digit && digit <= '7') {
                 digit += 26 - '2';
             } else {
-                throw new BadCodeException(Quote.DEFAULT.apply((byte) digit) + " not in [2-7A-Za-z]");
+                throw new BadCodeException(digit + " not in [2-7A-Za-z]");
             }
             srcShift -= SRC_STEP;
             buffer |= ((long) digit) << srcShift;

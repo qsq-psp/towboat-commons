@@ -1,8 +1,8 @@
 package mujica.ds.generic.set;
 
-/**
- * Created on 2025/6/5.
- */
+import mujica.reflect.modifier.CodeHistory;
+
+@CodeHistory(date = "2025/6/5")
 public enum CollectionConstant {
 
     EMPTY, REMOVED, PRESENT;

@@ -1,6 +1,8 @@
 package mujica.io.codec;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferenceCode;
+import mujica.reflect.modifier.Stable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterOutputStream;
@@ -8,11 +10,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 
-/**
- * Almost same with java.security.DigestOutputStream
- */
 @CodeHistory(date = "2023/10/10", project = "Ultramarine")
 @CodeHistory(date = "2025/3/11")
+@Stable(date = "2026/2/15")
+@ReferenceCode(groupId = "JDK", artifactId = "java.base", version = "12", fullyQualifiedName = "java.security.DigestOutputStream")
 public class DigestFilterOutputStream extends FilterOutputStream implements DigestStream {
 
     @NotNull

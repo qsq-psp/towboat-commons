@@ -49,4 +49,12 @@ public class NumberSegmentsCollator extends Collator {
     public int hashCode() {
         return radix;
     }
+
+    public boolean equals(Object obj) {
+        if (!(obj instanceof NumberSegmentsCollator)) {
+            return false;
+        }
+        final NumberSegmentsCollator that = (NumberSegmentsCollator) obj;
+        return this.radix == that.radix;
+    }
 }

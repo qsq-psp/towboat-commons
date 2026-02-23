@@ -2,7 +2,6 @@ package mujica.reflect.basic;
 
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.text.escape.Quote;
 import mujica.text.format.JavaFullyQualifiedNameValidator;
 import org.jetbrains.annotations.NotNull;
 
@@ -265,6 +264,6 @@ public class SourceFieldType implements NotLoadedFieldType<SourceFieldType>, Ser
     @NotNull
     @Override
     public String toString() {
-        return "SourceFieldType[" + Quote.DEFAULT.apply(string) + "]";
+        return "SourceFieldType[" + string + "]";
     }
 }

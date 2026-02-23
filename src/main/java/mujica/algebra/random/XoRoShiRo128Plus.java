@@ -6,15 +6,15 @@ import mujica.reflect.modifier.ReferenceCode;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/12/15.
- */
+import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
+
 @CodeHistory(date = "2025/12/15")
 @ReferencePage(title = "A PRNG shootout", href = "http://xoshiro.di.unimi.it/")
 @ReferenceCode(groupId = "it.unimi.dsi", artifactId = "dsiutils", version = "2.7.4", fullyQualifiedName = "it.unimi.dsi.util.XoRoShiRo128PlusRandom")
 @ReferenceCode(groupId = "org.apache.commons", artifactId = "commons-rng-core", version = "1.6", fullyQualifiedName = "org.apache.commons.rng.core.source64.XoRoShiRo128Plus")
 @Name(value = "xoroshiro128+", language = "en")
-public class XoRoShiRo128Plus implements RandomSource {
+public class XoRoShiRo128Plus implements RandomSource, LongSupplier {
 
     private long s0, s1;
 
@@ -26,6 +26,10 @@ public class XoRoShiRo128Plus implements RandomSource {
 
     public XoRoShiRo128Plus(@NotNull RandomSource source) {
         this(source.applyAsLong(Long.SIZE), source.applyAsLong(Long.SIZE));
+    }
+
+    public XoRoShiRo128Plus() {
+        this(GlobalRandomSource.INSTANCE);
     }
 
     @NotNull
@@ -41,10 +45,41 @@ public class XoRoShiRo128Plus implements RandomSource {
     }
 
     @Override
-    public long applyAsLong(int bitCount) {
+    public long getAsLong() {
         final long result = s0 + s1;
         next();
-        return result >>> (Long.SIZE - bitCount);
+        return result;
+    }
+
+    @Override
+    public long applyAsLong(int bitCount) {
+        return getAsLong() >>> (Long.SIZE - bitCount);
+    }
+
+    @NotNull
+    @Override
+    public IntSupplier intBind(int bitCount) {
+        if (bitCount == Integer.SIZE) {
+            return () -> (int) getAsLong();
+        }
+        if (!(0 < bitCount && bitCount < Integer.SIZE)) {
+            throw new IllegalArgumentException();
+        }
+        final int shift = Long.SIZE - bitCount;
+        return () -> (int) (getAsLong() >>> shift);
+    }
+
+    @NotNull
+    @Override
+    public LongSupplier longBind(int bitCount) {
+        if (bitCount == Long.SIZE) {
+            return this;
+        }
+        if (!(0 < bitCount && bitCount <= Long.SIZE)) {
+            throw new IllegalArgumentException();
+        }
+        final int shift = Long.SIZE - bitCount;
+        return () -> (int) (getAsLong() >>> shift);
     }
 
     private void jump(long[] jump) {
@@ -79,5 +114,14 @@ public class XoRoShiRo128Plus implements RandomSource {
 
     public void longJump() {
         jump(LONG_JUMP_COEFFICIENTS);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof XoRoShiRo128Plus)) {
+            return false;
+        }
+        final XoRoShiRo128Plus that = (XoRoShiRo128Plus) obj;
+        return this.s0 == that.s0 && this.s1 == that.s1;
     }
 }

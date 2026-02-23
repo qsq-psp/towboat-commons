@@ -15,9 +15,11 @@ class PackageConstantInfo extends IndirectUtf8ConstantInfo {
         super();
     }
 
+    public static final int TAG = 20;
+
     @Override
     protected int tag() {
-        return ConstantPool.CONSTANT_PACKAGE;
+        return TAG;
     }
 
     @Override

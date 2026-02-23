@@ -1,7 +1,7 @@
 package mujica.io.hash;
 
 import io.netty.buffer.ByteBufUtil;
-import mujica.ds.of_byte.ByteSequence;
+import mujica.ds.of_byte.list.ByteSequence;
 import mujica.algebra.random.FuzzyContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;

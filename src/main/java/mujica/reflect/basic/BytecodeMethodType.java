@@ -1,7 +1,6 @@
 package mujica.reflect.basic;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodType;
@@ -29,7 +28,51 @@ public class BytecodeMethodType implements NotLoadedMethodType<BytecodeFieldType
         } else {
             consumer.accept(new RuntimeException("bracket not found"));
         }
-        //
+        int count = 0;
+        int limit = Integer.MAX_VALUE;
+        while (count < limit) {
+            if (index >= length) {
+                consumer.accept(new StringIndexOutOfBoundsException());
+                return;
+            }
+            switch (string.charAt(index++)) {
+                case 'B':
+                case 'C':
+                case 'D':
+                case 'F':
+                case 'I':
+                case 'J':
+                case 'S':
+                case 'Z':
+                    count++;
+                    break;
+                case 'V':
+                    count++;
+                    if (count < limit) {
+                        consumer.accept(new RuntimeException("void parameter"));
+                    }
+                    break;
+                case 'L':
+                    count++;
+                    index = string.indexOf(';', index) + 1;
+                    if (index == 0) {
+                        consumer.accept(new RuntimeException("brackets not paired"));
+                        return;
+                    }
+                    break;
+                case '[':
+                    break;
+                case ')':
+                    limit = count + 1;
+                    break;
+                default:
+                    consumer.accept(new RuntimeException());
+                    break;
+            }
+        }
+        if (index < length) {
+            consumer.accept(new RuntimeException("trailing content"));
+        }
     }
 
     @Override
@@ -453,6 +496,6 @@ public class BytecodeMethodType implements NotLoadedMethodType<BytecodeFieldType
     @NotNull
     @Override
     public String toString() {
-        return "BytecodeMethodSignature[" + Quote.DEFAULT.apply(string) + "]";
+        return "BytecodeMethodSignature[" + string + "]";
     }
 }

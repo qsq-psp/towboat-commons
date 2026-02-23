@@ -17,9 +17,13 @@ public class ConcatList<E> extends AbstractList<E> implements Serializable {
 
     int[] offsets;
 
-    public ConcatList(@NotNull List<List<E>> segments) {
+    ConcatList(@NotNull List<List<E>> segments) {
         super();
         this.segments = segments;
+    }
+
+    public ConcatList() {
+        this(new ArrayList<>());
     }
 
     public void updateOffsets() {
@@ -37,7 +41,21 @@ public class ConcatList<E> extends AbstractList<E> implements Serializable {
 
     @Override
     public E get(int index) {
-        return null;
+        updateOffsets();
+        int low = 0;
+        int high = offsets.length;
+        while (low < high) {
+            int mid = (low + high) >>> 1;
+            if (index < offsets[mid]) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+        if (low != 0) {
+            index -= offsets[low - 1];
+        }
+        return segments.get(low).get(index);
     }
 
     @Override

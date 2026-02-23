@@ -10,7 +10,7 @@ import java.nio.charset.CharsetEncoder;
 @CodeHistory(date = "2025/4/19")
 public class Base16Charset extends Charset implements Base16Case {
 
-    static final String NAME = "BASE16";
+    static final String NAME = "BASE16"; // the default is lower case
     static final String NAME_LOWER = "BASE16-LOWER";
     static final String NAME_UPPER = "BASE16-UPPER";
 
@@ -26,8 +26,8 @@ public class Base16Charset extends Charset implements Base16Case {
     }
 
     @Override
-    public boolean contains(Charset cs) {
-        return cs instanceof Base16Charset && this.alphabetOffset == ((Base16Charset) cs).alphabetOffset;
+    public boolean contains(Charset that) {
+        return that instanceof Base16Charset && this.alphabetOffset == ((Base16Charset) that).alphabetOffset;
     }
 
     @NotNull

@@ -1,6 +1,6 @@
 package mujica.io.compress;
 
-import mujica.reflect.function.IOFunction;
+import mujica.io.function.IOFunction;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;

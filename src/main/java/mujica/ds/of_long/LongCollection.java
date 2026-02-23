@@ -1,6 +1,7 @@
 package mujica.ds.of_long;
 
 import mujica.ds.DataStructure;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -8,9 +9,7 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 
-/**
- * Created on 2026/1/14.
- */
+@CodeHistory(date = "2026/1/14")
 public interface LongCollection extends DataStructure, Iterable<Long> {
 
     @Override

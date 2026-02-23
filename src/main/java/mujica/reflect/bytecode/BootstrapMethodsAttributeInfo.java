@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.function.IntUnaryOperator;
 
-/**
- * Created on 2025/10/1.
- */
 @CodeHistory(date = "2025/10/1")
 @ReferencePage(title = "JVMS12 The BootstrapMethods Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.23")
 class BootstrapMethodsAttributeInfo extends AttributeInfo {

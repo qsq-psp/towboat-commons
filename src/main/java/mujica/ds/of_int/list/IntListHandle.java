@@ -23,12 +23,16 @@ public class IntListHandle implements Slot<int[]>, Serializable {
         return array;
     }
 
+    @Override
+    public void set(int[] newArray) {
+        array = newArray;
+    }
+
     @NotNull
     @Override
-    public int[] set(@NotNull int[] newArray) {
-        final int[] oldArray = array;
+    public IntListHandle box(int[] newArray) {
         array = newArray;
-        return oldArray;
+        return this;
     }
 
     @NotNull

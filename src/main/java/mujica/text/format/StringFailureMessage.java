@@ -1,7 +1,6 @@
 package mujica.text.format;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +27,7 @@ class StringFailureMessage implements LocalizedFailureMessage {
     @NotNull
     @Override
     public LocalizedFailureMessage replaceQuoted(@NotNull String mark, @NotNull String content) {
-        string = string.replace(mark, Quote.AUTO.apply(content));
+        string = string.replace(mark, DebugFormat.autoQuote().getOperator().apply(content));
         return this;
     }
 
@@ -49,7 +48,7 @@ class StringFailureMessage implements LocalizedFailureMessage {
     @NotNull
     @Override
     public LocalizedFailureMessage replaceQuoted(@NotNull String mark, char value) {
-        string = string.replace(mark, Quote.AUTO.apply(value));
+        string = string.replace(mark, DebugFormat.autoQuote().getStringifier().apply(value));
         return this;
     }
 
@@ -71,6 +70,6 @@ class StringFailureMessage implements LocalizedFailureMessage {
 
     @Override
     public String toString() {
-        return "StringFailureMessage[" + Quote.DEFAULT.apply(string) + "]";
+        return "StringFailureMessage[" + DebugFormat.autoQuote().getOperator().apply(string) + "]";
     }
 }

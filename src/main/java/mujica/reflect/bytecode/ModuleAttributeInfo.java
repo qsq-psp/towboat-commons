@@ -17,7 +17,7 @@ class ModuleAttributeInfo extends AttributeInfo {
 
     private static final long serialVersionUID = 0x5cb98421479a38a7L;
 
-    @ConstantType(tags = ConstantPool.CONSTANT_MODULE)
+    @ConstantType(tags = ModuleConstantInfo.TAG)
     private int moduleIndex;
 
     @NotNull
@@ -36,7 +36,7 @@ class ModuleAttributeInfo extends AttributeInfo {
         private static final long serialVersionUID = 0x58dc34a8eadba0e0L;
 
         @DataType("u16-{0}")
-        @ConstantType(tags = ConstantPool.CONSTANT_MODULE)
+        @ConstantType(tags = ModuleConstantInfo.TAG)
         private int moduleIndex;
 
         private int flags;
@@ -118,14 +118,14 @@ class ModuleAttributeInfo extends AttributeInfo {
         private static final long serialVersionUID = 0xfc19da983c170d4dL;
 
         @DataType("u16")
-        @ConstantType(tags = ConstantPool.CONSTANT_PACKAGE)
+        @ConstantType(tags = PackageConstantInfo.TAG)
         int packageIndex;
 
         @DataType("u16")
         int flags;
 
         @DataType("u16")
-        @ConstantType(tags = ConstantPool.CONSTANT_MODULE)
+        @ConstantType(tags = ModuleConstantInfo.TAG)
         short[] toModuleIndexes;
 
         Export() {
@@ -219,14 +219,14 @@ class ModuleAttributeInfo extends AttributeInfo {
         private static final long serialVersionUID = 0xfd0ff69094437fccL;
 
         @DataType("u16")
-        @ConstantType(tags = ConstantPool.CONSTANT_PACKAGE)
+        @ConstantType(tags = PackageConstantInfo.TAG)
         int packageIndex;
 
         @DataType("u16")
         int flags;
 
         @DataType("u16")
-        @ConstantType(tags = ConstantPool.CONSTANT_MODULE)
+        @ConstantType(tags = ModuleConstantInfo.TAG)
         short[] toModuleIndexes;
 
         Open() {

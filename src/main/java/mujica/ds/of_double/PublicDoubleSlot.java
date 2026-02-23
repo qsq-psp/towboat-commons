@@ -48,10 +48,8 @@ public class PublicDoubleSlot extends Number implements DoubleSlot, Comparable<P
     }
 
     @Override
-    public double setDouble(double newValue) {
-        final double oldValue = value;
+    public void setDouble(double newValue) {
         value = newValue;
-        return oldValue;
     }
 
     @Override

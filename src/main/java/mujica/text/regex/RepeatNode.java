@@ -4,9 +4,6 @@ import mujica.ds.of_int.set.IntervalIntSet;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/12/18.
- */
 @CodeHistory(date = "2022/3/27", project = "infrastructure", name = "Repeat")
 @CodeHistory(date = "2025/12/18")
 public class RepeatNode extends SlotNode {

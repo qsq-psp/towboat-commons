@@ -1,5 +1,6 @@
 package mujica.ds.of_int.list;
 
+import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -229,10 +230,10 @@ public class CopyOnWriteIntList extends AbstractIntList {
     }
 
     @Override
-    public void sort(boolean descending) {
+    public void sort(@NotNull MonotonicityDirection direction) {
         final int[] newArray = array.clone();
         Arrays.sort(newArray);
-        if (descending) {
+        if (direction == MonotonicityDirection.DESCENDING) { // reverse
             int i = 0;
             int j = newArray.length - 1;
             while (i < j) {

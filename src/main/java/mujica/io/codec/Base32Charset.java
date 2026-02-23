@@ -25,8 +25,8 @@ public class Base32Charset extends Charset implements Base32Case {
     }
 
     @Override
-    public boolean contains(Charset cs) {
-        return cs instanceof Base32Charset && this.alphabetOffset == ((Base32Charset) cs).alphabetOffset;
+    public boolean contains(Charset that) {
+        return that instanceof Base32Charset && this.alphabetOffset == ((Base32Charset) that).alphabetOffset;
     }
 
     @Override

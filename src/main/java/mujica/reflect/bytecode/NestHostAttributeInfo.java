@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 
 @CodeHistory(date = "2025/10/2")
 @ReferencePage(title = "JVMS12 The NestHost Attribute", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7.28")
-public class NestHostAttributeInfo extends AttributeInfo {
+class NestHostAttributeInfo extends AttributeInfo {
 
     private static final long serialVersionUID = 0xe8c2f4a1aa2347faL;
 

@@ -30,9 +30,7 @@ class JsonArraySlot implements Slot<Object>, Serializable {
     }
 
     @Override
-    public Object set(@NotNull Object newValue) {
-        final Object oldValue = jsonArray.getObject(index);
+    public void set(@NotNull Object newValue) {
         jsonArray.setObject(index, newValue);
-        return oldValue;
     }
 }

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2024/2/17", project = "Ultramarine")
+@CodeHistory(date = "2025/3/2")
 public abstract class ConicSection<P extends Point, Q extends Point> extends OriginJordan2<P> {
 
     @NotNull

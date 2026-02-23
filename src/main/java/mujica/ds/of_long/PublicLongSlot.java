@@ -94,10 +94,8 @@ public class PublicLongSlot extends Number implements LongSlot, Comparable<Publi
     }
 
     @Override
-    public long setLong(long newValue) {
-        final long oldValue = value;
+    public void setLong(long newValue) {
         value = newValue;
-        return oldValue;
     }
 
     @Override

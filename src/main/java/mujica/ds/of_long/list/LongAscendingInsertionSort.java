@@ -1,6 +1,8 @@
 package mujica.ds.of_long.list;
 
 import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.MonotonicityDirection;
+import mujica.ds.of_int.IntSlot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
@@ -8,9 +10,19 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2025/3/21", name = "InsertionSort")
 @CodeHistory(date = "2025/11/1")
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
-public class LongAscendingInsertionSort implements SortingAlgorithm<long[]> {
+public class LongAscendingInsertionSort extends SortingAlgorithm<long[]> {
 
     public static final LongAscendingInsertionSort INSTANCE = new LongAscendingInsertionSort();
+
+    public LongAscendingInsertionSort() {
+        super();
+    }
+
+    @NotNull
+    @Override
+    public MonotonicityDirection monotonicity() {
+        return MonotonicityDirection.ASCENDING;
+    }
 
     @Override
     public boolean stable() {
@@ -18,13 +30,8 @@ public class LongAscendingInsertionSort implements SortingAlgorithm<long[]> {
     }
 
     @Override
-    public int orderingComposition() {
-        return COMPOSITION_ASCENDING;
-    }
-
-    @Override
-    public long apply(@NotNull long[] array, int startIndex, int endIndex) {
-        long operation = 0L;
+    public long sort(@NotNull long[] array, int startIndex, int endIndex) {
+        long operationCount = 0L;
         int readIndex = startIndex;
         while (readIndex < endIndex) {
             long key = array[readIndex];
@@ -32,11 +39,41 @@ public class LongAscendingInsertionSort implements SortingAlgorithm<long[]> {
             while (writeIndex >= startIndex && array[writeIndex] > key) {
                 array[writeIndex + 1] = array[writeIndex];
                 writeIndex--;
-                operation++;
+                operationCount++;
             }
             array[writeIndex + 1] = key;
             readIndex++;
         }
-        return operation;
+        return operationCount;
+    }
+
+    @Override
+    public long sortUnique(@NotNull long[] array, int startIndex, @NotNull IntSlot endSlot) {
+        final int endIndex = endSlot.getInt();
+        long operationCount = 0L;
+        int writeIndex = startIndex;
+        LABEL:
+        for (int readIndex = startIndex; readIndex < endIndex; readIndex++) {
+            long key = array[readIndex];
+            for (int index = writeIndex - 1; index >= startIndex; index--) {
+                if (array[index] <= key) {
+                    if (array[index] < key) {
+                        index++;
+                        int length = writeIndex - index;
+                        System.arraycopy(array, index, array, index + 1, length);
+                        array[index] = key;
+                        writeIndex++;
+                        operationCount += length + 1;
+                    }
+                    continue LABEL;
+                }
+            }
+            System.arraycopy(array, startIndex, array, startIndex + 1, writeIndex - startIndex);
+            array[startIndex] = key;
+            writeIndex++;
+            operationCount += writeIndex - startIndex;
+        }
+        endSlot.setInt(writeIndex);
+        return operationCount;
     }
 }

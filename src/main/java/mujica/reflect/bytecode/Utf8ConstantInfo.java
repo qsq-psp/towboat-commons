@@ -3,7 +3,7 @@ package mujica.reflect.bytecode;
 import mujica.io.nest.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.text.escape.Quote;
+import mujica.text.format.DebugFormat;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -124,7 +124,7 @@ class Utf8ConstantInfo extends ConstantInfo {
     @NotNull
     @Override
     public String toString(@NotNull ClassFile context) {
-        return "#" + newIndex + " utf8 " + Quote.JSON.apply(string);
+        return "#" + newIndex + " utf8 " + DebugFormat.autoQuote().getOperator().apply(string);
     }
 
     @Override

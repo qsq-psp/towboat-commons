@@ -1,7 +1,7 @@
 package mujica.io.compress;
 
 import io.netty.handler.codec.CodecException;
-import mujica.ds.of_boolean.BitSequence;
+import mujica.ds.of_boolean.list.BitSequence;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

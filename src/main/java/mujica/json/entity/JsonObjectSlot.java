@@ -29,9 +29,7 @@ class JsonObjectSlot implements Slot<Object>, Serializable {
     }
 
     @Override
-    public Object set(@NotNull Object newValue) {
-        final Object oldValue = jsonObject.getObject(name);
+    public void set(@NotNull Object newValue) {
         jsonObject.setObject(name, newValue);
-        return oldValue;
     }
 }

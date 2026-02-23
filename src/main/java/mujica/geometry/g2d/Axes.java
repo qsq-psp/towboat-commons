@@ -5,11 +5,6 @@ import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created in existence on 2018/7/9, named MtCoordSysD3.
- * Recreated in coo on 2020/4/10, named PlanarTransform.Orthogonal.
- * Recreated on 2022/6/26.
- */
 @CodeHistory(date = "2018/7/9", project = "existence", name = "MtCoordSysD3")
 @CodeHistory(date = "2020/4/10", project = "coo", name = "PlanarTransform.Orthogonal")
 @CodeHistory(date = "2022/6/26")

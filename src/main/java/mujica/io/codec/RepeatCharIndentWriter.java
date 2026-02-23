@@ -1,5 +1,6 @@
 package mujica.io.codec;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.util.Arrays;
 /**
  * Created on 2025/9/22.
  */
+@CodeHistory(date = "2025/9/22")
 public class RepeatCharIndentWriter extends IndentWriter {
 
     static final int TEMPLATE_SIZE = 64;

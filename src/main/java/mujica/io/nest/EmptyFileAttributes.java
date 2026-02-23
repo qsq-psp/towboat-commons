@@ -1,5 +1,6 @@
 package mujica.io.nest;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.attribute.BasicFileAttributes;
@@ -9,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created on 2025/10/10.
  */
+@CodeHistory(date = "2025/10/10")
 public class EmptyFileAttributes implements BasicFileAttributes {
 
     public static final FileTime EPOCH = FileTime.from(0L, TimeUnit.SECONDS);

@@ -34,10 +34,8 @@ public class PublicBooleanSlot implements BooleanSlot, Cloneable, Serializable {
     }
 
     @Override
-    public boolean setBoolean(boolean newValue) {
-        final boolean oldValue = value;
+    public void setBoolean(boolean newValue) {
         value = newValue;
-        return oldValue;
     }
 
     @Override

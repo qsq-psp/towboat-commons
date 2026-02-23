@@ -3,9 +3,6 @@ package mujica.reflect.function;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/3/16.
- */
 @CodeHistory(date = "2025/3/16")
 @FunctionalInterface
 public interface WildRunnable {

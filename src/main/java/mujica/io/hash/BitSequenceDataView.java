@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.of_boolean.BitSequence;
+import mujica.ds.of_boolean.list.BitSequence;
 import mujica.io.codec.Base16Case;
 import mujica.algebra.discrete.ClampedMath;
 import mujica.reflect.modifier.CodeHistory;

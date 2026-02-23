@@ -3,7 +3,8 @@ package mujica.ds.generic.heap;
 import mujica.ds.ConsistencyException;
 import mujica.ds.ReferenceException;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.escape.Quote;
+import mujica.text.format.CharSequenceAppender;
+import mujica.text.format.UniversalAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -300,7 +301,7 @@ public class LinkedPriorityQueue<E> extends AbstractCollection<E> implements Pri
     @NotNull
     @Override
     public String detailToString() {
-        final Quote quote = Quote.DEFAULT;
+        final UniversalAppender appender = UniversalAppender.createIntAll();
         final StringBuilder sb = new StringBuilder();
         sb.append("[links = [");
         {
@@ -310,7 +311,7 @@ public class LinkedPriorityQueue<E> extends AbstractCollection<E> implements Pri
                 if (subsequent) {
                     sb.append(", ");
                 }
-                quote.append(node.element, sb);
+                appender.append(node.element, sb);
                 node = node.next;
                 subsequent = true;
             }

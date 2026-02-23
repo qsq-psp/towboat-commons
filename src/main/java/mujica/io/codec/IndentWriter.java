@@ -1,5 +1,6 @@
 package mujica.io.codec;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterWriter;
@@ -9,6 +10,7 @@ import java.io.Writer;
 /**
  * Created on 2025/9/22.
  */
+@CodeHistory(date = "2025/9/22")
 public class IndentWriter extends FilterWriter {
 
     /**

@@ -1,87 +1,121 @@
 package mujica.ds.of_int.list;
 
+import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.MonotonicityDirection;
+import mujica.ds.of_int.IntSlot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
+@CodeHistory(date = "2025/3/15", name = "QuickSort")
 @CodeHistory(date = "2025/12/23")
 @ReferencePage(title = "快速排序", href = "https://oi-wiki.org/basic/quick-sort/")
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
-public class IntDescendingQuickSort extends IntQuickSort {
+public class IntDescendingQuickSort extends SortingAlgorithm<int[]> {
+
+    @NotNull
+    final IntPivotSelector pivotSelector;
 
     public IntDescendingQuickSort(@NotNull IntPivotSelector pivotSelector) {
-        super(pivotSelector);
+        super();
+        this.pivotSelector = pivotSelector;
     }
 
     @Override
-    public int orderingComposition() {
-        return COMPOSITION_DESCENDING;
+    public MonotonicityDirection monotonicity() {
+        return MonotonicityDirection.DESCENDING;
     }
 
     @Override
-    public long apply(@NotNull int[] array, int startIndex, int endIndex) {
-        int lowIndex = startIndex;
-        int highIndex = endIndex - 1;
-        if (lowIndex >= highIndex) {
-            return 0L;
+    public long sort(@NotNull int[] array, int startIndex, int endIndex) {
+        int startWriteIndex = startIndex;
+        int endWriteIndex = endIndex;
+        { // end of recursion
+            int length = endWriteIndex - startWriteIndex;
+            if (length <= 2) {
+                if (length == 2) {
+                    endWriteIndex--;
+                    if (array[startWriteIndex] < array[endWriteIndex]) {
+                        int temp = array[startWriteIndex];
+                        array[startWriteIndex] = array[endWriteIndex];
+                        array[endWriteIndex] = temp;
+                    }
+                    return 1L;
+                } else {
+                    return 0L;
+                }
+            }
         }
-        long operationCount = 0L;
         final int pivot = pivotSelector.select(array, startIndex, endIndex);
-        BISECT:
+        int startReadIndex = startWriteIndex;
+        int endReadIndex = endWriteIndex;
+        long operationCount = 0L;
+        LABEL:
         while (true) {
-            while (true) {
-                if (array[lowIndex] >= pivot) {
-                    if (++lowIndex >= highIndex) {
-                        break BISECT;
+            while (true) { // skip from start to end
+                int value = array[startReadIndex];
+                if (value >= pivot) {
+                    if (value > pivot) {
+                        array[startWriteIndex++] = value;
+                    }
+                    if (++startReadIndex >= endReadIndex) {
+                        break LABEL;
                     }
                 } else {
                     break;
                 }
             }
-            while (true) {
-                if (array[highIndex] <= pivot) {
-                    if (--highIndex <= lowIndex) {
-                        break BISECT;
+            while (true) { // skip from end to start
+                int value = array[--endReadIndex];
+                if (value <= pivot) {
+                    if (value < pivot) {
+                        array[--endWriteIndex] = value;
+                    }
+                    if (startReadIndex >= endReadIndex) {
+                        break LABEL;
                     }
                 } else {
+                    ++endReadIndex;
                     break;
                 }
             }
-            int value = array[lowIndex];
-            array[lowIndex] = array[highIndex];
-            array[highIndex] = value;
-            lowIndex++;
-            highIndex--;
+            { // swap
+                int value = array[startReadIndex++];
+                array[startWriteIndex++] = array[--endReadIndex];
+                array[--endWriteIndex] = value;
+            }
             operationCount++;
-            if (lowIndex >= highIndex) {
+            if (startReadIndex >= endReadIndex) {
                 break;
             }
         }
-        assert lowIndex - highIndex == 0 || lowIndex - highIndex == 1;
-        if (lowIndex == highIndex && array[lowIndex] >= pivot) {
-            lowIndex++;
+        operationCount += sort(array, startIndex, startWriteIndex);
+        operationCount += sort(array, endWriteIndex, endIndex);
+        while (startWriteIndex < endWriteIndex) {
+            array[startWriteIndex++] = pivot;
         }
-        if (lowIndex == startIndex || lowIndex == endIndex) {
-            for (highIndex = startIndex; highIndex < endIndex; highIndex++) {
-                if (array[highIndex] == pivot) {
-                    break;
-                }
-            }
-            assert highIndex < endIndex;
-            if (lowIndex == startIndex) {
-                array[highIndex] = array[lowIndex];
-                array[lowIndex] = pivot;
-                lowIndex++;
-            } else {
-                lowIndex--;
-                array[highIndex] = array[lowIndex];
-                array[lowIndex] = pivot;
-            }
+        return operationCount;
+    }
+
+    @Override
+    public long sortUnique(@NotNull int[] array, int startIndex, @NotNull IntSlot endSlot) {
+        final int endIndex = endSlot.getInt();
+        if (endIndex - startIndex <= 1) {
+            return 0L;
         }
-        assert startIndex < lowIndex;
-        assert lowIndex < endIndex;
-        operationCount += apply(array, startIndex, lowIndex);
-        operationCount += apply(array, lowIndex, endIndex);
+        long operationCount = sort(array, startIndex, endIndex);
+        int previous = array[startIndex++];
+        int writeIndex = startIndex;
+        for (int readIndex = startIndex; readIndex < endIndex; readIndex++) {
+            int current = array[readIndex];
+            if (previous == current) {
+                continue;
+            }
+            array[writeIndex++] = current;
+            previous = current;
+            operationCount++;
+        }
+        endSlot.setInt(writeIndex);
         return operationCount;
     }
 }

@@ -7,9 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-/**
- * Created on 2022/10/5.
- */
 @CodeHistory(date = "2022/10/5", project = "Ultramarine")
 @CodeHistory(date = "2025/3/2")
 public class Arc<P extends Point, D extends Direction2> extends OriginJordan2<P> implements Curve2 {

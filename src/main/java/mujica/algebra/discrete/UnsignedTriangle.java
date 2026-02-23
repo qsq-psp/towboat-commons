@@ -1,5 +1,6 @@
 package mujica.algebra.discrete;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -8,6 +9,8 @@ import java.math.BigInteger;
  * Created in Ultramarine on 2023/10/6, named TriangleUU.
  * Recreated on 2025/2/28.
  */
+@CodeHistory(date = "2023/10/6", project = "Ultramarine", name = "TriangleUU")
+@CodeHistory(date = "2025/2/28")
 public class UnsignedTriangle implements DimensionCodec {
 
     public static final UnsignedTriangle INSTANCE = new UnsignedTriangle();

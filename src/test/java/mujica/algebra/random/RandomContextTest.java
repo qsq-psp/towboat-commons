@@ -1,5 +1,6 @@
 package mujica.algebra.random;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Created on 2026/1/21.
  */
+@CodeHistory(date = "2026/1/21")
 public class RandomContextTest {
 
     @NotNull

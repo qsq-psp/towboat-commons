@@ -12,7 +12,7 @@ public interface IntSlot {
 
     int getInt();
 
-    int setInt(int newValue);
+    int setInt(int newValue); // todo: return void
 
     default int setInt(@NotNull Number newValue) {
         return setInt(newValue.intValue());

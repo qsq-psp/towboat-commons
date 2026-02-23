@@ -4,7 +4,6 @@ import mujica.io.hash.ByteFillPolicy;
 import mujica.io.hash.DataView;
 import mujica.io.hash.LongDataView;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterInputStream;
@@ -75,7 +74,7 @@ public class Base32DecodeInputStream extends FilterInputStream implements Base32
         } else if ('2' <= digit && digit <= '7') {
             digit += 26 - '2';
         } else {
-            throw new BadCodeException(Quote.DEFAULT.apply((byte) digit) + " not in [2-7A-Za-z]");
+            throw new BadCodeException(digit + " not in [2-7A-Za-z]");
         }
         srcShift -= SRC_STEP;
         buffer |= ((long) digit) << srcShift;
@@ -94,7 +93,7 @@ public class Base32DecodeInputStream extends FilterInputStream implements Base32
         } else if ('2' <= digit && digit <= '7') {
             digit += 26 - '2';
         } else {
-            throw new BadCodeException(Quote.DEFAULT.apply((byte) digit) + " not in [2-7A-Za-z]");
+            throw new BadCodeException(digit + " not in [2-7A-Za-z]");
         }
         srcShift -= SRC_STEP;
         buffer |= ((long) digit) << srcShift;
@@ -108,7 +107,7 @@ public class Base32DecodeInputStream extends FilterInputStream implements Base32
                 while (stopShift < srcShift) {
                     int sign = in.read();
                     if (sign != '=') {
-                        throw new BadCodeException(Quote.DEFAULT.apply((byte) sign) + " != '='");
+                        throw new BadCodeException(sign + " != '='");
                     }
                     stopShift += SRC_STEP;
                 }

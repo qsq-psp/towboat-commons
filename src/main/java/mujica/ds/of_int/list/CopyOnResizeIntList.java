@@ -1,5 +1,8 @@
 package mujica.ds.of_int.list;
 
+import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.MonotonicityDirection;
+import mujica.ds.of_int.PublicIntSlot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
@@ -338,18 +341,51 @@ public class CopyOnResizeIntList extends AbstractIntList {
                 s = t;
             }
         } else {
-            // todo
+            int[] dArray = Arrays.copyOfRange(array, n - d, d);
+            System.arraycopy(array, 0, array, d, n - d);
+            System.arraycopy(dArray, 0, array, 0, d);
         }
     }
 
     @Override
-    public void sort(boolean descending) {
+    public void sort(@NotNull MonotonicityDirection direction) {
         Arrays.sort(array, 0, endIndex);
-        if (descending) {
+        if (direction == MonotonicityDirection.ASCENDING) {
+            modCount++;
+        } else if (direction == MonotonicityDirection.DESCENDING) {
             reverse(); // modCount included
         } else {
-            modCount++;
+            throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public long sort(@NotNull SortingAlgorithm<int[]> algorithm) {
+        return algorithm.sort(array, 0, endIndex);
+    }
+
+    @Override
+    public long sortPart(@NotNull SortingAlgorithm<int[]> algorithm, int m) {
+        if (!(0 <= m && m <= endIndex)) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (m == 0) {
+            clear();
+            return 0L;
+        }
+        final long r = algorithm.sortPart(array, 0, m, endIndex);
+        endIndex = m;
+        modCount++;
+        return r;
+    }
+
+    @Override
+    public long sortUnique(@NotNull SortingAlgorithm<int[]> algorithm) {
+        final PublicIntSlot slot = new PublicIntSlot(endIndex);
+        final long r = algorithm.sortUnique(array, 0, slot);
+        endIndex = slot.getInt();
+        modCount++;
+        return r;
     }
 
     @NotNull

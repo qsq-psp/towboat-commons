@@ -4,8 +4,7 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created on 2025/5/14.
- * Not an enum, same as {@code ByteOrder}
+ * not an enum, same as {@code ByteOrder}
  */
 @CodeHistory(date = "2025/5/14")
 public final class ByteAlign {

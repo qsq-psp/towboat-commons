@@ -4,7 +4,7 @@ import mujica.reflect.modifier.CodeHistory;
 
 @CodeHistory(date = "2025/1/27", project = "OSHI", name = "DigestState")
 @CodeHistory(date = "2025/5/14")
-public enum HashState {
+enum HashState {
 
     CLEARED, STARTED, FINISHED;
 

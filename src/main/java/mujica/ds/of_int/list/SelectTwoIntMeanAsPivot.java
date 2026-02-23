@@ -4,9 +4,6 @@ import mujica.algebra.discrete.CastToZero;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/12/19.
- */
 @CodeHistory(date = "2025/12/19")
 public class SelectTwoIntMeanAsPivot implements IntPivotSelector {
 

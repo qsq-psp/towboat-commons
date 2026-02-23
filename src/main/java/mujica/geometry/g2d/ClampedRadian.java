@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * The clamped range is the value range of Math.atan2 except PI, which is [-PI, PI)
  */
 @CodeHistory(date = "2022/6/26", project = "Ultramarine")
+@CodeHistory(date = "2025/3/2")
 public class ClampedRadian extends Radian {
 
     private static final long serialVersionUID = 0x2962c49b390606bcL;

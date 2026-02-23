@@ -688,11 +688,6 @@ public class RandomContext implements Serializable {
         return list;
     }
 
-    @NotNull
-    public <T> Comparator<T> shuffleComparator() {
-        return new ShuffleComparator<>();
-    }
-
     private class ShuffleComparator<T> implements Comparator<T>, Serializable {
 
         private static final long serialVersionUID = 0x6e5d1a3ba8fe0ec2L;
@@ -722,6 +717,11 @@ public class RandomContext implements Serializable {
         public boolean equals(Object obj) {
             return obj instanceof ShuffleComparator;
         }
+    }
+
+    @NotNull
+    public <T> Comparator<T> shuffleComparator() {
+        return new ShuffleComparator<>();
     }
 
     public <T> T select(@NotNull T[] array) {

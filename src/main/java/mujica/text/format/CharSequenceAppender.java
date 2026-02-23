@@ -53,26 +53,26 @@ public class CharSequenceAppender {
         return deltaCharCount(string.subSequence(startIndex, endIndex));
     }
 
-    public void append(@NotNull CharSequence string, @NotNull ByteBuffer out) {
+    public void write(@NotNull CharSequence string, @NotNull ByteBuffer out) {
         out.put(string.toString().getBytes(StandardCharsets.UTF_8));
     }
 
-    public void append(@NotNull CharSequence string,
-                       @Index(of = "string") int startIndex,
-                       @Index(of = "string", inclusive = false) int endIndex,
-                       @NotNull ByteBuffer out) {
-        append(string.subSequence(startIndex, endIndex), out);
+    public void write(@NotNull CharSequence string,
+                      @Index(of = "string") int startIndex,
+                      @Index(of = "string", inclusive = false) int endIndex,
+                      @NotNull ByteBuffer out) {
+        write(string.subSequence(startIndex, endIndex), out);
     }
 
-    public void append(@NotNull CharSequence string, @NotNull ByteBuf out) {
+    public void write(@NotNull CharSequence string, @NotNull ByteBuf out) {
         out.writeCharSequence(string, StandardCharsets.UTF_8);
     }
 
-    public void append(@NotNull CharSequence string,
-                       @Index(of = "string") int startIndex,
-                       @Index(of = "string", inclusive = false) int endIndex,
-                       @NotNull ByteBuf out) {
-        append(string.subSequence(startIndex, endIndex), out);
+    public void write(@NotNull CharSequence string,
+                      @Index(of = "string") int startIndex,
+                      @Index(of = "string", inclusive = false) int endIndex,
+                      @NotNull ByteBuf out) {
+        write(string.subSequence(startIndex, endIndex), out);
     }
 
     public void append(@NotNull CharSequence string, @NotNull StringBuilder out) {
@@ -126,17 +126,5 @@ public class CharSequenceAppender {
                        @Index(of = "string", inclusive = false) int endIndex,
                        @NotNull List<Object> out) {
         addTokens(string.subSequence(startIndex, endIndex), out);
-    }
-
-    @NotNull
-    public String apply(@NotNull CharSequence string) {
-        return string.toString();
-    }
-
-    @NotNull
-    public String apply(@NotNull CharSequence string,
-                      @Index(of = "string") int startIndex,
-                      @Index(of = "string", inclusive = false) int endIndex) {
-        return apply(string.subSequence(startIndex, endIndex));
     }
 }

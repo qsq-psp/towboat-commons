@@ -2,6 +2,7 @@ package mujica.ds;
 
 import mujica.ds.of_boolean.PublicBooleanSlot;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferenceCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -11,9 +12,7 @@ public interface HealthAware {
 
     void checkHealth(@NotNull Consumer<RuntimeException> consumer);
 
-    /**
-     * it is called dataStructureInvariants() in LinkedList
-     */
+    @ReferenceCode(groupId = "JDK", artifactId = "java.base", version = "12", fullyQualifiedName = "java.util.LinkedList.dataStructureInvariants()")
     default void checkHealth() throws RuntimeException {
         checkHealth(re -> {throw re;});
     }

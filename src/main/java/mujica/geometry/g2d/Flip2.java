@@ -6,10 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-/**
- * Created on 2022/6/27.
- */
 @CodeHistory(date = "2022/6/27", project = "Ultramarine")
+@CodeHistory(date = "2025/3/2")
 public class Flip2 extends Translation2 implements FlipOption2 {
 
     private static final long serialVersionUID = 0xdd0221d9348f764cL;

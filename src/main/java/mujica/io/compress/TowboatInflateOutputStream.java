@@ -1,6 +1,6 @@
 package mujica.io.compress;
 
-import mujica.ds.of_boolean.BitSequence;
+import mujica.ds.of_boolean.list.BitSequence;
 import mujica.ds.of_int.map.IntMap;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;

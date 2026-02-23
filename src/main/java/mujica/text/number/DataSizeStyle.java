@@ -133,9 +133,9 @@ public class DataSizeStyle extends HexEncoder implements IntegralToStringFunctio
             }
             out.append("0x");
             if ((style & HEX_PADDING) != 0) {
-                hex32(out, value);
+                hex32(value, out);
             } else {
-                hexMax32(out, value);
+                hexMax32(value, out);
             }
             subsequent = true;
         }
@@ -208,9 +208,9 @@ public class DataSizeStyle extends HexEncoder implements IntegralToStringFunctio
             }
             out.append("0x");
             if ((style & HEX_PADDING) != 0) {
-                hex64(out, value);
+                hex64(value, out);
             } else {
-                hexMax64(out, value);
+                hexMax64(value, out);
             }
             subsequent = true;
         }

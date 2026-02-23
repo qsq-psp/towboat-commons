@@ -9,8 +9,18 @@ import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 @CodeHistory(date = "2025/3/2")
 public class GlobalRandomSource extends LocalRandomSource {
 
+    public static final GlobalRandomSource INSTANCE = new GlobalRandomSource(0x99b2f581486c9adfL);
+
     private static final AtomicLongFieldUpdater<LocalRandomSource> X_UPDATER
             = AtomicLongFieldUpdater.newUpdater(LocalRandomSource.class, "x");
+
+    public GlobalRandomSource() {
+        super();
+    }
+
+    public GlobalRandomSource(long x) {
+        super(x);
+    }
 
     @NotNull
     @Override
@@ -19,12 +29,12 @@ public class GlobalRandomSource extends LocalRandomSource {
     }
 
     @Override
-    protected long next32(int bitCount) {
+    public long getAsLong() {
         while (true) {
             long x = this.x;
             long nx = (x * A + C) & M;
             if (X_UPDATER.compareAndSet(this, x, nx)) {
-                return nx >>> (H - bitCount);
+                return nx;
             }
         }
     }

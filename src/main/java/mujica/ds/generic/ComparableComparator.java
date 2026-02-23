@@ -1,7 +1,6 @@
 package mujica.ds.generic;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.DataType;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandle;
@@ -38,5 +37,15 @@ public class ComparableComparator<T> implements Comparator<T>, Serializable {
             }
             throw re;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) serialVersionUID; // easy
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ComparableComparator; // unique for every T
     }
 }

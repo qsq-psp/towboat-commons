@@ -4,9 +4,6 @@ import mujica.reflect.modifier.CodeHistory;
 
 import java.io.Serializable;
 
-/**
- * Created on 2025/3/27.
- */
 @CodeHistory(date = "2025/3/27")
 class SimpleIntMapEntry implements IntMap.Entry, Serializable {
 

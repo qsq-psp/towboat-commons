@@ -8,5 +8,5 @@ public interface BooleanSlot {
 
     boolean getBoolean();
 
-    boolean setBoolean(boolean newValue);
+    void setBoolean(boolean newValue);
 }

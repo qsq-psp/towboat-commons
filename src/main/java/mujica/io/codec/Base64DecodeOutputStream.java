@@ -4,7 +4,6 @@ import mujica.io.hash.ByteFillPolicy;
 import mujica.io.hash.DataView;
 import mujica.io.hash.IntDataView;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
@@ -64,7 +63,7 @@ public class Base64DecodeOutputStream extends FilterOutputStream implements Base
             case '/':
                 return 63;
             default:
-                throw new BadCodeException(Quote.DEFAULT.apply((byte) value) + " not in [0-9A-Za-z\\-+_/]");
+                throw new BadCodeException(value + " not in [0-9A-Za-z\\-+_/]");
         }
     }
 

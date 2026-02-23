@@ -2,7 +2,6 @@ package mujica.reflect.basic;
 
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.text.escape.Quote;
 import mujica.text.format.JavaFullyQualifiedNameValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -292,6 +291,6 @@ public class BytecodeFieldType // according to JVMS, 'bytecode' is one word
     @NotNull
     @Override
     public String toString() {
-        return "BytecodeFieldType[" + Quote.DEFAULT.apply(string) + "]";
+        return "BytecodeFieldType[" + string + "]";
     }
 }

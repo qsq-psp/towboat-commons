@@ -28,8 +28,8 @@ public @interface ConstantType {
             MethodTypeConstantInfo.TAG,
             DynamicConstantInfo.TAG,
             InvokeDynamicConstantInfo.TAG,
-            ConstantPool.CONSTANT_MODULE,
-            ConstantPool.CONSTANT_PACKAGE
+            ModuleConstantInfo.TAG,
+            PackageConstantInfo.TAG
     };
 
     boolean zero() default false;

@@ -75,6 +75,8 @@ public class EnumMapping implements Serializable {
         }
     }
 
+    @AccessStructure(online = true, local = true)
+    @NotNull
     private final HashMap<Object, Object> map = new HashMap<>();
 
     private final boolean caseInsensitive;

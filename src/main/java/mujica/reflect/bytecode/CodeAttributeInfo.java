@@ -522,7 +522,7 @@ public class CodeAttributeInfo extends AttributeInfo implements Consumer<CodeAtt
             int opcode = next(code);
             StringBuilder sb = new StringBuilder();
             sb.append("0x");
-            HexEncoder.LOWER_ENCODER.hex8(sb, opcode);
+            HexEncoder.LOWER_ENCODER.hex8(opcode, sb);
             sb.append(" ").append(Opcode.NAMES[opcode]);
             writer.write(sb.toString());
         }

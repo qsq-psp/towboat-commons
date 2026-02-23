@@ -1,16 +1,24 @@
 package mujica.ds.of_long.list;
 
 import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/3/18", name = "SelectionSort")
 @CodeHistory(date = "2025/11/4")
+@ReferencePage(title = "选择排序", href = "https://oi-wiki.org/basic/selection-sort/")
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
-public class LongDescendingSelectionSort implements SortingAlgorithm<long[]> {
+public class LongDescendingSelectionSort extends SortingAlgorithm<long[]> {
 
     public static final LongDescendingSelectionSort INSTANCE = new LongDescendingSelectionSort();
+
+    @Override
+    @NotNull
+    public MonotonicityDirection monotonicity() {
+        return MonotonicityDirection.DESCENDING;
+    }
 
     @Override
     public boolean stable() {
@@ -18,12 +26,7 @@ public class LongDescendingSelectionSort implements SortingAlgorithm<long[]> {
     }
 
     @Override
-    public int orderingComposition() {
-        return COMPOSITION_DESCENDING;
-    }
-
-    @Override
-    public long apply(@NotNull long[] array, int startIndex, int endIndex) {
+    public long sort(@NotNull long[] array, int startIndex, int endIndex) {
         long operation = 0L;
         while (startIndex < endIndex) {
             int selectedIndex = startIndex;

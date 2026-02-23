@@ -4,9 +4,6 @@ import mujica.algebra.discrete.IntegralMath;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/5/3.
- */
 @CodeHistory(date = "2025/5/3")
 public class BaseAnyLongCodec extends BaseAnyCodec {
 

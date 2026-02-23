@@ -66,14 +66,14 @@ public class QuoteAppender extends CharSequenceAppender {
     }
 
     @Override
-    public void append(@NotNull CharSequence string, @NotNull ByteBuffer out) {
+    public void write(@NotNull CharSequence string, @NotNull ByteBuffer out) {
         out.put(prefix.getBytes(StandardCharsets.UTF_8));
         out.put(string.toString().getBytes(StandardCharsets.UTF_8));
         out.put(suffix.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
-    public void append(@NotNull CharSequence string, @NotNull ByteBuf out) {
+    public void write(@NotNull CharSequence string, @NotNull ByteBuf out) {
         out.writeCharSequence(prefix, StandardCharsets.UTF_8);
         out.writeCharSequence(string, StandardCharsets.UTF_8);
         out.writeCharSequence(suffix, StandardCharsets.UTF_8);
@@ -125,17 +125,5 @@ public class QuoteAppender extends CharSequenceAppender {
         out.add(prefix);
         out.add(string.subSequence(startIndex, endIndex).toString());
         out.add(suffix);
-    }
-
-    @NotNull
-    @Override
-    public String apply(@NotNull CharSequence string) {
-        return prefix + string + suffix;
-    }
-
-    @NotNull
-    @Override
-    public String apply(@NotNull CharSequence string, int startIndex, int endIndex) {
-        return prefix + string.subSequence(startIndex, endIndex) + suffix;
     }
 }

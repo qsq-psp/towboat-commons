@@ -6,7 +6,7 @@ import mujica.ds.generic.list.TruncateList;
 import mujica.ds.of_int.list.ResizePolicy;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.text.escape.Quote;
+import mujica.text.format.UniversalAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -272,6 +272,7 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
 
     @Override
     public void stringifyDetail(@NotNull StringBuilder sb) {
+        final UniversalAppender appender = UniversalAppender.createIntAll();
         sb.append("[");
         final int length = list.size();
         for (int i = 0; i < length; i++) {
@@ -282,7 +283,7 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
             Node<E> node = list.get(i);
             if (node != null) {
                 while (true) {
-                    Quote.DEFAULT.append(node.element, sb);
+                    appender.append(node.element, sb);
                     node = node.next;
                     if (node == null) {
                         break;

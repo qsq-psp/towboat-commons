@@ -1,36 +1,45 @@
 package mujica.ds.of_int.list;
 
+import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.MonotonicityDirection;
+import mujica.ds.of_int.IntSlot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
+@CodeHistory(date = "2025/3/15", name = "QuickSort")
 @CodeHistory(date = "2025/12/22")
 @ReferencePage(title = "快速排序", href = "https://oi-wiki.org/basic/quick-sort/")
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
-public class IntAscendingQuickSort extends IntQuickSort {
+public class IntAscendingQuickSort extends SortingAlgorithm<int[]> {
+
+    @NotNull
+    final IntPivotSelector pivotSelector;
 
     public IntAscendingQuickSort(@NotNull IntPivotSelector pivotSelector) {
-        super(pivotSelector);
+        super();
+        this.pivotSelector = pivotSelector;
     }
 
     @Override
-    public int orderingComposition() {
-        return COMPOSITION_ASCENDING;
+    @NotNull
+    public MonotonicityDirection monotonicity() {
+        return MonotonicityDirection.ASCENDING;
     }
 
     @Override
-    public long apply(@NotNull int[] array, int start, int end) {
-        int startWrite = start;
-        int endWrite = end;
-        {
-            int length = endWrite - startWrite;
+    public long sort(@NotNull int[] array, int startIndex, int endIndex) {
+        int startWriteIndex = startIndex;
+        int endWriteIndex = endIndex;
+        { // end of recursion
+            int length = endWriteIndex - startWriteIndex;
             if (length <= 2) {
                 if (length == 2) {
-                    endWrite--;
-                    if (array[startWrite] > array[endWrite]) {
-                        int temp = array[startWrite];
-                        array[startWrite] = array[endWrite];
-                        array[endWrite] = temp;
+                    endWriteIndex--;
+                    if (array[startWriteIndex] > array[endWriteIndex]) {
+                        int temp = array[startWriteIndex];
+                        array[startWriteIndex] = array[endWriteIndex];
+                        array[endWriteIndex] = temp;
                     }
                     return 1L;
                 } else {
@@ -38,54 +47,76 @@ public class IntAscendingQuickSort extends IntQuickSort {
                 }
             }
         }
-        final int pivot = pivotSelector.select(array, start, end);
-        int startRead = startWrite;
-        int endRead = endWrite;
+        final int pivot = pivotSelector.select(array, startIndex, endIndex);
+        int startReadIndex = startWriteIndex;
+        int endReadIndex = endWriteIndex;
         long operationCount = 0L;
-        BISECT:
+        LABEL:
         while (true) {
-            while (true) {
-                int value = array[startRead];
+            while (true) { // skip from start to end
+                int value = array[startReadIndex];
                 if (value <= pivot) {
                     if (value < pivot) {
-                        array[startWrite++] = value;
+                        array[startWriteIndex++] = value;
                     }
-                    if (++startRead >= endRead) {
-                        break BISECT;
+                    if (++startReadIndex >= endReadIndex) {
+                        break LABEL;
                     }
                 } else {
                     break;
                 }
             }
-            while (true) {
-                int value = array[--endRead];
+            while (true) { // skip from end to start
+                int value = array[--endReadIndex];
                 if (value >= pivot) {
                     if (value > pivot) {
-                        array[--endWrite] = value;
+                        array[--endWriteIndex] = value;
                     }
-                    if (startRead >= endRead) {
-                        break BISECT;
+                    if (startReadIndex >= endReadIndex) {
+                        break LABEL;
                     }
                 } else {
-                    ++endRead;
+                    ++endReadIndex;
                     break;
                 }
             }
-            {
-                int value = array[startRead++];
-                array[startWrite++] = array[--endRead];
-                array[--endWrite] = value;
+            { // swap
+                int value = array[startReadIndex++];
+                array[startWriteIndex++] = array[--endReadIndex];
+                array[--endWriteIndex] = value;
             }
             operationCount++;
-            if (startRead >= endRead) {
+            if (startReadIndex >= endReadIndex) {
                 break;
             }
         }
-        operationCount += apply(array, start, startWrite);
-        operationCount += apply(array, endWrite, end);
-        while (startWrite < endWrite) {
-            array[startWrite++] = pivot;
+        operationCount += sort(array, startIndex, startWriteIndex);
+        operationCount += sort(array, endWriteIndex, endIndex);
+        while (startWriteIndex < endWriteIndex) {
+            array[startWriteIndex++] = pivot;
         }
+        return operationCount;
+    }
+
+    @Override
+    public long sortUnique(@NotNull int[] array, int startIndex, @NotNull IntSlot endSlot) {
+        final int endIndex = endSlot.getInt();
+        if (endIndex - startIndex <= 1) {
+            return 0L;
+        }
+        long operationCount = sort(array, startIndex, endIndex);
+        int previous = array[startIndex++];
+        int writeIndex = startIndex;
+        for (int readIndex = startIndex; readIndex < endIndex; readIndex++) {
+            int current = array[readIndex];
+            if (previous == current) {
+                continue;
+            }
+            array[writeIndex++] = current;
+            previous = current;
+            operationCount++;
+        }
+        endSlot.setInt(writeIndex);
         return operationCount;
     }
 }

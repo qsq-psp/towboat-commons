@@ -3,9 +3,6 @@ package mujica.ds.of_int.list;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/12/21.
- */
 @CodeHistory(date = "2025/12/21")
 public class SelectThreeIntMedianAsPivot implements IntPivotSelector {
 

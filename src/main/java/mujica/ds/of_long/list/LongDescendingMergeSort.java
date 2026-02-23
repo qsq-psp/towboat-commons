@@ -1,6 +1,7 @@
 package mujica.ds.of_long.list;
 
 import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import mujica.reflect.modifier.ReferencePage;
@@ -12,7 +13,7 @@ import java.lang.ref.SoftReference;
 @CodeHistory(date = "2025/11/25")
 @ReferencePage(title = "归并排序", href = "https://oi-wiki.org/basic/merge-sort/")
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
-public class LongDescendingMergeSort implements SortingAlgorithm<long[]> {
+public class LongDescendingMergeSort extends SortingAlgorithm<long[]> {
 
     private transient SoftReference<long[]> reference;
 
@@ -33,17 +34,17 @@ public class LongDescendingMergeSort implements SortingAlgorithm<long[]> {
     }
 
     @Override
+    public MonotonicityDirection monotonicity() {
+        return MonotonicityDirection.DESCENDING;
+    }
+
+    @Override
     public boolean stable() {
         return true;
     }
 
     @Override
-    public int orderingComposition() {
-        return COMPOSITION_DESCENDING;
-    }
-
-    @Override
-    public long apply(@NotNull long[] target, int startIndex, int endIndex) {
+    public long sort(@NotNull long[] target, int startIndex, int endIndex) {
         final int length = endIndex - startIndex;
         if (length < 2) {
             return 0L;

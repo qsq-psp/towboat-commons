@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.of_byte.ByteSequence;
+import mujica.ds.of_byte.list.ByteSequence;
 import mujica.io.codec.Base16Case;
 import mujica.algebra.discrete.ClampedMath;
 import mujica.algebra.discrete.IntegralMath;

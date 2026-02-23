@@ -1,7 +1,7 @@
 package mujica.io.buffer;
 
 import mujica.io.codec.InputStreamUtil;
-import mujica.reflect.function.IOConsumer;
+import mujica.io.function.IOConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

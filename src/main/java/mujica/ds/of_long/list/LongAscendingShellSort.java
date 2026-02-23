@@ -1,6 +1,7 @@
 package mujica.ds.of_long.list;
 
 import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2025/11/7")
 @ReferencePage(title = "希尔排序", href = "https://oi-wiki.org/basic/shell-sort/")
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
-public class LongAscendingShellSort implements SortingAlgorithm<long[]> {
+public class LongAscendingShellSort extends SortingAlgorithm<long[]> {
 
     public static final LongAscendingShellSort INSTANCE = new LongAscendingShellSort();
 
@@ -19,12 +20,12 @@ public class LongAscendingShellSort implements SortingAlgorithm<long[]> {
     }
 
     @Override
-    public int orderingComposition() {
-        return COMPOSITION_ASCENDING;
+    public MonotonicityDirection monotonicity() {
+        return MonotonicityDirection.ASCENDING;
     }
 
     @Override
-    public long apply(@NotNull long[] array, int startIndex, int endIndex) {
+    public long sort(@NotNull long[] array, int startIndex, int endIndex) {
         return apply(array, startIndex, endIndex, 1);
     }
 

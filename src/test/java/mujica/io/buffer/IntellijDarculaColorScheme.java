@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 
 @CodeHistory(date = "2025/12/13")
-public class IntellijDarculaColorScheme extends ColorScheme {
+class IntellijDarculaColorScheme extends ColorScheme {
 
     @NotNull
     @Override

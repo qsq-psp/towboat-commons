@@ -1,7 +1,7 @@
 package mujica.io.hash;
 
-import mujica.ds.of_boolean.BitSequence;
-import mujica.ds.of_byte.ByteSequence;
+import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_byte.list.ByteSequence;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
     protected final DataView resultView;
 
     @NotNull
-    protected HashState state = HashState.CLEARED;
+    HashState state = HashState.CLEARED;
 
     /**
      * 0 <= padBitCount < Byte.SIZE = 8

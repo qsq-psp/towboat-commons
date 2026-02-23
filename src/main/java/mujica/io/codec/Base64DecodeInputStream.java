@@ -4,7 +4,6 @@ import mujica.io.hash.ByteFillPolicy;
 import mujica.io.hash.DataView;
 import mujica.io.hash.IntDataView;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
@@ -12,11 +11,6 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created in omnidirectional on 2025/4/14, named Base64InputStream.
- * Recreated in UltraIO on 2025/4/21.
- * Moved here on 2025/4/26.
- */
 @CodeHistory(date = "2025/4/14", project = "omnidirectional", name = "Base64InputStream")
 @CodeHistory(date = "2025/4/21", project = "UltraIO")
 @CodeHistory(date = "2025/4/26")
@@ -69,7 +63,7 @@ public class Base64DecodeInputStream extends FilterInputStream implements Base64
                     value = 63;
                     break;
                 default:
-                    throw new BadCodeException(Quote.DEFAULT.apply((byte) value) + " not in [0-9A-Za-z\\-+_/]");
+                    throw new BadCodeException(value + " not in [0-9A-Za-z\\-+_/]");
             }
         }
         buffer = value << 18;
@@ -97,7 +91,7 @@ public class Base64DecodeInputStream extends FilterInputStream implements Base64
                     value = 63;
                     break;
                 default:
-                    throw new BadCodeException(Quote.DEFAULT.apply((byte) value) + " not in [0-9A-Za-z\\-+_/]");
+                    throw new BadCodeException(value + " not in [0-9A-Za-z\\-+_/]");
             }
         }
         buffer |= value << 12;
@@ -126,7 +120,7 @@ public class Base64DecodeInputStream extends FilterInputStream implements Base64
                     value = 63;
                     break;
                 default:
-                    throw new BadCodeException(Quote.DEFAULT.apply((byte) value) + " not in [0-9A-Za-z\\-+_/=]");
+                    throw new BadCodeException(value + " not in [0-9A-Za-z\\-+_/=]");
             }
         }
         buffer |= value << shift;
@@ -136,7 +130,7 @@ public class Base64DecodeInputStream extends FilterInputStream implements Base64
     private void readStop() throws IOException {
         final int sign = in.read();
         if (sign != '=') {
-            throw new BadCodeException(Quote.DEFAULT.apply((byte) sign) + " != '='");
+            throw new BadCodeException(sign + " != '='");
         }
     }
 

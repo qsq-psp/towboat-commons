@@ -3,7 +3,7 @@ package mujica.json.io;
 import mujica.ds.of_int.list.CopyOnResizeIntList;
 import mujica.json.entity.JsonHandler;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.escape.Quote;
+import mujica.text.format.DebugFormat;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +55,7 @@ public abstract class JsonWriter extends JsonHandler {
 
     public void openJsonp(@NotNull CharSequence name) {
         if (LOGGER.isWarnEnabled()) {
-            LOGGER.warn("openJsonp({})", Quote.JSON.apply(name));
+            LOGGER.warn("openJsonp({})", DebugFormat.autoQuote().getOperator().apply(name));
         }
     }
 

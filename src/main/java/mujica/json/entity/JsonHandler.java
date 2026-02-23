@@ -1,7 +1,7 @@
 package mujica.json.entity;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.escape.Quote;
+import mujica.text.format.DebugFormat;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public abstract class JsonHandler {
 
     public void stringKey(@NotNull String key) {
         if (LOGGER.isWarnEnabled()) {
-            LOGGER.warn("stringKey({})", Quote.JSON.apply(key));
+            LOGGER.warn("stringKey({})", DebugFormat.autoQuote().getOperator().apply(key));
         }
     }
 

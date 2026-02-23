@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.of_long.LongSequence;
+import mujica.ds.of_long.list.LongSequence;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,8 +1,11 @@
 package mujica.reflect.function;
 
+import mujica.reflect.modifier.CodeHistory;
+
 /**
  * Created on 2025/11/22.
  */
+@CodeHistory(date = "2025/11/22")
 public interface WildIterator<E> {
     
     boolean hasNext() throws Throwable;

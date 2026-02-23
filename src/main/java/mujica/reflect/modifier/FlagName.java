@@ -1,6 +1,6 @@
 package mujica.reflect.modifier;
 
-import mujica.text.escape.Quote;
+import mujica.text.format.DebugFormat;
 import mujica.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -115,7 +115,10 @@ public class FlagName implements Cloneable, Serializable {
             }
             if (array[shift] != null) {
                 LOGGER.warn("Flag name {} override name {} shift {}",
-                        Quote.DEFAULT.apply(name), Quote.DEFAULT.apply(array[shift]), shift);
+                        DebugFormat.autoQuote().getOperator().apply(name),
+                        DebugFormat.autoQuote().getOperator().apply(array[shift]),
+                        shift
+                );
             }
             array[shift] = name;
         } else {
@@ -295,7 +298,7 @@ public class FlagName implements Cloneable, Serializable {
         int remain = stringify(out, value, ", ");
         if (remain != 0) {
             out.append("; remain = 0x");
-            HexEncoder.LOWER_ENCODER.hexMax32(out, value);
+            HexEncoder.LOWER_ENCODER.hexMax32(value, out);
         }
         out.append(')');
     }

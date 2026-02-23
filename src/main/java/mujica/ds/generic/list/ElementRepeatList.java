@@ -1,5 +1,6 @@
 package mujica.ds.generic.list;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -7,12 +8,27 @@ import java.util.Objects;
 /**
  * Created on 2026/1/24.
  */
+@CodeHistory(date = "2026/1/24")
 public class ElementRepeatList<E> extends PeriodicList<E> {
 
     private static final long serialVersionUID = 0xF8219D0994EF9421L;
 
     @Nullable
     protected E element;
+
+    public ElementRepeatList(@Nullable E element, int times) {
+        super();
+        this.element = element;
+        this.size = times;
+    }
+
+    public ElementRepeatList(@Nullable E element) {
+        this(element, 1);
+    }
+
+    public ElementRepeatList(int times) {
+        this(null, times);
+    }
 
     @Override
     public int times() {

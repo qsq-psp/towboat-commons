@@ -68,10 +68,6 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
         }
     }
 
-    public static final int CONSTANT_MODULE = 19;
-
-    public static final int CONSTANT_PACKAGE = 20;
-
     @NotNull
     private static ConstantInfo createByTag(int tag) {
         switch (tag) {
@@ -99,9 +95,9 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
                 return new MethodHandleConstantInfo();
             case MethodTypeConstantInfo.TAG:
                 return new MethodTypeConstantInfo();
-            case CONSTANT_MODULE:
+            case ModuleConstantInfo.TAG:
                 return new ModuleConstantInfo();
-            case CONSTANT_PACKAGE:
+            case PackageConstantInfo.TAG:
                 return new PackageConstantInfo();
             case DynamicConstantInfo.TAG:
                 return new DynamicConstantInfo();

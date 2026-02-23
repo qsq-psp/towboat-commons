@@ -17,7 +17,9 @@ public class CrcSpec implements Serializable {
 
     final long finalFlip;
 
-    final boolean reflectIn, reflectOut;
+    final boolean reflectIn;
+
+    final boolean reflectOut;
 
     public CrcSpec(int bitLength, long polynomial, long initialState, long finalFlip, boolean reflectIn, boolean reflectOut) {
         super();
@@ -39,4 +41,21 @@ public class CrcSpec implements Serializable {
     public static final CrcSpec CRC32C = new CrcSpec(
             32, 0x1edc6f41, 0xffffffffL, 0xffffffffL, true, true
     );
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true; // quick
+        }
+        if (!(obj instanceof CrcSpec)) {
+            return false;
+        }
+        final CrcSpec that = (CrcSpec) obj;
+        return this.bitLength == that.bitLength
+                && this.polynomial == that.polynomial
+                && this.initialState == that.initialState
+                && this.finalFlip == that.finalFlip
+                && this.reflectIn == that.reflectIn
+                && this.reflectOut == that.reflectOut;
+    }
 }

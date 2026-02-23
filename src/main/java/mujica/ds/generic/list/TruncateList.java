@@ -1,9 +1,11 @@
 package mujica.ds.generic.list;
 
 import mujica.ds.DataStructure;
+import mujica.ds.SortingAlgorithm;
+import mujica.ds.of_int.PublicIntSlot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
-import mujica.text.escape.Quote;
+import mujica.text.format.UniversalAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -182,6 +184,10 @@ public class TruncateList<E> extends ArrayList<E> implements DataStructure {
         }
     }
 
+    public void addFlat(@Nullable Object object) {
+        // use identity hash set
+    }
+
     public E removeFirst() {
         return remove(0);
     }
@@ -258,6 +264,28 @@ public class TruncateList<E> extends ArrayList<E> implements DataStructure {
             low++;
             high--;
         }
+    }
+
+    public void sort(@NotNull Comparator<E> comparator, @NotNull MonotonicityDirection direction) {
+        sort(comparator);
+        if (direction == MonotonicityDirection.DESCENDING) {
+            reverse();
+        }
+    }
+
+    public long sort(@NotNull SortingAlgorithm<List<E>> algorithm) {
+        return algorithm.sort(this);
+    }
+
+    public long sortPart(@NotNull SortingAlgorithm<List<E>> algorithm, int m) {
+        return algorithm.sortPart(this, 0, m, size());
+    }
+
+    public long sortUnique(@NotNull SortingAlgorithm<List<E>> algorithm) {
+        final PublicIntSlot slot = new PublicIntSlot(size());
+        final long r = algorithm.sortUnique(this, 0, slot);
+        truncate(slot.getInt());
+        return r;
     }
 
     public void map(@NotNull UnaryOperator<E> operator) {
@@ -353,14 +381,14 @@ public class TruncateList<E> extends ArrayList<E> implements DataStructure {
     }
 
     public void stringifyDetail(@NotNull StringBuilder sb) {
-        final Quote quote = Quote.DEFAULT;
+        final UniversalAppender appender = UniversalAppender.createIntAll();
         sb.append("[");
         boolean subsequent = false;
         for (E element : this) {
             if (subsequent) {
                 sb.append(", ");
             }
-            quote.append(element, sb);
+            appender.append(element, sb);
             subsequent = true;
         }
         sb.append("]");

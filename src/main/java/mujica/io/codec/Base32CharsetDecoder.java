@@ -2,14 +2,19 @@ package mujica.io.codec;
 
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
+import java.nio.charset.CodingErrorAction;
 
 @CodeHistory(date = "2025/4/21")
 class Base32CharsetDecoder extends CharsetDecoder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Base32CharsetDecoder.class);
 
     private int buffer32;
 
@@ -20,12 +25,22 @@ class Base32CharsetDecoder extends CharsetDecoder {
     }
 
     @Override
+    protected void implOnMalformedInput(CodingErrorAction newAction) {
+        LOGGER.info("set malformed action {}", newAction);
+    }
+
+    @Override
+    protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
+        LOGGER.info("set unmappable action {}", newAction);
+    }
+
+    @Override
     protected void implReset() {
         srcShift = 0;
     }
 
     @Override
-    protected CoderResult decodeLoop(ByteBuffer in, CharBuffer out) {
+    protected CoderResult decodeLoop(@NotNull ByteBuffer in, @NotNull CharBuffer out) {
         final int alphabetOffset = ((Base32Charset) charset()).alphabetOffset();
         while (true) {
             if (out.remaining() < 8) {
@@ -42,7 +57,7 @@ class Base32CharsetDecoder extends CharsetDecoder {
                 out.put(decode(0x1f & (int) (longData >> shift), alphabetOffset));
             }
         }
-        return CoderResult.UNDERFLOW;
+        return CoderResult.UNDERFLOW; // underflow first
     }
 
     @Override

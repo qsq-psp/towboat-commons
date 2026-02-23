@@ -1,5 +1,6 @@
 package mujica.ds.of_int.set;
 
+import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.IntSlot;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.ds.of_int.list.CopyOnResizeIntList;
@@ -11,9 +12,6 @@ import java.util.Iterator;
 import java.util.OptionalInt;
 import java.util.function.IntConsumer;
 
-/**
- * Created on 2026/1/17.
- */
 @CodeHistory(date = "2026/1/17")
 public abstract class NavigableIntSet extends IntSet {
 
@@ -198,7 +196,7 @@ public abstract class NavigableIntSet extends IntSet {
         for (int key : this) {
             list.offerLast(key);
         }
-        list.sort(false);
+        list.sort(MonotonicityDirection.ASCENDING);
         list.forEach(action);
     }
 
@@ -207,7 +205,7 @@ public abstract class NavigableIntSet extends IntSet {
         for (int key : this) {
             list.offerLast(key);
         }
-        list.sort(true);
+        list.sort(MonotonicityDirection.DESCENDING);
         list.forEach(action);
     }
 
@@ -217,7 +215,7 @@ public abstract class NavigableIntSet extends IntSet {
         for (int key : this) {
             list.offerLast(key);
         }
-        list.sort(false);
+        list.sort(MonotonicityDirection.ASCENDING);
         return list.iterator();
     }
 
@@ -227,7 +225,7 @@ public abstract class NavigableIntSet extends IntSet {
         for (int key : this) {
             list.offerLast(key);
         }
-        list.sort(true);
+        list.sort(MonotonicityDirection.DESCENDING);
         return list.iterator();
     }
 }

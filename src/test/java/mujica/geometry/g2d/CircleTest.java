@@ -7,10 +7,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created on 2022/10/3.
- */
 @CodeHistory(date = "2022/10/3", project = "Ultramarine")
+@CodeHistory(date = "2025/3/2")
 public class CircleTest extends G2dTest {
 
     @Test

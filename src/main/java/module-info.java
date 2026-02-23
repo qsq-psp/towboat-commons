@@ -4,14 +4,12 @@ import mujica.reflect.modifier.CodeHistory;
 @CodeHistory(date = "2023/12/12", name = "CDP")
 module CDP {
     requires java.base;
+    requires java.compiler;
     requires java.desktop;
 
     requires annotations;
     requires org.slf4j;
-    requires io.netty.common;
-    requires io.netty.buffer;
-    requires io.netty.codec;
-    requires io.netty.transport;
+    requires io.netty.all;
 
     exports mujica.reflect.modifier;
     exports mujica.reflect.function;
@@ -29,7 +27,9 @@ module CDP {
     exports mujica.ds.generic.set;
     exports mujica.ds.generic.heap;
     exports mujica.ds.of_boolean;
+    exports mujica.ds.of_boolean.list;
     exports mujica.ds.of_byte;
+    exports mujica.ds.of_byte.list;
     exports mujica.ds.of_int;
     exports mujica.ds.of_int.list;
     exports mujica.ds.of_int.set;
@@ -40,7 +40,6 @@ module CDP {
     exports mujica.ds.of_double;
     exports mujica.ds.of_double.list;
     exports mujica.text.number;
-    exports mujica.text.escape;
     exports mujica.text.format;
     exports mujica.text.collation;
     exports mujica.text.bnf;

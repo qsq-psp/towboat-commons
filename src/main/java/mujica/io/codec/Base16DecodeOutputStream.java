@@ -1,7 +1,6 @@
 package mujica.io.codec;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.escape.Quote;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterOutputStream;
@@ -45,7 +44,7 @@ public class Base16DecodeOutputStream extends FilterOutputStream implements Base
         if ('A' <= digit && digit <= 'F') {
             return digit - Base16Case.UPPER;
         }
-        throw new BadCodeException(Quote.DEFAULT.apply((byte) digit) + " not in [0-9A-Fa-f]");
+        throw new BadCodeException(digit + " not in [0-9A-Fa-f]");
     }
 
     @Override
