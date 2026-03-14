@@ -33,6 +33,7 @@ public class LongAscendingMergeSort extends SortingAlgorithm<long[]> {
         return array;
     }
 
+    @NotNull
     @Override
     public MonotonicityDirection monotonicity() {
         return MonotonicityDirection.ASCENDING;

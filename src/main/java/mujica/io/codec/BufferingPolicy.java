@@ -1,9 +1,9 @@
 package mujica.io.codec;
 
-/**
- * Created in UltraIO on 2025/4/17, named YieldPolicy.
- * Recreated on 2025/4/25.
- */
+import mujica.reflect.modifier.CodeHistory;
+
+@CodeHistory(date = "2025/4/17", project = "UltraIO", name = "YieldPolicy")
+@CodeHistory(date = "2025/4/25")
 public enum BufferingPolicy {
 
     GREEDY, NORMAL, MINIMAL;

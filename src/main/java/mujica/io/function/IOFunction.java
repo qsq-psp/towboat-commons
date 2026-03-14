@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOError;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -23,12 +24,23 @@ public interface IOFunction<T, R> {
     R apply(T t) throws IOException;
 
     @NotNull
-    default Function<T, R> ignore(R value) {
+    default Function<T, R> uncheck() {
         return (t) -> {
             try {
                 return apply(t);
-            } catch (IOException ignore) {
-                return value;
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        };
+    }
+
+    @NotNull
+    static <T, R> IOFunction<T, R> check(@NotNull Function<T, R> action) {
+        return (t) -> {
+            try {
+                return action.apply(t);
+            } catch (UncheckedIOException e) {
+                throw e.getCause();
             }
         };
     }
@@ -40,6 +52,31 @@ public interface IOFunction<T, R> {
                 return apply(t);
             } catch (IOException e) {
                 throw new IOError(e);
+            }
+        };
+    }
+
+    static <T, R> IOFunction<T, R> downgrade(@NotNull Function<T, R> action) {
+        return (t) -> {
+            try {
+                return action.apply(t);
+            } catch (IOError e) {
+                Throwable cause = e.getCause();
+                if (cause instanceof IOException) {
+                    throw (IOException) cause;
+                }
+                throw e;
+            }
+        };
+    }
+
+    @NotNull
+    default Function<T, R> ignore(R value) {
+        return (t) -> {
+            try {
+                return apply(t);
+            } catch (IOException ignore) {
+                return value;
             }
         };
     }

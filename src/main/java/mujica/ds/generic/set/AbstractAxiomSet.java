@@ -5,10 +5,7 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.AbstractCollection;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2025/6/5")
@@ -30,6 +27,19 @@ public abstract class AbstractAxiomSet<E> extends AbstractCollection<E> implemen
             count++;
         }
         return count;
+    }
+
+    @Override
+    public E intern(E element, boolean force) {
+        for (E internal : this) {
+            if (Objects.equals(internal, element)) {
+                return internal;
+            }
+        }
+        if (force) {
+            add(element);
+        }
+        return element;
     }
 
     @Override

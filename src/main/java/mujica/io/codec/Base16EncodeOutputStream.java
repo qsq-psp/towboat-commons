@@ -19,20 +19,20 @@ public class Base16EncodeOutputStream extends FilterOutputStream implements Base
     }
 
     public Base16EncodeOutputStream(@NotNull OutputStream out) {
-        this(out, Base16Case.LOWER);
+        this(out, Base16Case.LOWER_CONSTANT);
     }
 
     @Override
     public boolean isUpperCase() {
-        return alphabetOffset == UPPER;
+        return alphabetOffset == UPPER_CONSTANT;
     }
 
     @Override
     public void setUpperCase(boolean upper) {
         if (upper) {
-            alphabetOffset = UPPER;
+            alphabetOffset = UPPER_CONSTANT;
         } else {
-            alphabetOffset = LOWER;
+            alphabetOffset = LOWER_CONSTANT;
         }
     }
 

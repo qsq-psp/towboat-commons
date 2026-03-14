@@ -36,14 +36,14 @@ public class JavaFullyQualifiedNameValidator extends AbstractFormatValidator.Int
 
     @NotNull
     @Override
-    LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int start, int end) {
-        for (int index = start; index <= end; index++) {
-            if (index == end || string.charAt(index) == identifierSeparator) {
-                LocalizedFailureMessage message = JavaIdentifierValidator.INSTANCE.get(locale, string.subSequence(start, index).toString());
+    LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int startIndex, int endIndex) {
+        for (int index = startIndex; index <= endIndex; index++) {
+            if (index == endIndex || string.charAt(index) == identifierSeparator) {
+                LocalizedFailureMessage message = JavaIdentifierValidator.INSTANCE.get(locale, string.subSequence(startIndex, index).toString());
                 if (message != BooleanFailureMessage.SUCCESS) {
                     return message;
                 }
-                start = index + 1;
+                startIndex = index + 1;
             }
         }
         return BooleanFailureMessage.SUCCESS;

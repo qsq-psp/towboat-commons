@@ -39,10 +39,10 @@ public class Base16DecodeOutputStream extends FilterOutputStream implements Base
             return digit - '0';
         }
         if ('a' <= digit && digit <= 'f') {
-            return digit - Base16Case.LOWER;
+            return digit - Base16Case.LOWER_CONSTANT;
         }
         if ('A' <= digit && digit <= 'F') {
-            return digit - Base16Case.UPPER;
+            return digit - Base16Case.UPPER_CONSTANT;
         }
         throw new BadCodeException(digit + " not in [0-9A-Fa-f]");
     }

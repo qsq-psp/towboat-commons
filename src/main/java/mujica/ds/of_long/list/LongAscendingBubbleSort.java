@@ -12,6 +12,7 @@ public class LongAscendingBubbleSort extends SortingAlgorithm<long[]> {
 
     public static final LongAscendingBubbleSort INSTANCE = new LongAscendingBubbleSort();
 
+    @NotNull
     @Override
     public MonotonicityDirection monotonicity() {
         return MonotonicityDirection.ASCENDING;

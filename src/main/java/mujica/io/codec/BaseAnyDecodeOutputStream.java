@@ -9,6 +9,7 @@ import java.io.OutputStream;
 /**
  * Created on 2025/5/7.
  */
+@Deprecated
 public class BaseAnyDecodeOutputStream extends FilterOutputStream {
 
     @NotNull

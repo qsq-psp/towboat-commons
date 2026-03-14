@@ -259,73 +259,70 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
         modCount++;
     }
 
-    private class SafeIterator implements PrimitiveIterator.OfInt {
-
-        int currentIndex = 0;
-
-        int previousIndex = -1;
-
-        int expectedModCount = modCount;
-
-        SafeIterator() {
-            super();
-            while (currentIndex < array.length) {
-                int v = array[currentIndex];
-                if (v == EMPTY_MARK || v == REMOVED_MARK) {
-                    currentIndex++;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            return currentIndex < array.length;
-        }
-
-        @Override
-        public int nextInt() {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            final int t = array[currentIndex];
-            previousIndex = currentIndex;
-            while (true) {
-                if (++currentIndex == array.length) {
-                    break;
-                }
-                int v = array[currentIndex];
-                if (v != EMPTY_MARK && v != REMOVED_MARK) {
-                    break;
-                }
-            }
-            return t; // never return EMPTY_MARK and REMOVED_MARK ?
-        }
-
-        @Override
-        public void remove() {
-            if (previousIndex == -1) {
-                throw new IllegalStateException();
-            }
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            {
-                int v = array[previousIndex];
-                assert v != EMPTY_MARK && v != REMOVED_MARK;
-            }
-            array[previousIndex] = REMOVED_MARK;
-            size--;
-            expectedModCount = ++modCount;
-            previousIndex = -1;
-        }
-    }
-
     @NotNull
     @Override
-    public Iterator<Integer> iterator() {
-        return new SafeIterator();
+    public PrimitiveIterator.OfInt iterator() {
+        return new PrimitiveIterator.OfInt() {
+
+            int currentIndex = 0;
+
+            int previousIndex = -1;
+
+            int expectedModCount = modCount;
+
+            {
+                while (currentIndex < array.length) {
+                    int v = array[currentIndex];
+                    if (v == EMPTY_MARK || v == REMOVED_MARK) {
+                        currentIndex++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex < array.length;
+            }
+
+            @Override
+            public int nextInt() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                final int t = array[currentIndex];
+                previousIndex = currentIndex;
+                while (true) {
+                    if (++currentIndex == array.length) {
+                        break;
+                    }
+                    int v = array[currentIndex];
+                    if (v != EMPTY_MARK && v != REMOVED_MARK) {
+                        break;
+                    }
+                }
+                return t; // never return EMPTY_MARK and REMOVED_MARK ?
+            }
+
+            @Override
+            public void remove() {
+                if (previousIndex == -1) {
+                    throw new IllegalStateException();
+                }
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                {
+                    int v = array[previousIndex];
+                    assert v != EMPTY_MARK && v != REMOVED_MARK;
+                }
+                array[previousIndex] = REMOVED_MARK;
+                size--;
+                expectedModCount = ++modCount;
+                previousIndex = -1;
+            }
+        };
     }
 
     @NotNull

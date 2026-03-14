@@ -10,7 +10,7 @@ import org.junit.Test;
 public class FormatValidatorTest {
 
     @Test
-    public void testCharsetName1() {
+    public void caseCharsetName1() {
         final FormatValidator validator = CharsetNameValidator.INSTANCE;
         Assert.assertTrue(validator.test("ASCII"));
         Assert.assertTrue(validator.test("ISO646-US"));
@@ -20,7 +20,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testCharsetName2() {
+    public void caseCharsetName2() {
         final FormatValidator validator = CharsetNameValidator.INSTANCE;
         Assert.assertFalse(validator.test("American Standard Code for Information Interchange"));
         Assert.assertFalse(validator.test("UTF-16 BE"));
@@ -28,7 +28,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testDomainName1() {
+    public void caseDomainName1() {
         final FormatValidator validator = DomainNameValidator.INSTANCE;
         Assert.assertTrue(validator.test("localhost"));
         Assert.assertTrue(validator.test("www.rfc-editor.org"));
@@ -44,7 +44,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testDomainName2() {
+    public void caseDomainName2() {
         final FormatValidator validator = DomainNameValidator.INSTANCE;
         Assert.assertTrue(validator.test("[127.0.0.1]"));
         Assert.assertTrue(validator.test("[192.168.1.2]"));
@@ -56,7 +56,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testDomainName3() {
+    public void caseDomainName3() {
         final FormatValidator validator = DomainNameValidator.INSTANCE;
         Assert.assertFalse(validator.test("p.qlogo.cn"));
         Assert.assertFalse(validator.test("i.pixiv.cat"));
@@ -65,7 +65,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testDomainName4() {
+    public void caseDomainName4() {
         final FormatValidator validator = DomainNameValidator.INSTANCE;
         Assert.assertFalse(validator.test("[7.100..3]"));
         Assert.assertFalse(validator.test("[24.08.39.133]"));
@@ -77,7 +77,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testIPV4Address1() {
+    public void caseIPV4Address1() {
         final FormatValidator validator = IPV4AddressValidator.INSTANCE;
         Assert.assertTrue(validator.test("216.146.35.35"));
         Assert.assertTrue(validator.test("8.8.8.8"));
@@ -86,7 +86,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testIPV4Address2() {
+    public void caseIPV4Address2() {
         final FormatValidator validator = IPV4AddressValidator.INSTANCE;
         Assert.assertFalse(validator.test("4.7.3."));
         Assert.assertFalse(validator.test(".2.1.9"));
@@ -104,7 +104,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testWindowsFileName1() {
+    public void caseWindowsFileName1() {
         final FormatValidator validator = WindowsFileNameValidator.INSTANCE;
         Assert.assertTrue(validator.test("be682ca9-3475-4c0c-bd1f-4532d3315e92.jpg"));
         Assert.assertTrue(validator.test("py.exe"));
@@ -120,7 +120,7 @@ public class FormatValidatorTest {
 
     @Test
     @ReferencePage(title = "Lorem ipsum", href = "https://www.zhihu.com/question/19708165/answer/1929610818628068504")
-    public void testWindowsFileName2() {
+    public void caseWindowsFileName2() {
         final FormatValidator validator = WindowsFileNameValidator.INSTANCE;
         Assert.assertFalse(validator.test("?.jpeg"));
         Assert.assertFalse(validator.test("@3w/pc.zip"));
@@ -149,7 +149,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testSchemaObjectName1() {
+    public void caseSchemaObjectName1() {
         final FormatValidator validator = SchemaObjectNameValidator.INSTANCE;
         Assert.assertTrue(validator.test("mysql"));
         Assert.assertTrue(validator.test("time_zone"));
@@ -158,7 +158,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testSchemaObjectName2() {
+    public void caseSchemaObjectName2() {
         final FormatValidator validator = SchemaObjectNameValidator.INSTANCE;
         Assert.assertFalse(validator.test(""));
         Assert.assertFalse(validator.test("8008"));
@@ -166,7 +166,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testJavaIdentifier1() {
+    public void caseJavaIdentifier1() {
         final FormatValidator validator = JavaIdentifierValidator.INSTANCE;
         Assert.assertTrue(validator.test("Math"));
         Assert.assertTrue(validator.test("ByteArrayOutputStream"));
@@ -186,7 +186,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testJavaIdentifier2() {
+    public void caseJavaIdentifier2() {
         final FormatValidator validator = JavaIdentifierValidator.INSTANCE;
         Assert.assertFalse(validator.test(""));
         Assert.assertFalse(validator.test(" "));
@@ -206,7 +206,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testJavaFullyQualifiedName1() {
+    public void caseJavaFullyQualifiedName1() {
         final FormatValidator validator = JavaFullyQualifiedNameValidator.SOURCE;
         Assert.assertTrue(validator.test("Main"));
         Assert.assertTrue(validator.test("indi.Starter"));
@@ -218,7 +218,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void testJavaFullyQualifiedName2() {
+    public void caseJavaFullyQualifiedName2() {
         final FormatValidator validator = JavaFullyQualifiedNameValidator.SOURCE;
         Assert.assertFalse(validator.test("Main{}"));
         Assert.assertFalse(validator.test("indi.Starter()"));

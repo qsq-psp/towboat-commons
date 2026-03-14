@@ -1,5 +1,6 @@
 package mujica.geometry.g2d;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -8,10 +9,11 @@ import static org.junit.Assert.*;
 /**
  * Created on 2022/7/10.
  */
+@CodeHistory(date = "2022/7/10")
 public class PointTest extends G2dTest {
 
     @Test
-    public void testSerializable() {
+    public void checkSerializable() {
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
             Point point = nextPoint();
             assertEquals(point, tryCopy(point));
@@ -19,7 +21,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testComplexMultiplyAssociative() {
+    public void checkComplexMultiplyAssociative() {
         final Point d = new Point();
         final Point e = new Point();
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
@@ -35,7 +37,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testComplexMultiplyDistributive() {
+    public void checkComplexMultiplyDistributive() {
         final Point d = new Point();
         final Point e = new Point();
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
@@ -52,7 +54,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testComplexInvert() {
+    public void checkComplexInvert() {
         final Point a = new Point();
         final Point c = new Point(1.0, 0.0);
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
@@ -65,7 +67,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testComplexDivide() {
+    public void checkComplexDivide() {
         final Point d = new Point();
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
             Point a = nextPoint();
@@ -123,7 +125,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testComplexPower2() {
+    public void checkComplexPower2() {
         final Point b = new Point();
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
             Point a = nextPoint();
@@ -135,7 +137,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testComplexPower3() {
+    public void checkComplexPower3() {
         final Point b = new Point();
         final Point c = new Point();
         final Point d = new Point();
@@ -161,7 +163,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testComplexPower4() {
+    public void checkComplexPower4() {
         final Point b = new Point();
         final Point c = new Point();
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
@@ -176,7 +178,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testComplexExponent() {
+    public void checkComplexExponent() {
         final Point c = new Point();
         final Point d = new Point();
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
@@ -192,7 +194,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testComplexLogarithm() {
+    public void checkComplexLogarithm() {
         final Point b = new Point();
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
             Point a = nextSmallPoint();
@@ -204,7 +206,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testLerp1() {
+    public void checkLerp1() {
         final Point q1 = new Point();
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
             Point p1 = nextPoint();
@@ -217,7 +219,7 @@ public class PointTest extends G2dTest {
     }
 
     @Test
-    public void testLerp2() {
+    public void checkLerp2() {
         final Point q1 = new Point();
         for (int pointIndex = 0; pointIndex < POINT; pointIndex++) {
             Point p1 = nextPoint();

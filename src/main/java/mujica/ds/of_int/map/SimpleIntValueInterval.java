@@ -1,11 +1,16 @@
 package mujica.ds.of_int.map;
 
+import mujica.reflect.modifier.CodeHistory;
+
 import java.io.Serializable;
 
 /**
  * Created on 2026/1/18.
  */
+@CodeHistory(date = "2026/1/18")
 public class SimpleIntValueInterval implements IntValueInterval, Serializable {
+
+    private static final long serialVersionUID = 0x374E49CEE7F80D88L;
 
     int left, right, value;
 
@@ -35,9 +40,23 @@ public class SimpleIntValueInterval implements IntValueInterval, Serializable {
     }
 
     @Override
-    public int setInt(int newValue) {
-        final int oldValue = value;
+    public void setInt(int newValue) {
         value = newValue;
-        return oldValue;
+    }
+
+    private static final int H = 59;
+
+    @Override
+    public int hashCode() {
+        return ((left * H) + right) * H + value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof IntValueInterval)) {
+            return false;
+        }
+        final IntValueInterval that = (IntValueInterval) obj;
+        return this.getLeft() == that.getLeft() && this.getRight() == that.getRight() && this.getInt() == that.getInt();
     }
 }

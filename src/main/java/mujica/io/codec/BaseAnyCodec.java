@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
+@Deprecated
 @CodeHistory(date = "2025/5/6")
 public abstract class BaseAnyCodec implements Serializable {
 

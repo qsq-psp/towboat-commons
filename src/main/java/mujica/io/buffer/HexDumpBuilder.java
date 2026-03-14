@@ -205,11 +205,23 @@ public class HexDumpBuilder implements Serializable {
     }
 
     @NotNull
+    public HexDumpBuilder setNegativeStyle(@NotNull TerminalStyle negativeStyle) {
+        this.negativeStyle = negativeStyle;
+        return this;
+    }
+
+    @NotNull
     private TerminalStyle invisibleStyle = TerminalStyle.RESET_STYLE; // control C0 and DEL, space not included
 
     @NotNull
     public TerminalStyle getInvisibleStyle() {
         return invisibleStyle;
+    }
+
+    @NotNull
+    public HexDumpBuilder setInvisibleStyle(@NotNull TerminalStyle invisibleStyle) {
+        this.invisibleStyle = invisibleStyle;
+        return this;
     }
 
     @NotNull
@@ -221,10 +233,22 @@ public class HexDumpBuilder implements Serializable {
     }
 
     @NotNull
+    public HexDumpBuilder setAlphanumericStyle(@NotNull TerminalStyle alphanumericStyle) {
+        this.alphanumericStyle = alphanumericStyle;
+        return this;
+    }
+
+    @NotNull
     private TerminalStyle otherStyle = TerminalStyle.RESET_STYLE; // space and visible symbols
 
     @NotNull
     public TerminalStyle getOtherStyle() {
         return otherStyle;
+    }
+
+    @NotNull
+    public HexDumpBuilder setOtherStyle(@NotNull TerminalStyle otherStyle) {
+        this.otherStyle = otherStyle;
+        return this;
     }
 }

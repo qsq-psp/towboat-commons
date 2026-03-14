@@ -3,15 +3,10 @@ package mujica.text.number;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 
-/**
- * Special case: when minLength == 0, 0 is converted to empty string ""
- */
 @CodeHistory(date = "2025/2/25")
-@SuppressWarnings("StringRepeatCanBeUsed")
-public class PaddedRadix implements IntegralToStringFunction, Serializable {
+public class PaddedRadix extends IntegralAppender {
 
     private static final long serialVersionUID = 0x24eac7505fd7a969L;
 
@@ -22,6 +17,7 @@ public class PaddedRadix implements IntegralToStringFunction, Serializable {
         if (radix < Character.MIN_RADIX || radix > Character.MAX_RADIX) {
             throw new IllegalArgumentException("Radix out of range");
         }
+        // special case: when minLength == 0, 0 is converted to empty string ""
         if (!(0 <= minLength && minLength <= maxLength)) {
             throw new IllegalArgumentException("Invalid length range");
         }
@@ -39,7 +35,22 @@ public class PaddedRadix implements IntegralToStringFunction, Serializable {
     }
 
     @Override
-    public void append(int value, @NotNull StringBuilder out) {
+    public void acceptByte(byte value, @NotNull StringBuilder out) {
+        acceptInteger(value, out);
+    }
+
+    @Override
+    public void acceptShort(short value, @NotNull StringBuilder out) {
+        acceptInteger(value, out);
+    }
+
+    @Override
+    public void acceptCharacter(char value, @NotNull StringBuilder out) {
+        acceptInteger(value, out);
+    }
+
+    @Override
+    public void acceptInteger(int value, @NotNull StringBuilder out) {
         if (value == 0 && minLength == 0) {
             return;
         }
@@ -76,8 +87,7 @@ public class PaddedRadix implements IntegralToStringFunction, Serializable {
     }
 
     @NotNull
-    @Override
-    public String stringify(int value) {
+    public String stringifyInteger(int value) {
         if (value == 0 && minLength == 0) {
             return "";
         }
@@ -103,7 +113,7 @@ public class PaddedRadix implements IntegralToStringFunction, Serializable {
     }
 
     @Override
-    public void append(long value, @NotNull StringBuilder out) {
+    public void acceptLong(long value, @NotNull StringBuilder out) {
         if (value == 0L && minLength == 0) {
             return;
         }
@@ -140,8 +150,7 @@ public class PaddedRadix implements IntegralToStringFunction, Serializable {
     }
 
     @NotNull
-    @Override
-    public String stringify(long value) {
+    public String stringifyLong(long value) {
         if (value == 0L && minLength == 0) {
             return "";
         }
@@ -167,7 +176,7 @@ public class PaddedRadix implements IntegralToStringFunction, Serializable {
     }
 
     @Override
-    public void append(@NotNull BigInteger value, @NotNull StringBuilder out) {
+    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out) {
         if (value.signum() == 0 && minLength == 0) {
             return;
         }
@@ -204,8 +213,7 @@ public class PaddedRadix implements IntegralToStringFunction, Serializable {
     }
 
     @NotNull
-    @Override
-    public String stringify(@NotNull BigInteger value) {
+    public String stringifyBig(@NotNull BigInteger value) {
         if (value.signum() == 0 && minLength == 0) {
             return "";
         }

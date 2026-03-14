@@ -117,48 +117,43 @@ public class ConcatList<E> extends AbstractList<E> implements Serializable {
         modCount++;
     }
 
-    @CodeHistory(date = "2026/1/24")
-    private static class IteratorImpl<E> implements Iterator<E> {
-
-        @NotNull
-        final Iterator<List<E>> iterator0;
-
-        Iterator<E> iterator1;
-
-        IteratorImpl(@NotNull Iterator<List<E>> iterator0) {
-            super();
-            this.iterator0 = iterator0;
-            Iterator<E> iterator1 = null;
-            while (iterator0.hasNext()) {
-                iterator1 = iterator0.next().iterator();
-                if (iterator1.hasNext()) {
-                    break;
-                }
-            }
-            if (iterator1 == null) {
-                iterator1 = Collections.emptyIterator();
-            }
-            this.iterator1 = iterator1;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return iterator1.hasNext();
-        }
-
-        @Override
-        public E next() {
-            final E element = iterator1.next();
-            while (!iterator1.hasNext() && iterator0.hasNext()) {
-                iterator1 = iterator0.next().iterator();
-            }
-            return element;
-        }
-    }
-
     @Override
     @NotNull
     public Iterator<E> iterator() {
-        return new IteratorImpl<>(segments.iterator());
+        return new Iterator<>() {
+
+            @NotNull
+            final Iterator<List<E>> iterator0 = segments.iterator();
+
+            Iterator<E> iterator1;
+
+            {
+                Iterator<E> iterator1 = null;
+                while (iterator0.hasNext()) {
+                    iterator1 = iterator0.next().iterator();
+                    if (iterator1.hasNext()) {
+                        break;
+                    }
+                }
+                if (iterator1 == null) {
+                    iterator1 = Collections.emptyIterator();
+                }
+                this.iterator1 = iterator1;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return iterator1.hasNext();
+            }
+
+            @Override
+            public E next() {
+                final E element = iterator1.next();
+                while (!iterator1.hasNext() && iterator0.hasNext()) {
+                    iterator1 = iterator0.next().iterator();
+                }
+                return element;
+            }
+        };
     }
 }

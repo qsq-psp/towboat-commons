@@ -3,8 +3,6 @@ package mujica.ds.generic.heap;
 import mujica.ds.ConsistencyException;
 import mujica.ds.ReferenceException;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.CharSequenceAppender;
-import mujica.text.format.UniversalAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -217,52 +215,48 @@ public class LinkedPriorityQueue<E> extends AbstractCollection<E> implements Pri
         clear();
     }
 
-    private class ModCountIterator implements Iterator<E> {
-
-        LinkedNode<E> node = head;
-
-        final int expectedModCount = ((AbstractPriorityQueue<?>) priorityQueue).modCount;
-
-        @Override
-        public boolean hasNext() {
-            return node != null;
-        }
-
-        @Override
-        public E next() {
-            if (expectedModCount != ((AbstractPriorityQueue<?>) priorityQueue).modCount) {
-                throw new ConcurrentModificationException();
-            }
-            final E element = node.element;
-            node = node.next;
-            return element;
-        }
-    }
-
-    private class UnsafeIterator implements Iterator<E> {
-
-        LinkedNode<E> node = head;
-
-        @Override
-        public boolean hasNext() {
-            return node != null;
-        }
-
-        @Override
-        public E next() {
-            final E element = node.element;
-            node = node.next;
-            return element;
-        }
-    }
-
     @NotNull
     @Override
     public Iterator<E> iterator() {
         if (priorityQueue instanceof AbstractPriorityQueue) {
-            return new ModCountIterator();
+            return new Iterator<>() {
+
+                LinkedNode<E> node = head;
+
+                final int expectedModCount = ((AbstractPriorityQueue<?>) priorityQueue).modCount;
+
+                @Override
+                public boolean hasNext() {
+                    return node != null;
+                }
+
+                @Override
+                public E next() {
+                    if (expectedModCount != ((AbstractPriorityQueue<?>) priorityQueue).modCount) {
+                        throw new ConcurrentModificationException();
+                    }
+                    final E element = node.element;
+                    node = node.next;
+                    return element;
+                }
+            };
         } else {
-            return new UnsafeIterator();
+            return new Iterator<>() {
+
+                LinkedNode<E> node = head;
+
+                @Override
+                public boolean hasNext() {
+                    return node != null;
+                }
+
+                @Override
+                public E next() {
+                    final E element = node.element;
+                    node = node.next;
+                    return element;
+                }
+            };
         }
     }
 
@@ -301,7 +295,6 @@ public class LinkedPriorityQueue<E> extends AbstractCollection<E> implements Pri
     @NotNull
     @Override
     public String detailToString() {
-        final UniversalAppender appender = UniversalAppender.createIntAll();
         final StringBuilder sb = new StringBuilder();
         sb.append("[links = [");
         {
@@ -311,7 +304,7 @@ public class LinkedPriorityQueue<E> extends AbstractCollection<E> implements Pri
                 if (subsequent) {
                     sb.append(", ");
                 }
-                appender.append(node.element, sb);
+                sb.append(node.element);
                 node = node.next;
                 subsequent = true;
             }

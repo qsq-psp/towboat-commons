@@ -55,16 +55,16 @@ public class XmlNameValidator extends AbstractFormatValidator.IntervalForm {
 
     @NotNull
     @Override
-    LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int start, int end) {
-        if (start >= end) {
+    LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int startIndex, int endIndex) {
+        if (startIndex >= endIndex) {
             return localize(locale, EMPTY);
-        } else if (!isXmlNameStart(string.charAt(start))) {
-            return localize(locale, START).replaceQuoted("{char}", string.charAt(start));
+        } else if (!isXmlNameStart(string.charAt(startIndex))) {
+            return localize(locale, START).replaceQuoted("{char}", string.charAt(startIndex));
         } else {
-            for (int index = start + 1; index < end; index++) {
+            for (int index = startIndex + 1; index < endIndex; index++) {
                 char ch = string.charAt(index);
                 if (!isXmlNamePart(ch)) {
-                    return localize(locale, PART).replace("{index}", index - start).replaceQuoted("{char}", ch);
+                    return localize(locale, PART).replace("{index}", index - startIndex).replaceQuoted("{char}", ch);
                 }
             }
         }

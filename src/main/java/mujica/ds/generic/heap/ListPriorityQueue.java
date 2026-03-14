@@ -173,7 +173,46 @@ public abstract class ListPriorityQueue<E> extends AbstractPriorityQueue<E> {
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new IteratorImpl();
+        return new Iterator<>() {
+
+            int index;
+
+            int lastRemove; // if remove() is not used, there is no extra processing
+
+            int expectedModCount = modCount;
+
+            @Override
+            public boolean hasNext() {
+                return index < list.size();
+            }
+
+            @Override
+            public E next() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                try {
+                    E element = list.get(index);
+                    index++; // if index out of bounds index remain unchanged
+                    return element;
+                } catch (IndexOutOfBoundsException e) {
+                    throw new NoSuchElementException();
+                }
+            }
+
+            @Override
+            public void remove() {
+                if (index == lastRemove) {
+                    throw new IllegalStateException();
+                }
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                lastRemove = --index;
+                ListPriorityQueue.this.remove(lastRemove);
+                expectedModCount = modCount;
+            }
+        };
     }
 
     @Override

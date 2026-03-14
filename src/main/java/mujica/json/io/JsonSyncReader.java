@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public interface JsonSyncReader extends JsonReader {
 
     @Override
-    void config(int config);
+    void config(int flags);
 
     void read(@NotNull JsonHandler jh);
 }

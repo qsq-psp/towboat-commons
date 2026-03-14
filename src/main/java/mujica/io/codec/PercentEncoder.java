@@ -38,7 +38,7 @@ abstract class PercentEncoder extends CharsetEncoder {
         while (true) {
             int inRemaining = in.remaining();
             if (inRemaining < 1) {
-                return CoderResult.UNDERFLOW;
+                return CoderResult.UNDERFLOW; // underflow first
             }
             int outRemaining = out.remaining();
             if (outRemaining < 1) {
@@ -71,24 +71,28 @@ abstract class PercentEncoder extends CharsetEncoder {
             } else {
                 // now ch0 is surrogate
                 if (Character.MIN_LOW_SURROGATE <= ch0) {
+                    LOGGER.warn("malformed high {}", ch0);
                     return CoderResult.malformedForLength(1);
                 }
                 // now ch0 is high (leading) surrogate
                 if (inRemaining < 2) {
-                    return CoderResult.UNDERFLOW;
+                    undoGet(in);
+                    return CoderResult.UNDERFLOW; // underflow first
+                }
+                if (outRemaining < 12) {
+                    undoGet(in);
+                    return CoderResult.OVERFLOW;
                 }
                 int ch1 = in.get();
                 if (ch1 < Character.MIN_LOW_SURROGATE || Character.MAX_LOW_SURROGATE < ch1) {
+                    LOGGER.warn("malformed low {} {}", ch0, ch1);
                     return CoderResult.malformedForLength(2);
-                }
-                if (outRemaining < 12) {
-                    return CoderResult.OVERFLOW;
                 }
                 int cp = ((ch0 << 10) + ch1) + (Character.MIN_SUPPLEMENTARY_CODE_POINT - (Character.MIN_HIGH_SURROGATE << 10) - Character.MIN_LOW_SURROGATE);
                 percentEncodeOctet(0xf0 | (0x07 & (cp >> 18)), out);
-                percentEncodeOctet(0x80 | (0x3f & (ch0 >> 12)), out);
-                percentEncodeOctet(0x80 | (0x3f & (ch0 >> 6)), out);
-                percentEncodeOctet(0x80 | (0x3f & ch0), out);
+                percentEncodeOctet(0x80 | (0x3f & (cp >> 12)), out);
+                percentEncodeOctet(0x80 | (0x3f & (cp >> 6)), out);
+                percentEncodeOctet(0x80 | (0x3f & cp), out);
             }
         }
     }

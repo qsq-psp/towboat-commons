@@ -1,5 +1,6 @@
 package mujica.io.nest;
 
+import mujica.io.fs.EmptyFileAttributes;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.Nullable;
 

@@ -43,9 +43,9 @@ public class Base16DecodeInputStream extends FilterInputStream implements Base16
         if ('0' <= digit && digit <= '9') {
             digit -= '0';
         } else if ('a' <= digit && digit <= 'f') {
-            digit -= Base16Case.LOWER;
+            digit -= Base16Case.LOWER_CONSTANT;
         } else if ('A' <= digit && digit <= 'F') {
-            digit -= Base16Case.UPPER;
+            digit -= Base16Case.UPPER_CONSTANT;
         } else if (digit == -1) {
             return -1;
         } else {

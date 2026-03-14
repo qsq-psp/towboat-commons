@@ -2,7 +2,9 @@ package mujica.ds.generic;
 
 import mujica.reflect.modifier.CodeHistory;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UncheckedIOException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
@@ -32,6 +34,8 @@ public class ComparableComparator<T> implements Comparator<T>, Serializable {
             RuntimeException re;
             if (e instanceof RuntimeException) {
                 re = (RuntimeException) e;
+            } else if (e instanceof IOException) {
+                re = new UncheckedIOException((IOException) e);
             } else {
                 re = new RuntimeException(e);
             }

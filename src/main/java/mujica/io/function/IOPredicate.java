@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOError;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.function.Predicate;
 
 @CodeHistory(date = "2024/6/7", project = "UltraIO")
@@ -18,12 +19,23 @@ public interface IOPredicate<T> {
     boolean test(T t) throws IOException;
 
     @NotNull
-    default Predicate<T> ignore(boolean value) {
+    default Predicate<T> uncheck() {
         return (t) -> {
             try {
                 return test(t);
-            } catch (IOException ignore) {
-                return value;
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        };
+    }
+
+    @NotNull
+    static <T> IOPredicate<T> check(@NotNull Predicate<T> action) {
+        return (t) -> {
+            try {
+                return action.test(t);
+            } catch (UncheckedIOException e) {
+                throw e.getCause();
             }
         };
     }
@@ -35,6 +47,32 @@ public interface IOPredicate<T> {
                 return test(t);
             } catch (IOException e) {
                 throw new IOError(e);
+            }
+        };
+    }
+
+    @NotNull
+    static <T> IOPredicate<T> downgrade(@NotNull Predicate<T> action) {
+        return (t) -> {
+            try {
+                return action.test(t);
+            } catch (IOError e) {
+                Throwable cause = e.getCause();
+                if (cause instanceof IOException) {
+                    throw (IOException) cause;
+                }
+                throw e;
+            }
+        };
+    }
+
+    @NotNull
+    default Predicate<T> ignore(boolean value) {
+        return (t) -> {
+            try {
+                return test(t);
+            } catch (IOException ignore) {
+                return value;
             }
         };
     }

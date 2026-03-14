@@ -3,7 +3,6 @@ package mujica.ds.generic.set;
 import mujica.ds.of_int.list.ResizePolicy;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.text.format.UniversalAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,60 +57,57 @@ public abstract class ClosedHashSet<E> extends AbstractHashSet<E> {
         modCount++;
     }
 
-    private class ClosedIterator implements Iterator<E> {
-
-        int currentIndex = 0;
-
-        int previousIndex = -1;
-
-        int expectedModCount = modCount;
-
-        ClosedIterator() {
-            super();
-            while (currentIndex < array.length && array[currentIndex] instanceof CollectionConstant) {
-                currentIndex++;
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            return currentIndex < array.length;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public E next() {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            final E element = (E) array[currentIndex];
-            previousIndex = currentIndex;
-            do {
-                currentIndex++;
-            } while (currentIndex < array.length && array[currentIndex] instanceof CollectionConstant);
-            return element;
-        }
-
-        @Override
-        public void remove() {
-            if (previousIndex == -1) {
-                throw new IllegalStateException();
-            }
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            assert !(array[previousIndex] instanceof CollectionConstant);
-            array[previousIndex] = CollectionConstant.REMOVED;
-            size--;
-            expectedModCount = ++modCount;
-            previousIndex = -1;
-        }
-    }
-
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new ClosedIterator();
+        return new Iterator<>() {
+
+            int currentIndex = 0;
+
+            int previousIndex = -1;
+
+            int expectedModCount = modCount;
+
+            {
+                while (currentIndex < array.length && array[currentIndex] instanceof CollectionConstant) {
+                    currentIndex++;
+                }
+            }
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex < array.length;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public E next() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                final E element = (E) array[currentIndex];
+                previousIndex = currentIndex;
+                do {
+                    currentIndex++;
+                } while (currentIndex < array.length && array[currentIndex] instanceof CollectionConstant);
+                return element;
+            }
+
+            @Override
+            public void remove() {
+                if (previousIndex == -1) {
+                    throw new IllegalStateException();
+                }
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                assert !(array[previousIndex] instanceof CollectionConstant);
+                array[previousIndex] = CollectionConstant.REMOVED;
+                size--;
+                expectedModCount = ++modCount;
+                previousIndex = -1;
+            }
+        };
     }
 
     @NotNull
@@ -122,6 +118,6 @@ public abstract class ClosedHashSet<E> extends AbstractHashSet<E> {
 
     @Override
     public void stringifyDetail(@NotNull StringBuilder sb) {
-        UniversalAppender.createIntAll().appendArray(array, sb);
+        sb.append(Arrays.toString(array));
     }
 }

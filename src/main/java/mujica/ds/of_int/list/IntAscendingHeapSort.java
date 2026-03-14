@@ -4,9 +4,11 @@ import mujica.ds.SortingAlgorithm;
 import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.IntSlot;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/11/9")
+@ReferencePage(title = "堆排序", href = "https://oi-wiki.org/basic/heap-sort/")
 public class IntAscendingHeapSort extends SortingAlgorithm<int[]> {
 
     public static final IntAscendingHeapSort INSTANCE = new IntAscendingHeapSort();

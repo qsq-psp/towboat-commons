@@ -1,6 +1,6 @@
 package mujica.reflect.modifier;
 
-import mujica.text.format.DebugFormat;
+import mujica.text.format.CharSequenceAppender;
 import mujica.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -113,16 +113,17 @@ public class FlagName implements Cloneable, Serializable {
                 } while (shift >= length);
                 array = Arrays.copyOf(array, length);
             }
-            if (array[shift] != null) {
-                LOGGER.warn("Flag name {} override name {} shift {}",
-                        DebugFormat.autoQuote().getOperator().apply(name),
-                        DebugFormat.autoQuote().getOperator().apply(array[shift]),
+            if (array[shift] != null && LOGGER.isWarnEnabled()) {
+                CharSequenceAppender appender = CharSequenceAppender.Json.INSTANCE;
+                LOGGER.warn("flag name {} override name {} shift {}",
+                        appender.stringify(name, (StringBuilder) null),
+                        appender.stringify(array[shift], (StringBuilder) null),
                         shift
                 );
             }
             array[shift] = name;
         } else {
-            LOGGER.warn("Shift value {} out of range", shift);
+            LOGGER.warn("shift value {} out of range", shift);
         }
         return this;
     }
@@ -168,10 +169,10 @@ public class FlagName implements Cloneable, Serializable {
                     } else if (value instanceof Long) {
                         shift = shift64((Long) value);
                     } else {
-                        LOGGER.warn("Unexpected type {} out of {}", value, field);
+                        LOGGER.warn("unexpected type {} out of {}", value, field);
                     }
                 } catch (ReflectiveOperationException e) {
-                    LOGGER.warn("Fail to reflect on field {}", field, e);
+                    LOGGER.warn("fail to reflect on field {}", field, e);
                 }
                 if (shift == -1) {
                     continue;

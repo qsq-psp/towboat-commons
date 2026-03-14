@@ -117,9 +117,9 @@ public class DomainNameValidator extends AbstractFormatValidator.IntervalForm {
 
     @NotNull
     @Override
-    LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int start, int end) {
+    LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int startIndex, int endIndex) {
         {
-            int length = end - start;
+            int length = endIndex - startIndex;
             if (length <= 0) {
                 return localize(locale, EMPTY);
             }
@@ -128,10 +128,10 @@ public class DomainNameValidator extends AbstractFormatValidator.IntervalForm {
             }
         }
         boolean inside = false;
-        for (int index = start; index <= end; index++) {
+        for (int index = startIndex; index <= endIndex; index++) {
             int ch;
             boolean divide;
-            if (index == end) {
+            if (index == endIndex) {
                 ch = '.';
                 divide = true;
             } else {
@@ -139,13 +139,13 @@ public class DomainNameValidator extends AbstractFormatValidator.IntervalForm {
                 divide = !inside && (ch == '.');
             }
             if (divide) {
-                LocalizedFailureMessage message = getForSegment(locale, string, start, index);
+                LocalizedFailureMessage message = getForSegment(locale, string, startIndex, index);
                 if (!(message instanceof BooleanFailureMessage)) {
-                    return message.replace("{segment}", string.subSequence(start, index).toString());
+                    return message.replace("{segment}", string.subSequence(startIndex, index).toString());
                 } else if (message != BooleanFailureMessage.SUCCESS) {
                     return message;
                 }
-                start = index + 1;
+                startIndex = index + 1;
             } else if (ch == '[') {
                 if (inside) {
                     return localize(locale, NESTING);

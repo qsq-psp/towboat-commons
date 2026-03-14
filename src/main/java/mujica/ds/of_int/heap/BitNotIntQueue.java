@@ -112,60 +112,41 @@ public class BitNotIntQueue implements OrderedIntQueue {
         queue.forEach((IntConsumer) (t -> action.accept(~t)));
     }
 
-    private static class BitwiseNotIterator implements Iterator<Integer> {
-
-        @NotNull
-        private final Iterator<Integer> it;
-
-        private BitwiseNotIterator(@NotNull Iterator<Integer> it) {
-            super();
-            this.it = it;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return it.hasNext();
-        }
-
-        @Override
-        public Integer next() {
-            Integer t = it.next();
-            if (t != null) {
-                t = ~t;
-            }
-            return t;
-        }
-    }
-
-    private static class BitwiseNotPrimitiveIterator implements PrimitiveIterator.OfInt {
-
-        @NotNull
-        private final OfInt it;
-
-        private BitwiseNotPrimitiveIterator(@NotNull OfInt it) {
-            super();
-            this.it = it;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return it.hasNext();
-        }
-
-        @Override
-        public int nextInt() {
-            return ~it.nextInt();
-        }
-    }
-
     @NotNull
     @Override
     public Iterator<Integer> iterator() {
         final Iterator<Integer> it = queue.iterator();
         if (it instanceof PrimitiveIterator.OfInt) {
-            return new BitwiseNotPrimitiveIterator(((PrimitiveIterator.OfInt) it));
+            PrimitiveIterator.OfInt iit = (PrimitiveIterator.OfInt) it;
+            return new PrimitiveIterator.OfInt() {
+
+                @Override
+                public boolean hasNext() {
+                    return iit.hasNext();
+                }
+
+                @Override
+                public int nextInt() {
+                    return ~iit.nextInt();
+                }
+            };
         } else {
-            return new BitwiseNotIterator(it);
+            return new Iterator<>() {
+
+                @Override
+                public boolean hasNext() {
+                    return it.hasNext();
+                }
+
+                @Override
+                public Integer next() {
+                    Integer t = it.next();
+                    if (t != null) {
+                        t = ~t;
+                    }
+                    return t;
+                }
+            };
         }
     }
 

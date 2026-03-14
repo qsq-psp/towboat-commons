@@ -136,52 +136,41 @@ public class LookUpIntMap extends IterableIntMap {
         secondary.forEachValue(action);
     }
 
-    @CodeHistory(date = "2025/3/26", name = "TwoPhaseIterator")
-    @CodeHistory(date = "2026/2/6")
-    private class IteratorImpl implements Iterator<Entry> {
-
-        @NotNull
-        final SimpleIntMapEntry entry = new SimpleIntMapEntry();
-
-        int primaryIndex;
-
-        Iterator<Entry> secondaryIterator;
-
-        IteratorImpl() {
-            super();
-            if (primary.intLength() == 0) {
-                secondaryIterator = secondary.iterator();
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            if (secondaryIterator != null) {
-                return secondaryIterator.hasNext();
-            } else {
-                return primaryIndex < primary.intLength();
-            }
-        }
-
-        @Override
-        public Entry next() {
-            if (secondaryIterator != null) {
-                return secondaryIterator.next();
-            } else {
-                entry.value = primary.getInt(primaryIndex);
-                entry.key = primaryIndex;
-                primaryIndex++;
-                if (primaryIndex == primary.intLength()) {
-                    secondaryIterator = secondary.iterator();
-                }
-                return entry;
-            }
-        }
-    }
-
     @NotNull
     @Override
     public Iterator<Entry> iterator() {
-        return new IteratorImpl();
+        return new Iterator<>() {
+
+            @NotNull
+            final SimpleIntMapEntry entry = new SimpleIntMapEntry();
+
+            int primaryIndex;
+
+            Iterator<Entry> secondaryIterator = primary.intLength() == 0 ? secondary.iterator() : null;
+
+            @Override
+            public boolean hasNext() {
+                if (secondaryIterator != null) {
+                    return secondaryIterator.hasNext();
+                } else {
+                    return primaryIndex < primary.intLength();
+                }
+            }
+
+            @Override
+            public Entry next() {
+                if (secondaryIterator != null) {
+                    return secondaryIterator.next();
+                } else {
+                    entry.value = primary.getInt(primaryIndex);
+                    entry.key = primaryIndex;
+                    primaryIndex++;
+                    if (primaryIndex == primary.intLength()) {
+                        secondaryIterator = secondary.iterator();
+                    }
+                    return entry;
+                }
+            }
+        };
     }
 }

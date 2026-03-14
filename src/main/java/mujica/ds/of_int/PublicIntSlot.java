@@ -210,10 +210,8 @@ public class PublicIntSlot extends Number implements IntSlot, Comparable<PublicI
     }
 
     @Override
-    public int setInt(int newValue) {
-        final int oldValue = value;
+    public void setInt(int newValue) {
         value = newValue;
-        return oldValue;
     }
 
     @Override

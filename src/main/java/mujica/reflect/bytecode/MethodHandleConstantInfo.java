@@ -1,9 +1,8 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.nest.LimitedDataInput;
+import mujica.io.stream.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
-import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

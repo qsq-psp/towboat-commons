@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/3/21", name = "InsertionSort")
 @CodeHistory(date = "2025/10/30")
+@ReferencePage(title = "插入排序", href = "https://oi-wiki.org/basic/insertion-sort/")
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
 public class IntDescendingInsertionSort extends SortingAlgorithm<int[]> {
 

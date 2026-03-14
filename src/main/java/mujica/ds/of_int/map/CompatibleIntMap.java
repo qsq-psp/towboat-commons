@@ -138,34 +138,32 @@ public class CompatibleIntMap extends IterableIntMap {
     @NotNull
     @Override
     public Iterator<Entry> iterator() {
-        return new CompatibleIntIterator();
-    }
+        return new Iterator<>() {
 
-    private class CompatibleIntIterator implements Iterator<Entry> {
+            @NotNull
+            final Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
 
-        @NotNull
-        final Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
+            @NotNull
+            final SimpleIntMapEntry entry1 = new SimpleIntMapEntry();
 
-        @NotNull
-        final SimpleIntMapEntry entry1 = new SimpleIntMapEntry();
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
 
-        @Override
-        public boolean hasNext() {
-            return iterator.hasNext();
-        }
+            @Override
+            public Entry next() {
+                final Map.Entry<Integer, Integer> entry0 = iterator.next();
+                entry1.key = entry0.getKey();
+                entry1.value = entry0.getValue();
+                return entry1;
+            }
 
-        @Override
-        public Entry next() {
-            final Map.Entry<Integer, Integer> entry0 = iterator.next();
-            entry1.key = entry0.getKey();
-            entry1.value = entry0.getValue();
-            return entry1;
-        }
-
-        @Override
-        public void remove() {
-            iterator.remove();
-        }
+            @Override
+            public void remove() {
+                iterator.remove();
+            }
+        };
     }
 
     @Override

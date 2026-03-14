@@ -6,13 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2025/3/3.
- */
 @CodeHistory(date = "2025/3/3")
 public class ModuloI64 extends ModularMath {
-
-    protected static final BigInteger BIG_MASK = BigInteger.ONE.shiftLeft(Long.SIZE).subtract(BigInteger.ONE);
 
     @Override
     protected int modLevel() {
@@ -47,7 +42,7 @@ public class ModuloI64 extends ModularMath {
     @NotNull
     @Override
     public BigInteger increment(@NotNull BigInteger a) {
-        return a.add(BigInteger.ONE).and(BIG_MASK);
+        return a.add(BigInteger.ONE).and(BigConstants.MAX_UNSIGNED_LONG);
     }
 
     @Override
@@ -66,7 +61,7 @@ public class ModuloI64 extends ModularMath {
     @NotNull
     @Override
     public BigInteger decrement(@NotNull BigInteger a) {
-        return a.subtract(BigInteger.ONE).and(BIG_MASK);
+        return a.subtract(BigInteger.ONE).and(BigConstants.MAX_UNSIGNED_LONG);
     }
 
     @Override
@@ -83,7 +78,7 @@ public class ModuloI64 extends ModularMath {
     @NotNull
     @Override
     public BigInteger add(@NotNull BigInteger x, @NotNull BigInteger y) {
-        return x.add(y).and(BIG_MASK);
+        return x.add(y).and(BigConstants.MAX_UNSIGNED_LONG);
     }
 
     @Override
@@ -100,7 +95,7 @@ public class ModuloI64 extends ModularMath {
     @NotNull
     @Override
     public BigInteger subtract(@NotNull BigInteger x, @NotNull BigInteger y) {
-        return x.subtract(y).and(BIG_MASK);
+        return x.subtract(y).and(BigConstants.MAX_UNSIGNED_LONG);
     }
 
     @Override
@@ -117,7 +112,7 @@ public class ModuloI64 extends ModularMath {
     @NotNull
     @Override
     public BigInteger multiply(@NotNull BigInteger x, @NotNull BigInteger y) {
-        return x.multiply(y).and(BIG_MASK);
+        return x.multiply(y).and(BigConstants.MAX_UNSIGNED_LONG);
     }
 
     @Override
@@ -179,9 +174,9 @@ public class ModuloI64 extends ModularMath {
             throw new ArithmeticException("Power negative");
         }
         if (BigInteger.ONE.equals(exponent)) {
-            return base.and(BIG_MASK);
+            return base.and(BigConstants.MAX_UNSIGNED_LONG);
         }
-        return base.modPow(exponent, BIG_MASK);
+        return base.modPow(exponent, BigConstants.COUNT_LONG);
     }
 
     private static final int FACTORIAL_THRESHOLD = 66;
@@ -236,7 +231,7 @@ public class ModuloI64 extends ModularMath {
             for (int i = 2; i <= ia; i++) {
                 product *= i;
             }
-            return BigInteger.valueOf(product).and(BIG_MASK);
+            return BigInteger.valueOf(product).and(BigConstants.MAX_UNSIGNED_LONG);
         } else {
             return BigInteger.ZERO;
         }

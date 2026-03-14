@@ -10,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2025/3/3")
 public class HexEncoder implements Base16Case {
 
-    public static final HexEncoder LOWER_ENCODER = new HexEncoder(LOWER);
+    public static final HexEncoder LOWER_ENCODER = new HexEncoder(LOWER_CONSTANT);
 
-    public static final HexEncoder UPPER_ENCODER = new HexEncoder(UPPER);
+    public static final HexEncoder UPPER_ENCODER = new HexEncoder(UPPER_CONSTANT);
 
     protected final int alphabetOffset;
 

@@ -74,7 +74,7 @@ public abstract class AbstractFormatValidator implements FormatValidator {
     public static abstract class IntervalForm extends AbstractFormatValidator {
 
         @NotNull
-        abstract LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int start, int end);
+        abstract LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int startIndex, int endIndex);
 
         @Override
         public boolean test(@Nullable CharSequence string) {
@@ -85,8 +85,8 @@ public abstract class AbstractFormatValidator implements FormatValidator {
         }
 
         @Override
-        public boolean test(@NotNull CharSequence string, int start, int end) {
-            return get(null, string, start, end).get() == null;
+        public boolean test(@NotNull CharSequence string, int startIndex, int endIndex) {
+            return get(null, string, startIndex, endIndex).get() == null;
         }
 
         @Nullable
@@ -103,11 +103,11 @@ public abstract class AbstractFormatValidator implements FormatValidator {
 
         @Nullable
         @Override
-        public String message(@Nullable Locale locale, @NotNull CharSequence string, int start, int end) {
+        public String message(@Nullable Locale locale, @NotNull CharSequence string, int startIndex, int endIndex) {
             if (locale == null) {
                 locale = Locale.ROOT;
             }
-            return get(locale, string, start, end).get();
+            return get(locale, string, startIndex, endIndex).get();
         }
     }
 }

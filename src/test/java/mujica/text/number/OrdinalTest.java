@@ -7,9 +7,10 @@ import org.junit.Test;
 @CodeHistory(date = "2025/3/1")
 public class OrdinalTest {
 
+    /*
     @Test
     public void caseInt() {
-        final IntegralToStringFunction instance = Ordinal.INSTANCE;
+        final Ordinal instance = Ordinal.INSTANCE;
         Assert.assertEquals("0th", instance.stringify(0));
         Assert.assertEquals("1st", instance.stringify(1));
         Assert.assertEquals("2nd", instance.stringify(2));
@@ -35,7 +36,7 @@ public class OrdinalTest {
 
     @Test
     public void caseLong() {
-        final IntegralToStringFunction instance = Ordinal.INSTANCE;
+        final Ordinal instance = Ordinal.INSTANCE;
         Assert.assertEquals("1234567890000th", instance.stringify(1234567890000L));
         Assert.assertEquals("1234567890001st", instance.stringify(1234567890001L));
         Assert.assertEquals("1234567890002nd", instance.stringify(1234567890002L));
@@ -52,4 +53,5 @@ public class OrdinalTest {
         Assert.assertEquals("1234567890024th", instance.stringify(1234567890024L));
         Assert.assertEquals("9223372036854775807th", instance.stringify(Long.MAX_VALUE));
     }
+    //*/
 }

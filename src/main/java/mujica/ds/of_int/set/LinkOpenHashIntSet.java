@@ -81,48 +81,44 @@ public class LinkOpenHashIntSet extends AbstractHashIntSet {
         //
     }
 
-    @CodeHistory(date = "2025/6/27")
-    private class SafeIterator implements PrimitiveIterator.OfInt {
-
-        int expectedModCount;
-
-        int nextIndex;
-
-        int currentIndex = -1;
-
-        Node nextNode;
-
-        Node currentNode;
-
-        Node previousNode;
-
-        SafeIterator() {
-            super();
-            final int m = array.length;
-            while (nextIndex < m) {
-                nextNode = array[nextIndex];
-                if (nextNode != null) {
-                    break;
-                }
-                nextIndex++;
-            }
-            expectedModCount = modCount;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return nextNode != null;
-        }
-
-        @Override
-        public int nextInt() {
-            return 0;
-        }
-    }
-
     @NotNull
     @Override
     public PrimitiveIterator.OfInt iterator() {
-        return new SafeIterator();
+        return new PrimitiveIterator.OfInt() {
+
+            int expectedModCount;
+
+            int nextIndex;
+
+            int currentIndex = -1;
+
+            Node nextNode;
+
+            Node currentNode;
+
+            Node previousNode;
+
+            {
+                final int m = array.length;
+                while (nextIndex < m) {
+                    nextNode = array[nextIndex];
+                    if (nextNode != null) {
+                        break;
+                    }
+                    nextIndex++;
+                }
+                expectedModCount = modCount;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return nextNode != null;
+            }
+
+            @Override
+            public int nextInt() {
+                return 0;
+            }
+        };
     }
 }

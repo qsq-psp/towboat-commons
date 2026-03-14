@@ -19,6 +19,7 @@ public class LongAscendingShellSort extends SortingAlgorithm<long[]> {
         return false;
     }
 
+    @NotNull
     @Override
     public MonotonicityDirection monotonicity() {
         return MonotonicityDirection.ASCENDING;

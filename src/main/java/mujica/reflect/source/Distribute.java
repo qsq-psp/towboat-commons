@@ -17,7 +17,6 @@ public final class Distribute {
     private static final Logger LOGGER = LoggerFactory.getLogger(Distribute.class);
 
     private static final String[][] LINKS = {
-            {"D:\\Java\\CDP\\src", "D:\\Java\\CRYCHIC\\src"},
             {"D:\\Java\\CRYCHIC\\src", "D:\\Java\\MyGO\\src"},
             {"D:\\Java\\MyGO\\src", "D:\\Java\\Mujica\\src"},
             {"D:\\Java\\Mujica\\src", "D:\\Java\\AveMujica\\src"}

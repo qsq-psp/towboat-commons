@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 public class TangentTest extends G2dTest {
 
     @Test
-    public void testGetRadian() {
+    public void checkGetRadian() {
         for (int directionIndex = 0; directionIndex < TANGENT; directionIndex++) {
             Tangent tan = nextTangent();
             Radian rad = new Radian(tan.getRadian());
@@ -21,7 +21,7 @@ public class TangentTest extends G2dTest {
     }
 
     @Test
-    public void testSetRadian() {
+    public void checkSetRadian() {
         for (int directionIndex = 0; directionIndex < TANGENT; directionIndex++) {
             Radian rad = new Radian();
             rad.setRandom(rc);
@@ -32,7 +32,7 @@ public class TangentTest extends G2dTest {
     }
 
     @Test
-    public void testCosine() {
+    public void checkCosine() {
         for (int directionIndex = 0; directionIndex < TANGENT; directionIndex++) {
             Tangent tan = nextTangent();
             Point point = new Point(tan.cos(), tan.sin());
@@ -41,7 +41,7 @@ public class TangentTest extends G2dTest {
     }
 
     @Test
-    public void testCotangent() {
+    public void checkCotangent() {
         for (int directionIndex = 0; directionIndex < TANGENT; directionIndex++) {
             Tangent tan = nextTangent();
             Radian rad = new Radian(tan.getRadian());
@@ -51,7 +51,7 @@ public class TangentTest extends G2dTest {
     }
 
     @Test
-    public void testSum() {
+    public void checkSum() {
         for (int directionIndex = 0; directionIndex < TANGENT; directionIndex++) {
             Tangent a = nextTangent();
             Tangent b = nextTangent();
@@ -62,7 +62,7 @@ public class TangentTest extends G2dTest {
     }
 
     @Test
-    public void testAddAssociative() {
+    public void checkAddAssociative() {
         Tangent a = new Tangent();
         Tangent b = new Tangent();
         Tangent c = new Tangent();
@@ -80,7 +80,7 @@ public class TangentTest extends G2dTest {
     }
 
     @Test
-    public void testDifference() {
+    public void checkDifference() {
         for (int directionIndex = 0; directionIndex < TANGENT; directionIndex++) {
             Tangent a = nextTangent();
             Tangent b = nextTangent();
@@ -91,7 +91,7 @@ public class TangentTest extends G2dTest {
     }
 
     @Test
-    public void testSubtractAssociative() {
+    public void checkSubtractAssociative() {
         Tangent a = new Tangent();
         Tangent b = new Tangent();
         Tangent c = new Tangent();
@@ -109,7 +109,7 @@ public class TangentTest extends G2dTest {
     }
 
     @Test
-    public void testVector1() {
+    public void checkVector1() {
         for (int pointIndex = 0; pointIndex < TANGENT; pointIndex++) {
             Point point = nextPoint();
             if (point.euclidNorm() < Geometry.EPSILON) {
@@ -124,7 +124,7 @@ public class TangentTest extends G2dTest {
     }
 
     @Test
-    public void testVector2() {
+    public void checkVector2() {
         for (int pointIndex = 0; pointIndex < TANGENT; pointIndex++) {
             Point point0 = nextPoint();
             Point point1 = nextPoint();

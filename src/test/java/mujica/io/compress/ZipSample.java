@@ -1,6 +1,6 @@
 package mujica.io.compress;
 
-import mujica.io.nest.BufferedLimitedUniversalDataInputStream;
+import mujica.io.stream.BufferedLimitedUniversalDataInputStream;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;

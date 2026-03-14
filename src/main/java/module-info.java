@@ -1,4 +1,5 @@
 import mujica.io.codec.TowboatCharsetProvider;
+import mujica.io.fs.ExtensionFileTypeDetector;
 import mujica.reflect.modifier.CodeHistory;
 
 @CodeHistory(date = "2023/12/12", name = "CDP")
@@ -25,6 +26,7 @@ module CDP {
     exports mujica.ds.generic;
     exports mujica.ds.generic.list;
     exports mujica.ds.generic.set;
+    exports mujica.ds.generic.map;
     exports mujica.ds.generic.heap;
     exports mujica.ds.of_boolean;
     exports mujica.ds.of_boolean.list;
@@ -44,7 +46,6 @@ module CDP {
     exports mujica.text.collation;
     exports mujica.text.bnf;
     exports mujica.text.regex;
-    exports mujica.algebra;
     exports mujica.algebra.discrete;
     exports mujica.algebra.prime;
     exports mujica.algebra.random;
@@ -56,4 +57,5 @@ module CDP {
     exports mujica.netty.concurrent;
 
     provides java.nio.charset.spi.CharsetProvider with TowboatCharsetProvider;
+    provides java.nio.file.spi.FileTypeDetector with ExtensionFileTypeDetector;
 }

@@ -278,94 +278,89 @@ public class LinearClosedHashIntSet extends AbstractHashIntSet {
         modCount++;
     }
 
-    private class SafeIterator implements PrimitiveIterator.OfInt {
-
-        int currentIndex;
-
-        int previousIndex;
-
-        int expectedModCount = modCount;
-
-        SafeIterator() {
-            super();
-            previousIndex = -3;
-            if (containsRemovedMark) {
-                currentIndex = ~REMOVED_MARK; // -2
-                return;
-            }
-            if (containsEmptyMark) {
-                currentIndex = ~EMPTY_MARK; // -1
-                return;
-            }
-            currentIndex = 0;
-            while (currentIndex < array.length) {
-                int v = array[currentIndex];
-                if (v == EMPTY_MARK || v == REMOVED_MARK) {
-                    currentIndex++;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            return currentIndex < array.length;
-        }
-
-        @Override
-        public int nextInt() {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            previousIndex = currentIndex;
-            int t;
-            if (currentIndex == ~REMOVED_MARK) { // -2
-                t = REMOVED_MARK;
-                if (containsEmptyMark) {
-                    currentIndex = ~EMPTY_MARK;
-                    return t;
-                }
-            } else if (currentIndex == ~EMPTY_MARK) { // -1
-                t = EMPTY_MARK;
-            } else {
-                t = array[currentIndex];
-            }
-            while (true) {
-                if (++currentIndex == array.length) {
-                    break;
-                }
-                int v = array[currentIndex];
-                if (v != EMPTY_MARK && v != REMOVED_MARK) {
-                    break;
-                }
-            }
-            return t;
-        }
-
-        @Override
-        public void remove() {
-            if (previousIndex == -1) {
-                throw new IllegalStateException();
-            }
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            {
-                int v = array[previousIndex];
-                assert v != EMPTY_MARK && v != REMOVED_MARK;
-            }
-            array[previousIndex] = REMOVED_MARK;
-            size--;
-            expectedModCount = ++modCount;
-            previousIndex = -1;
-        }
-    }
-
     @NotNull
     @Override
     public PrimitiveIterator.OfInt iterator() {
-        return new SafeIterator();
+        return new PrimitiveIterator.OfInt() {
+
+            int currentIndex;
+
+            int previousIndex;
+
+            int expectedModCount = modCount;
+
+            {
+                previousIndex = -3;
+                if (containsRemovedMark) {
+                    currentIndex = ~REMOVED_MARK; // -2
+                } else if (containsEmptyMark) {
+                    currentIndex = ~EMPTY_MARK; // -1
+                } else {
+                    currentIndex = 0;
+                    while (currentIndex < array.length) {
+                        int v = array[currentIndex];
+                        if (v == EMPTY_MARK || v == REMOVED_MARK) {
+                            currentIndex++;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex < array.length;
+            }
+
+            @Override
+            public int nextInt() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                previousIndex = currentIndex;
+                int t;
+                if (currentIndex == ~REMOVED_MARK) { // -2
+                    t = REMOVED_MARK;
+                    if (containsEmptyMark) {
+                        currentIndex = ~EMPTY_MARK;
+                        return t;
+                    }
+                } else if (currentIndex == ~EMPTY_MARK) { // -1
+                    t = EMPTY_MARK;
+                } else {
+                    t = array[currentIndex];
+                }
+                while (true) {
+                    if (++currentIndex == array.length) {
+                        break;
+                    }
+                    int v = array[currentIndex];
+                    if (v != EMPTY_MARK && v != REMOVED_MARK) {
+                        break;
+                    }
+                }
+                return t;
+            }
+
+            @Override
+            public void remove() {
+                if (previousIndex == -1) {
+                    throw new IllegalStateException();
+                }
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                {
+                    int v = array[previousIndex];
+                    assert v != EMPTY_MARK && v != REMOVED_MARK;
+                }
+                array[previousIndex] = REMOVED_MARK;
+                size--;
+                expectedModCount = ++modCount;
+                previousIndex = -1;
+            }
+        };
     }
 
     @NotNull

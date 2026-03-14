@@ -41,11 +41,17 @@ public class SlicedCharSequence extends FilteredCharSequence {
 
     @Override
     public CharSequence subSequence(int startIndex, int endIndex) {
-        startIndex += this.startIndex;
-        endIndex += this.startIndex;
-        if (!(this.startIndex <= startIndex && startIndex <= endIndex && endIndex <= this.endIndex)) {
+        if (startIndex < endIndex) {
+            startIndex += this.startIndex;
+            endIndex += this.startIndex;
+            if (!(this.startIndex <= startIndex && endIndex <= this.endIndex)) {
+                throw new IndexOutOfBoundsException();
+            }
+            return new SlicedCharSequence(original, startIndex, endIndex);
+        } else if (startIndex > endIndex) {
             throw new IndexOutOfBoundsException();
+        } else {
+            return EmptyCharSequence.INSTANCE;
         }
-        return new SlicedCharSequence(original, startIndex, endIndex);
     }
 }

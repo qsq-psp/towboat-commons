@@ -1,8 +1,8 @@
 package mujica.reflect.bytecode;
 
 import mujica.ds.generic.list.TruncateList;
-import mujica.io.codec.IndentWriter;
-import mujica.io.nest.LimitedDataInput;
+import mujica.io.stream.IndentWriter;
+import mujica.io.stream.LimitedDataInput;
 import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;

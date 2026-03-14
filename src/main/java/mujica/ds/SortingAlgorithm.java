@@ -40,7 +40,7 @@ public abstract class SortingAlgorithm<T> {
     public abstract long sort(@NotNull T target, @Index(of = "target") int startIndex, @Index(of = "target", inclusive = false) int endIndex);
 
     public long sort(@NotNull T target) {
-        return sort(target, 0, Array.getLength(target)); // java.lang.IllegalArgumentException: Argument is not an array
+        return sort(target, 0, Array.getLength(target));
     }
 
     public long sortPart(@NotNull T target, @Index(of = "target") int startIndex, @Index(of = "target", inclusive = false) int midIndex, @Index(of = "target", inclusive = false) int endIndex) {

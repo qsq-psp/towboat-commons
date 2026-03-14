@@ -66,7 +66,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testPreserveLength() {
+    public void checkPreserveLength() {
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
             Transform2 transform = nextPreserveLength();
             Assert.assertTrue(transform.preserveLength());
@@ -135,7 +135,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testLinear() {
+    public void checkLinear() {
         final Point point2 = new Point();
         final Point point3 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -154,7 +154,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testTransform0() {
+    public void checkTransform0() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -176,7 +176,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testTransform() {
+    public void checkTransform() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -198,7 +198,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testTransformLine1() {
+    public void checkTransformLine1() {
         final Point point1 = new Point();
         final HalfPlane halfPlane1 = new HalfPlane();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -221,7 +221,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testTransformLine2() {
+    public void checkTransformLine2() {
         final HalfPlane halfPlane1 = new HalfPlane();
         final HalfPlane halfPlane2 = new HalfPlane();
         final Line<Point> line = Line.points();
@@ -247,7 +247,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testTransformLine3() {
+    public void checkTransformLine3() {
         final HalfPlane halfPlane1 = new HalfPlane();
         final HalfPlane halfPlane2 = new HalfPlane();
         final Line<Point> line = Line.points();
@@ -273,7 +273,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testInverseTransform() {
+    public void checkInverseTransform() {
         Point point1 = new Point();
         Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -288,7 +288,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testSetToInverse() {
+    public void checkSetToInverse() {
         Point point1 = new Point();
         Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -307,7 +307,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testInvert() {
+    public void checkInvert() {
         Point point1 = new Point();
         Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -324,7 +324,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testVectorComponents() {
+    public void checkVectorComponents() {
         Point point1 = new Point();
         Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -385,7 +385,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testStationaryPoint() {
+    public void checkStationaryPoint() {
         final Point point0 = new Point();
         final Point point1 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -404,7 +404,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testScaleBefore() {
+    public void checkScaleBefore() {
         final Point point0 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
             double scale = nextViewportTransform().vectorComponent(0); // mxx
@@ -419,7 +419,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testCenterScaleBefore() {
+    public void checkCenterScaleBefore() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -434,7 +434,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testScaleAfter() {
+    public void checkScaleAfter() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -454,7 +454,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testCenterScaleAfter() {
+    public void checkCenterScaleAfter() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -490,7 +490,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testRotateBefore() {
+    public void checkRotateBefore() {
         final Point point0 = new Point();
         final Point point1 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -507,7 +507,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testPivotRotateBefore() {
+    public void checkPivotRotateBefore() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -521,7 +521,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testRotateAfter() {
+    public void checkRotateAfter() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -541,7 +541,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testPivotRotateAfter() {
+    public void checkPivotRotateAfter() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -562,7 +562,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testOrthogonalizeCore() {
+    public void checkOrthogonalizeCore() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -578,7 +578,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testAxesProduct() {
+    public void checkAxesProduct() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {
@@ -608,7 +608,7 @@ public class Transform2Test extends G2dTest {
     }
 
     @Test
-    public void testAffine2Product() {
+    public void checkAffine2Product() {
         final Point point1 = new Point();
         final Point point2 = new Point();
         for (int transformIndex = 0; transformIndex < TRANSFORM; transformIndex++) {

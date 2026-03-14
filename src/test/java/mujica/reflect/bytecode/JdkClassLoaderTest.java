@@ -13,7 +13,7 @@ import org.junit.Test;
 public class JdkClassLoaderTest {
 
     @Test
-    public void testPlatformClassLoader() {
+    public void casePlatformClassLoader() {
         final ClassLoader classLoader = ClassLoader.getPlatformClassLoader();
         Assert.assertNotNull(classLoader.getResource("java/lang/StringBuilder.class"));
         Assert.assertNotNull(classLoader.getResource("java/io/File.class"));
@@ -31,7 +31,7 @@ public class JdkClassLoaderTest {
     }
 
     @Test
-    public void testSystemClassLoader() {
+    public void caseSystemClassLoader() {
         final ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         Assert.assertNotNull(classLoader.getResource("java/lang/StringBuilder.class"));
         Assert.assertNotNull(classLoader.getResource("java/io/File.class"));

@@ -1,11 +1,11 @@
 package mujica.algebra.discrete;
 
+import mujica.reflect.modifier.CodeHistory;
+
 import java.math.BigInteger;
 
-/**
- * Created on 2025/3/7.
- */
-public class BaselineClampedMath extends ClampedMath {
+@CodeHistory(date = "2025/3/7")
+class BaselineClampedMath extends ClampedMath {
 
     @Override
     public int add(int x, int y) {

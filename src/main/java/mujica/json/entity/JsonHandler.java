@@ -1,11 +1,13 @@
 package mujica.json.entity;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.DebugFormat;
+import mujica.text.format.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "JsonConsumer")
@@ -33,7 +35,7 @@ public abstract class JsonHandler {
 
     public void stringKey(@NotNull String key) {
         if (LOGGER.isWarnEnabled()) {
-            LOGGER.warn("stringKey({})", DebugFormat.autoQuote().getOperator().apply(key));
+            LOGGER.warn("stringKey({})", CharSequenceAppender.Json.INSTANCE.stringify(key, (StringBuilder) null));
         }
     }
 
@@ -229,6 +231,22 @@ public abstract class JsonHandler {
 
     public void emptyObjectValue() {
         openObject();
+        closeObject();
+    }
+
+    public void annotationValue(@NotNull Annotation annotation) throws ReflectiveOperationException {
+        openObject();
+        for (Method method : annotation.annotationType().getDeclaredMethods()) {
+            stringKey(method.getName());
+            Object object = method.invoke(annotation);
+            if (object instanceof Annotation) {
+                annotationValue((Annotation) object);
+            } else if (object instanceof Enum) {
+                stringValue(object.toString());
+            } else {
+                //...
+            }
+        }
         closeObject();
     }
 }

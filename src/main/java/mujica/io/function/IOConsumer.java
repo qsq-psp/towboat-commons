@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOError;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2024/6/6", project = "UltraIO")
@@ -18,11 +19,24 @@ public interface IOConsumer<T> {
     void accept(T t) throws IOException;
 
     @NotNull
-    default Consumer<T> ignore() {
+    default Consumer<T> uncheck() {
         return (t) -> {
             try {
                 accept(t);
-            } catch (IOException ignore) {}
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        };
+    }
+
+    @NotNull
+    static <T> IOConsumer<T> check(@NotNull Consumer<T> consumer) {
+        return (t) -> {
+            try {
+                consumer.accept(t);
+            } catch (UncheckedIOException e) {
+                throw e.getCause();
+            }
         };
     }
 
@@ -34,6 +48,30 @@ public interface IOConsumer<T> {
             } catch (IOException e) {
                 throw new IOError(e);
             }
+        };
+    }
+
+    @NotNull
+    static <T> IOConsumer<T> downgrade(@NotNull Consumer<T> consumer) {
+        return (t) -> {
+            try {
+                consumer.accept(t);
+            } catch (IOError e) {
+                Throwable cause = e.getCause();
+                if (cause instanceof IOException) {
+                    throw (IOException) cause;
+                }
+                throw e;
+            }
+        };
+    }
+
+    @NotNull
+    default Consumer<T> ignore() {
+        return (t) -> {
+            try {
+                accept(t);
+            } catch (IOException ignore) {}
         };
     }
 

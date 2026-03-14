@@ -2,6 +2,7 @@ package mujica.text.format;
 
 import io.netty.buffer.ByteBuf;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.text.collation.Bracket;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintStream;
@@ -13,26 +14,79 @@ import java.util.List;
 public class QuoteAppender extends CharSequenceAppender {
 
     @NotNull
-    protected final String prefix;
+    private final CharSequenceAppender center;
+
+    @NotNull
+    private String left;
     
     @NotNull
-    protected final String suffix;
+    private String right;
 
-    protected final int deltaCharCount;
+    private final int deltaCharCount;
 
-    public QuoteAppender(@NotNull String prefix, @NotNull String suffix) {
+    private boolean checkEnabled;
+
+    public QuoteAppender(@NotNull CharSequenceAppender center, @NotNull String left, @NotNull String right) {
         super();
-        this.prefix = prefix;
-        this.suffix = suffix;
-        deltaCharCount = prefix.length() + suffix.length();
+        this.center = center;
+        this.left = left;
+        this.right = right;
+        deltaCharCount = left.length() + right.length();
         if (deltaCharCount <= 0) {
             throw new IllegalArgumentException();
         }
     }
 
+    public QuoteAppender(@NotNull String left, @NotNull String right) {
+        this(new CharSequenceAppender(), left, right);
+    }
+
+    public QuoteAppender(@NotNull CharSequenceAppender center, @NotNull Bracket bracket) {
+        this(center, bracket.left, bracket.right);
+    }
+
+    public QuoteAppender(@NotNull CharSequenceAppender center, @NotNull String around) {
+        this(center, around, around);
+    }
+
+    @NotNull
+    public String getLeft() {
+        return left;
+    }
+
+    @NotNull
+    public QuoteAppender setLeft(@NotNull String left) {
+        this.left = left;
+        return this;
+    }
+
+    @NotNull
+    public String getRight() {
+        return right;
+    }
+
+    @NotNull
+    public QuoteAppender setRight(@NotNull String right) {
+        this.right = right;
+        return this;
+    }
+
+    public boolean isCheckEnabled() {
+        return checkEnabled;
+    }
+
+    @NotNull
+    public QuoteAppender setCheckEnabled(boolean checkEnabled) {
+        this.checkEnabled = checkEnabled;
+        return this;
+    }
+
     @Override
     public boolean isApplicable(@NotNull CharSequence string) {
-        return string.toString().contains(suffix);
+        if (checkEnabled && string.toString().contains(right)) {
+            return false;
+        }
+        return center.isApplicable(string);
     }
 
     @Override
@@ -47,83 +101,91 @@ public class QuoteAppender extends CharSequenceAppender {
 
     @Override
     public int deltaCharCount(@NotNull CharSequence string) {
-        return deltaCharCount;
+        return deltaCharCount + center.deltaCharCount(string);
     }
 
     @Override
     public int deltaCharCount(@NotNull CharSequence string, int startIndex, int endIndex) {
-        return deltaCharCount;
+        return deltaCharCount + center.deltaCharCount(string, startIndex, endIndex);
     }
 
     @Override
     public int charEditDistance(@NotNull CharSequence string) {
-        return deltaCharCount;
+        return deltaCharCount + center.charEditDistance(string);
     }
 
     @Override
     public int charEditDistance(@NotNull CharSequence string, int startIndex, int endIndex) {
-        return deltaCharCount;
+        return deltaCharCount + center.charEditDistance(string, startIndex, endIndex);
     }
 
     @Override
     public void write(@NotNull CharSequence string, @NotNull ByteBuffer out) {
-        out.put(prefix.getBytes(StandardCharsets.UTF_8));
-        out.put(string.toString().getBytes(StandardCharsets.UTF_8));
-        out.put(suffix.getBytes(StandardCharsets.UTF_8));
+        out.put(left.getBytes(StandardCharsets.UTF_8));
+        center.write(string, out);
+        out.put(right.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
     public void write(@NotNull CharSequence string, @NotNull ByteBuf out) {
-        out.writeCharSequence(prefix, StandardCharsets.UTF_8);
-        out.writeCharSequence(string, StandardCharsets.UTF_8);
-        out.writeCharSequence(suffix, StandardCharsets.UTF_8);
+        out.writeCharSequence(left, StandardCharsets.UTF_8);
+        center.write(string, out);
+        out.writeCharSequence(right, StandardCharsets.UTF_8);
     }
 
     @Override
     public void append(@NotNull CharSequence string, @NotNull StringBuilder out) {
-        out.append(prefix).append(string).append(suffix);
+        out.append(left);
+        center.append(string, out);
+        out.append(right);
     }
 
     @Override
     public void append(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull StringBuilder out) {
-        out.append(prefix).append(string, startIndex, endIndex).append(suffix);
+        out.append(left);
+        center.append(string, startIndex, endIndex, out);
+        out.append(right);
     }
 
     @Override
     public void append(@NotNull CharSequence string, @NotNull StringBuffer out) {
-        out.append(prefix).append(string).append(suffix);
+        out.append(left);
+        center.append(string, out);
+        out.append(right);
     }
 
     @Override
     public void append(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull StringBuffer out) {
-        out.append(prefix).append(string, startIndex, endIndex).append(suffix);
+        out.append(left);
+        center.append(string, startIndex, endIndex, out);
+        out.append(right);
     }
 
     @Override
     public void print(@NotNull CharSequence string, @NotNull PrintStream out) {
-        out.print(prefix);
-        out.print(string);
-        out.print(suffix);
+        out.print(left);
+        center.print(string, out);
+        out.print(right);
     }
 
     @Override
     public void print(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull PrintStream out) {
-        out.print(prefix);
-        out.print(string.subSequence(startIndex, endIndex));
-        out.print(suffix);
+        out.print(left);
+        center.print(string, startIndex, endIndex, out);
+        out.print(right);
     }
 
     @Override
     public void addTokens(@NotNull CharSequence string, @NotNull List<Object> out) {
-        out.add(prefix);
-        out.add(string.toString());
-        out.add(suffix);
+        out.add(left);
+        center.addTokens(string, out);
+        out.add(right);
     }
 
     @Override
     public void addTokens(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull List<Object> out) {
-        out.add(prefix);
-        out.add(string.subSequence(startIndex, endIndex).toString());
-        out.add(suffix);
+        out.add(left);
+        center.addTokens(string, startIndex, endIndex, out);
+        out.add(right);
     }
 }

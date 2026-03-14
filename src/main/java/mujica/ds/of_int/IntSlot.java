@@ -12,21 +12,65 @@ public interface IntSlot {
 
     int getInt();
 
-    int setInt(int newValue); // todo: return void
+    void setInt(int newValue);
 
-    default int setInt(@NotNull Number newValue) {
-        return setInt(newValue.intValue());
+    default void setInt(@NotNull IntSlot newValue) {
+        setInt(newValue.getInt());
     }
 
-    default int setInt(@NotNull IntSlot newValue) {
-        return setInt(newValue.getInt());
+    default void setInt(@NotNull Number newValue) {
+        setInt(newValue.intValue());
     }
 
-    default int setInt(@NotNull IntSupplier supplier) {
-        return setInt(supplier.getAsInt());
+    default void setInt(@NotNull IntSupplier supplier) {
+        setInt(supplier.getAsInt());
     }
 
-    static void exchange(@NotNull IntSlot a, @NotNull IntSlot b) {
-        a.setInt(b.setInt(a.getInt()));
+    default int updateInt(int newValue) {
+        final int oldValue = getInt();
+        setInt(newValue);
+        return oldValue;
+    }
+
+    default int updateInt(@NotNull IntSlot newValue) {
+        return updateInt(newValue.getInt());
+    }
+
+    default int updateInt(@NotNull Number newValue) {
+        return updateInt(newValue.intValue());
+    }
+
+    default int updateInt(@NotNull IntSupplier newValue) {
+        return updateInt(newValue.getAsInt());
+    }
+
+    static void exchangeInt(@NotNull IntSlot a, @NotNull IntSlot b) {
+        a.setInt(b.updateInt(a.getInt()));
+    }
+
+    @NotNull
+    default IntSlot boxInt(int newValue) {
+        setInt(newValue);
+        return this;
+    }
+
+    @NotNull
+    default IntSlot boxInt(@NotNull IntSlot newValue) {
+        return boxInt(newValue.getInt());
+    }
+
+    @NotNull
+    default IntSlot boxInt(@NotNull Number newValue) {
+        return boxInt(newValue.intValue());
+    }
+
+    @NotNull
+    default IntSlot boxInt(@NotNull IntSupplier newValue) {
+        return boxInt(newValue.getAsInt());
+    }
+
+    @NotNull
+    default IntSlot swapInt(@NotNull IntSlot that) {
+        return boxInt(that.updateInt(getInt()));
     }
 }

@@ -27,7 +27,7 @@ class StringFailureMessage implements LocalizedFailureMessage {
     @NotNull
     @Override
     public LocalizedFailureMessage replaceQuoted(@NotNull String mark, @NotNull String content) {
-        string = string.replace(mark, DebugFormat.autoQuote().getOperator().apply(content));
+        string = string.replace(mark, CharSequenceAppender.Json.INSTANCE.stringify(content, (StringBuilder) null));
         return this;
     }
 
@@ -48,7 +48,7 @@ class StringFailureMessage implements LocalizedFailureMessage {
     @NotNull
     @Override
     public LocalizedFailureMessage replaceQuoted(@NotNull String mark, char value) {
-        string = string.replace(mark, DebugFormat.autoQuote().getStringifier().apply(value));
+        string = string.replace(mark, CharSequenceAppender.Json.INSTANCE.stringify(value, (StringBuilder) null));
         return this;
     }
 
@@ -70,6 +70,9 @@ class StringFailureMessage implements LocalizedFailureMessage {
 
     @Override
     public String toString() {
-        return "StringFailureMessage[" + DebugFormat.autoQuote().getOperator().apply(string) + "]";
+        final StringBuilder sb = new StringBuilder();
+        sb.append("StringFailureMessage[");
+        CharSequenceAppender.Json.INSTANCE.append(string, sb);
+        return sb.append("]").toString();
     }
 }

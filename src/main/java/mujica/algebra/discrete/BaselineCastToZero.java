@@ -1,11 +1,11 @@
 package mujica.algebra.discrete;
 
+import mujica.reflect.modifier.CodeHistory;
+
 import java.math.BigInteger;
 
-/**
- * Created on 2025/3/15.
- */
-public class BaselineCastToZero extends CastToZero {
+@CodeHistory(date = "2025/3/15")
+class BaselineCastToZero extends CastToZero {
 
     @Override
     public int mean(int x, int y) {

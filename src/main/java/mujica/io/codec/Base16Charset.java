@@ -18,7 +18,7 @@ public class Base16Charset extends Charset implements Base16Case {
 
     public Base16Charset(boolean upperCase) {
         super(upperCase ? NAME_UPPER : NAME_LOWER, upperCase ? null : new String[] {NAME});
-        this.alphabetOffset = upperCase ? UPPER : LOWER;
+        this.alphabetOffset = upperCase ? UPPER_CONSTANT : LOWER_CONSTANT;
     }
 
     public int alphabetOffset() {

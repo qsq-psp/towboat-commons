@@ -1,6 +1,6 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.nest.LimitedDataInput;
+import mujica.io.stream.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

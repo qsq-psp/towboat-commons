@@ -60,12 +60,12 @@ public class RewriteClassLoaderTest {
     }
 
     @Test
-    public void testIdentity() throws Exception {
+    public void caseIdentity() throws Exception {
         assertOperator(UnaryOperator.identity());
     }
 
     @Test
-    public void testSimplyAttributeInfo() throws Exception {
+    public void caseSimplyAttributeInfo() throws Exception {
         assertOperator(classFile -> {
             classFile.simplifyAttributeInfo();
             return classFile;
@@ -73,7 +73,7 @@ public class RewriteClassLoaderTest {
     }
 
     @Test
-    public void testSortAttributeInfo() throws Exception {
+    public void caseSortAttributeInfo() throws Exception {
         assertOperator(classFile -> {
             classFile.sortAttributeInfo(Comparator.comparing(AttributeInfo::attributeName));
             return classFile;
@@ -81,7 +81,7 @@ public class RewriteClassLoaderTest {
     }
 
     @Test
-    public void testShuffleAttributeInfo() throws Exception {
+    public void caseShuffleAttributeInfo() throws Exception {
         assertOperator(classFile -> {
             classFile.shuffleAttributeInfo();
             return classFile;

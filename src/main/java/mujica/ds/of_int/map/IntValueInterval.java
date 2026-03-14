@@ -18,5 +18,5 @@ public interface IntValueInterval extends Interval, IntSlot {
 
     int getInt();
 
-    int setInt(int newValue);
+    void setInt(int newValue);
 }

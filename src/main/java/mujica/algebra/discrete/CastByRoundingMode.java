@@ -1,5 +1,6 @@
 package mujica.algebra.discrete;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.RoundingMode;
@@ -7,6 +8,7 @@ import java.math.RoundingMode;
 /**
  * Created on 2025/3/4.
  */
+@CodeHistory(date = "2025/3/4")
 public class CastByRoundingMode implements IntegralCast {
 
     @NotNull

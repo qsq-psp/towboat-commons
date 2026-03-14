@@ -2,6 +2,7 @@ package mujica.io.compress;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,7 @@ import java.io.OutputStream;
 /**
  * Created on 2025/11/29.
  */
+@CodeHistory(date = "2025/11/29")
 public class StrictByteBufRunBuffer extends ByteBufRunBuffer {
 
     public StrictByteBufRunBuffer(@NotNull ByteBuf data) {

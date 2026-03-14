@@ -13,7 +13,7 @@ abstract class PercentCharset extends Charset implements Base16Case {
 
     protected PercentCharset(boolean upperCase, @NotNull String canonicalName, String[] aliases) {
         super(canonicalName, aliases);
-        this.alphabetOffset = upperCase ? UPPER : LOWER;
+        this.alphabetOffset = upperCase ? UPPER_CONSTANT : LOWER_CONSTANT;
     }
 
     public int getAlphabetOffset() {

@@ -5,23 +5,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2025/4/3.
- */
 @CodeHistory(date = "2025/4/3")
 public class ModuloSomeBigInteger extends ModularMath {
 
-    protected static final BigInteger BIG_MAX_LONG = BigInteger.valueOf(Long.MAX_VALUE);
-
-    protected static final BigInteger BIG_MAX_LONG_SUM = ModuloI64.BIG_MASK;
-
-    protected static final BigInteger BIG_MAX_LONG_PRODUCT = BIG_MAX_LONG.multiply(BIG_MAX_LONG);
+    protected static final BigInteger BIG_MAX_LONG_PRODUCT = BigConstants.MAX_LONG.multiply(BigConstants.MAX_LONG);
 
     protected static int level(@NotNull BigInteger value) {
-        if (value.compareTo(BIG_MAX_LONG) > 0) {
+        if (value.compareTo(BigConstants.MAX_LONG) > 0) {
             if (value.compareTo(BIG_MAX_LONG_PRODUCT) > 0) {
                 return LARGER_THAN_MAX_LONG_PRODUCT;
-            } else if (value.compareTo(BIG_MAX_LONG_SUM) > 0) {
+            } else if (value.compareTo(BigConstants.MAX_UNSIGNED_LONG) > 0) { // max sum of two long
                 return LARGER_THAN_MAX_LONG_SUM;
             } else {
                 return LARGER_THAN_MAX_LONG;

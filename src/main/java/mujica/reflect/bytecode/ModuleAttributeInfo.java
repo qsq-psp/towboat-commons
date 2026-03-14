@@ -1,6 +1,6 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.nest.LimitedDataInput;
+import mujica.io.stream.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;

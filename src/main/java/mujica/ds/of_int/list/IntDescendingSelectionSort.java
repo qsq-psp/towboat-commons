@@ -15,6 +15,7 @@ public class IntDescendingSelectionSort extends SortingAlgorithm<int[]> {
 
     public static final IntDescendingSelectionSort INSTANCE = new IntDescendingSelectionSort();
 
+    @NotNull
     @Override
     public MonotonicityDirection monotonicity() {
         return MonotonicityDirection.DESCENDING;

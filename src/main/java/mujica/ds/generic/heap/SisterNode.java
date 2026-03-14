@@ -261,6 +261,12 @@ class SisterNode<E> implements Serializable {
         }
     }
 
+    @Override
+    @NotNull
+    public String toString() {
+        return element + " @" + Integer.toHexString(hashCode());
+    }
+
     @CodeHistory(date = "2025/6/5")
     class Frame {
 

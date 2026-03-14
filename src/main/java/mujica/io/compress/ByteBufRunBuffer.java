@@ -11,9 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
 
-/**
- * Created on 2025/11/17.
- */
 @CodeHistory(date = "2025/11/17", name = "ByteBufLookBackMemory")
 @CodeHistory(date = "2025/11/29")
 public class ByteBufRunBuffer extends RunBuffer implements ByteBufHolder {

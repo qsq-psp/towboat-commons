@@ -27,6 +27,9 @@ public abstract class FilteredCharSequence implements CharSequence {
 
     @Override
     public CharSequence subSequence(@Index(of = "this") int startIndex, @Index(of = "this", inclusive = false) int endIndex) {
+        if (startIndex == endIndex) {
+            return EmptyCharSequence.INSTANCE;
+        }
         return new SlicedCharSequence(this, startIndex, endIndex);
     }
 

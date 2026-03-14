@@ -12,9 +12,6 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
-/**
- * Created on 2025/11/10.
- */
 @CodeHistory(date = "2025/11/10")
 public class TableInflateInputStream extends ResidueInflateInputStream {
 

@@ -11,6 +11,7 @@ import java.io.OutputStream;
  * Created on 2025/5/7.
  */
 @CodeHistory(date = "2025/5/7")
+@Deprecated
 public class BaseAnyEncodeOutputStream extends FilterOutputStream {
 
     @NotNull

@@ -1,13 +1,12 @@
 package mujica.algebra.discrete;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2025/3/7.
- */
-public class BaselineIntegralMath extends IntegralMath {
+@CodeHistory(date = "2025/3/7")
+class BaselineIntegralMath extends IntegralMath {
 
     @Override
     public int abs(int a) {

@@ -2,6 +2,7 @@ package mujica.reflect.modifier;
 
 import java.lang.annotation.*;
 
+@CodeHistory(date = "2022/10/29", project = "Ultramarine", name = "LocaleNames")
 @CodeHistory(date = "2025/5/5")
 @Stable(date = "2025/8/1")
 @Documented

@@ -1,5 +1,7 @@
 package mujica.io.nest;
 
+import mujica.io.fs.EmptyFileAttributes;
+import mujica.io.stream.BufferedLimitedInputStream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

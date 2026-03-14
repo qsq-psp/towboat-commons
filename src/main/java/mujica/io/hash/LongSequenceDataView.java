@@ -285,9 +285,9 @@ public class LongSequenceDataView implements DataView {
                 if (digit < 0xa) {
                     digit += '0';
                 } else if (upperCase) {
-                    digit += Base16Case.UPPER;
+                    digit += Base16Case.UPPER_CONSTANT;
                 } else {
-                    digit += Base16Case.LOWER;
+                    digit += Base16Case.LOWER_CONSTANT;
                 }
                 charArray[charIndex++] = (char) digit;
             }

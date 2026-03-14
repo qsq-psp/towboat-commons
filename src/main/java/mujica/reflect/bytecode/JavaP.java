@@ -1,8 +1,8 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.codec.IndentWriter;
-import mujica.io.codec.RepeatCharIndentWriter;
-import mujica.io.nest.BufferedLimitedDataInputStream;
+import mujica.io.stream.IndentWriter;
+import mujica.io.stream.RepeatCharIndentWriter;
+import mujica.io.stream.BufferedLimitedDataInputStream;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

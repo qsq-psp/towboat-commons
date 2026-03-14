@@ -1,17 +1,16 @@
 package mujica.algebra.discrete;
 
 import mujica.ds.of_int.list.AbstractIntList;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-/**
- * Created in infrastructure on 2022/4/20, named AddressDistributionResult.
- * Recreated in Ultramarine on 2023/3/24, named BitCount32.
- * Recreated on 2025/3/17.
- */
+@CodeHistory(date = "2022/4/20", project = "infrastructure", name = "AddressDistributionResult")
+@CodeHistory(date = "2023/3/24", project = "Ultramarine", name = "BitCount32")
+@CodeHistory(date = "2025/3/17")
 public class Bit32CombinationList extends AbstractIntList {
 
     public static int next(int value) {

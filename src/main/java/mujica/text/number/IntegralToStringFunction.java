@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2025/2/25")
+@Deprecated
 public interface IntegralToStringFunction {
 
     void append(int value, @NotNull StringBuilder out);

@@ -25,6 +25,6 @@ public class HexDumpTemplate implements Base16Case, Serializable {
         columnSize = builder.getColumnSize();
         columnCount = builder.getColumnCount();
         bytesPerLine = columnSize * columnCount;
-        alphabetOffset = builder.isUpperCase() ? UPPER : LOWER;
+        alphabetOffset = builder.isUpperCase() ? UPPER_CONSTANT : LOWER_CONSTANT;
     }
 }

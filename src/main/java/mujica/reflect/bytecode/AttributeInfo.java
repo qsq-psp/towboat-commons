@@ -1,7 +1,7 @@
 package mujica.reflect.bytecode;
 
 import mujica.ds.of_int.PublicIntSlot;
-import mujica.io.nest.LimitedDataInput;
+import mujica.io.stream.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;

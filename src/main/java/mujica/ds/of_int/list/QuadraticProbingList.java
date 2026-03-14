@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.PrimitiveIterator;
 
-/**
- * Created on 2025/6/30.
- */
 @CodeHistory(date = "2025/6/30")
 public class QuadraticProbingList extends AbstractIntList {
 

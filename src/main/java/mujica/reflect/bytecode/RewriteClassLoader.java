@@ -1,7 +1,7 @@
 package mujica.reflect.bytecode;
 
 import mujica.io.buffer.ByteBufferUtil;
-import mujica.io.nest.BufferedLimitedDataInputStream;
+import mujica.io.stream.BufferedLimitedDataInputStream;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

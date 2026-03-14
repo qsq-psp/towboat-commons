@@ -1,10 +1,12 @@
 package mujica.text.format;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created on 2026/1/9.
  */
+@CodeHistory(date = "2026/1/9")
 public class CodePointReversedCharSequence extends FilteredCharSequence {
 
     public CodePointReversedCharSequence(@NotNull CharSequence original) {

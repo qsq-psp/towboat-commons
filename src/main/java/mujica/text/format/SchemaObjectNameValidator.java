@@ -40,19 +40,19 @@ public class SchemaObjectNameValidator extends AbstractFormatValidator.IntervalF
 
     @NotNull
     @Override
-    LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int start, int end) {
-        final int length = end - start;
+    LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int startIndex, int endIndex) {
+        final int length = endIndex - startIndex;
         FailureMessage message;
         if (length <= 0) {
             message = EMPTY;
         } else if (length > 64) {
             message = LONG;
-        } else if (string.charAt(end - 1) == ' ') {
+        } else if (string.charAt(endIndex - 1) == ' ') {
             message = END;
         } else {
             message = null;
             boolean allNumber = true;
-            for (int index = start; index < end; index++) {
+            for (int index = startIndex; index < endIndex; index++) {
                 int ch = string.charAt(index);
                 if ('0' <= ch && ch <= '9') {
                     continue;

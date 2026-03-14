@@ -5,7 +5,6 @@ import mujica.ds.SortingAlgorithm;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
-import mujica.text.format.UniversalAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -381,14 +380,13 @@ public class TruncateList<E> extends ArrayList<E> implements DataStructure {
     }
 
     public void stringifyDetail(@NotNull StringBuilder sb) {
-        final UniversalAppender appender = UniversalAppender.createIntAll();
         sb.append("[");
         boolean subsequent = false;
         for (E element : this) {
             if (subsequent) {
                 sb.append(", ");
             }
-            appender.append(element, sb);
+            sb.append(element);
             subsequent = true;
         }
         sb.append("]");

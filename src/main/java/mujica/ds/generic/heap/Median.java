@@ -122,38 +122,31 @@ public class Median<E> extends AbstractCollection<E> implements DataStructure {
         }
     }
 
-    private class IteratorImpl implements Iterator<E> {
-
-        @NotNull
-        private Iterator<E> it;
-
-        private boolean isHigh;
-
-        IteratorImpl() {
-            super();
-            it = low.iterator();
-        }
-
-        @Override
-        public boolean hasNext() {
-            return it.hasNext();
-        }
-
-        @Override
-        public E next() {
-            final E element = it.next();
-            if (!it.hasNext() && !isHigh) {
-                it = high.iterator();
-                isHigh = true;
-            }
-            return element;
-        }
-    }
-
     @Override
     @NotNull
     public Iterator<E> iterator() {
-        return new IteratorImpl();
+        return new Iterator<>() {
+
+            @NotNull
+            private Iterator<E> it = low.iterator();
+
+            private boolean isHigh;
+
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public E next() {
+                final E element = it.next();
+                if (!it.hasNext() && !isHigh) {
+                    it = high.iterator();
+                    isHigh = true;
+                }
+                return element;
+            }
+        };
     }
 
     @NotNull

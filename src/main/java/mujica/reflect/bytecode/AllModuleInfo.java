@@ -1,8 +1,8 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.codec.IndentWriter;
-import mujica.io.codec.RepeatCharIndentWriter;
-import mujica.io.nest.BufferedLimitedDataInputStream;
+import mujica.io.stream.IndentWriter;
+import mujica.io.stream.RepeatCharIndentWriter;
+import mujica.io.stream.BufferedLimitedDataInputStream;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -21,13 +21,13 @@ public final class AllModuleInfo {
     private static final Logger LOGGER = LoggerFactory.getLogger(AllModuleInfo.class);
 
     private static final String[] TARGETS = {
-            "D:\\Java\\CDP\\target\\javap-module-info"
+            "target\\javap-module-info"
     };
 
     public static void main(String[] args) {
         final Path currentPath = Path.of("").toAbsolutePath();
         for (String targetName : TARGETS) {
-            Path targetPath = Path.of(targetName);
+            Path targetPath = Path.of(targetName).toAbsolutePath();
             if (!(Files.isDirectory(targetPath) && targetPath.startsWith(currentPath))) {
                 continue;
             }

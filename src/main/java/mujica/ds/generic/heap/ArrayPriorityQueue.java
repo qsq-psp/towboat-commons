@@ -273,70 +273,68 @@ public class ArrayPriorityQueue<E> extends AbstractPriorityQueue<E> {
         return (E) elements[head];
     }
 
-    private class IteratorImpl implements Iterator<E> {
-
-        int index = head;
-
-        int lastRemove = head; // if remove() is not used, there is no extra processing
-
-        int expectedModCount = modCount;
-
-        @Override
-        public boolean hasNext() {
-            return index < tail;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public E next() {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            if (index < tail) {
-                return (E) elements[index++];
-            } else {
-                throw new NoSuchElementException();
-            }
-        }
-
-        @Override
-        public void remove() {
-            if (index == lastRemove) {
-                throw new IllegalStateException();
-            }
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            int low = index - head - 1;
-            int high = tail - index;
-            assert low >= 0;
-            assert high >= 0;
-            if (low < high) {
-                System.arraycopy(elements, head, elements, head + 1, low);
-                elements[head] = null;
-                head++;
-                lastRemove = index;
-            } else {
-                System.arraycopy(elements, index, elements, index - 1, high);
-                tail--;
-                elements[tail] = null;
-                lastRemove = --index;
-            }
-            if (head == tail) {
-                int half = elements.length >> 1;
-                head = half;
-                tail = half;
-                index = half;
-                lastRemove = half;
-            }
-            expectedModCount = ++modCount;
-        }
-    }
-
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new IteratorImpl();
+        return new Iterator<>() {
+
+            int index = head;
+
+            int lastRemove = head; // if remove() is not used, there is no extra processing
+
+            int expectedModCount = modCount;
+
+            @Override
+            public boolean hasNext() {
+                return index < tail;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public E next() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                if (index < tail) {
+                    return (E) elements[index++];
+                } else {
+                    throw new NoSuchElementException();
+                }
+            }
+
+            @Override
+            public void remove() {
+                if (index == lastRemove) {
+                    throw new IllegalStateException();
+                }
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                int low = index - head - 1;
+                int high = tail - index;
+                assert low >= 0;
+                assert high >= 0;
+                if (low < high) {
+                    System.arraycopy(elements, head, elements, head + 1, low);
+                    elements[head] = null;
+                    head++;
+                    lastRemove = index;
+                } else {
+                    System.arraycopy(elements, index, elements, index - 1, high);
+                    tail--;
+                    elements[tail] = null;
+                    lastRemove = --index;
+                }
+                if (head == tail) {
+                    int half = elements.length >> 1;
+                    head = half;
+                    tail = half;
+                    index = half;
+                    lastRemove = half;
+                }
+                expectedModCount = ++modCount;
+            }
+        };
     }
 
     @NotNull

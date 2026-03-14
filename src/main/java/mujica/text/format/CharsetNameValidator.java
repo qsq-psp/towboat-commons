@@ -39,15 +39,15 @@ public class CharsetNameValidator extends AbstractFormatValidator.IntervalForm {
 
     @NotNull
     @Override
-    LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int start, int end) {
+    LocalizedFailureMessage get(@Nullable Locale locale, @NotNull CharSequence string, int startIndex, int endIndex) {
         FailureMessage message;
-        if (start >= end) {
+        if (startIndex >= endIndex) {
             message = EMPTY;
-        } else if (!isCharsetNameStart(string.charAt(start))) {
+        } else if (!isCharsetNameStart(string.charAt(startIndex))) {
             message = START;
         } else {
             message = null;
-            for (int index = start + 1; index < end; index++) {
+            for (int index = startIndex + 1; index < endIndex; index++) {
                 if (!isCharsetNamePart(string.charAt(index))) {
                     message = PART;
                     break;

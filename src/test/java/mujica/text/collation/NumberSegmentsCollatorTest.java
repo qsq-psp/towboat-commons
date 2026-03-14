@@ -71,4 +71,12 @@ public class NumberSegmentsCollatorTest {
         Assert.assertEquals(0, collator.normalizedCompare("0223749729472r03453453465653r005464353465r", "223749729472r3453453465653r0000005464353465r"));
         Assert.assertEquals(0, collator.normalizedCompare("w04792374923749", "w00000000000000004792374923749"));
     }
+
+    public void checkSymmetry() {
+        //
+    }
+
+    public void checkTransitivity() {
+        //
+    }
 }

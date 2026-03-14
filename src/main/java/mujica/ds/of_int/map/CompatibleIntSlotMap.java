@@ -126,7 +126,7 @@ public class CompatibleIntSlotMap extends IterableIntMap {
         }
         PublicIntSlot slot = map.get(key);
         if (slot != null) {
-            int oldValue = slot.setInt(newValue);
+            int oldValue = slot.updateInt(newValue);
             if (oldValue == 0) {
                 zeroCount--;
             }
@@ -171,34 +171,32 @@ public class CompatibleIntSlotMap extends IterableIntMap {
     @NotNull
     @Override
     public Iterator<Entry> iterator() {
-        return new CompatibleIntSlotIterator();
-    }
+        return new Iterator<>() {
 
-    private class CompatibleIntSlotIterator implements Iterator<Entry> {
+            @NotNull
+            final Iterator<Map.Entry<Integer, PublicIntSlot>> iterator = map.entrySet().iterator();
 
-        @NotNull
-        final Iterator<Map.Entry<Integer, PublicIntSlot>> iterator = map.entrySet().iterator();
+            @NotNull
+            final SimpleIntMapEntry entry1 = new SimpleIntMapEntry();
 
-        @NotNull
-        final SimpleIntMapEntry entry1 = new SimpleIntMapEntry();
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
 
-        @Override
-        public boolean hasNext() {
-            return iterator.hasNext();
-        }
+            @Override
+            public Entry next() {
+                final Map.Entry<Integer, PublicIntSlot> entry0 = iterator.next();
+                entry1.key = entry0.getKey();
+                entry1.value = entry0.getValue().value;
+                return entry1;
+            }
 
-        @Override
-        public Entry next() {
-            final Map.Entry<Integer, PublicIntSlot> entry0 = iterator.next();
-            entry1.key = entry0.getKey();
-            entry1.value = entry0.getValue().value;
-            return entry1;
-        }
-
-        @Override
-        public void remove() {
-            iterator.remove();
-        }
+            @Override
+            public void remove() {
+                iterator.remove();
+            }
+        };
     }
 
     @Override

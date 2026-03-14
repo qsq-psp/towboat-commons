@@ -1,6 +1,7 @@
 package mujica.ds.generic.heap;
 
 import mujica.reflect.modifier.CodeHistory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -20,8 +21,9 @@ public class LinkedNode<E> implements Serializable {
         this.element = element;
     }
 
+    @NotNull
     @Override
     public String toString() {
-        return element + " @ " + Integer.toHexString(hashCode());
+        return element + " @" + Integer.toHexString(hashCode());
     }
 }

@@ -21,6 +21,7 @@ public class IntDescendingQuickSort extends SortingAlgorithm<int[]> {
         this.pivotSelector = pivotSelector;
     }
 
+    @NotNull
     @Override
     public MonotonicityDirection monotonicity() {
         return MonotonicityDirection.DESCENDING;

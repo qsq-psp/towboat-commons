@@ -180,7 +180,52 @@ public abstract class BiasedPriorityQueue<E> extends AbstractPriorityQueue<E> {
     @Override
     @NotNull
     public Iterator<E> iterator() {
-        return new IteratorImpl();
+        return new Iterator<>() {
+
+            BiasedNode<E>.Frame current, previous;
+
+            int expectedModCount = modCount;
+
+            {
+                if (root != null) {
+                    current = root.new Frame(null);
+                }
+            }
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public E next() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                if (current == null) {
+                    throw new NoSuchElementException();
+                }
+                previous = current;
+                current = previous.next();
+                return previous.node().element;
+            }
+
+            @Override
+            public void remove() {
+                if (previous == null) {
+                    throw new IllegalStateException();
+                }
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                final BiasedNode<E> node = removeNode(previous.node(), previous.parent != null ? previous.parent.node() : null);
+                if (node != null) {
+                    current = node.new Frame(previous.parent);
+                }
+                previous = null;
+                expectedModCount = modCount;
+            }
+        };
     }
 
     @Override

@@ -4,9 +4,11 @@ import mujica.ds.SortingAlgorithm;
 import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.IntSlot;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2026/2/6")
+@ReferencePage(title = "桶排序", href = "https://oi-wiki.org/basic/bucket-sort/")
 public class IntDescendingBucketSort extends SortingAlgorithm<int[]> {
 
     @NotNull

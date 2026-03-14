@@ -4,7 +4,7 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/12/20")
-public class RotateModifier extends VectorExchangeModifier {
+public class RotateModifier extends VectorOrderModifier {
 
     final int move;
 

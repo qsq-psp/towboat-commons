@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2025/3/14.
- */
 @CodeHistory(date = "2025/3/14")
 public class ModuloSomeInt extends ModularMath {
 

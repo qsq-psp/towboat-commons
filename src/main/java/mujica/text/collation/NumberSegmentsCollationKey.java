@@ -23,10 +23,10 @@ public class NumberSegmentsCollationKey extends CollationKey {
             } else {
                 if (ch <= '9') {
                     return ch - '0';
-                } else if ('A' <= ch && ch < Base16Case.UPPER + radix) {
-                    return ch - Base16Case.UPPER;
-                } else if ('a' <= ch && ch < Base16Case.LOWER + radix) {
-                    return ch - Base16Case.LOWER;
+                } else if ('A' <= ch && ch < Base16Case.UPPER_CONSTANT + radix) {
+                    return ch - Base16Case.UPPER_CONSTANT;
+                } else if ('a' <= ch && ch < Base16Case.LOWER_CONSTANT + radix) {
+                    return ch - Base16Case.LOWER_CONSTANT;
                 }
             }
         }

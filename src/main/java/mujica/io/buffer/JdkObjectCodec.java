@@ -39,7 +39,9 @@ public class JdkObjectCodec implements ObjectCodec {
         final ByteArrayInputStream is = new ByteArrayInputStream(data, pointer.getInt(), length);
         try (ObjectInputStream ois = new ObjectInputStream(is)) {
             return ois.readObject();
-        } catch (Exception e) {
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } finally {
             pointer.setInt(length - is.available());
@@ -55,7 +57,9 @@ public class JdkObjectCodec implements ObjectCodec {
     public Object decode(@NotNull ByteBuf in) {
         try (ObjectInputStream ois = new ObjectInputStream(new ByteBufInputStream(in))) {
             return ois.readObject();
-        } catch (Exception e) {
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -73,8 +77,8 @@ public class JdkObjectCodec implements ObjectCodec {
     public void encode(Object value, @NotNull ByteBuf out) {
         try {
             (new ObjectOutputStream(new ByteBufOutputStream(out))).writeObject(value);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 

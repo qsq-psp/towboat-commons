@@ -1,9 +1,9 @@
 package mujica.reflect.bytecode;
 
-import mujica.io.nest.LimitedDataInput;
+import mujica.io.stream.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.text.format.DebugFormat;
+import mujica.text.format.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -124,7 +124,10 @@ class Utf8ConstantInfo extends ConstantInfo {
     @NotNull
     @Override
     public String toString(@NotNull ClassFile context) {
-        return "#" + newIndex + " utf8 " + DebugFormat.autoQuote().getOperator().apply(string);
+        final StringBuilder sb = new StringBuilder();
+        sb.append("#").append(newIndex).append(" utf8 ");
+        CharSequenceAppender.Json.INSTANCE.append(string, sb);
+        return sb.toString();
     }
 
     @Override

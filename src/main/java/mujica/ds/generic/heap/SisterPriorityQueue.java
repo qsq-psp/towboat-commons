@@ -164,7 +164,31 @@ public abstract class SisterPriorityQueue<E> extends AbstractPriorityQueue<E> {
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new IteratorImpl();
+        return new Iterator<>() {
+
+            @Nullable
+            SisterNode<E>.Frame frame = root != null ? root.new Frame(null) : null;
+
+            final int expectedModCount = modCount;
+
+            @Override
+            public boolean hasNext() {
+                return frame != null;
+            }
+
+            @Override
+            public E next() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                if (frame == null) {
+                    throw new NoSuchElementException();
+                }
+                final E element = frame.node().element;
+                frame = frame.next();
+                return element;
+            }
+        };
     }
 
     @Override

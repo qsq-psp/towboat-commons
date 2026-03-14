@@ -26,7 +26,7 @@ public class NotLoadedFieldTypeTest {
     public final ErrorCollector errorCollector = new ErrorCollector();
 
     @Test
-    public void testPrimitive() {
+    public void casePrimitive() {
         final SourceFieldType sourceFieldType = SourceFieldType.of(byte.class);
         final BytecodeFieldType bytecodeFieldType = BytecodeFieldType.of(Byte.TYPE); // also the primitive
         sourceFieldType.checkHealth(errorCollector::addError);
@@ -48,7 +48,7 @@ public class NotLoadedFieldTypeTest {
     private static final double[] ARRAY1 = new double[0];
 
     @Test
-    public void testPrimitiveArray1() {
+    public void casePrimitiveArray1() {
         final SourceFieldType sourceFieldType = SourceFieldType.of(double[].class);
         final BytecodeFieldType bytecodeFieldType = BytecodeFieldType.of(ARRAY1.getClass());
         sourceFieldType.checkHealth(errorCollector::addError);
@@ -70,7 +70,7 @@ public class NotLoadedFieldTypeTest {
     private static final int[][] ARRAY2 = new int[1][1];
 
     @Test
-    public void testPrimitiveArray2() {
+    public void casePrimitiveArray2() {
         final SourceFieldType sourceFieldType = SourceFieldType.of(int[][].class);
         final BytecodeFieldType bytecodeFieldType = BytecodeFieldType.of(ARRAY2.getClass());
         sourceFieldType.checkHealth(errorCollector::addError);
@@ -92,7 +92,7 @@ public class NotLoadedFieldTypeTest {
     private static final boolean[][][] ARRAY3 = new boolean[2][2][2];
 
     @Test
-    public void testPrimitiveArray3() {
+    public void casePrimitiveArray3() {
         final SourceFieldType sourceFieldType = SourceFieldType.of(boolean[][][].class);
         final BytecodeFieldType bytecodeFieldType = BytecodeFieldType.of(ARRAY3.getClass());
         sourceFieldType.checkHealth(errorCollector::addError);
@@ -112,7 +112,7 @@ public class NotLoadedFieldTypeTest {
     }
 
     @Test
-    public void testVoid() {
+    public void caseVoid() {
         final SourceFieldType sourceFieldType = SourceFieldType.of(void.class);
         final BytecodeFieldType bytecodeFieldType = BytecodeFieldType.of(Void.TYPE);
         sourceFieldType.checkReturnTypeHealth(errorCollector::addError);
@@ -144,7 +144,7 @@ public class NotLoadedFieldTypeTest {
     };
 
     @Test
-    public void testOuter() {
+    public void caseOuter() {
         for (Class<?> clazz : OUTER) {
             SourceFieldType sourceFieldType = SourceFieldType.of(clazz);
             BytecodeFieldType bytecodeFieldType = BytecodeFieldType.of(clazz);
@@ -171,7 +171,7 @@ public class NotLoadedFieldTypeTest {
     };
 
     @Test
-    public void testInner() {
+    public void caseInner() {
         for (Class<?> clazz : INNER) {
             SourceFieldType sourceFieldType = SourceFieldType.of(clazz);
             BytecodeFieldType bytecodeFieldType = BytecodeFieldType.of(clazz);

@@ -6,7 +6,6 @@ import mujica.ds.generic.list.TruncateList;
 import mujica.ds.of_int.list.ResizePolicy;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.text.format.UniversalAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +22,7 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
 
     private static final long serialVersionUID = 0xba6c85823572e18fL;
 
+    @CodeHistory(date = "2025/6/8")
     private static class Node<E> implements Serializable {
 
         private static final long serialVersionUID = 0x0337ceefd81cfca3L;
@@ -60,7 +60,7 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
     @NotNull
     @Override
     public LinkOpenHashSet<E> duplicate() {
-        final LinkOpenHashSet<E> that = new LinkOpenHashSet<>(policy, list);
+        final LinkOpenHashSet<E> that = new LinkOpenHashSet<>(policy, list); // todo
         that.size = this.size;
         return that;
     }
@@ -168,51 +168,42 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
         modCount++;
     }
 
-    private class SafeIterator implements Iterator<E> {
-
-        int expectedModCount;
-
-        int nextIndex;
-
-        int currentIndex = -1;
-
-        Node<E> nextNode;
-
-        Node<E> currentNode;
-
-        Node<E> previousNode;
-
-        SafeIterator() {
-            super();
-            final int listSize = list.size();
-            while (nextIndex < listSize) {
-                nextNode = list.get(nextIndex);
-                if (nextNode != null) {
-                    break;
-                }
-                nextIndex++;
+    @Override
+    public E intern(E element, boolean force) {
+        final int i = index(element, list.size());
+        Node<E> node = list.get(i);
+        while (node != null) {
+            if (Objects.equals(node.element, element)) {
+                return node.element;
             }
-            expectedModCount = modCount;
+            node = node.next;
         }
-
-        @Override
-        public boolean hasNext() {
-            return nextNode != null;
+        if (force) {
+            list.set(i, new Node<>(element, list.get(i)));
+            size++;
+            modCount++;
         }
+        return element;
+    }
 
-        @Override
-        public E next() {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            currentIndex = nextIndex;
-            if (currentNode != null) {
-                previousNode = currentNode;
-            }
-            currentNode = nextNode;
-            nextNode = nextNode.next;
-            if (nextNode == null) {
-                nextIndex++;
+    @NotNull
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<>() {
+
+            int expectedModCount;
+
+            int nextIndex;
+
+            int currentIndex = -1;
+
+            Node<E> nextNode;
+
+            Node<E> currentNode;
+
+            Node<E> previousNode;
+
+            {
                 int listSize = list.size();
                 while (nextIndex < listSize) {
                     nextNode = list.get(nextIndex);
@@ -221,47 +212,72 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
                     }
                     nextIndex++;
                 }
+                expectedModCount = modCount;
             }
-            return currentNode.element;
-        }
 
-        @Override
-        public void remove() {
-            if (currentNode == null) {
-                throw new IllegalStateException();
+            @Override
+            public boolean hasNext() {
+                return nextNode != null;
             }
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            if (previousNode != null && previousNode.next == currentNode) {
-                previousNode.next = currentNode.next;
-            } else {
-                Node<E> node = list.set(currentIndex, currentNode.next);
-                assert node == currentNode : toString();
-            }
-            currentNode = null;
-            size--;
-            expectedModCount = ++modCount;
-        }
 
-        @Override
-        public String toString() {
-            final StringBuilder sb = new StringBuilder("SafeIterator{");
-            sb.append("nextIndex=").append(nextIndex);
-            sb.append(", currentIndex=").append(currentIndex);
-            sb.append(", nextNode=").append(nextNode);
-            sb.append(", currentNode=").append(currentNode);
-            sb.append(", previousNode=").append(previousNode);
-            sb.append(", expectedModCount=").append(expectedModCount);
-            sb.append('}');
-            return sb.toString();
-        }
-    }
+            @Override
+            public E next() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                currentIndex = nextIndex;
+                if (currentNode != null) {
+                    previousNode = currentNode;
+                }
+                currentNode = nextNode;
+                nextNode = nextNode.next;
+                if (nextNode == null) {
+                    nextIndex++;
+                    int listSize = list.size();
+                    while (nextIndex < listSize) {
+                        nextNode = list.get(nextIndex);
+                        if (nextNode != null) {
+                            break;
+                        }
+                        nextIndex++;
+                    }
+                }
+                return currentNode.element;
+            }
 
-    @NotNull
-    @Override
-    public Iterator<E> iterator() {
-        return new SafeIterator();
+            @Override
+            public void remove() {
+                if (currentNode == null) {
+                    throw new IllegalStateException();
+                }
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                if (previousNode != null && previousNode.next == currentNode) {
+                    previousNode.next = currentNode.next;
+                } else {
+                    Node<E> node = list.set(currentIndex, currentNode.next);
+                    assert node == currentNode : toString();
+                }
+                currentNode = null;
+                size--;
+                expectedModCount = ++modCount;
+            }
+
+            @SuppressWarnings("StringBufferReplaceableByString")
+            @Override
+            public String toString() {
+                final StringBuilder sb = new StringBuilder("SafeIterator[");
+                sb.append("nextIndex=").append(nextIndex);
+                sb.append(", currentIndex=").append(currentIndex);
+                sb.append(", nextNode=").append(nextNode);
+                sb.append(", currentNode=").append(currentNode);
+                sb.append(", previousNode=").append(previousNode);
+                sb.append(", expectedModCount=").append(expectedModCount);
+                sb.append(']');
+                return sb.toString();
+            }
+        };
     }
 
     @NotNull
@@ -272,7 +288,6 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
 
     @Override
     public void stringifyDetail(@NotNull StringBuilder sb) {
-        final UniversalAppender appender = UniversalAppender.createIntAll();
         sb.append("[");
         final int length = list.size();
         for (int i = 0; i < length; i++) {
@@ -283,7 +298,7 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
             Node<E> node = list.get(i);
             if (node != null) {
                 while (true) {
-                    appender.append(node.element, sb);
+                    sb.append(node.element);
                     node = node.next;
                     if (node == null) {
                         break;

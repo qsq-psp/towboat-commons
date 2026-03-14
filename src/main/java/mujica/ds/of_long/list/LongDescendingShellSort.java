@@ -14,6 +14,7 @@ public class LongDescendingShellSort extends SortingAlgorithm<long[]> {
 
     public static final LongDescendingShellSort INSTANCE = new LongDescendingShellSort();
 
+    @NotNull
     @Override
     public MonotonicityDirection monotonicity() {
         return MonotonicityDirection.DESCENDING;

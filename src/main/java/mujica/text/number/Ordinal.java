@@ -1,12 +1,13 @@
 package mujica.text.number;
 
+import mujica.algebra.discrete.BigConstants;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
 @CodeHistory(date = "2025/2/26")
-public class Ordinal implements IntegralToStringFunction {
+public class Ordinal extends IntegralAppender {
 
     public static final Ordinal INSTANCE = new Ordinal();
 
@@ -27,38 +28,38 @@ public class Ordinal implements IntegralToStringFunction {
         }
     }
 
+    public Ordinal() {
+        super();
+    }
+
     @Override
-    public void append(int value, @NotNull StringBuilder out) {
+    public void acceptByte(byte value, @NotNull StringBuilder out) {
+        acceptInteger(value, out);
+    }
+
+    @Override
+    public void acceptShort(short value, @NotNull StringBuilder out) {
+        acceptInteger(value, out);
+    }
+
+    @Override
+    public void acceptCharacter(char value, @NotNull StringBuilder out) {
+        acceptInteger(value, out);
+    }
+
+    @Override
+    public void acceptInteger(int value, @NotNull StringBuilder out) {
         out.append(value).append(ordinalSuffix(value));
     }
 
-    @NotNull
     @Override
-    public String stringify(int value) {
-        return value + ordinalSuffix(value);
-    }
-
-    @Override
-    public void append(long value, @NotNull StringBuilder out) {
+    public void acceptLong(long value, @NotNull StringBuilder out) {
         out.append(value).append(ordinalSuffix(value));
     }
 
-    @NotNull
     @Override
-    public String stringify(long value) {
-        return value + ordinalSuffix(value);
+    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out) {
+        out.append(value).append(ordinalSuffix(value.mod(BigConstants.HUNDRED).intValue()));
     }
 
-    private static final BigInteger HUNDRED = BigInteger.valueOf(100L);
-
-    @Override
-    public void append(@NotNull BigInteger value, @NotNull StringBuilder out) {
-        out.append(value).append(ordinalSuffix(value.mod(HUNDRED).intValue()));
-    }
-
-    @NotNull
-    @Override
-    public String stringify(@NotNull BigInteger value) {
-        return value + ordinalSuffix(value.mod(HUNDRED).intValue());
-    }
 }

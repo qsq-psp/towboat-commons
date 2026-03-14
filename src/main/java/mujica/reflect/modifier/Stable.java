@@ -7,6 +7,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.MODULE, ElementType.PACKAGE, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Deprecated
 public @interface Stable {
 
     String date();

@@ -230,7 +230,54 @@ public class BinomialQueue<E> extends AbstractPriorityQueue<E> {
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new IteratorImpl();
+        return new Iterator<>() {
+
+            private int index;
+
+            @Nullable
+            private SisterNode<E>.Frame frame;
+
+            final int expectedModCount = modCount;
+
+            {
+                int listSize = list.size();
+                while (index < listSize) {
+                    SisterNode<E> tree = list.get(index++);
+                    if (tree != null) {
+                        frame = tree.new Frame(null);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public boolean hasNext() {
+                return frame != null;
+            }
+
+            @Override
+            public E next() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                if (frame == null) {
+                    throw new NoSuchElementException();
+                }
+                final E element = frame.node().element;
+                frame = frame.next();
+                if (frame == null) {
+                    int listSize = list.size();
+                    while (index < listSize) {
+                        SisterNode<E> tree = list.get(index++);
+                        if (tree != null) {
+                            frame = tree.new Frame(null);
+                            break;
+                        }
+                    }
+                }
+                return element;
+            }
+        };
     }
 
     void unsafeForEach(@NotNull Consumer<? super E> action) {

@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2025/3/3.
- */
 @CodeHistory(date = "2025/3/3")
 public class ModuloI32 extends ModularMath {
 

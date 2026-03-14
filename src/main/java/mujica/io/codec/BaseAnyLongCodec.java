@@ -5,6 +5,7 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/5/3")
+@Deprecated
 public class BaseAnyLongCodec extends BaseAnyCodec {
 
     private static final long serialVersionUID = 0xf8a08599fc6b54c4L;

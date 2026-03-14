@@ -1,5 +1,6 @@
 package mujica.geometry.g2d;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -9,10 +10,11 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created on 2022/10/10.
  */
+@CodeHistory(date = "2022/10/10")
 public class LineTest extends G2dTest {
 
     @Test
-    public void testSerializable() {
+    public void checkSerializable() {
         for (int lineIndex = 0; lineIndex < LINE; lineIndex++) {
             Line<Point> line = nextLine();
             assertEquals(line, tryCopy(line));
@@ -20,7 +22,7 @@ public class LineTest extends G2dTest {
     }
 
     @Test
-    public void testSmallestCircle() {
+    public void checkSmallestCircle() {
         final Circle<Point> circle = Circle.origin();
         final Point point = new Point();
         for (int lineIndex = 0; lineIndex < LINE; lineIndex++) {
@@ -76,7 +78,7 @@ public class LineTest extends G2dTest {
     }
 
     @Test
-    public void testIntersects2() {
+    public void checkIntersects2() {
         for (int lineIndex = 0; lineIndex < LINE; lineIndex++) {
             Line<Point> a = nextLine();
             Line<Point> b = nextLine();
@@ -85,7 +87,7 @@ public class LineTest extends G2dTest {
     }
 
     @Test
-    public void testMinimumDistance1() {
+    public void checkMinimumDistance1() {
         final Circle<Point> circle = Circle.origin();
         final Point b = new Point();
         for (int lineIndex = 0; lineIndex < LINE; lineIndex++) {
@@ -102,7 +104,7 @@ public class LineTest extends G2dTest {
     }
 
     @Test
-    public void testMinimumDistance2() {
+    public void checkMinimumDistance2() {
         final Circle<Point> c = Circle.origin();
         final Circle<Point> d = Circle.origin();
         for (int lineIndex = 0; lineIndex < LINE; lineIndex++) {
@@ -121,7 +123,7 @@ public class LineTest extends G2dTest {
     }
 
     @Test
-    public void testEnterArea() {
+    public void checkEnterArea() {
         final Point a = new Point();
         final Point b = new Point();
         for (int lineIndex = 0; lineIndex < LINE; lineIndex++) {

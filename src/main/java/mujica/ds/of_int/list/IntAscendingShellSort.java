@@ -18,6 +18,7 @@ public class IntAscendingShellSort extends SortingAlgorithm<int[]> {
         super();
     }
 
+    @NotNull
     @Override
     public MonotonicityDirection monotonicity() {
         return MonotonicityDirection.ASCENDING;

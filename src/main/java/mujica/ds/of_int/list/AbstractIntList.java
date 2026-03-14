@@ -61,41 +61,32 @@ public abstract class AbstractIntList implements IntList {
         }
     }
 
-    /**
-     * No check for commodification; simple and fast
-     */
-    @CodeHistory(date = "2025/5/30")
-    private class NoModificationIterator implements PrimitiveIterator.OfInt {
-
-        private int index;
-
-        @Override
-        public boolean hasNext() {
-            return index < intLength();
-        }
-
-        @Override
-        public int nextInt() {
-            return getInt(index++);
-        }
-
-        @Override
-        public void remove() {
-            final int newIndex = index - 1;
-            removeAt(newIndex);
-            index = newIndex;
-        }
-    }
-
     @NotNull
     @Override
     public Iterator<Integer> iterator() {
-        return new NoModificationIterator();
+        return new PrimitiveIterator.OfInt() {
+
+            private int index;
+
+            @Override
+            public boolean hasNext() {
+                return index < intLength();
+            }
+
+            @Override
+            public int nextInt() {
+                return getInt(index++); // no check for commodification; simple and fast
+            }
+
+            @Override
+            public void remove() {
+                final int newIndex = index - 1;
+                removeAt(newIndex);
+                index = newIndex;
+            }
+        };
     }
 
-    /**
-     * No check for commodification; simple and fast
-     */
     @CodeHistory(date = "2025/5/30")
     private class NoModificationSpliterator implements Spliterator.OfInt {
 
@@ -127,7 +118,7 @@ public abstract class AbstractIntList implements IntList {
         @Override
         public boolean tryAdvance(IntConsumer action) {
             if (position < intLength()) {
-                action.accept(getInt(position));
+                action.accept(getInt(position)); // no check for commodification; simple and fast
                 return true;
             } else {
                 return false;

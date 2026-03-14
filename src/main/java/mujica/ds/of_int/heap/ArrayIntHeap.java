@@ -138,32 +138,30 @@ public abstract class ArrayIntHeap extends AbstractOrderedIntQueue {
         }
     }
 
-    private class SafeIterator implements PrimitiveIterator.OfInt {
-
-        private final int expectedModCount = modCount;
-
-        private int index = startIndex();
-
-        @Override
-        public boolean hasNext() {
-            return index < endIndex;
-        }
-
-        @Override
-        public int nextInt() {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            if (index >= endIndex) {
-                throw new NoSuchElementException();
-            }
-            return array[index++];
-        }
-    }
-
     @NotNull
     @Override
     public Iterator<Integer> iterator() {
-        return new SafeIterator();
+        return new PrimitiveIterator.OfInt() {
+
+            private final int expectedModCount = modCount;
+
+            private int index = startIndex();
+
+            @Override
+            public boolean hasNext() {
+                return index < endIndex;
+            }
+
+            @Override
+            public int nextInt() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                if (index >= endIndex) {
+                    throw new NoSuchElementException();
+                }
+                return array[index++];
+            }
+        };
     }
 }

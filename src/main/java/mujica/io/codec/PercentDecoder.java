@@ -31,6 +31,7 @@ class PercentDecoder extends CharsetDecoder {
     }
 
     @Override
+    @NotNull
     protected CoderResult decodeLoop(@NotNull ByteBuffer in, @NotNull CharBuffer out) {
         while (true) {
             int inRemaining = in.remaining();
@@ -69,9 +70,9 @@ class PercentDecoder extends CharsetDecoder {
                 if ('0' <= ch && ch <= '9') {
                     octet = ch - '0';
                 } else if ('a' <= ch && ch <= 'z') {
-                    octet = ch - Base16Case.LOWER;
+                    octet = ch - Base16Case.LOWER_CONSTANT;
                 } else if ('A' <= ch && ch <= 'Z') {
-                    octet = ch - Base16Case.UPPER;
+                    octet = ch - Base16Case.UPPER_CONSTANT;
                 } else {
                     return CoderResult.malformedForLength(3 * utf8Index + 2);
                 }
@@ -80,9 +81,9 @@ class PercentDecoder extends CharsetDecoder {
                 if ('0' <= ch && ch <= '9') {
                     octet |= ch - '0';
                 } else if ('a' <= ch && ch <= 'z') {
-                    octet |= ch - Base16Case.LOWER;
+                    octet |= ch - Base16Case.LOWER_CONSTANT;
                 } else if ('A' <= ch && ch <= 'Z') {
-                    octet |= ch - Base16Case.UPPER;
+                    octet |= ch - Base16Case.UPPER_CONSTANT;
                 } else {
                     return CoderResult.malformedForLength(3 * utf8Index + 3);
                 }

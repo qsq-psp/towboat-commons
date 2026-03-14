@@ -45,9 +45,9 @@ class Base16CharsetEncoder extends CharsetEncoder {
             if ('0' <= ch && ch <= '9') {
                 octet = ch - '0';
             } else if ('a' <= ch && ch <= 'z') {
-                octet = ch - Base16Case.LOWER;
+                octet = ch - Base16Case.LOWER_CONSTANT;
             } else if ('A' <= ch && ch <= 'Z') {
-                octet = ch - Base16Case.UPPER;
+                octet = ch - Base16Case.UPPER_CONSTANT;
             } else {
                 LOGGER.warn("digit0 {}", ch);
                 return CoderResult.malformedForLength(1);
@@ -57,9 +57,9 @@ class Base16CharsetEncoder extends CharsetEncoder {
             if ('0' <= ch && ch <= '9') {
                 octet |= ch - '0';
             } else if ('a' <= ch && ch <= 'z') {
-                octet |= ch - Base16Case.LOWER;
+                octet |= ch - Base16Case.LOWER_CONSTANT;
             } else if ('A' <= ch && ch <= 'Z') {
-                octet |= ch - Base16Case.UPPER;
+                octet |= ch - Base16Case.UPPER_CONSTANT;
             } else {
                 LOGGER.warn("digit1 {}", ch);
                 return CoderResult.malformedForLength(2);
