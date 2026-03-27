@@ -1,11 +1,10 @@
 package mujica.reflect.function;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Stable;
+
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/3/5")
-@Stable(date = "2025/8/7")
 @FunctionalInterface
 public interface FloatPredicate {
 

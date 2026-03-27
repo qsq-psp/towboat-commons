@@ -2,13 +2,10 @@ package mujica.json.io;
 
 import mujica.reflect.modifier.CodeHistory;
 
-/**
- * built with input and output, used only once
- */
 @CodeHistory(date = "2022/6/12", project = "Ultramarine", name = "ReaderStates")
 @CodeHistory(date = "2023/4/29", project = "Ultramarine", name = "ReaderFlags")
 @CodeHistory(date = "2025/10/27")
-public interface JsonReader {
+public interface JsonReader { // built with input and output, used only once
 
     int FLAG_LINE_COMMENT                       = 0x0001;
     int FLAG_BLOCK_COMMENT                      = 0x0002;
@@ -24,8 +21,10 @@ public interface JsonReader {
     int FLAG_INTEGRAL_FORCE_TO_FRACTIONAL       = 0x0800;
     int FLAG_INTEGRAL_FORCE_TO_RAW              = 0x1000;
     int FLAG_FRACTIONAL_FORCE_TO_RAW            = 0x2000;
+    int FLAG_SKIP_VALUE                         = 0x4000;
+    int FLAG_SKIP_TO_BYTE_BUF                   = 0x8000;
 
-    void config(int flags);
+    void setFlags(int flags);
 
-    // skip supported and skip/jump methods
+    int getFlags();
 }

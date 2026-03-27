@@ -95,12 +95,9 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
     }
 
     private boolean rehash() {
-        // System.out.println(Arrays.toString(array));
         final int oldModulo = array.length;
         final int newModulo = policy.nextCapacity(oldModulo);
-        // System.out.println("old " + oldModulo + " new " + newModulo);
         if (newModulo <= oldModulo) {
-            // System.out.println("full");
             return false;
         }
         final Object[] newArray = new Object[newModulo];
@@ -114,12 +111,10 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
             for (int index : probingList.setBase(Objects.hashCode(object))) {
                 Object item = newArray[index];
                 if (item == CollectionConstant.EMPTY) { // only empty, no removed
-                    // System.out.println("index = " + index);
                     newArray[index] = object;
                     continue OA;
                 }
             }
-            // System.out.println("never");
             probingList.setModulo(oldModulo);
             return false;
         }
@@ -135,7 +130,6 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
         }
         do {
             if (policy.testLoadedSize(size + 1, array.length)) {
-                // System.out.println("LoadedSize " + summaryToString() + " " + element);
                 continue;
             }
             int linkLength = 0;
@@ -146,7 +140,6 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
                     if (slotIndex == -1) {
                         slotIndex = testIndex;
                         if (policy.testLinkLength(linkLength, array.length)) {
-                            // System.out.println("LinkLength " + summaryToString() + " " + element);
                             break;
                         }
                     }

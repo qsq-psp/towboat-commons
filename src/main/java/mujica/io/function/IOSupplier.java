@@ -1,7 +1,6 @@
 package mujica.io.function;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Stable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOError;
@@ -11,7 +10,6 @@ import java.util.function.Supplier;
 
 @CodeHistory(date = "2024/6/11", project = "UltraIO")
 @CodeHistory(date = "2025/3/4")
-@Stable(date = "2026/3/5")
 @FunctionalInterface
 public interface IOSupplier<T> {
 

@@ -2,6 +2,7 @@ package mujica.ds.generic.list;
 
 import mujica.algebra.random.RandomContext;
 import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.ComparableComparator;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -16,9 +17,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-/**
- * Created on 2026/2/12.
- */
 @CodeHistory(date = "2026/2/12")
 public class ListSortingAlgorithmTest {
 
@@ -29,6 +27,8 @@ public class ListSortingAlgorithmTest {
     private static final int MAIN_LENGTH = 278;
 
     private static final int ASIDE_LENGTH = 19;
+
+    private static final int STRING_LENGTH = 5;
 
     private final RandomContext rc = new RandomContext();
 
@@ -98,6 +98,46 @@ public class ListSortingAlgorithmTest {
         checkObject(ListInsertionSort::new);
         checkObject(ListMergeSort::new);
         checkObject(ListSelectionSort::new);
+    }
+
+    private void checkString(@NotNull SortingAlgorithm<List<String>> algorithm) {
+        Assert.assertEquals(MonotonicityDirection.ASCENDING, algorithm.monotonicity());
+        final HashMap<String, PublicIntSlot> counter = new HashMap<>();
+        for (int repeatIndex = 0; repeatIndex < REPEAT_COUNT; repeatIndex++) {
+            counter.clear();
+            int prefixLength = rc.nextInt(ASIDE_LENGTH);
+            int prefixAndMainLength = prefixLength + rc.nextInt(2, MAIN_LENGTH);
+            int totalLength = prefixAndMainLength + rc.nextInt(ASIDE_LENGTH);
+            List<String> list = new ArrayList<>(totalLength);
+            for (int index = 0; index < totalLength; index++) {
+                String string = rc.nextString(STRING_LENGTH);
+                list.add(string);
+                PublicIntSlot.increase(counter, string);
+            }
+            algorithm.sort(list, prefixLength, prefixAndMainLength);
+            try {
+                for (int index = prefixLength + 1; index < prefixAndMainLength; index++) {
+                    Assert.assertTrue(list.get(index - 1).compareTo(list.get(index)) <= 0);
+                }
+                for (String string : list) {
+                    PublicIntSlot.decrease(counter, string);
+                }
+                for (PublicIntSlot value : counter.values()) {
+                    Assert.assertEquals(0, value.getInt());
+                }
+            } catch (AssertionError e) {
+                LOGGER.error("{}", list);
+                throw e;
+            }
+        }
+    }
+
+    @Test
+    public void checkString() {
+        final ComparableComparator<String> comparator = new ComparableComparator<>();
+        checkString(new ListInsertionSort<>(comparator));
+        checkString(new ListMergeSort<>(comparator));
+        checkString(new ListSelectionSort<>(comparator));
     }
 
     private static final TimeUnit[] TIME_UNIT = TimeUnit.values();

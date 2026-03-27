@@ -6,9 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2025/3/1", name = "SignedVector")
-public class SignedVector extends DimensionCodecModifier { // SignedVectorModifier
+@CodeHistory(date = "2026/3/22")
+public class SignedVectorModifier extends DimensionCodecModifier {
 
-    public SignedVector(DimensionCodec codec) {
+    public SignedVectorModifier(DimensionCodec codec) {
         super(codec);
         if (codec.vectorSigned()) {
             throw new IllegalArgumentException("Inner codec has signed vector");

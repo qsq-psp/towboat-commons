@@ -1,7 +1,7 @@
 package mujica.reflect.basic;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Stable;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +13,6 @@ import java.lang.reflect.TypeVariable;
 @CodeHistory(date = "2022/7/23", project = "Ultramarine", name = "GenericSearch")
 @CodeHistory(date = "2024/2/17", project = "Ultramarine", name = "GenericTravel")
 @CodeHistory(date = "2025/3/6")
-@Stable(date = "2025/7/25")
 public final class TypeUtil {
 
     @Nullable

@@ -1,6 +1,6 @@
 package mujica.io.compress;
 
-import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_boolean.list.BooleanSequence;
 import mujica.ds.of_int.map.IntMap;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -12,17 +12,17 @@ import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 
 @CodeHistory(date = "2025/10/20")
-public class TowboatInflateOutputStream extends FilterOutputStream implements BitSequence {
+public class TowboatInflateOutputStream extends FilterOutputStream implements BooleanSequence {
 
     private int bitSize, bitPosition, buffer;
 
     @Override
-    public int bitLength() {
+    public int booleanLength() {
         return bitSize;
     }
 
     @Override
-    public boolean getBit(int index) {
+    public boolean getBoolean(int index) {
         if (index < 0 || index >= bitSize) {
             throw new IndexOutOfBoundsException();
         }

@@ -1,6 +1,6 @@
 package mujica.json.reflect;
 
-import mujica.json.entity.JsonConstant;
+import mujica.ds.generic.set.CollectionConstant;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +25,7 @@ class MethodHandleSetter extends Setter {
 
     @Override
     protected void invoke(@Nullable Object self, @Nullable Object value) {
-        if (value == JsonConstant.UNDEFINED) {
+        if (value == CollectionConstant.UNDEFINED) {
             return;
         }
         try {

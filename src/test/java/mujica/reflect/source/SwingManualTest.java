@@ -13,19 +13,25 @@ import java.util.function.Supplier;
 @CodeHistory(date = "2025/11/22")
 public class SwingManualTest extends ManualTest {
 
-    protected static final JFrame FRAME = new JFrame(SwingManualTest.class.getSimpleName());
+    public static final int GAP = 6;
 
-    private static final JProgressBar PROGRESS = new JProgressBar();
+    private static JFrame FRAME = new JFrame(SwingManualTest.class.getSimpleName());
 
-    private static final JPanel CHOICES = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 8));
+    private static JProgressBar PROGRESS = new JProgressBar();
+
+    private static JPanel CHOICES = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 8));
+
+    private static Supplier<JComponent> CONTENT_SUPPLIER;
+
+    private static JComponent CONTENT;
 
     protected static void installComponents() {
         FRAME.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         FRAME.setMinimumSize(new Dimension(640, 480));
-        final JPanel rootPanel = new JPanel(new BorderLayout(8, 8));
+        final JPanel rootPanel = new JPanel(new BorderLayout(GAP, GAP));
+        rootPanel.setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
         {
             PROGRESS.setModel(new DefaultBoundedRangeModel());
-            PROGRESS.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
             rootPanel.add(PROGRESS, BorderLayout.NORTH);
             CHOICES.removeAll();
             rootPanel.add(CHOICES, BorderLayout.SOUTH);
@@ -40,8 +46,6 @@ public class SwingManualTest extends ManualTest {
         FRAME.setVisible(false);
     }
 
-    private static JComponent CONTENT;
-
     protected static void installContent(@NotNull Supplier<JComponent> supplier) {
         SwingUtilities.invokeLater(() -> {
             CONTENT = supplier.get();
@@ -51,7 +55,6 @@ public class SwingManualTest extends ManualTest {
 
     @After
     public void uninstallContent() {
-        // System.out.println("SwingManualTest.uninstallContent");
         SwingUtilities.invokeLater(() -> {
             if (CONTENT != null) {
                 FRAME.getContentPane().remove(CONTENT);

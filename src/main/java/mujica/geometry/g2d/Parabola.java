@@ -1,10 +1,10 @@
 package mujica.geometry.g2d;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2024/2/17.
- */
+@CodeHistory(date = "2024/2/17", project = "Ultramarine")
+@CodeHistory(date = "2025/3/2")
 public class Parabola<P extends Point, Q extends Point> extends ConicSection<P, Q> {
 
     private static final long serialVersionUID = 0xe8c6ebcb02685cf6L;

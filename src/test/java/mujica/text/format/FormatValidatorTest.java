@@ -10,7 +10,7 @@ import org.junit.Test;
 public class FormatValidatorTest {
 
     @Test
-    public void caseCharsetName1() {
+    public void caseCharsetNamePositive() {
         final FormatValidator validator = CharsetNameValidator.INSTANCE;
         Assert.assertTrue(validator.test("ASCII"));
         Assert.assertTrue(validator.test("ISO646-US"));
@@ -20,15 +20,18 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void caseCharsetName2() {
+    public void caseCharsetNameNegative() {
         final FormatValidator validator = CharsetNameValidator.INSTANCE;
         Assert.assertFalse(validator.test("American Standard Code for Information Interchange"));
         Assert.assertFalse(validator.test("UTF-16 BE"));
         Assert.assertFalse(validator.test("UTF-16 LE"));
+        Assert.assertFalse(validator.test("1 + 1 < 3"));
+        Assert.assertFalse(validator.test("/var/www"));
+        Assert.assertFalse(validator.test("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
     }
 
     @Test
-    public void caseDomainName1() {
+    public void caseDomainNameHostPositive() {
         final FormatValidator validator = DomainNameValidator.INSTANCE;
         Assert.assertTrue(validator.test("localhost"));
         Assert.assertTrue(validator.test("www.rfc-editor.org"));
@@ -44,19 +47,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void caseDomainName2() {
-        final FormatValidator validator = DomainNameValidator.INSTANCE;
-        Assert.assertTrue(validator.test("[127.0.0.1]"));
-        Assert.assertTrue(validator.test("[192.168.1.2]"));
-        Assert.assertTrue(validator.test("[43.129.115.16]"));
-        Assert.assertTrue(validator.test("[14.22.9.100]"));
-        // Assert.assertTrue(validator.test("[240E:904:3401:1001::E]"));
-        // Assert.assertTrue(validator.test("[2409:8C4C:C00:1311:3B::13]"));
-        Assert.assertTrue(validator.test("#233"));
-    }
-
-    @Test
-    public void caseDomainName3() {
+    public void caseDomainNameHostNegative() {
         final FormatValidator validator = DomainNameValidator.INSTANCE;
         Assert.assertFalse(validator.test("p.qlogo.cn"));
         Assert.assertFalse(validator.test("i.pixiv.cat"));
@@ -65,7 +56,19 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void caseDomainName4() {
+    public void caseDomainNameAddressPositive() {
+        final FormatValidator validator = DomainNameValidator.INSTANCE;
+        Assert.assertTrue(validator.test("[127.0.0.1]"));
+        Assert.assertTrue(validator.test("[192.168.1.2]"));
+        Assert.assertTrue(validator.test("[43.129.115.16]"));
+        Assert.assertTrue(validator.test("[14.22.9.100]"));
+        Assert.assertTrue(validator.test("[240E:904:3401:1001::E]"));
+        Assert.assertTrue(validator.test("[2409:8C4C:C00:1311:3B::13]"));
+        Assert.assertTrue(validator.test("#233"));
+    }
+
+    @Test
+    public void caseDomainNameAddressNegative() {
         final FormatValidator validator = DomainNameValidator.INSTANCE;
         Assert.assertFalse(validator.test("[7.100..3]"));
         Assert.assertFalse(validator.test("[24.08.39.133]"));
@@ -74,10 +77,13 @@ public class FormatValidatorTest {
         Assert.assertFalse(validator.test("[4%.220.218.177]"));
         Assert.assertFalse(validator.test("[45.90.136]"));
         Assert.assertFalse(validator.test("[82.197.199.0.52]"));
+        Assert.assertFalse(validator.test("[F:F:F:F]"));
+        Assert.assertFalse(validator.test("[0:0:0:0:0:0:0:0:1]"));
+        Assert.assertFalse(validator.test("[0:0:0:0:0:0:0:22222]"));
     }
 
     @Test
-    public void caseIPV4Address1() {
+    public void caseIPV4AddressPositive() {
         final FormatValidator validator = IPV4AddressValidator.INSTANCE;
         Assert.assertTrue(validator.test("216.146.35.35"));
         Assert.assertTrue(validator.test("8.8.8.8"));
@@ -86,7 +92,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void caseIPV4Address2() {
+    public void caseIPV4AddressNegative() {
         final FormatValidator validator = IPV4AddressValidator.INSTANCE;
         Assert.assertFalse(validator.test("4.7.3."));
         Assert.assertFalse(validator.test(".2.1.9"));
@@ -104,7 +110,41 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void caseWindowsFileName1() {
+    public void caseIPV6AddressPositive() {
+        final FormatValidator validator = IPV6AddressValidator.INSTANCE;
+        Assert.assertTrue(validator.test("::"));
+        Assert.assertTrue(validator.test("::1"));
+        Assert.assertTrue(validator.test("::ff00"));
+        Assert.assertTrue(validator.test("44a3::"));
+        Assert.assertTrue(validator.test("44a3::5:2"));
+        Assert.assertTrue(validator.test("2a02:26f0:fe00:0:0:0:5c7b:4d41"));
+        Assert.assertTrue(validator.test("2409:8c4c:e00:2c00:0:0:0:2f"));
+        Assert.assertTrue(validator.test("2603:1030:800:5:0:0:bfee:a08d"));
+        Assert.assertTrue(validator.test("2a01:111:f100:9001:0:0:1761:914d"));
+        Assert.assertTrue(validator.test("240e:95c:300d:100:0:0:0:3"));
+        Assert.assertTrue(validator.test("2600:140b:1c00:1d:0:0:17d5:b8cd"));
+        Assert.assertTrue(validator.test("2600:1417:8400:24:0:0:17dc:47b8"));
+        Assert.assertTrue(validator.test("2409:8a4c:1244:c7b0:1ab0:7751:1429:d462"));
+    }
+
+    @Test
+    public void caseIPV6AddressNegative() {
+        final FormatValidator validator = IPV6AddressValidator.INSTANCE;
+        Assert.assertFalse(validator.test("ipv6"));
+        Assert.assertFalse(validator.test("address"));
+        Assert.assertFalse(validator.test(":::"));
+        Assert.assertFalse(validator.test("::af:"));
+        Assert.assertFalse(validator.test(":8c00::"));
+        Assert.assertFalse(validator.test("1:2:3:4:5:6:7:8:9"));
+        Assert.assertFalse(validator.test("1:2:3:4:5:6:7:80000"));
+        Assert.assertFalse(validator.test("1:2d:3d:4v:5v:6:7:8"));
+        Assert.assertFalse(validator.test("bbff1:2:3:4:5:6:7:8"));
+        Assert.assertFalse(validator.test(":1:2:3:4:5:6:7:8"));
+        Assert.assertFalse(validator.test("1:2:3:4:5:6:7:8:"));
+    }
+
+    @Test
+    public void caseWindowsFileNamePositive() {
         final FormatValidator validator = WindowsFileNameValidator.INSTANCE;
         Assert.assertTrue(validator.test("be682ca9-3475-4c0c-bd1f-4532d3315e92.jpg"));
         Assert.assertTrue(validator.test("py.exe"));
@@ -116,11 +156,12 @@ public class FormatValidatorTest {
         Assert.assertTrue(validator.test(".bash_history"));
         Assert.assertTrue(validator.test("NTUSER.DAT{e0095173-8afb-11eb-b13e-8efb84361009}.TM.blf"));
         Assert.assertTrue(validator.test("普通数据.csv"));
+        Assert.assertTrue(validator.test("示例图片.jpg"));
     }
 
     @Test
     @ReferencePage(title = "Lorem ipsum", href = "https://www.zhihu.com/question/19708165/answer/1929610818628068504")
-    public void caseWindowsFileName2() {
+    public void caseWindowsFileNameNegative() {
         final FormatValidator validator = WindowsFileNameValidator.INSTANCE;
         Assert.assertFalse(validator.test("?.jpeg"));
         Assert.assertFalse(validator.test("@3w/pc.zip"));
@@ -149,7 +190,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void caseSchemaObjectName1() {
+    public void caseSchemaObjectNamePositive() {
         final FormatValidator validator = SchemaObjectNameValidator.INSTANCE;
         Assert.assertTrue(validator.test("mysql"));
         Assert.assertTrue(validator.test("time_zone"));
@@ -158,7 +199,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void caseSchemaObjectName2() {
+    public void caseSchemaObjectNameNegative() {
         final FormatValidator validator = SchemaObjectNameValidator.INSTANCE;
         Assert.assertFalse(validator.test(""));
         Assert.assertFalse(validator.test("8008"));
@@ -166,7 +207,7 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void caseJavaIdentifier1() {
+    public void caseJavaIdentifierPositive() {
         final FormatValidator validator = JavaIdentifierValidator.INSTANCE;
         Assert.assertTrue(validator.test("Math"));
         Assert.assertTrue(validator.test("ByteArrayOutputStream"));
@@ -180,13 +221,14 @@ public class FormatValidatorTest {
         Assert.assertTrue(validator.test("αρετη"));
         Assert.assertTrue(validator.test("MAX_VALUE"));
         Assert.assertTrue(validator.test("isLetterOrDigit"));
+        Assert.assertTrue(validator.test("LocalVariableTable"));
         Assert.assertTrue(validator.test("_lock"));
         Assert.assertTrue(validator.test("$1"));
         Assert.assertTrue(validator.test("Video$Header"));
     }
 
     @Test
-    public void caseJavaIdentifier2() {
+    public void caseJavaIdentifierNegative() {
         final FormatValidator validator = JavaIdentifierValidator.INSTANCE;
         Assert.assertFalse(validator.test(""));
         Assert.assertFalse(validator.test(" "));
@@ -206,9 +248,10 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void caseJavaFullyQualifiedName1() {
+    public void caseJavaFullyQualifiedNamePositive() {
         final FormatValidator validator = JavaFullyQualifiedNameValidator.SOURCE;
         Assert.assertTrue(validator.test("Main"));
+        Assert.assertTrue(validator.test("Code"));
         Assert.assertTrue(validator.test("indi.Starter"));
         Assert.assertTrue(validator.test("javax.sql.DataSource"));
         Assert.assertTrue(validator.test("jdk.nio.Channels"));
@@ -218,13 +261,16 @@ public class FormatValidatorTest {
     }
 
     @Test
-    public void caseJavaFullyQualifiedName2() {
+    public void caseJavaFullyQualifiedNameNegative() {
         final FormatValidator validator = JavaFullyQualifiedNameValidator.SOURCE;
+        Assert.assertFalse(validator.test("[I"));
         Assert.assertFalse(validator.test("Main{}"));
+        Assert.assertFalse(validator.test("List<T>"));
         Assert.assertFalse(validator.test("indi.Starter()"));
         Assert.assertFalse(validator.test("javax.sql.DataSource[]"));
         Assert.assertFalse(validator.test("jdk.nio.Channels;"));
         Assert.assertFalse(validator.test("java.io.-IOException"));
+        Assert.assertFalse(validator.test("Lorg/junit/Assert;"));
         Assert.assertFalse(validator.test("@com.sun.crypto.provider.ChaCha20Cipher"));
         Assert.assertFalse(validator.test("+junit.framework.JUnit4TestAdapter"));
     }

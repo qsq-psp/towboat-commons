@@ -33,13 +33,13 @@ public class LongSequenceDataView implements DataView {
     }
 
     @Override
-    public int bitLength() {
+    public int booleanLength() {
         guard.run();
         return ClampedMath.INSTANCE.multiply(longSequence.longLength(), Long.SIZE);
     }
 
     @Override
-    public boolean getBit(int index) {
+    public boolean getBoolean(int index) {
         guard.run();
         final long value = longSequence.getLong(index >>> 6);
         int shift = index & 0x3f;

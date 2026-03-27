@@ -1,5 +1,6 @@
 package mujica.geometry.g2d;
 
+import mujica.io.stream.InputStreamUtil;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -14,10 +15,10 @@ import static org.junit.Assert.assertTrue;
 public class LineTest extends G2dTest {
 
     @Test
-    public void checkSerializable() {
+    public void checkSerializable() throws Exception {
         for (int lineIndex = 0; lineIndex < LINE; lineIndex++) {
             Line<Point> line = nextLine();
-            assertEquals(line, tryCopy(line));
+            assertEquals(line, InputStreamUtil.copy(line));
         }
     }
 

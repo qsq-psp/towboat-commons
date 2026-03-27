@@ -54,4 +54,10 @@ public class CachedFileLength implements CachedDataSize<File> {
     public boolean equals(Object obj) {
         return this == obj || obj instanceof CachedFileLength && this.file.equals(((CachedFileLength) obj).file);
     }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "CachedFileLength[file = " + file + ", value = " + value + "]";
+    }
 }

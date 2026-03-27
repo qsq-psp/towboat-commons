@@ -16,10 +16,10 @@ import java.util.List;
 public class ListMergeSort<T> extends SortingAlgorithm<List<T>> {
 
     @NotNull
-    final List<T> auxiliary = new ArrayList<>();
+    private final List<T> auxiliary = new ArrayList<>();
 
     @NotNull
-    final Comparator<T> comparator;
+    private final Comparator<T> comparator;
 
     public ListMergeSort(@NotNull Comparator<T> comparator) {
         super();

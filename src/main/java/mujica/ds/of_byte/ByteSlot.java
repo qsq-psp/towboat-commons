@@ -2,11 +2,9 @@ package mujica.ds.of_byte;
 
 import mujica.reflect.function.ByteSupplier;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Stable;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/1/1")
-@Stable(date = "2026/2/3")
 public interface ByteSlot {
 
     byte getByte();

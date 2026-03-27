@@ -5,7 +5,9 @@ import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2026/1/8")
-public abstract class FilteredCharSequence implements CharSequence {
+public abstract class FilteredCharSequence extends TowboatCharSequence {
+
+    private static final long serialVersionUID = 0x0F6535B784955850L;
 
     @NotNull
     protected final CharSequence original;
@@ -31,16 +33,5 @@ public abstract class FilteredCharSequence implements CharSequence {
             return EmptyCharSequence.INSTANCE;
         }
         return new SlicedCharSequence(this, startIndex, endIndex);
-    }
-
-    @NotNull
-    @Override
-    public String toString() {
-        final int length = length();
-        final char[] chars = new char[length];
-        for (int index = 0; index < length; index++) {
-            chars[index] = charAt(index);
-        }
-        return new String(chars);
     }
 }

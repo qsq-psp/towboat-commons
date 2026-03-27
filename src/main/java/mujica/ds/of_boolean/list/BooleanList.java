@@ -12,17 +12,17 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2026/2/7")
-public interface BitList extends DataStructure, BitSequence, Iterable<Boolean> {
+public interface BooleanList extends DataStructure, BooleanSequence, Iterable<Boolean> {
 
     @Override
     @NotNull
-    BitList duplicate();
+    BooleanList duplicate();
 
     @Override
     void checkHealth(@NotNull Consumer<RuntimeException> consumer);
 
     @Override
-    int bitLength();
+    int booleanLength();
 
     boolean isEmpty();
 
@@ -41,7 +41,7 @@ public interface BitList extends DataStructure, BitSequence, Iterable<Boolean> {
     Spliterator<Boolean> spliterator();
 
     @NotNull
-    ListIterator<Integer> listIterator(int i);
+    ListIterator<Boolean> listIterator(int i);
 
     @NotNull
     boolean[] toBooleanArray();
@@ -51,7 +51,7 @@ public interface BitList extends DataStructure, BitSequence, Iterable<Boolean> {
     void getRange(int srcOffset, @NotNull boolean[] dst, int dstOffset, int length);
 
     @Override
-    boolean getBit(int index);
+    boolean getBoolean(int index);
 
     boolean getFirst();
 
@@ -89,7 +89,7 @@ public interface BitList extends DataStructure, BitSequence, Iterable<Boolean> {
 
     int count(boolean t);
 
-    boolean equals(@NotNull BitList that);
+    boolean equals(@NotNull BooleanList that);
 
     @Override
     boolean equals(Object o);

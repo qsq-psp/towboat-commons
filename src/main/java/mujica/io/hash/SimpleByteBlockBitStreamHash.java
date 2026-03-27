@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_boolean.list.BooleanSequence;
 import mujica.ds.of_byte.list.ByteSequence;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
@@ -230,17 +230,17 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
     }
 
     @Override
-    public void update(@NotNull BitSequence input) {
+    public void update(@NotNull BooleanSequence input) {
         if (state != HashState.STARTED) {
             throw new IllegalHashStateException();
         }
         assert 0 <= padBitCount;
         assert padBitCount < Byte.SIZE;
         assert (concatBuffer.position() << 3 - padBitCount) < (core.blockBytes() << 3);
-        final int bitLength = input.bitLength();
+        final int bitLength = input.booleanLength();
         for (int index = 0; index < bitLength; index++) {
             if (padBitCount == 0) {
-                if (input.getBit(index)) {
+                if (input.getBoolean(index)) {
                     if (core.bitOrder() == ByteOrder.LITTLE_ENDIAN) {
                         concatBuffer.put((byte) 0x01);
                     } else {
@@ -259,7 +259,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
                 } else {
                     octet = 0x01 << padBitCount;
                 }
-                if (input.getBit(index)) {
+                if (input.getBoolean(index)) {
                     octet = concatBuffer.get(dstPosition) | octet;
                 } else {
                     octet = concatBuffer.get(dstPosition) & ~octet;
@@ -398,7 +398,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
 
     @Override
     public void update(@NotNull DataView input) {
-        update((BitSequence) input);
+        update((BooleanSequence) input);
     }
 
     @NotNull
@@ -423,7 +423,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
 
     @NotNull
     @Override
-    public DataView apply(@NotNull BitSequence input) {
+    public DataView apply(@NotNull BooleanSequence input) {
         start();
         update(input);
         return finish();

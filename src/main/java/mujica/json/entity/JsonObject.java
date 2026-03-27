@@ -7,9 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Set;
 
-/**
- * Created on 2026/1/4.
- */
 @CodeHistory(date = "2026/1/4")
 public abstract class JsonObject implements JsonContainer<String> {
 

@@ -9,9 +9,13 @@ import mujica.io.stream.OneBufferDataInputStream;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.JsonHandler;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
@@ -33,8 +37,224 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
     }
 
     @Override
-    public void config(int flags) {
+    public void setFlags(int flags) {
         this.flags = flags;
+    }
+
+    @Override
+    public int getFlags() {
+        return flags;
+    }
+
+    public void skipJson() throws IOException {
+        final int octet = super.readUnsignedByte();
+        switch (octet) {
+            case 'A': case 'B': case 'C': case 'D': case 'E':
+            case 'F': case 'G': case 'H': case 'I': case 'J':
+            case 'K': case 'L': case 'M': case 'N': case 'O':
+            case 'P': case 'Q': case 'R': case 'S': case 'T':
+            case 'U': case 'V': case 'W': case 'X': case 'Y':
+            case 'Z':
+            case 'a': case 'b': case 'c': case 'd': case 'e':
+            case 'f': case 'g': case 'h': case 'i': case 'j':
+            case 'k': case 'l': case 'm': case 'n': case 'o':
+            case 'p': case 'q': case 'r': case 's': case 't':
+            case 'u': case 'v': case 'w': case 'x': case 'y':
+            case 'z':
+            case '+': case '-':
+            case '0': case '1': case '2': case '3': case '4':
+            case '5': case '6': case '7': case '8': case '9':
+                skipJsonLiteral();
+                break;
+            case '"':
+                skipJsonString(octet);
+                break;
+            case '\'':
+                if ((flags & FLAG_APOSTROPHE_QUOTE_STRING) == 0) {
+                    throw new IOException("apostrophe");
+                }
+                skipJsonString(octet);
+                break;
+            case '`':
+                if ((flags & FLAG_GRAVE_ACCENT_QUOTE_STRING) == 0) {
+                    throw new IOException("grave accent");
+                }
+                skipJsonString(octet);
+                break;
+            case '{':
+                skipJsonObject();
+                break;
+            case '[':
+                skipJsonArray();
+                break;
+            default:
+                throw new IOException("unrecognized " + octet);
+        }
+    }
+
+    private void skipJsonLiteral() throws IOException {
+        while (true) {
+            int octet = read();
+            if (!('0' <= octet && octet <= '9' || 'a' <= octet && octet <= 'z' || 'A' <= octet && octet <= 'Z'
+                    || octet == '+' || octet == '-' || octet == '.')) {
+                if (octet != -1) {
+                    unread(octet);
+                }
+                break;
+            }
+        }
+    }
+
+    private void skipJsonString(int quoteChar) throws IOException {
+        while (true) {
+            int octet = super.readUnsignedByte();
+            if (octet == '\\') {
+                super.readUnsignedByte();
+            } else if (octet == quoteChar) {
+                break;
+            }
+        }
+    }
+
+    private void skipJsonObject() throws IOException {
+        boolean first = true;
+        boolean comma = false;
+        LABEL:
+        while (true) {
+            skipGap();
+            int octet = super.readUnsignedByte();
+            switch (octet) {
+                case '"':
+                    if (!first && !comma) {
+                        throw new IOException("missing comma");
+                    }
+                    skipJsonString(octet);
+                    break;
+                case '\'':
+                    if (!first && !comma) {
+                        throw new IOException("missing comma");
+                    }
+                    if ((flags & FLAG_APOSTROPHE_QUOTE_STRING) == 0) {
+                        throw new IOException("apostrophe");
+                    }
+                    skipJsonString(octet);
+                    break;
+                case '`':
+                    if (!first && !comma) {
+                        throw new IOException("missing comma");
+                    }
+                    if ((flags & FLAG_GRAVE_ACCENT_QUOTE_STRING) == 0) {
+                        throw new IOException("grave accent");
+                    }
+                    skipJsonString(octet);
+                    break;
+                case ',':
+                    if (comma) {
+                        throw new IOException("duplicate comma");
+                    }
+                    if (first && (flags & FLAG_LEADING_COMMA) == 0) {
+                        throw new IOException("leading comma");
+                    }
+                    comma = true;
+                    skipGap();
+                    continue LABEL;
+                case '}':
+                    if (comma && (flags & FLAG_TRAILING_COMMA) == 0) {
+                        throw new IOException("trailing comma");
+                    }
+                    break LABEL;
+                default:
+                    throw new IOException("unrecognized " + octet);
+            }
+            skipGap();
+            octet = super.readUnsignedByte();
+            if (octet != ':') {
+                throw new IOException("expect colon actual " + octet);
+            }
+            skipGap();
+            skipJson();
+            first = false;
+            comma = false;
+        }
+    }
+
+    private void skipJsonArray() throws IOException {
+        boolean first = true;
+        boolean comma = false;
+        while (true) {
+            skipGap();
+            int octet = super.readUnsignedByte();
+            if (octet == ',') {
+                if (comma) {
+                    throw new IOException("duplicate comma");
+                }
+                if (first && (flags & FLAG_LEADING_COMMA) == 0) {
+                    throw new IOException("leading comma");
+                }
+                comma = true;
+                continue;
+            } else if (octet == ']') {
+                if (comma && (flags & FLAG_TRAILING_COMMA) == 0) {
+                    throw new IOException("trailing comma");
+                }
+                break;
+            }
+            if (comma || first) {
+                unread(octet);
+                skipJson();
+                first = false;
+                comma = false;
+            } else {
+                throw new IOException("missing comma");
+            }
+        }
+    }
+
+    private void skipGap() throws IOException {
+        int octet;
+        if ((flags & (FLAG_LINE_COMMENT | FLAG_BLOCK_COMMENT)) == 0) {
+            do {
+                octet = super.readUnsignedByte();
+            } while (octet <= 0x20);
+        } else {
+            while (true) {
+                octet = super.readUnsignedByte();
+                if (octet != '/') {
+                    if (octet > 0x20) {
+                        break;
+                    }
+                    continue;
+                }
+                octet = super.readUnsignedByte();
+                if (octet == '/') {
+                    if ((flags & FLAG_LINE_COMMENT) == 0) {
+                        throw new IOException("line comment");
+                    }
+                    do {
+                        octet = super.readUnsignedByte();
+                    } while (octet != '\n');
+                    unread(octet);
+                } else if (octet == '*') {
+                    if ((flags & FLAG_BLOCK_COMMENT) == 0) {
+                        throw new IOException("block comment");
+                    }
+                    while (true) {
+                        octet = super.readUnsignedByte();
+                        if (octet == '*') {
+                            octet = super.readUnsignedByte();
+                            if (octet == '/') {
+                                break;
+                            } else {
+                                unread(octet);
+                            }
+                        }
+                    }
+                } else {
+                    throw new IOException("comment unrecognized " + octet);
+                }
+            }
+        }
+        unread(octet);
     }
 
     @Override
@@ -47,7 +267,19 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
         }
     }
 
-    public void readJson(@NotNull JsonHandler jh) throws IOException {
+    private void readJson(@NotNull JsonHandler jh) throws IOException {
+        if ((flags & (FLAG_SKIP_VALUE | FLAG_SKIP_TO_BYTE_BUF)) != 0) {
+            if ((flags & FLAG_SKIP_TO_BYTE_BUF) != 0) {
+                teeToByteBuf(byteBuf -> {
+                    skipJson();
+                    jh.skipped(byteBuf.retain());
+                });
+            } else {
+                skipJson();
+                jh.skipped();
+            }
+            return;
+        }
         final int octet = super.readUnsignedByte();
         switch (octet) {
             case 'A': case 'B': case 'C': case 'D': case 'E':
@@ -79,19 +311,18 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
                 unread(octet);
                 readJsonNumber(jh);
                 break;
-            case '"':
+            case '`':
+                if ((flags & FLAG_GRAVE_ACCENT_QUOTE_STRING) == 0) {
+                    throw new IOException("grave accent");
+                }
                 jh.stringValue(readJsonString(octet));
                 break;
             case '\'':
                 if ((flags & FLAG_APOSTROPHE_QUOTE_STRING) == 0) {
                     throw new IOException("apostrophe");
                 }
-                jh.stringValue(readJsonString(octet));
-                break;
-            case '`':
-                if ((flags & FLAG_GRAVE_ACCENT_QUOTE_STRING) == 0) {
-                    throw new IOException("grave accent");
-                }
+                // no break here
+            case '"':
                 jh.stringValue(readJsonString(octet));
                 break;
             case '{':
@@ -108,10 +339,13 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
     private void readJsonWord(@NotNull JsonHandler jh) throws IOException {
         sb.delete(0, sb.length());
         while (true) {
-            int octet = super.readUnsignedByte();
+            int octet = read();
             if ('a' <= octet && octet <= 'z' || 'A' <= octet && octet <= 'Z') {
                 sb.append((char) octet);
             } else {
+                if (octet != -1) {
+                    unread(octet);
+                }
                 break;
             }
         }
@@ -155,13 +389,16 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
         sb.delete(0, sb.length());
         boolean isFractional = (flags & FLAG_INTEGRAL_FORCE_TO_FRACTIONAL) != 0;
         while (true) {
-            int octet = super.readUnsignedByte();
+            int octet = read();
             if ('0' <= octet && octet <= '9' || octet == '+' || octet == '-') {
                 sb.append((char) octet);
             } else if ('a' <= octet && octet <= 'z' || 'A' <= octet && octet <= 'Z' || octet == '.') {
                 sb.append((char) octet);
                 isFractional = true;
             } else {
+                if (octet != -1) {
+                    unread(octet);
+                }
                 break;
             }
         }
@@ -193,7 +430,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
             }
             jh.numberValue(new FastNumber(string));
         } else {
-            readJsonInteger(jh);
+            parseJsonInteger(jh);
         }
     }
 
@@ -202,13 +439,16 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
         sb.delete(0, sb.length());
         boolean isFractional = (flags & FLAG_INTEGRAL_FORCE_TO_FRACTIONAL) != 0;
         while (true) {
-            int octet = super.readUnsignedByte();
+            int octet = read();
             if ('0' <= octet && octet <= '9' || octet == '+' || octet == '-') {
                 sb.append((char) octet);
             } else if (octet == 'E' || octet == 'e' || octet == '.') {
                 sb.append((char) octet);
                 isFractional = true;
             } else {
+                if (octet != -1) {
+                    unread(octet);
+                }
                 break;
             }
         }
@@ -224,11 +464,11 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
             }
             jh.numberValue(new FastNumber(string));
         } else {
-            readJsonInteger(jh);
+            parseJsonInteger(jh);
         }
     }
 
-    private void readJsonInteger(@NotNull JsonHandler jh) {
+    private void parseJsonInteger(@NotNull JsonHandler jh) {
         if ((flags & FLAG_INTEGRAL_FORCE_TO_RAW) != 0) {
             jh.numberValue(new FastNumber(sb.toString()));
             return;
@@ -267,7 +507,8 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
         }
     }
 
-    private String readJsonString(int quote) throws IOException {
+    @NotNull
+    private String readJsonString(@DataType("u8") int quoteChar) throws IOException {
         sb.delete(0, sb.length());
         decoder.reset();
         while (true) {
@@ -276,37 +517,32 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
                 decoder.finishPush(sb);
                 octet = super.readUnsignedByte();
                 switch (octet) {
-                    case '\r': {
+                    case '\r':
                         octet = super.readUnsignedByte();
                         if (octet != '\n') {
                             unread(octet);
                         }
                         break;
-                    }
                     case '\n':
                         break;
                     case '"':
-                        sb.append('"');
+                    case '\\':
+                    case '/':
+                        sb.append((char) octet);
                         break;
                     case '\'':
-                        if (octet == quote) {
+                        if (octet == quoteChar) {
                             sb.append('\'');
                         } else {
                             throw new IOException("escape apostrophe");
                         }
                         break;
                     case '`':
-                        if (octet == quote) {
+                        if (octet == quoteChar) {
                             sb.append('`');
                         } else {
                             throw new IOException("escape grave accent");
                         }
-                        break;
-                    case '\\':
-                        sb.append('\\');
-                        break;
-                    case '/':
-                        sb.append('/');
                         break;
                     case 'b':
                         sb.append('\b');
@@ -331,7 +567,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
                 }
                 continue;
             }
-            if (octet == quote) {
+            if (octet == quoteChar) {
                 decoder.finishPush(sb);
                 break;
             }
@@ -446,7 +682,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
                 }
                 break;
             }
-            if (comma) {
+            if (comma || first) {
                 unread(octet);
                 readJson(jh);
                 first = false;
@@ -547,7 +783,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
     }
 
     @NotNull
-    public int[] readIntArray1() throws IOException {
+    public int[] readIntArray1D() throws IOException {
         skipGap();
         if (super.readUnsignedByte() != '[') {
             throw new IOException("open array");
@@ -591,7 +827,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
     }
 
     @NotNull
-    public int[][] readIntArray2() throws IOException {
+    public int[][] readIntArray2D() throws IOException {
         skipGap();
         if (super.readUnsignedByte() != '[') {
             throw new IOException("open array");
@@ -621,7 +857,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
                 if (list == null) {
                     list = new ArrayList<>();
                 }
-                list.add(readIntArray1());
+                list.add(readIntArray1D());
                 comma = false;
             } else {
                 throw new IOException("missing comma");
@@ -774,47 +1010,5 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
     @Override
     public Object readObject() throws IOException {
         return null;
-    }
-
-    private void skipGap() throws IOException {
-        int octet;
-        if ((flags & (FLAG_LINE_COMMENT | FLAG_BLOCK_COMMENT)) == 0) {
-            do {
-                octet = super.readUnsignedByte();
-            } while (octet <= 0x20);
-        } else {
-            do {
-                octet = super.readUnsignedByte();
-                if (octet == '/') {
-                    octet = super.readUnsignedByte();
-                    if (octet == '/') {
-                        if ((flags & FLAG_LINE_COMMENT) == 0) {
-                            throw new IOException("line comment");
-                        }
-                        do {
-                            octet = super.readUnsignedByte();
-                        } while (octet != '\n');
-                    } else if (octet == '*') {
-                        if ((flags & FLAG_BLOCK_COMMENT) == 0) {
-                            throw new IOException("block comment");
-                        }
-                        LABEL:
-                        while (true) {
-                            octet = super.readUnsignedByte();
-                            while (octet == '*') {
-                                octet = super.readUnsignedByte();
-                                if (octet == '/') {
-                                    break LABEL;
-                                }
-                            }
-                        }
-                    } else {
-                        throw new IOException("comment unrecognized " + octet);
-                    }
-                    octet = super.readUnsignedByte();
-                }
-            } while (octet <= 0x20);
-        }
-        unread(octet);
     }
 }

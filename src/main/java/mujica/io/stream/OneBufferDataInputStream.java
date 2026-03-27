@@ -1,5 +1,9 @@
 package mujica.io.stream;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.Unpooled;
+import mujica.io.function.IOConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferenceCode;
@@ -7,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 @CodeHistory(date = "2026/2/24")
 @ReferenceCode(groupId = "JDK", artifactId = "java.base", version = "12", fullyQualifiedName = "java.io.PushbackInputStream")
@@ -49,5 +54,20 @@ public class OneBufferDataInputStream extends ZeroBufferDataInputStream {
             return 1;
         }
         return in.read(array, offset, length);
+    }
+
+    protected void teeToByteBuf(@NotNull IOConsumer<ByteBuf> consumer) throws IOException {
+        final ByteBuf byteBuf = Unpooled.buffer();
+        if (back != 0) {
+            byteBuf.writeByte(back);
+        }
+        final InputStream originalIn = in;
+        try (OutputStream os = new ByteBufOutputStream(byteBuf)) {
+            in = new TeeInputStream(originalIn, os);
+            consumer.accept(byteBuf);
+        } finally {
+            in = originalIn;
+            byteBuf.release();
+        }
     }
 }

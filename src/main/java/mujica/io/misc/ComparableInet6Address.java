@@ -60,4 +60,14 @@ public class ComparableInet6Address extends ComparableInetAddress {
             return Long.compareUnsigned(this.low, that.low);
         }
     }
+
+    @Override
+    @NotNull
+    public String toString() {
+        if (address != null) {
+            return "ComparableInet6Address[address = " + address + ", high = " + high + ", low = " + low + "]";
+        } else {
+            return "ComparableInet6Address[high = " + high + ", low = " + low + "]";
+        }
+    }
 }

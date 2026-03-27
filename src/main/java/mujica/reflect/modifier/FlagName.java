@@ -19,7 +19,6 @@ import java.util.function.UnaryOperator;
 @CodeHistory(date = "2019/11/12", project = "coo", name = "FlagInterpreter")
 @CodeHistory(date = "2022/6/12", project = "Ultramarine")
 @CodeHistory(date = "2025/3/12")
-@Stable(date = "2025/7/25")
 @SuppressWarnings("UnusedReturnValue")
 public class FlagName implements Cloneable, Serializable {
 

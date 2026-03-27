@@ -1,7 +1,7 @@
 package mujica.io.compress;
 
 import io.netty.handler.codec.CodecException;
-import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_boolean.list.BooleanSequence;
 import mujica.ds.of_int.map.CompatibleIntMap;
 import mujica.ds.of_int.map.IntMap;
 import mujica.reflect.modifier.CodeHistory;
@@ -16,17 +16,17 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 
 @CodeHistory(date = "2025/11/14")
-public class Inflate64InputStream extends FilterInputStream implements BitSequence {
+public class Inflate64InputStream extends FilterInputStream implements BooleanSequence {
 
     private int bitSize, buffer;
 
     @Override
-    public int bitLength() {
+    public int booleanLength() {
         return bitSize;
     }
 
     @Override
-    public boolean getBit(int index) {
+    public boolean getBoolean(int index) {
         if (index < 0 || index >= bitSize) {
             throw new IndexOutOfBoundsException();
         }

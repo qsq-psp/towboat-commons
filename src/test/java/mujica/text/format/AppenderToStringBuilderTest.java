@@ -8,18 +8,25 @@ import mujica.text.number.HexadecimalAppender;
 import mujica.text.number.IntegralAppender;
 import mujica.text.number.MarkedIntegralAppender;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+@SuppressWarnings("SpellCheckingInspection")
 @CodeHistory(date = "2026/1/28")
 public class AppenderToStringBuilderTest {
 
+    @BeforeClass
+    public static void loadClasses() throws ReflectiveOperationException {
+        AppenderToStringBuilder.create();
+    }
+
     @Test
     public void caseDefaultNull() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         Assert.assertEquals("null", appender.apply(null));
         Assert.assertEquals("[null]", appender.apply(new Object[] {null}));
         Assert.assertEquals("[null, null]", appender.apply(new Void[] {null, null}));
@@ -29,7 +36,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseConfigNull() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = (new AppenderToStringBuilder()).setNullString("-");
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create().setNullString("-");
         Assert.assertEquals("-", appender.apply(null));
         Assert.assertEquals("[-, -]", appender.apply(new Void[] {null, null}));
         Assert.assertEquals("[-, [-], []]", appender.apply(new Object[] {null, new Object[] {null}, new Object[] {}}));
@@ -40,7 +47,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseDefaultBoolean() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         Assert.assertEquals("true", appender.apply(true));
         Assert.assertEquals("false", appender.apply(false));
         Assert.assertEquals("[true]", appender.apply(new boolean[] {true}));
@@ -52,7 +59,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseConfigBoolean() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         appender.config().booleanTrueFalse();
         Assert.assertEquals("[False, False, True]", appender.apply(new boolean[] {false, false, true}));
         appender.config().booleanYesNo();
@@ -63,7 +70,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseDefaultByte() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         Assert.assertEquals("-1", appender.apply((byte) -1));
         Assert.assertEquals("0", appender.apply((byte) 0));
         Assert.assertEquals("1", appender.apply((byte) 1));
@@ -76,7 +83,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseConfigByte() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         appender.config().booleanTrueFalse().use(new IntegralAppender());
         Assert.assertEquals("[-128, 127, -1, 1]", appender.apply(new byte[] {-128, 127, -1, 1}));
         appender.config().booleanYesNo().use(new IntegralAppender.Unsigned());
@@ -110,7 +117,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseDefaultShort() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         Assert.assertEquals("0", appender.apply((short) 0));
         Assert.assertEquals("32767", appender.apply((short) 32767));
         Assert.assertEquals("[-32768]", appender.apply(new short[] {-32768}));
@@ -120,7 +127,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseConfigShort() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         appender.config().booleanTrueFalse().use(new IntegralAppender());
         Assert.assertEquals("[32767, -32768, 8080]", appender.apply(new short[] {32767, -32768, 8080}));
         appender.config().booleanYesNo().use(new IntegralAppender.Unsigned());
@@ -139,7 +146,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseDefaultChar() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         Assert.assertEquals("0", appender.apply('0'));
         Assert.assertEquals("A", appender.apply('A'));
         Assert.assertEquals("[]", appender.apply(new char[] {}));
@@ -150,7 +157,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseConfigCharAsNumber() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         appender.config().booleanTrueFalse().use(new IntegralAppender());
         Assert.assertEquals("0", appender.apply((char) 0));
         Assert.assertEquals("48", appender.apply((char) 48));
@@ -170,7 +177,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseDefaultInt() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         Assert.assertEquals("-1", appender.apply(-1));
         Assert.assertEquals("0", appender.apply(0));
         Assert.assertEquals("1", appender.apply(1));
@@ -183,7 +190,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseConfigInt() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         appender.config().booleanTrueFalse().use(new IntegralAppender());
         Assert.assertEquals("-7", appender.apply(-7));
         Assert.assertEquals("[-121, 50]", appender.apply(new int[] {-121, 50}));
@@ -212,7 +219,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseConfigNumberInt() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         appender.config().numberIntegral().use(new IntegralAppender());
         Assert.assertEquals("15", appender.apply(new AtomicInteger(15)));
         Assert.assertEquals("188", appender.apply(new PublicIntSlot(188)));
@@ -223,7 +230,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseDefaultLong() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         Assert.assertEquals("-1", appender.apply(-1L));
         Assert.assertEquals("0", appender.apply(0L));
         Assert.assertEquals("1", appender.apply(1L));
@@ -239,7 +246,7 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseConfigLong() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         appender.config().use(new IntegralAppender());
         Assert.assertEquals("-1", appender.apply(-1L));
         Assert.assertEquals("0", appender.apply(0L));
@@ -256,12 +263,110 @@ public class AppenderToStringBuilderTest {
 
     @Test
     public void caseConfigNumberLong() throws ReflectiveOperationException {
-        final AppenderToStringBuilder appender = new AppenderToStringBuilder();
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
         appender.config().numberIntegral().use(new IntegralAppender());
         Assert.assertEquals("15", appender.apply(new AtomicLong(15)));
         Assert.assertEquals("188", appender.apply(new PublicLongSlot(188)));
         appender.config().use(new HexadecimalAppender(false, false));
         Assert.assertEquals("0x1c", appender.apply(new AtomicLong(0x1c)));
         Assert.assertEquals("0x22a", appender.apply(new PublicLongSlot(0x22a)));
+    }
+
+    @Test
+    public void caseLoop() throws ReflectiveOperationException {
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
+        final Object[] array = new Object[] {false, 12, null, null};
+        array[2] = array;
+        Assert.assertEquals("[false, 12, loop, null]", appender.apply(array));
+        array[2] = new Object[] {array, true, 96};
+        Assert.assertEquals("[false, 12, [loop, true, 96], null]", appender.apply(array));
+        array[2] = 48;
+        array[3] = new Object[] {-60, array, array};
+        Assert.assertEquals("[false, 12, 48, [-60, loop, loop]]", appender.apply(array));
+        array[3] = new int[0];
+        array[0] = new Object[][] {{array, 0, array}};
+        Assert.assertEquals("[[[loop, 0, loop]], 12, 48, []]", appender.apply(array));
+    }
+
+    @Test
+    public void caseConfigLoop() throws ReflectiveOperationException {
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
+        final Object[] array = new Object[] {(long) 40, 30, 20, true};
+        array[1] = array;
+        appender.setNullString("!").config().numberIntegral().use(appender.newArrayStyle().setLoop("%"), Object.class);
+        Assert.assertEquals("[!, [40, %, 20, true], !]", appender.apply(new Object[] {null, array, null}));
+        appender.setNullString("!!").config().numberDecimal().use(appender.newArrayStyle().setLoop("%%"), Object.class);
+        Assert.assertEquals("[[40, %%, 20, true], !!, []]", appender.apply(new Object[] {array, null, new byte[0]}));
+        appender.setNullString("_").config().use(appender.newArrayStyle().setLoop("*"), Object.class);
+        Assert.assertEquals("[[40, *, 20, true], [], _, _]", appender.apply(new Object[] {array, new float[0], null, null}));
+    }
+
+    @Test
+    public void caseConfigArrayStyle() throws ReflectiveOperationException {
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
+        appender.config().use(appender.newArrayStyle().setLeft("int[] {").setRight("}"), int[].class);
+        Assert.assertEquals("[34, 35, 36]", appender.apply(new byte[] {34, 35, 36}));
+        Assert.assertEquals("int[] {34, 35, 36}", appender.apply(new int[] {34, 35, 36}));
+        appender.config().use(appender.newArrayStyle().setItemSeparator("; "), long[].class);
+        Assert.assertEquals("[234, 235, 236]", appender.apply(new short[] {234, 235, 236}));
+        Assert.assertEquals("[234; 235; 236]", appender.apply(new long[] {234, 235, 236}));
+    }
+
+    @Test
+    public void caseConfigMatrixStyle() throws ReflectiveOperationException {
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
+        appender.config().use(appender.newMatrixStyle(), int[][].class);
+        Assert.assertEquals("[[1, 2], [3, 4]]", appender.apply(new byte[][] {{1, 2}, {3, 4}}));
+        Assert.assertEquals("[1, 2; 3, 4]", appender.apply(new int[][] {{1, 2}, {3, 4}}));
+        appender.config().use(appender.newMatrixStyle().setLeft("(").setRight(")"), boolean[][].class);
+        Assert.assertEquals("[45, 46; 47, 48]", appender.apply(new int[][] {{45, 46}, {47, 48}}));
+        Assert.assertEquals("[[x, y], [z, w]]", appender.apply(new char[][] {{'x', 'y'}, {'z', 'w'}}));
+        Assert.assertEquals("(true, false; false, true)", appender.apply(new boolean[][] {{true, false}, {false, true}}));
+    }
+
+    @Test
+    public void caseConfigJavaString() {
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.Java.get();
+        Assert.assertEquals("\"\"", appender.apply(""));
+        Assert.assertEquals("\"[101]\"", appender.apply("[101]"));
+        Assert.assertEquals("\"get\"", appender.apply("get"));
+        Assert.assertEquals("{\"int\", \"out\", \"class\", \"Test\", null}", appender.apply(new String[] {"int", "out", "class", "Test", null}));
+    }
+
+    @Test
+    public void caseConfigJsonString() {
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.Json.get();
+        Assert.assertEquals("\"\"", appender.apply(""));
+        Assert.assertEquals("\"[101]\"", appender.apply("[101]"));
+        Assert.assertEquals("\"get\"", appender.apply("get"));
+        Assert.assertEquals("[\"-\", \"xx\", \"$\", \"function\", null]", appender.apply(new String[] {"-", "xx", "$", "function", null}));
+        Assert.assertEquals("[\"()\", \"[]\", \"{}\", false, true]", appender.apply(new Object[] {"()", "[]", "{}", false, true}));
+        Assert.assertEquals("[\"over\\\\ride\", \"over\\r\\nwrite\", \"\\\"COM\\\"\", \"\\\"'function'\\\"\"]", appender.apply(new String[] {"over\\ride", "over\r\nwrite", "\"COM\"", "\"'function'\""}));
+    }
+
+    @Test
+    public void caseConfigJavascriptString() {
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.JavaScript.get();
+        Assert.assertEquals("''", appender.apply(""));
+        Assert.assertEquals("'[101]'", appender.apply("[101]"));
+        Assert.assertEquals("'apply'", appender.apply("apply"));
+        Assert.assertEquals("['void', 'undefined', 'null', 'none', null]", appender.apply(new String[] {"void", "undefined", "null", "none", null}));
+        Assert.assertEquals("['true', 'false', true, false]", appender.apply(new Object[] {"true", "false", true, false}));
+        Assert.assertEquals("['\\r', '\\n', '\\\\']", appender.apply(new String[] {"\r", "\n", "\\"}));
+        Assert.assertEquals("[\"abc 'def'\", `ghi 'jkl' \"mno\"`, '\\\\\\\\\\\\']", appender.apply(new String[] {"abc 'def'", "ghi 'jkl' \"mno\"", "\\\\\\"}));
+        Assert.assertEquals("['80\\x1e', '90\\x1f']", appender.apply(new String[] {"80\u001e", "90\u001f"}));
+    }
+
+    @Test
+    public void caseConfigPythonString() throws ReflectiveOperationException {
+        final AppenderToStringBuilder appender = AppenderToStringBuilder.create();
+        appender.config().numberIntegral().use(CharSequenceAppender.Python.AUTO);
+        Assert.assertEquals("\"0x0\"", appender.apply("0x0"));
+        Assert.assertEquals("\"appender\"", appender.apply("appender"));
+        Assert.assertEquals("\"black, white\"", appender.apply("black, white"));
+        Assert.assertEquals("[\"all\", \"some\", \"none\"]", appender.apply(new String[] {"all", "some", "none"}));
+        Assert.assertEquals("[\"-1\", \"50%\", \"A\"]", appender.apply(new Object[] {"-1", "50%", "A"}));
+        Assert.assertEquals("[\"user\\t007\", \"root\\a12\", \"phone\\f89\", \"panda\\b3\"]", appender.apply(new String[] {"user\t007", "root\u000712", "phone\f89", "panda\b3"}));
+        Assert.assertEquals("[\"\\vgood\", \"\\x0ebetter\", \"\\x0fbest\"]", appender.apply(new Object[] {"\u000bgood", "\u000ebetter", "\u000fbest"}));
     }
 }

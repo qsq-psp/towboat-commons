@@ -60,7 +60,23 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
     @NotNull
     @Override
     public LinkOpenHashSet<E> duplicate() {
-        final LinkOpenHashSet<E> that = new LinkOpenHashSet<>(policy, list); // todo
+        final TruncateList<Node<E>> thatList = new TruncateList<>(this.list.size());
+        for (Node<E> thisTail : this.list) {
+            if (thisTail == null) {
+                thatList.add(null);
+                continue;
+            }
+            Node<E> thatHead = new Node<>(thisTail.element, null);
+            Node<E> thatTail = thatHead;
+            while (thisTail.next != null) {
+                thisTail = thisTail.next;
+                Node<E> node = new Node<>(thisTail.element, null);
+                thatTail.next = node;
+                thatTail = node;
+            }
+            thatList.add(thatHead);
+        }
+        final LinkOpenHashSet<E> that = new LinkOpenHashSet<>(policy, thatList);
         that.size = this.size;
         return that;
     }
@@ -84,10 +100,10 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
             while (node != null) {
                 int i = index(node.element, mod);
                 if (i != j) {
-                    consumer.accept(new InvariantException("misplaced item " + node.element + " from " + i + " to " + j));
+                    consumer.accept(new InvariantException("misplaced element " + node.element + " from " + i + " to " + j));
                 }
                 if (!set.add(node.element)) {
-                    consumer.accept(new InvariantException("identical item " + node.element));
+                    consumer.accept(new InvariantException("identical element " + node.element));
                     break; // prevent infinite loop
                 }
                 node = node.next;

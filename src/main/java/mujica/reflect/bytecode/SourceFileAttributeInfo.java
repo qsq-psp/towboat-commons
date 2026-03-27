@@ -17,9 +17,19 @@ class SourceFileAttributeInfo extends AttributeInfo {
 
     private static final long serialVersionUID = 0x8326d0b801e6b67bL;
 
+    SourceFileAttributeInfo() {
+        super();
+    }
+
     @DataType("u16-{0}")
     @ConstantType(tags = Utf8ConstantInfo.TAG)
     int sourceFileIndex;
+
+    @DataType("u16-{0}")
+    @ConstantType(tags = Utf8ConstantInfo.TAG)
+    public int getSourceFileIndex() {
+        return sourceFileIndex;
+    }
 
     public static final String NAME = "SourceFile";
 
@@ -54,14 +64,14 @@ class SourceFileAttributeInfo extends AttributeInfo {
         buffer.putShort((short) sourceFileIndex);
     }
 
+    @Override
+    public void remapConstant(@NotNull IntUnaryOperator remap) {
+        sourceFileIndex = remap.applyAsInt(sourceFileIndex);
+    }
+
     @NotNull
     @Override
     public String toString(@NotNull ClassFile context) {
         return NAME + " " + context.constantPool.getUtf8(sourceFileIndex);
-    }
-
-    @Override
-    public void remapConstant(@NotNull IntUnaryOperator remap) {
-        sourceFileIndex = remap.applyAsInt(sourceFileIndex);
     }
 }

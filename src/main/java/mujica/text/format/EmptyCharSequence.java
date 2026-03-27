@@ -1,11 +1,15 @@
 package mujica.text.format;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created on 2026/3/7.
  */
-public class EmptyCharSequence implements CharSequence {
+@CodeHistory(date = "2026/3/7")
+public class EmptyCharSequence extends TowboatCharSequence {
+
+    private static final long serialVersionUID = 0x237A92FE744304E7L;
 
     public static final EmptyCharSequence INSTANCE = new EmptyCharSequence();
 

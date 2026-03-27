@@ -5,7 +5,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created on 2026/3/7.
  */
-public class UnitCharSequence implements CharSequence {
+public class UnitCharSequence extends TowboatCharSequence {
+
+    private static final long serialVersionUID = 0x8ABBFFDCB78EB24CL;
 
     public char ch;
 

@@ -95,6 +95,7 @@ public class CyclicArrayRunBuffer extends ArrayRunBuffer {
         if (tail >= capacity) {
             assert tail == capacity;
             if (capacity < maxDistance) {
+                assert policy != null;
                 capacity = policy.nextLargerCapacity(capacity);
                 this.array = Arrays.copyOf(array, capacity);
             } else {
@@ -122,31 +123,6 @@ public class CyclicArrayRunBuffer extends ArrayRunBuffer {
         put(data);
         return data;
     }
-
-    /*
-    @Override
-    public int copy(int distance, @NotNull byte[] array, int offset, int length) {
-        checkDistance(distance);
-        int index = tail - distance;
-        if (index < 0) {
-            if (head >= tail) {
-                int capacity = this.array.length;
-                index += capacity;
-                if (index < head) {
-                    throw new IllegalArgumentException("distance = " + distance + ", head = " + head + ", tail = " + tail);
-                }
-                length = Math.min(length, capacity - index);
-            } else {
-                throw new IllegalArgumentException("distance = " + distance + ", head = " + head + ", tail = " + tail);
-            }
-        } else {
-            length = Math.min(length, distance);
-        }
-        System.arraycopy(this.array, index, array, offset, length);
-        putFully(array, offset, length);
-        return length;
-    }
-    //*/
 
     @Override
     public void clear() {

@@ -42,4 +42,10 @@ public class CachedChannelSize implements CachedDataSize<SeekableByteChannel> {
         value = channel.size();
         return this;
     }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "CachedChannelSize[channel = " + channel + ", value = " + value + "]";
+    }
 }

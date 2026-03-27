@@ -18,10 +18,13 @@ module CDP {
     exports mujica.reflect.bytecode;
     exports mujica.reflect.source;
     exports mujica.io.function;
-    exports mujica.io.codec;
+    exports mujica.io.stream;
     exports mujica.io.buffer;
     exports mujica.io.hash;
+    exports mujica.io.codec;
+    exports mujica.io.compress;
     exports mujica.io.nest;
+    exports mujica.io.fs;
     exports mujica.ds;
     exports mujica.ds.generic;
     exports mujica.ds.generic.list;
@@ -32,6 +35,9 @@ module CDP {
     exports mujica.ds.of_boolean.list;
     exports mujica.ds.of_byte;
     exports mujica.ds.of_byte.list;
+    // exports mujica.ds.of_byte.view;
+    exports mujica.ds.of_char;
+    // exports mujica.ds.of_char.sequence;
     exports mujica.ds.of_int;
     exports mujica.ds.of_int.list;
     exports mujica.ds.of_int.set;
@@ -43,6 +49,8 @@ module CDP {
     exports mujica.ds.of_double.list;
     exports mujica.text.number;
     exports mujica.text.format;
+    // exports mujica.text.sanitizer;
+    // exports mujica.text.filter;
     exports mujica.text.collation;
     exports mujica.text.bnf;
     exports mujica.text.regex;
@@ -57,5 +65,5 @@ module CDP {
     exports mujica.netty.concurrent;
 
     provides java.nio.charset.spi.CharsetProvider with TowboatCharsetProvider;
-    provides java.nio.file.spi.FileTypeDetector with ExtensionFileTypeDetector;
+    provides java.nio.file.spi.FileTypeDetector with ExtensionFileTypeDetector.Cached;
 }

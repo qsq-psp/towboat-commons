@@ -2,6 +2,7 @@ package mujica.algebra.random;
 
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -241,6 +242,78 @@ public class FuzzyContext extends FreeFloatingPointContext {
         }
     }
 
+    @Override
+    public char nextCharEN() {
+        switch ((int) source.applyAsLong(3)) { // from 0x0 to 0x7
+            case 0x0:
+                return ' ';
+            case 0x1:
+                return nextChar(",;.?!'\"()");
+            case 0x2:
+                return (char) ('A' + nextInt(26));
+            default: // 5 values
+                return (char) ('a' + nextInt(26));
+        }
+    }
+
+    @ReferencePage(title = "Hangul Jamo", href = "https://www.unicode.org/charts/PDF/U1100.pdf") // 谚文字母, U+1100 - U+11ff
+    @ReferencePage(title = "Hiragana", href = "https://www.unicode.org/charts/PDF/U3040.pdf") // 平假名, U+3040 - U+309f
+    @ReferencePage(title = "Katakana", href = "https://www.unicode.org/charts/PDF/U30A0.pdf") // 片假名, U+30a0 - U+30ff
+    @ReferencePage(title = "CJK Unified Ideographs (Han)", href = "https://www.unicode.org/charts/PDF/U4E00.pdf") // U+4e00 - U+9fef
+    @ReferencePage(title = "Hangul Syllables", href = "https://www.unicode.org/charts/PDF/UAC00.pdf") // 谚文音节, U+ac00 - U+d7af
+    public char nextCharCJK() {
+        switch ((int) source.applyAsLong(3)) { // from 0x0 to 0x7
+            case 0x0:
+                return (char) nextInt(0x1100, 0x1200);
+            case 0x1:
+                return (char) nextInt(0x3040, 0x3100);
+            case 0x2:
+                return (char) nextInt(0xac00, 0xd7b0);
+            default:
+                return (char) nextInt(0x4e00, 0x9ff0);
+        }
+    }
+
+    @ReferencePage(title = "CJK Extension A", href = "https://www.unicode.org/charts/PDF/U3400.pdf") // U+3400 - U+4db5
+    @ReferencePage(title = "CJK Unified Ideographs (Han)", href = "https://www.unicode.org/charts/PDF/U4E00.pdf") // U+4e00 - U+9fef
+    public char nextCharZH() {
+        if (source.applyAsLong(2) == 0) { // 1 / 4
+            return (char) nextInt(0x3400, 0x4db6);
+        } else {
+            return (char) nextInt(0x4e00, 0x9ff0);
+        }
+    }
+
+    @Override
+    public char nextChar() {
+        switch ((int) source.applyAsLong(4)) { // from 0x0 to 0xf
+            case 0x0:
+            case 0x1:
+                return 0;
+            case 0x2:
+            case 0x3:
+                return (char) super.nextInt(0x20);
+            case 0x4:
+            case 0x5:
+                return (char) super.nextInt(0xa0);
+            case 0x6:
+            case 0x7:
+                return (char) nextInt(0x800);
+            case 0x8:
+                return super.nextCharEN();
+            case 0x9:
+                return nextCharEN();
+            case 0xa:
+                return nextCharCJK();
+            case 0xb:
+                return super.nextCharZH();
+            case 0xc:
+                return nextCharZH();
+            default: // 3 values
+                return super.nextChar();
+        }
+    }
+
     private static final int[] SPECIAL_INT = {
             Float.floatToRawIntBits(1.0f),
             Float.floatToRawIntBits(-1.0f),
@@ -365,7 +438,7 @@ public class FuzzyContext extends FreeFloatingPointContext {
 
     @Override
     public int nextInt() {
-        switch ((int) source.applyAsLong(4)) { // from 0x00 to 0x1f
+        switch ((int) source.applyAsLong(5)) { // from 0x00 to 0x1f
             case 0x00:
             case 0x01:
             case 0x02:

@@ -1,7 +1,7 @@
 package mujica.reflect.basic;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Stable;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -11,7 +11,6 @@ import java.lang.reflect.AnnotatedElement;
 @CodeHistory(date = "2022/8/18", project = "LeetCode", name = "NeverAnnotatedElement")
 @CodeHistory(date = "2022/11/14", project = "nettyon", name = "NeverAnnotatedElement")
 @CodeHistory(date = "2025/10/31")
-@Stable(date = "2025/11/3")
 public class NotAnnotatedElement implements AnnotatedElement, Serializable {
 
     public static final NotAnnotatedElement INSTANCE = new NotAnnotatedElement();

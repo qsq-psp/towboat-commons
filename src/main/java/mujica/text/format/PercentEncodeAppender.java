@@ -8,7 +8,7 @@ import java.util.function.IntPredicate;
 
 @CodeHistory(date = "2026/2/23", name = "PercentAppender")
 @CodeHistory(date = "2026/3/8")
-public abstract class PercentEncodeAppender extends CharSequenceAppender {
+public class PercentEncodeAppender extends CharSequenceAppender {
 
     @ReferencePage(title = "encodeURI()", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURI")
     public static final IntPredicate URI = (ch) -> {
@@ -94,6 +94,16 @@ public abstract class PercentEncodeAppender extends CharSequenceAppender {
     public PercentEncodeAppender(@NotNull IntPredicate noEscape) {
         super();
         this.noEscape = noEscape;
+    }
+
+    @NotNull
+    public static PercentEncodeAppender encodeURI() {
+        return new PercentEncodeAppender(URI);
+    }
+
+    @NotNull
+    public static PercentEncodeAppender encodeURIComponent() {
+        return new PercentEncodeAppender(URI_COMPONENT);
     }
 
     @Override

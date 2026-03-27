@@ -293,18 +293,6 @@ public abstract class AttributeInfo implements ClassFileNode.Dependent, BiConsum
         throw new UnsupportedOperationException();
     }
 
-    @NotNull
-    @Override
-    public String toString(@NotNull ClassFile context) {
-        return attributeName();
-    }
-
-    @Override
-    @NotNull
-    public String toString() {
-        return attributeName();
-    }
-
     @CodeHistory(date = "2025/10/6")
     public static class Statistics {
 
@@ -340,5 +328,17 @@ public abstract class AttributeInfo implements ClassFileNode.Dependent, BiConsum
         for (int index = 0; index < length; index++) {
             array[index] = (short) remap.applyAsInt(0xffff & array[index]);
         }
+    }
+
+    @NotNull
+    @Override
+    public String toString(@NotNull ClassFile context) {
+        return attributeName();
+    }
+
+    @Override
+    @NotNull
+    public String toString() {
+        return attributeName();
     }
 }

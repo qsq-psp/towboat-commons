@@ -7,9 +7,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created on 2025/10/10.
- */
 @CodeHistory(date = "2025/10/10")
 public class EmptyFileAttributes implements BasicFileAttributes {
 

@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_boolean.list.BooleanSequence;
 import mujica.ds.of_byte.list.ByteSequence;
 import mujica.ds.of_int.list.IntSequence;
 import mujica.ds.of_long.list.LongSequence;
@@ -13,15 +13,15 @@ import org.jetbrains.annotations.NotNull;
  */
 @CodeHistory(date = "2025/5/9")
 @ReferencePage(title = "DataView", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView")
-public interface DataView extends BitSequence, ByteSequence, IntSequence, LongSequence {
+public interface DataView extends BooleanSequence, ByteSequence, IntSequence, LongSequence {
 
     Runnable NOP_GUARD = () -> {};
 
     @Override
-    int bitLength();
+    int booleanLength();
 
     @Override
-    boolean getBit(int index);
+    boolean getBoolean(int index);
 
     boolean getBitExact();
 

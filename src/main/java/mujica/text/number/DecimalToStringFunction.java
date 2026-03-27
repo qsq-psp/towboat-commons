@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  */
 @CodeHistory(date = "2018/7/9", project = "existence", name = "DoubleToStringConverter")
 @CodeHistory(date = "2025/2/25")
+@Deprecated
 public interface DecimalToStringFunction {
 
     void append(@NotNull CharSequence num, int numRadix, @NotNull StringBuilder out);

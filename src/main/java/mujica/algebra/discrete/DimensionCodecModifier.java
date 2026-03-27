@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * the base modifier class remains unchanged (identity transform)
- */
 @CodeHistory(date = "2025/3/1")
 public class DimensionCodecModifier implements DimensionCodec {
 
@@ -17,6 +14,7 @@ public class DimensionCodecModifier implements DimensionCodec {
     public DimensionCodecModifier(@NotNull DimensionCodec codec) {
         super();
         this.codec = codec;
+        // the base modifier class remains unchanged (identity transform)
     }
 
     @Override

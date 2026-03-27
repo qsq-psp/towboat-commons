@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_boolean.list.BooleanSequence;
 import mujica.ds.of_byte.list.ByteSequence;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -32,10 +32,10 @@ public abstract class EachBitStreamHash implements BitStreamHash {
     public abstract DataView finish();
 
     @Override
-    public void update(@NotNull BitSequence input) {
-        final int bitLength = input.bitLength();
+    public void update(@NotNull BooleanSequence input) {
+        final int bitLength = input.booleanLength();
         for (int index = 0; index < bitLength; index++) {
-            update(input.getBit(index));
+            update(input.getBoolean(index));
         }
     }
 
@@ -79,12 +79,12 @@ public abstract class EachBitStreamHash implements BitStreamHash {
 
     @Override
     public void update(@NotNull DataView input) {
-        update((BitSequence) input);
+        update((BooleanSequence) input);
     }
 
     @NotNull
     @Override
-    public DataView apply(@NotNull BitSequence input) {
+    public DataView apply(@NotNull BooleanSequence input) {
         start();
         update(input);
         return finish();

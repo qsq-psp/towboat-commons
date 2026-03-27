@@ -1,12 +1,10 @@
 package mujica.geometry;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Stable;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2022/6/5", project = "Ultramarine")
 @CodeHistory(date = "2025/3/2")
-@Stable(date = "2025/7/25")
 public enum GeometryOperationResult {
 
     FAIL, MODIFIED, UNKNOWN, REMAIN;

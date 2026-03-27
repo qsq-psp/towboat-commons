@@ -1,7 +1,7 @@
 package mujica.io.compress;
 
 import io.netty.handler.codec.CodecException;
-import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_boolean.list.BooleanSequence;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @CodeHistory(date = "2025/11/6")
-public abstract class ResidueInflateInputStream extends AbstractInflateInputStream implements BitSequence {
+public abstract class ResidueInflateInputStream extends AbstractInflateInputStream implements BooleanSequence {
 
     protected static final int MAX_SYMBOL = 287;
 
@@ -83,7 +83,7 @@ public abstract class ResidueInflateInputStream extends AbstractInflateInputStre
     private int bitSize, buffer;
 
     @Override
-    public int bitLength() {
+    public int booleanLength() {
         return bitSize;
     }
 
@@ -92,7 +92,7 @@ public abstract class ResidueInflateInputStream extends AbstractInflateInputStre
      * steganography information contained inside
      */
     @Override
-    public boolean getBit(int index) {
+    public boolean getBoolean(int index) {
         if (index < 0 || index >= bitSize) {
             throw new IndexOutOfBoundsException();
         }

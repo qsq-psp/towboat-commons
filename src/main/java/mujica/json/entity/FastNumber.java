@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "RawDecimal")
 @CodeHistory(date = "2023/5/5", project = "Ultramarine", name = "RawNumber")
 @CodeHistory(date = "2025/10/11")
-public class FastNumber extends Number {
+public final class FastNumber extends Number {
 
     private static final long serialVersionUID = 0x6e78b6e4e0a6eef9L;
 

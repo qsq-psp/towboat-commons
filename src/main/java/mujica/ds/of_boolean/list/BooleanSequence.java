@@ -3,9 +3,9 @@ package mujica.ds.of_boolean.list;
 import mujica.reflect.modifier.CodeHistory;
 
 @CodeHistory(date = "2025/4/15")
-public interface BitSequence {
+public interface BooleanSequence {
 
-    int bitLength();
+    int booleanLength();
 
-    boolean getBit(int index);
+    boolean getBoolean(int index);
 }

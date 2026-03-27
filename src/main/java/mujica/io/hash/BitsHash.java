@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_boolean.list.BooleanSequence;
 import mujica.ds.of_byte.list.ByteSequence;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public interface BitsHash extends BytesHash {
 
     @NotNull
-    DataView apply(@NotNull BitSequence input);
+    DataView apply(@NotNull BooleanSequence input);
 
     @NotNull
     @Override

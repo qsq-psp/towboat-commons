@@ -137,14 +137,7 @@ public class AxiomSetTest {
                     list.add(string);
                 }
             }
-            try {
-                set.checkHealth(errorCollector::addError);
-            } catch (RuntimeException re) {
-                for (String string : list) {
-                    System.out.println(string);
-                }
-                throw re;
-            }
+            set.checkHealth(errorCollector::addError);
         }
     }
 

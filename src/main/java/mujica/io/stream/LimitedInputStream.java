@@ -10,7 +10,7 @@ import java.io.InputStream;
 @CodeHistory(date = "2021/1/7", project = "webbiton", name = "ContentLengthInputStream")
 @CodeHistory(date = "2022/6/15", name = "LengthInputStream")
 @CodeHistory(date = "2026/2/24")
-public class LimitedInputStream extends FilterInputStream { // rename it LimitedInputStream and leave record
+public class LimitedInputStream extends FilterInputStream {
 
     long remaining;
 

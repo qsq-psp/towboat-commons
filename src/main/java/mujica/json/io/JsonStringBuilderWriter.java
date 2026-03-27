@@ -3,28 +3,32 @@ package mujica.json.io;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.FastString;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.text.format.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
+@CodeHistory(date = "2021/12/30", project = "infrastructure", name = "StringWriter")
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "SimpleJsonStringWriter")
-@CodeHistory(date = "2026/1/6")
-public class StringBuilderJsonWriter extends StringJsonWriter {
+@CodeHistory(date = "2026/1/6", name = "StringBuilderJsonWriter")
+@CodeHistory(date = "2026/3/22")
+public class JsonStringBuilderWriter extends JsonStringWriter {
 
     @NotNull
     protected final StringBuilder sb;
 
-    public StringBuilderJsonWriter(@NotNull StringBuilder sb) {
+    public JsonStringBuilderWriter(@NotNull StringBuilder sb) {
         super();
         this.sb = sb;
     }
 
-    public StringBuilderJsonWriter() {
+    public JsonStringBuilderWriter() {
         this(new StringBuilder());
     }
 
     @Override
     public void reset() {
+        super.reset();
         sb.delete(0, sb.length());
     }
 
@@ -140,7 +144,7 @@ public class StringBuilderJsonWriter extends StringJsonWriter {
     @Override
     public void stringKey(@NotNull String key) {
         anyKey();
-        // Quote.JSON.append(key, sb);
+        CharSequenceAppender.Json.INSTANCE.append(key, sb);
         sb.append(':');
     }
 
@@ -148,6 +152,12 @@ public class StringBuilderJsonWriter extends StringJsonWriter {
     public void stringKey(@NotNull FastString key) {
         anyKey();
         sb.append('"').append(key.string).append('"').append(':');
+    }
+
+    @Override
+    public void nullValue() {
+        anyValue();
+        sb.append("null");
     }
 
     @Override
@@ -195,7 +205,7 @@ public class StringBuilderJsonWriter extends StringJsonWriter {
     @Override
     public void stringValue(@NotNull CharSequence value) {
         anyValue();
-        // Quote.JSON.append(value, sb);
+        CharSequenceAppender.Json.INSTANCE.append(value, sb);
     }
 
     @Override

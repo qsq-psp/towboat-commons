@@ -1,6 +1,8 @@
 package mujica.algebra.random;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
+import mujica.text.format.ArrayRepeatCharSequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,6 +60,81 @@ public class RandomContext implements Serializable {
             array[i] = nextShort();
         }
         return array;
+    }
+
+    public char nextCharEN() {
+        final int value = nextInt(26 * 2);
+        if (value < 26) {
+            return (char) ('A' + value);
+        } else {
+            return (char) ('a' - 26 + value);
+        }
+    }
+
+    @ReferencePage(title = "Hangul Jamo", href = "https://www.unicode.org/charts/PDF/U1100.pdf") // 谚文字母, U+1100 - U+11ff
+    @ReferencePage(title = "Hiragana", href = "https://www.unicode.org/charts/PDF/U3040.pdf") // 平假名, U+3040 - U+309f
+    @ReferencePage(title = "Katakana", href = "https://www.unicode.org/charts/PDF/U30A0.pdf") // 片假名, U+30a0 - U+30ff
+    @ReferencePage(title = "CJK Unified Ideographs (Han)", href = "https://www.unicode.org/charts/PDF/U4E00.pdf") // U+4e00 - U+9fef
+    @ReferencePage(title = "Hangul Syllables", href = "https://www.unicode.org/charts/PDF/UAC00.pdf") // 谚文音节, U+ac00 - U+d7af
+    public char nextCharCJK() {
+        int value = nextInt((0x1200 - 0x1100) + (0x3100 - 0x3040) + (0x9ff0 - 0x4e00) + (0xd7b0 - 0xac00));
+        if (value >= (0x1200 - 0x1100) + (0x3100 - 0x3040)) {
+            if (value >= (0x1200 - 0x1100) + (0x3100 - 0x3040) + (0x9ff0 - 0x4e00)) {
+                value += 0xac00 - (0x1200 - 0x1100) + (0x3100 - 0x3040) + (0x9ff0 - 0x4e00);
+            } else {
+                value += 0x4e00 - (0x1200 - 0x1100) + (0x3100 - 0x3040);
+            }
+        } else {
+            if (value >= 0x1200 - 0x1100) {
+                value += 0x3040 + (0x1200 - 0x1100);
+            } else {
+                value += 0x1100;
+            }
+        }
+        return (char) value;
+    }
+
+    @ReferencePage(title = "CJK Extension A", href = "https://www.unicode.org/charts/PDF/U3400.pdf") // U+3400 - U+4db5
+    @ReferencePage(title = "CJK Unified Ideographs (Han)", href = "https://www.unicode.org/charts/PDF/U4E00.pdf") // U+4e00 - U+9fef
+    public char nextCharZH() {
+        int value = nextInt((0x4db6 - 0x3400) + (0x9ff0 - 0x4e00));
+        if (value >= 0x4db6 - 0x3400) {
+            value += 0x4e00 - (0x4db6 - 0x3400);
+        } else {
+            value += 0x3400;
+        }
+        return (char) value;
+    }
+
+    public char nextChar(@NotNull CharSequence string) {
+        return string.charAt(nextInt(string.length()));
+    }
+
+    public char nextChar() {
+        int value = nextInt((Character.MAX_VALUE + 1) - (Character.MAX_SURROGATE - Character.MIN_SURROGATE + 1));
+        if (value >= Character.MIN_SURROGATE) {
+            value += Character.MAX_SURROGATE - Character.MIN_SURROGATE + 1;
+        }
+        return (char) value;
+    }
+
+    @NotNull
+    public char[] nextCharArray(int charLength) {
+        final char[] array = new char[charLength];
+        for (int i = 0; i < charLength; i++) {
+            array[i] = nextChar();
+        }
+        return array;
+    }
+
+    @NotNull
+    public CharSequence nextCharSequence(int charLength) {
+        return new ArrayRepeatCharSequence(nextCharArray(charLength));
+    }
+
+    @NotNull
+    public String nextString(int charLength) {
+        return new String(nextCharArray(charLength));
     }
 
     public int nextInt() {

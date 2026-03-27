@@ -31,6 +31,9 @@ public abstract class AbstractIntList implements IntList {
     }
 
     @Override
+    public abstract int intLength();
+
+    @Override
     public boolean isEmpty() {
         return intLength() == 0;
     }
@@ -107,7 +110,7 @@ public abstract class AbstractIntList implements IntList {
 
         @Override
         public long estimateSize() {
-            return intLength();
+            return limit - position;
         }
 
         @Override
@@ -117,7 +120,7 @@ public abstract class AbstractIntList implements IntList {
 
         @Override
         public boolean tryAdvance(IntConsumer action) {
-            if (position < intLength()) {
+            if (position < limit) {
                 action.accept(getInt(position)); // no check for commodification; simple and fast
                 return true;
             } else {
@@ -145,9 +148,6 @@ public abstract class AbstractIntList implements IntList {
         return new NoModificationSpliterator();
     }
 
-    /**
-     * No check for commodification; simple and fast
-     */
     @CodeHistory(date = "2025/5/30")
     private class NoModificationListIterator implements ListIterator<Integer> {
 
@@ -165,7 +165,7 @@ public abstract class AbstractIntList implements IntList {
 
         @Override
         public Integer next() {
-            return getInt(index++);
+            return getInt(index++); // no check for commodification; simple and fast
         }
 
         @Override
@@ -194,12 +194,12 @@ public abstract class AbstractIntList implements IntList {
         }
 
         @Override
-        public void set(Integer integer) {
+        public void set(Integer x) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public void add(Integer integer) {
+        public void add(Integer x) {
             throw new UnsupportedOperationException();
         }
     }
@@ -414,7 +414,7 @@ public abstract class AbstractIntList implements IntList {
     }
 
     @Override
-    public void rotate(int d) {
+    public void rotate(int d) { // todo: test it
         final int n = intLength();
         if (n <= 1) {
             return;

@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @CodeHistory(date = "2022/6/1", project = "Ultramarine", name = "TypedString")
 @CodeHistory(date = "2025/10/11")
-public class FastString implements Serializable {
+public final class FastString implements Serializable {
 
     private static final long serialVersionUID = 0xe6acf0939adaa8c6L;
 

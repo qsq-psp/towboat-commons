@@ -5,10 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created in Ultramarine on 2023/10/6, named SquareUU.
- * Recreated on 2025/2/28.
- */
 @CodeHistory(date = "2023/10/6", project = "Ultramarine", name = "SquareUU")
 @CodeHistory(date = "2025/2/28")
 public class UnsignedSquare implements DimensionCodec {

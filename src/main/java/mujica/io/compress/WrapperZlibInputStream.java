@@ -4,7 +4,6 @@ import mujica.io.hash.Adler32;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.reflect.modifier.Stable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
@@ -14,7 +13,6 @@ import java.io.InputStream;
 
 @CodeHistory(date = "2025/10/27", name = "TowboatZlibInputStream")
 @CodeHistory(date = "2025/11/12")
-@Stable(date = "2025/11/28")
 @ReferencePage(title = "ZLIB Compressed Data Format Specification version 3.3", href = "https://www.rfc-editor.org/rfc/rfc1950.html")
 public class WrapperZlibInputStream extends FilterInputStream {
 

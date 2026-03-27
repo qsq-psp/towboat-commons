@@ -1,7 +1,6 @@
 package mujica.io.function;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Stable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOError;
@@ -11,7 +10,6 @@ import java.util.Iterator;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2025/4/7")
-@Stable(date = "2025/8/18")
 public interface IOIterator<E> {
 
     boolean hasNext() throws IOException;

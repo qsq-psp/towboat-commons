@@ -14,4 +14,10 @@ public interface CachedDataSize<T> extends LongSlot {
 
     @NotNull
     CachedDataSize<T> updateCache() throws IOException;
+
+    @Override
+    long getLong();
+
+    @Override
+    void setLong(long newValue);
 }

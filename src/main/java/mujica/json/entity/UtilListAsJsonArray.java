@@ -1,5 +1,6 @@
 package mujica.json.entity;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -7,7 +8,13 @@ import java.util.List;
 /**
  * Created on 2026/1/6.
  */
+@CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "JsonArray")
+@CodeHistory(date = "2025/9/23", name = "JsonArray")
+@CodeHistory(date = "2025/12/29", name = "GeneralJsonArray")
+@CodeHistory(date = "2026/1/6")
 class UtilListAsJsonArray<T extends List<Object>> extends JsonArray {
+
+    private static final long serialVersionUID = 0x326e01ada4ba3c92L;
 
     @NotNull
     protected T list;

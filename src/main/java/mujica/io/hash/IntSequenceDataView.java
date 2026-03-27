@@ -33,13 +33,13 @@ public class IntSequenceDataView implements DataView {
     }
 
     @Override
-    public int bitLength() {
+    public int booleanLength() {
         guard.run();
         return ClampedMath.INSTANCE.multiply(intSequence.intLength(), Integer.SIZE);
     }
 
     @Override
-    public boolean getBit(int index) {
+    public boolean getBoolean(int index) {
         guard.run();
         final int value = intSequence.getInt(index >>> 5);
         int shift = index & 0x1f;
@@ -52,7 +52,7 @@ public class IntSequenceDataView implements DataView {
     @Override
     public boolean getBitExact() {
         guard.run();
-        throw new DataSizeMismatchException(bitLength() + " != 1");
+        throw new DataSizeMismatchException(booleanLength() + " != 1");
     }
 
     @Override
@@ -84,7 +84,7 @@ public class IntSequenceDataView implements DataView {
     @Override
     public byte getByteExact() {
         guard.run();
-        throw new DataSizeMismatchException(bitLength() + " != " + Byte.SIZE);
+        throw new DataSizeMismatchException(booleanLength() + " != " + Byte.SIZE);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class IntSequenceDataView implements DataView {
     @Override
     public short getUnsignedByteExact() {
         guard.run();
-        throw new DataSizeMismatchException(bitLength() + " != " + Byte.SIZE);
+        throw new DataSizeMismatchException(booleanLength() + " != " + Byte.SIZE);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class IntSequenceDataView implements DataView {
     @Override
     public short getShortExact() {
         guard.run();
-        throw new DataSizeMismatchException(bitLength() + " != " + Short.SIZE);
+        throw new DataSizeMismatchException(booleanLength() + " != " + Short.SIZE);
     }
 
     @Override
@@ -180,7 +180,7 @@ public class IntSequenceDataView implements DataView {
     @Override
     public int getUnsignedShortExact() {
         guard.run();
-        throw new DataSizeMismatchException(bitLength() + " != " + Short.SIZE);
+        throw new DataSizeMismatchException(booleanLength() + " != " + Short.SIZE);
     }
 
     @Override
@@ -233,7 +233,7 @@ public class IntSequenceDataView implements DataView {
         } else if (intLength == 0) {
             return 0;
         } else {
-            throw new DataSizeMismatchException(bitLength() + " > " + Integer.SIZE);
+            throw new DataSizeMismatchException(booleanLength() + " > " + Integer.SIZE);
         }
     }
 
@@ -243,7 +243,7 @@ public class IntSequenceDataView implements DataView {
         if (intSequence.intLength() == 1) {
             return intSequence.getInt(0);
         } else {
-            throw new DataSizeMismatchException(bitLength() + " != " + Integer.SIZE);
+            throw new DataSizeMismatchException(booleanLength() + " != " + Integer.SIZE);
         }
     }
 
@@ -268,7 +268,7 @@ public class IntSequenceDataView implements DataView {
         } else if (size == 0) {
             return 0L;
         } else {
-            throw new DataSizeMismatchException(bitLength() + " > " + Integer.SIZE);
+            throw new DataSizeMismatchException(booleanLength() + " > " + Integer.SIZE);
         }
     }
 
@@ -278,7 +278,7 @@ public class IntSequenceDataView implements DataView {
         if (intSequence.intLength() == 1) {
             return 0xffffffffL & intSequence.getInt(0);
         } else {
-            throw new DataSizeMismatchException(bitLength() + " != " + Integer.SIZE);
+            throw new DataSizeMismatchException(booleanLength() + " != " + Integer.SIZE);
         }
     }
 
@@ -331,7 +331,7 @@ public class IntSequenceDataView implements DataView {
             case 0:
                 return 0L;
             default:
-                throw new DataSizeMismatchException(bitLength() + " > " + Long.SIZE);
+                throw new DataSizeMismatchException(booleanLength() + " > " + Long.SIZE);
         }
         if (byteOrder == ByteOrder.BIG_ENDIAN) {
             return (value0 << Integer.SIZE) | value1;
@@ -344,7 +344,7 @@ public class IntSequenceDataView implements DataView {
     public long getLongExact() {
         guard.run();
         if (intSequence.intLength() != 2) {
-            throw new DataSizeMismatchException(bitLength() + " != " + Long.SIZE);
+            throw new DataSizeMismatchException(booleanLength() + " != " + Long.SIZE);
         }
         final long value0 = intSequence.getInt(0);
         final long value1 = intSequence.getInt(1);

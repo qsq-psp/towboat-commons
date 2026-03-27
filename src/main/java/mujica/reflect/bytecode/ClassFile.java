@@ -6,6 +6,7 @@ import mujica.io.stream.LimitedInput;
 import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
@@ -22,6 +23,7 @@ import java.util.function.Predicate;
 
 @CodeHistory(date = "2019/8/15", project = "bone", name = "JavaClassFile")
 @CodeHistory(date = "2025/9/9")
+@ReferencePage(title = "JVMS12 The ClassFile Structure", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.1")
 public class ClassFile implements ClassFileNode.Independent, BiConsumer<AttributeInfo.Statistics, String>, Consumer<CodeAttributeInfo.Statistics> {
 
     private static final long serialVersionUID = 0xd029789af7932a07L;
@@ -57,6 +59,14 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
 
     @DataType("u16")
     int minorVersion;
+
+    String fullName; // like mujica/reflect/bytecode/ClassFile
+
+    String packageName; // like mujica/reflect/bytecode
+
+    String sourceFile; // ClassFile.java
+
+    String sourcePath; // like mujica/reflect/bytecode/ClassFile.java
 
     public ClassFile() {
         super();
@@ -160,6 +170,7 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
             }
         }
         attributes = AttributeInfo.readArray(constantPool, in);
+        afterRead();
     }
 
     @Override
@@ -203,6 +214,39 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
             }
         }
         attributes = AttributeInfo.readArray(constantPool, buffer);
+        afterRead();
+    }
+
+    @SuppressWarnings("LoopStatementThatDoesntLoop")
+    protected void afterRead() {
+        fullName = constantPool.getClassName(thisClass);
+        final int slash = fullName.lastIndexOf('/');
+        if (slash != -1) {
+            packageName = fullName.substring(0, slash);
+        } else {
+            packageName = "";
+        }
+        LABEL:
+        while (true) {
+            for (AttributeInfo attribute : attributes) {
+                if (attribute instanceof SourceFileAttributeInfo) {
+                    sourceFile = constantPool.getUtf8(((SourceFileAttributeInfo) attribute).getSourceFileIndex());
+                    break LABEL;
+                }
+            }
+            int pound = fullName.indexOf('$', slash + 1);
+            if (slash != -1) {
+                sourceFile = fullName.substring(slash + 1, pound) + ".java";
+            } else {
+                sourceFile = fullName.substring(slash + 1) + ".java";
+            }
+            break;
+        }
+        if (slash != -1) {
+            sourcePath = fullName.substring(0, slash + 1) + sourceFile;
+        } else {
+            sourcePath = sourceFile;
+        }
     }
 
     @Override
@@ -274,6 +318,14 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
             throw new RuntimeException("no module attribute info");
         }
         return moduleAttribute;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getSourcePath() {
+        return sourcePath;
     }
 
     @NotNull
@@ -383,6 +435,22 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
     }
 
     @Override
+    public void remapConstant(@NotNull IntUnaryOperator remap) {
+        thisClass = remap.applyAsInt(thisClass);
+        superClass = remap.applyAsInt(superClass);
+        AttributeInfo.remapConstant(remap, superInterfaces);
+        for (MemberInfo memberInfo : fields) {
+            memberInfo.remapConstant(remap);
+        }
+        for (MemberInfo memberInfo : methods) {
+            memberInfo.remapConstant(remap);
+        }
+        for (AttributeInfo attribute : attributes) {
+            attribute.remapConstant(remap);
+        }
+    }
+
+    @Override
     public void accept(@NotNull AttributeInfo.Statistics statistics, @NotNull String prefix) {
         for (MemberInfo member : fields) {
             member.accept(statistics, prefix);
@@ -432,21 +500,5 @@ public class ClassFile implements ClassFileNode.Independent, BiConsumer<Attribut
 
     public void shuffleAttributeInfo() {
         sortAttributeInfo((new RandomContext()).shuffleComparator());
-    }
-
-    @Override
-    public void remapConstant(@NotNull IntUnaryOperator remap) {
-        thisClass = remap.applyAsInt(thisClass);
-        superClass = remap.applyAsInt(superClass);
-        AttributeInfo.remapConstant(remap, superInterfaces);
-        for (MemberInfo memberInfo : fields) {
-            memberInfo.remapConstant(remap);
-        }
-        for (MemberInfo memberInfo : methods) {
-            memberInfo.remapConstant(remap);
-        }
-        for (AttributeInfo attribute : attributes) {
-            attribute.remapConstant(remap);
-        }
     }
 }

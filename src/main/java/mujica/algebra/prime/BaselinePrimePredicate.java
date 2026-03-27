@@ -1,8 +1,8 @@
 package mujica.algebra.prime;
 
-/**
- * Created on 2025/10/4.
- */
+import mujica.reflect.modifier.CodeHistory;
+
+@CodeHistory(date = "2025/10/4")
 public class BaselinePrimePredicate extends PrimePredicate {
 
     public static final BaselinePrimePredicate INSTANCE = new BaselinePrimePredicate();

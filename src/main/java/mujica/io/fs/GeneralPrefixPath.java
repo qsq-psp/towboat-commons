@@ -1,6 +1,7 @@
 package mujica.io.fs;
 
 import mujica.ds.HealthAware;
+import mujica.ds.InvariantException;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,25 +18,23 @@ public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implemen
     private static final long serialVersionUID = 0x9e00691fa3997846L;
 
     @Nullable
-    protected final P parent;
+    protected final P parent; // the prefix
 
     @NotNull
     protected final String segment;
+
+    protected final int hash;
 
     protected GeneralPrefixPath(@Nullable P parent, @NotNull String segment) {
         super();
         this.parent = parent;
         this.segment = segment;
+        this.hash = parent == null ? segment.hashCode() : parent.hash * 79 + segment.hashCode();
     }
 
     @NotNull
     @Override
-    public abstract FileSystem getFileSystem();
-
-    @NotNull
-    protected String getRootString() {
-        return ":";
-    }
+    public abstract GeneralFileSystem getFileSystem();
 
     @NotNull
     protected String getSeparator() {
@@ -44,7 +43,18 @@ public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implemen
 
     @Override
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
-
+        // Floyd loop algorithm
+        GeneralPrefixPath<P> slow = this;
+        GeneralPrefixPath<P> fast = this.parent;
+        while (slow != fast) {
+            if (fast == null || fast.parent == null) {
+                return;
+            }
+            assert slow != null;
+            slow = slow.parent;
+            fast = fast.parent.parent;
+        }
+        consumer.accept(new InvariantException("loop"));
     }
 
     @Override
@@ -52,13 +62,21 @@ public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implemen
         if (parent != null) {
             return parent.isAbsolute();
         } else {
-            return segment.equals(getRootString());
+            return segment.equals(getFileSystem().getRootSymbol());
         }
     }
 
     @Override
     public Path getRoot() {
-        return null;
+        GeneralPrefixPath<P> node = this;
+        while (node.parent != null) {
+            node = node.parent;
+        }
+        if (node.segment.equals(getFileSystem().getRootSymbol())) {
+            return node;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -74,7 +92,13 @@ public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implemen
 
     @Override
     public int getNameCount() {
-        return 0;
+        int count = 0;
+        GeneralPrefixPath<P> node = this;
+        do {
+            node = node.parent;
+            count++;
+        } while (node != null);
+        return count;
     }
 
     @NotNull
@@ -85,7 +109,7 @@ public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implemen
 
     @NotNull
     @Override
-    public Path subpath(int beginIndex, int endIndex) {
+    public Path subpath(int startIndex, int endIndex) {
         return null;
     }
 
@@ -142,5 +166,53 @@ public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implemen
     @Override
     public int compareTo(Path other) {
         return 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return hash;
+    }
+
+    private boolean equals(@NotNull GeneralPrefixPath<?> a, @NotNull GeneralPrefixPath<?> b) {
+        if (a == b) {
+            return true;
+        }
+        while (true) {
+            if (!a.segment.equals(b.segment)) {
+                return false;
+            }
+            a = a.parent;
+            b = b.parent;
+            if (a == b) {
+                return true;
+            }
+            if (a == null || b == null) {
+                return false;
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof GeneralPrefixPath && equals(this, (GeneralPrefixPath<?>) obj);
+    }
+
+    protected void append(@NotNull String separator, @NotNull StringBuilder out) {
+        if (parent != null) {
+            parent.append(separator, out);
+            out.append(separator);
+        }
+        out.append(segment);
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        if (parent == null) {
+            return segment;
+        }
+        final StringBuilder sb = new StringBuilder();
+        append(getFileSystem().getSeparator(), sb);
+        return sb.toString();
     }
 }

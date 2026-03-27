@@ -231,11 +231,8 @@ class StackMapTableAttributeInfo extends AttributeInfo {
         }
     }
 
-    /**
-     * The base class is same_frame, frame_type 0-63
-     */
     @CodeHistory(date = "2025/9/14")
-    private static class StackMapFrame implements ClassFileNode.Independent {
+    private static class StackMapFrame implements ClassFileNode.Independent { // same_frame, frame_type 0-63
 
         private static final long serialVersionUID = 0x8ddbbd032dea1b4bL;
 
@@ -305,11 +302,8 @@ class StackMapTableAttributeInfo extends AttributeInfo {
         }
     }
 
-    /**
-     * This class is same_locals_1_stack_item_frame, frame_type 64-127
-     */
     @CodeHistory(date = "2025/9/14")
-    private static class SameLocalsOneStackItemFrame extends StackMapFrame {
+    private static class SameLocalsOneStackItemFrame extends StackMapFrame { // same_locals_1_stack_item_frame, frame_type 64-127
 
         private static final long serialVersionUID = 0x8d5692a62c622b6dL;
 
@@ -358,11 +352,8 @@ class StackMapTableAttributeInfo extends AttributeInfo {
         }
     }
 
-    /**
-     * This class is same_locals_1_stack_item_frame_extended, frame_type 247
-     */
     @CodeHistory(date = "2025/9/14")
-    private static class SameLocalsOneStackItemFrameExtended extends SameLocalsOneStackItemFrame {
+    private static class SameLocalsOneStackItemFrameExtended extends SameLocalsOneStackItemFrame { // same_locals_1_stack_item_frame_extended, frame_type 247
 
         private static final long serialVersionUID = 0x7eabe48e44c503daL;
 
@@ -410,12 +401,8 @@ class StackMapTableAttributeInfo extends AttributeInfo {
         }
     }
 
-    /**
-     * This class is same_locals_1_stack_item_frame, frame_type 248-250
-     * Or same_frame_extended, frame_type 251
-     */
     @CodeHistory(date = "2025/9/14")
-    private static class ChopFrameOrSameFrameExtended extends StackMapFrame {
+    private static class ChopFrameOrSameFrameExtended extends StackMapFrame { // same_locals_1_stack_item_frame, frame_type 248-250; or same_frame_extended, frame_type 251
 
         private static final long serialVersionUID = 0xf31c986fbe577603L;
 
@@ -462,11 +449,8 @@ class StackMapTableAttributeInfo extends AttributeInfo {
         }
     }
 
-    /**
-     * This class is append_frame, frame_type 252-254
-     */
     @CodeHistory(date = "2025/9/14")
-    private static class AppendFrame extends StackMapFrame {
+    private static class AppendFrame extends StackMapFrame { // append_frame, frame_type 252-254
 
         private static final long serialVersionUID = 0x4f4dffc2d3b0c00dL;
 
@@ -530,11 +514,8 @@ class StackMapTableAttributeInfo extends AttributeInfo {
         }
     }
 
-    /**
-     * This class is full_frame, frame_type 255
-     */
     @CodeHistory(date = "2025/9/14")
-    private static class FullFrame extends StackMapFrame {
+    private static class FullFrame extends StackMapFrame { // full_frame, frame_type 255
 
         private static final long serialVersionUID = 0x1cae38435f2a1568L;
 
@@ -546,6 +527,7 @@ class StackMapTableAttributeInfo extends AttributeInfo {
 
         FullFrame(int frameType) {
             super(frameType);
+            assert frameType == 255;
         }
 
         @Override

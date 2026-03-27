@@ -48,7 +48,7 @@ public class TerminalDisplayTest extends SwingManualTest {
     @NotNull
     private static TerminalStyle nextTerminalStyle() {
         final int length = COLORS.length;
-        int foregroundIndex = rc.nextMinInt(length, 2);
+        final int foregroundIndex = rc.nextMinInt(length, 2);
         int backgroundIndex = rc.nextMinInt(length, 3);
         if (foregroundIndex == backgroundIndex && foregroundIndex != 0) {
             backgroundIndex = (backgroundIndex + 1) % length;
@@ -82,7 +82,23 @@ public class TerminalDisplayTest extends SwingManualTest {
         }
     }
 
-    private JTextPane checkTerminalDisplayTextPane(@NotNull String[] words) {
+    @CodeHistory(date = "2026/3/25")
+    private static class StyledWord {
+
+        @NotNull
+        final TerminalStyle style = nextTerminalStyle();
+
+        @NotNull
+        final String word;
+
+        private StyledWord(@NotNull String word) {
+            super();
+            this.word = word;
+        }
+    }
+
+    @NotNull
+    private JTextPane confirmTerminalDisplayTextPane(@NotNull StyledWord[] styledWords) {
         final TerminalStyleTransition transition = new TerminalStyleTransition();
         transition.reset();
         final StringBuilder sb = new StringBuilder();
@@ -93,17 +109,15 @@ public class TerminalDisplayTest extends SwingManualTest {
         final Style parentStyle = document.addStyle("base", StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE));
         StyleConstants.setFontFamily(parentStyle, "Consolas");
         StyleConstants.setFontSize(parentStyle, 20);
-        for (String word : words) {
-            TerminalStyle terminalStyle = nextTerminalStyle();
-            System.out.println(terminalStyle);
+        for (StyledWord styledWord : styledWords) {
             transition.copy();
-            transition.setDst(terminalStyle);
+            transition.setDst(styledWord.style);
             transition.stringify(sb);
-            sb.append(word);
+            sb.append(styledWord.word);
             try {
-                Style childStyle = document.addStyle(word, parentStyle);
-                setSwingStyle(terminalStyle, childStyle);
-                document.insertString(document.getLength(), word, childStyle);
+                Style childStyle = document.addStyle(styledWord.word, parentStyle);
+                setSwingStyle(styledWord.style, childStyle);
+                document.insertString(document.getLength(), styledWord.word, childStyle);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
@@ -114,14 +128,19 @@ public class TerminalDisplayTest extends SwingManualTest {
         return textPane;
     }
 
-    private void checkTerminalDisplay(@NotNull String[] words) throws InterruptedException {
-        installContent(() -> checkTerminalDisplayTextPane(words));
+    private void confirmTerminalDisplay(@NotNull String[] words) throws InterruptedException {
+        final int length = words.length;
+        final StyledWord[] styledWords = new StyledWord[length];
+        for (int index = 0; index < length; index++) {
+            styledWords[index] = new StyledWord(words[index]);
+        }
+        installContent(() -> confirmTerminalDisplayTextPane(styledWords));
         passOrFail();
     }
 
     @Test
-    public void checkTerminalDisplay3() throws InterruptedException {
-        checkTerminalDisplay(new String[] {
+    public void confirmTerminalDisplay3() throws InterruptedException {
+        confirmTerminalDisplay(new String[] {
                 "Indicate",
                 "dependence",
                 "municipality"
@@ -129,8 +148,8 @@ public class TerminalDisplayTest extends SwingManualTest {
     }
 
     @Test
-    public void checkTerminalDisplay4() throws InterruptedException {
-        checkTerminalDisplay(new String[] {
+    public void confirmTerminalDisplay4() throws InterruptedException {
+        confirmTerminalDisplay(new String[] {
                 "Dispenser",
                 "sunbathing",
                 "antidote",
@@ -139,8 +158,8 @@ public class TerminalDisplayTest extends SwingManualTest {
     }
 
     @Test
-    public void checkTerminalDisplay5() throws InterruptedException {
-        checkTerminalDisplay(new String[] {
+    public void confirmTerminalDisplay5() throws InterruptedException {
+        confirmTerminalDisplay(new String[] {
                 "Stockholm",
                 "propulsion",
                 "obsolescence",
@@ -150,8 +169,8 @@ public class TerminalDisplayTest extends SwingManualTest {
     }
 
     @Test
-    public void checkTerminalDisplay6() throws InterruptedException {
-        checkTerminalDisplay(new String[] {
+    public void confirmTerminalDisplay6() throws InterruptedException {
+        confirmTerminalDisplay(new String[] {
                 "Representation",
                 "domestication",
                 "dialysis",

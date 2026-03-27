@@ -34,12 +34,12 @@ public class ByteSequenceDataView implements DataView {
     }
 
     @Override
-    public int bitLength() {
+    public int booleanLength() {
         return ClampedMath.INSTANCE.multiply(byteSequence.byteLength(), Byte.SIZE);
     }
 
     @Override
-    public boolean getBit(int index) {
+    public boolean getBoolean(int index) {
         guard.run();
         return false;
     }

@@ -7,9 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created on 2026/2/11.
- */
 @CodeHistory(date = "2026/2/11")
 public class ListHeapSort<T> extends SortingAlgorithm<List<T>> {
 

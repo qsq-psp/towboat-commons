@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * Created on 2026/2/23.
- */
 @CodeHistory(date = "2026/2/23")
 @FunctionalInterface
 public interface ListPivotSelector<T> {

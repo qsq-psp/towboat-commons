@@ -52,4 +52,14 @@ public class ComparableInet4Address extends ComparableInetAddress {
     int compareFrom6(@NotNull ComparableInet6Address that) {
         return 1;
     }
+
+    @Override
+    @NotNull
+    public String toString() {
+        if (address != null) {
+            return "ComparableInet4Address[address = " + address + ", value = " + value + "]";
+        } else {
+            return "ComparableInet4Address[value = " + value + "]";
+        }
+    }
 }

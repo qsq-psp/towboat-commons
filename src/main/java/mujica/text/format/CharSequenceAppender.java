@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.PrintStream;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -319,21 +318,37 @@ public class CharSequenceAppender {
         return left + "" + right;
     }
 
-    public static final List<Class<? extends CharSequence>> CHAR_SEQUENCE_CLASSES = List.of(
-            String.class,
-            StringBuilder.class,
-            StringBuffer.class,
-            CharBuffer.class
-    );
+    @CodeHistory(date = "2026/3/19")
+    public static final class Java {
+
+        @ReferencePage(title = "3.10.5. String Literals", href = "https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.5")
+        public static final CharSequenceAppender STRING_LITERAL = new QuoteAppender(
+                (new IntMapEscapeAppender()).escapeControlU().escapeFormatU().escapeNTR().escapeBackspace()
+                        .escapeFormFeed().escapeBackSlash().escapeQuotationMark(),
+                "\"");
+
+        @ReferencePage(title = "3.10.6. Text Blocks", href = "https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.10.6")
+        public static final CharSequenceAppender TEXT_BLOCK = (new QuoteAppender(
+                (new IntMapEscapeAppender()).escapeBackSlashU(),
+                "\"\"\"")).setCheckEnabled(true);
+
+        public static final CharSequenceAppender AUTO = new SelectiveAppender.LeastCharCount(new CharSequenceAppender[] {
+                STRING_LITERAL, TEXT_BLOCK
+        });
+
+        private Java() {
+            super();
+        }
+    }
 
     @CodeHistory(date = "2026/3/8")
     public static final class Json {
 
-        public static final CharSequenceAppender INSTANCE = new QuoteAppender(new SwitchEscapeAppender(
-                SwitchEscapeAppender.FLAG_BS | SwitchEscapeAppender.FLAG_HT | SwitchEscapeAppender.FLAG_LF | SwitchEscapeAppender.FLAG_FF
-                        | SwitchEscapeAppender.FLAG_CR | SwitchEscapeAppender.FLAG_QUOT | SwitchEscapeAppender.FLAG_SL
-                        | SwitchEscapeAppender.FLAG_BSL
-        ), "\"");
+        @ReferencePage(title = "Introducing JSON", href = "https://www.json.org/json-en.html")
+        public static final CharSequenceAppender INSTANCE = new QuoteAppender(
+                (new IntMapEscapeAppender()).escapeControlU().escapeFormatU().escapeNTR().escapeBackspace()
+                        .escapeFormFeed().escapeBackSlash().escapeQuotationMark(),
+                "\"");
 
         private Json() {
             super();
@@ -341,20 +356,21 @@ public class CharSequenceAppender {
     }
 
     @CodeHistory(date = "2026/3/11")
-    @ReferencePage(title = "String literals", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#string_literals")
     public static final class JavaScript {
 
+        @ReferencePage(title = "String literals", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#string_literals")
         public static final CharSequenceAppender APOSTROPHE = new QuoteAppender(
                 (new IntMapEscapeAppender()).escapeControlX().escapeNTR().escapeBackSlash().escapeApostrophe(),
                 "'");
 
+        @ReferencePage(title = "String literals", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#string_literals")
         public static final CharSequenceAppender QUOTATION_MARK = new QuoteAppender(
                 (new IntMapEscapeAppender()).escapeControlX().escapeNTR().escapeBackSlash().escapeQuotationMark(),
                 "\"");
 
         @ReferencePage(title = "Template literals", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals")
         public static final CharSequenceAppender GRAVE_ACCENT = new QuoteAppender(
-                (new IntMapEscapeAppender()).escapeControlX().escapeGraveAccent(),
+                (new IntMapEscapeAppender()).escapeControlX().escapeBackSlash().escapeGraveAccent(),
                 "`");
 
         public static final CharSequenceAppender AUTO = new SelectiveAppender.LeastCharCount(new CharSequenceAppender[] {
@@ -367,18 +383,19 @@ public class CharSequenceAppender {
 
     }
 
+    @CodeHistory(date = "2021/3/29", project = "webbiton", name = "PythonCodec")
     @CodeHistory(date = "2026/3/10")
     @ReferencePage(title = "String and Bytes literals", href = "https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals")
     public static final class Python {
 
         public static final CharSequenceAppender QUOTATION_MARK = new QuoteAppender(
-                (new IntMapEscapeAppender()).escapeControlX().escapeNTR().escapeBell().escapeBackspace().escapeVerticalTabulation().escapeFormFeed()
-                .escapeBackSlash().escapeQuotationMark(),
+                (new IntMapEscapeAppender()).escapeControlX().escapeFormatX().escapeNTR().escapeBell().escapeBackspace()
+                        .escapeVerticalTabulation().escapeFormFeed().escapeBackSlash().escapeQuotationMark(),
                 "\"");
 
         public static final CharSequenceAppender APOSTROPHE = new QuoteAppender(
-                (new IntMapEscapeAppender()).escapeControlX().escapeNTR().escapeBell().escapeBackspace().escapeVerticalTabulation().escapeFormFeed()
-                .escapeBackSlash().escapeApostrophe(),
+                (new IntMapEscapeAppender()).escapeControlX().escapeFormatX().escapeNTR().escapeBell().escapeBackspace()
+                        .escapeVerticalTabulation().escapeFormFeed().escapeBackSlash().escapeApostrophe(),
                 "'");
 
         public static final CharSequenceAppender TRIPLE_QUOTATION_MARK = (new QuoteAppender(
@@ -396,5 +413,38 @@ public class CharSequenceAppender {
         private Python() {
             super();
         }
+    }
+
+    @CodeHistory(date = "2026/3/21")
+    @ReferencePage(title = "11.1.1 String Literals", href = "https://dev.mysql.com/doc/refman/8.0/en/string-literals.html")
+    public static final class MySQL {
+
+        public static final CharSequenceAppender QUOTATION_MARK = new QuoteAppender(
+                (new IntMapEscapeAppender()).escapeZero().escapeNTR().escapeBackspace().escapeEndOfFile()
+                        .escapeBackSlash().escapeQuotationMark(),
+                "\"");
+
+        public static final CharSequenceAppender APOSTROPHE = new QuoteAppender(
+                (new IntMapEscapeAppender()).escapeZero().escapeNTR().escapeBackspace().escapeEndOfFile()
+                        .escapeBackSlash().escapeApostrophe(),
+                "'");
+
+        public static final CharSequenceAppender AUTO = new SelectiveAppender.LeastCharCount(new CharSequenceAppender[] {
+                QUOTATION_MARK, APOSTROPHE
+        });
+
+        public static final CharSequenceAppender PATTERN_QUOTATION_MARK = new QuoteAppender(
+                (new IntMapEscapeAppender()).escapeZero().escapeNTR().escapeBackspace().escapeEndOfFile()
+                        .escapeBackSlash().escapeQuotationMark().escapePercent().escapeUnderscore(),
+                "\"");
+
+        public static final CharSequenceAppender PATTERN_APOSTROPHE = new QuoteAppender(
+                (new IntMapEscapeAppender()).escapeZero().escapeNTR().escapeBackspace().escapeEndOfFile()
+                        .escapeBackSlash().escapeApostrophe().escapePercent().escapeUnderscore(),
+                "'");
+
+        public static final CharSequenceAppender PATTERN_AUTO = new SelectiveAppender.LeastCharCount(new CharSequenceAppender[] {
+                PATTERN_QUOTATION_MARK, PATTERN_APOSTROPHE
+        });
     }
 }

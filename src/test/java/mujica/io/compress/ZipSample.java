@@ -14,9 +14,9 @@ import java.io.InputStream;
 import java.util.Objects;
 import java.util.zip.CRC32;
 
-@CodeHistory(date = "2025/11/16", name = "SampleDescription") // can not extends Description because there is no public or protected constructor
+@CodeHistory(date = "2025/11/16", name = "SampleDescription")
 @CodeHistory(date = "2025/11/16")
-class ZipSample {
+class ZipSample { // can not extends org.junit.runner.Description because there is no public or protected constructor
 
     private static final int INDEX_CRC32 = 0;
     private static final int INDEX_COMPRESSED_SIZE = 1;

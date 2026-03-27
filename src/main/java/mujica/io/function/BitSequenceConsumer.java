@@ -1,6 +1,6 @@
 package mujica.io.function;
 
-import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_boolean.list.BooleanSequence;
 import mujica.reflect.function.BooleanConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
@@ -17,10 +17,10 @@ public interface BitSequenceConsumer extends BooleanConsumer {
     @Override
     void accept(boolean value);
 
-    default void accept(@NotNull BitSequence sequence) {
-        final int length = sequence.bitLength();
+    default void accept(@NotNull BooleanSequence sequence) {
+        final int length = sequence.booleanLength();
         for (int index = 0; index < length; index++) {
-            accept(sequence.getBit(index));
+            accept(sequence.getBoolean(index));
         }
     }
 

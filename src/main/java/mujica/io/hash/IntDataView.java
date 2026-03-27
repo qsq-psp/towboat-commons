@@ -33,12 +33,12 @@ public class IntDataView implements DataView {
     }
 
     @Override
-    public int bitLength() {
+    public int booleanLength() {
         return bitLength;
     }
 
     @Override
-    public boolean getBit(int index) {
+    public boolean getBoolean(int index) {
         if (index < 0 || index >= bitLength) {
             throw new IndexOutOfBoundsException();
         }

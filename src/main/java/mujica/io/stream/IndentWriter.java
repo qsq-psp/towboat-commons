@@ -10,12 +10,6 @@ import java.io.Writer;
 @CodeHistory(date = "2025/9/22")
 public class IndentWriter extends FilterWriter {
 
-    /**
-     * Create a new filtered writer.
-     *
-     * @param out a Writer object to provide the underlying stream.
-     * @throws NullPointerException if <code>out</code> is <code>null</code>
-     */
     public IndentWriter(@NotNull Writer out) {
         super(out);
     }

@@ -97,7 +97,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                 case STATE_NO_COMPRESSION:
                 case STATE_LAST_BLOCK_NO_COMPRESSION:
                     if (remainingLength > 0) {
-                        if (bitLength() != 0) {
+                        if (booleanLength() != 0) {
                             int data = readTrailingByte();
                             if (data == -1) {
                                 throw new EOFException();
@@ -154,7 +154,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                     return 1;
                 }
                 case STATE_TRAILING_BYTES:
-                    if (bitLength() != 0) {
+                    if (booleanLength() != 0) {
                         int data = readTrailingByte();
                         if (data == -1) {
                             return -1;

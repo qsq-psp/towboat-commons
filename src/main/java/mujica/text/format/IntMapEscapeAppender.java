@@ -155,6 +155,12 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
     }
 
     @NotNull
+    public IntMapEscapeAppender escapeZero() {
+        map.putInt(0x00, '0');
+        return this;
+    }
+
+    @NotNull
     public IntMapEscapeAppender escapeBell() {
         map.putInt(0x07, 'a');
         return this;
@@ -175,6 +181,12 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
     @NotNull
     public IntMapEscapeAppender escapeFormFeed() {
         map.putInt('\f', 'f');
+        return this;
+    }
+
+    @NotNull
+    public IntMapEscapeAppender escapeEndOfFile() {
+        map.putInt(0x1a, 'Z');
         return this;
     }
 
@@ -208,9 +220,49 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
         return this;
     }
 
+    @NotNull
+    public IntMapEscapeAppender escapeBackSlashX() {
+        map.putInt('\\', HEX2);
+        return this;
+    }
+
+    @NotNull
+    public IntMapEscapeAppender escapeBackSlashU() {
+        map.putInt('\\', HEX4);
+        return this;
+    }
+
+    @NotNull
+    public IntMapEscapeAppender escapePercent() {
+        map.putInt('%', '%');
+        return this;
+    }
+
+    @NotNull
+    public IntMapEscapeAppender escapeUnderscore() {
+        map.putInt('_', '_');
+        return this;
+    }
+
+    @Override
+    public boolean isIdentity(@NotNull CharSequence string) {
+        return isIdentity(string, 0, string.length());
+    }
+
     @Override
     public boolean isIdentity(@NotNull CharSequence string, int startIndex, int endIndex) {
-        return deltaCharCount(string, startIndex, endIndex) == 0;
+        for (int index = startIndex; index < endIndex; index++) {
+            int value = map.getInt(string.charAt(index));
+            if (value > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int deltaCharCount(@NotNull CharSequence string) {
+        return deltaCharCount(string, 0, string.length());
     }
 
     @Override
@@ -228,6 +280,11 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
             }
         }
         return count;
+    }
+
+    @Override
+    public int charEditDistance(@NotNull CharSequence string) {
+        return charEditDistance(string, 0, string.length());
     }
 
     @Override
@@ -253,16 +310,27 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
     }
 
     @Override
+    public void append(@NotNull CharSequence string, @NotNull StringBuilder out) {
+        append(string, 0, string.length(), out);
+    }
+
+    @Override
     public void append(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull StringBuilder out) {
         for (int index = startIndex; index < endIndex; index++) {
             char key = string.charAt(index);
             int value = map.getInt(key);
             if (value > 0) {
-                out.append('\\').append((char) value);
                 if (value == HEX2) {
+                    int position = out.length();
                     hex.acceptByte((byte) key, out);
+                    out.setCharAt(position, '\\');
                 } else if (value == HEX4) {
+                    int position = out.length();
                     hex.acceptCharacter(key, out);
+                    out.setCharAt(position, '\\');
+                    out.setCharAt(position + 1, 'u');
+                } else {
+                    out.append('\\').append((char) value);
                 }
             } else {
                 out.append(key);

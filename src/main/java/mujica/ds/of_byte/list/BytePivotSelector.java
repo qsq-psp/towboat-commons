@@ -4,9 +4,6 @@ import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2026/2/6.
- */
 @CodeHistory(date = "2026/2/6")
 public interface BytePivotSelector {
 

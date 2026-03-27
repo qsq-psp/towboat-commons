@@ -1,17 +1,16 @@
 package mujica.algebra.prime;
 
-/**
- * Created on 2025/3/20.
- */
+import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
+
+@CodeHistory(date = "2025/3/20")
+@ReferencePage(title = "算法学习笔记(48): 米勒-拉宾素性检验", href = "https://zhuanlan.zhihu.com/p/220203643")
 public class RabinMiller extends PrimePredicate {
 
     private static final int[] A = {
             2, 325, 9375, 28178, 450775, 9780504, 1795265022
     };
 
-    /**
-     * https://zhuanlan.zhihu.com/p/220203643
-     */
     @Override
     public boolean isPrime(int x) {
         if (x < 3) {

@@ -1,6 +1,7 @@
 package mujica.geometry.g2d;
 
 import mujica.geometry.Geometry;
+import mujica.io.stream.InputStreamUtil;
 import mujica.reflect.modifier.CodeHistory;
 import org.junit.Test;
 
@@ -11,10 +12,10 @@ import static org.junit.Assert.*;
 public class HalfPlaneTest extends G2dTest {
 
     @Test
-    public void checkSerializable() {
+    public void checkSerializable() throws Exception {
         for (int halfPlaneIndex = 0; halfPlaneIndex < HALF_PLANE; halfPlaneIndex++) {
             HalfPlane halfPlane = nextHalfPlane();
-            assertEquals(halfPlane, tryCopy(halfPlane));
+            assertEquals(halfPlane, InputStreamUtil.copy(halfPlane));
         }
     }
 

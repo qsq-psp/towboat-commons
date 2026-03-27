@@ -21,10 +21,7 @@ public class ConstantPool implements ClassFileNode.Independent, IntUnaryOperator
 
     private static final long serialVersionUID = 0x3e9ba0cfa68b44adL;
 
-    /**
-     * Occupy two slots
-     */
-    interface Large {}
+    interface Large {} // occupy two slots
 
     private final TruncateList<ConstantInfo> list = new TruncateList<>();
 

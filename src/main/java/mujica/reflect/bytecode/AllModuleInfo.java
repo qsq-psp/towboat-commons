@@ -38,7 +38,7 @@ public final class AllModuleInfo {
 
     private static void transform(@NotNull ClassLoader classLoader, @NotNull Path directory) {
         try {
-            if (!Files.exists(directory)) {
+            if (Files.notExists(directory)) {
                 Files.createDirectory(directory);
             }
             Object[] urls = classLoader.resources("module-info.class").toArray();

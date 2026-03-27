@@ -3,7 +3,6 @@ package mujica.geometry.g2d;
 import mujica.geometry.Geometry;
 import mujica.geometry.GeometryOperationResult;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Stable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -12,7 +11,6 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2018/7/9", name = "MtPointD2")
 @CodeHistory(date = "2022/6/5")
 @CodeHistory(date = "2025/3/2")
-@Stable(date = "2025/8/4")
 public class Point extends Geometry implements Comparable<Point> {
 
     private static final long serialVersionUID = 0x2ee216dfd4ff322aL;

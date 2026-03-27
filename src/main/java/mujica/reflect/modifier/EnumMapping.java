@@ -20,7 +20,6 @@ import java.util.function.UnaryOperator;
 @CodeHistory(date = "2022/4/1", project = "infrastructure")
 @CodeHistory(date = "2022/6/3", project = "Ultramarine")
 @CodeHistory(date = "2025/3/12")
-@Stable(date = "2025/7/25")
 public class EnumMapping implements Serializable {
 
     private static final long serialVersionUID = 0xf10dfa3a9fb3e15bL;

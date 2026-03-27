@@ -3,11 +3,10 @@ package mujica.text.format;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2026/1/9.
- */
 @CodeHistory(date = "2026/1/9")
 public class CharReversedCharSequence extends FilteredCharSequence {
+
+    private static final long serialVersionUID = 0x4625BF04D4D94AA8L;
 
     public CharReversedCharSequence(@NotNull CharSequence original) {
         super(original);

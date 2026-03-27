@@ -1,7 +1,7 @@
 package mujica.reflect.basic;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Stable;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +12,6 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2022/9/22", project = "Ultramarine", name = "ClassUtility")
 @CodeHistory(date = "2025/2/17", project = "Ultramarine", name = "ClassTravel")
 @CodeHistory(date = "2025/3/6")
-@Stable(date = "2025/8/6")
 public final class ClassUtil {
 
     public static String removeCommonPrefix(@NotNull Class<?> targetClass, @NotNull Class<?> referenceClass) {

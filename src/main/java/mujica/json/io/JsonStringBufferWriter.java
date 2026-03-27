@@ -3,22 +3,24 @@ package mujica.json.io;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.FastString;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.text.format.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-@CodeHistory(date = "2026/1/7")
-public class StringBufferJsonWriter extends StringJsonWriter {
+@CodeHistory(date = "2026/1/7", name = "StringBufferJsonWriter")
+@CodeHistory(date = "2026/3/24")
+public class JsonStringBufferWriter extends JsonStringWriter {
 
     @NotNull
     protected final StringBuffer sb;
 
-    public StringBufferJsonWriter(@NotNull StringBuffer sb) {
+    public JsonStringBufferWriter(@NotNull StringBuffer sb) {
         super();
         this.sb = sb;
     }
 
-    public StringBufferJsonWriter() {
+    public JsonStringBufferWriter() {
         this(new StringBuffer());
     }
 
@@ -139,7 +141,7 @@ public class StringBufferJsonWriter extends StringJsonWriter {
     @Override
     public void stringKey(@NotNull String key) {
         anyKey();
-        // Quote.JSON.append(key, sb);
+        CharSequenceAppender.Json.INSTANCE.append(key, sb);
         sb.append(':');
     }
 
@@ -194,7 +196,7 @@ public class StringBufferJsonWriter extends StringJsonWriter {
     @Override
     public void stringValue(@NotNull CharSequence value) {
         anyValue();
-        // Quote.JSON.append(value, sb);
+        CharSequenceAppender.Json.INSTANCE.append(value, sb);
     }
 
     @Override

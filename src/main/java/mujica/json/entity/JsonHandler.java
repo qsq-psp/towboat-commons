@@ -1,8 +1,11 @@
 package mujica.json.entity;
 
+import io.netty.buffer.ByteBuf;
+import mujica.ds.generic.set.CollectionConstant;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.format.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,14 +48,14 @@ public abstract class JsonHandler {
         }
     }
 
-    public void objectValue(@NotNull Object value) {
+    public void objectValue(@Nullable Object value) {
         if (LOGGER.isWarnEnabled()) {
-            LOGGER.warn("objectValue({})", value.getClass().getName());
+            LOGGER.warn("objectValue({})", value);
         }
     }
 
     public void nullValue() {
-        objectValue(JsonConstant.NULL);
+        objectValue(null);
     }
 
     public void booleanValue(boolean value) {
@@ -89,6 +92,18 @@ public abstract class JsonHandler {
 
     public void stringValue(@NotNull FastString value) {
         objectValue(value);
+    }
+
+    public void skipped() {
+        objectValue(CollectionConstant.EMPTY);
+    }
+
+    public void skipped(@NotNull ByteBuf value) {
+        try {
+            objectValue(value);
+        } finally {
+            value.release();
+        }
     }
 
     public void emptyArrayValue() {

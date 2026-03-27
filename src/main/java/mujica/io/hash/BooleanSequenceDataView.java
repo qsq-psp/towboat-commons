@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_boolean.list.BooleanSequence;
 import mujica.io.codec.Base16Case;
 import mujica.algebra.discrete.ClampedMath;
 import mujica.reflect.modifier.CodeHistory;
@@ -9,10 +9,10 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteOrder;
 
 @CodeHistory(date = "2025/4/15")
-public class BitSequenceDataView implements DataView {
+public class BooleanSequenceDataView implements DataView {
 
     @NotNull
-    private final BitSequence bitSequence;
+    private final BooleanSequence booleanSequence;
 
     @NotNull
     private final ByteOrder byteOrder;
@@ -20,34 +20,34 @@ public class BitSequenceDataView implements DataView {
     @NotNull
     private final Runnable guard;
 
-    public BitSequenceDataView(@NotNull BitSequence bitSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
+    public BooleanSequenceDataView(@NotNull BooleanSequence booleanSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
         super();
-        this.bitSequence = bitSequence;
+        this.booleanSequence = booleanSequence;
         this.byteOrder = byteOrder;
         this.guard = guard;
     }
 
-    public BitSequenceDataView(@NotNull BitSequence bitSequence, @NotNull ByteOrder byteOrder) {
-        this(bitSequence, byteOrder, NOP_GUARD);
+    public BooleanSequenceDataView(@NotNull BooleanSequence booleanSequence, @NotNull ByteOrder byteOrder) {
+        this(booleanSequence, byteOrder, NOP_GUARD);
     }
 
     @Override
-    public int bitLength() {
+    public int booleanLength() {
         guard.run();
-        return bitSequence.bitLength();
+        return booleanSequence.booleanLength();
     }
 
     @Override
-    public boolean getBit(int index) {
+    public boolean getBoolean(int index) {
         guard.run();
-        return bitSequence.getBit(index);
+        return booleanSequence.getBoolean(index);
     }
 
     @Override
     public boolean getBitExact() {
         guard.run();
-        if (bitSequence.bitLength() == 1) {
-            return bitSequence.getBit(0);
+        if (booleanSequence.booleanLength() == 1) {
+            return booleanSequence.getBoolean(0);
         } else {
             throw new RuntimeException();
         }
@@ -56,20 +56,20 @@ public class BitSequenceDataView implements DataView {
     @Override
     public int byteLength() {
         guard.run();
-        return (bitSequence.bitLength() + (Byte.SIZE - 1)) >>> 3;
+        return (booleanSequence.booleanLength() + (Byte.SIZE - 1)) >>> 3;
     }
 
     @Override
     public byte getByte(int index) {
         guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Byte.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             int value = 0;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Byte.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1;
                     }
                     if (index == bitLength) {
@@ -78,7 +78,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Byte.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1 << shift;
                     }
                     if (index == bitLength) {
@@ -95,7 +95,7 @@ public class BitSequenceDataView implements DataView {
     @Override
     public byte getByteAll() {
         guard.run();
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (bitLength > Byte.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -106,7 +106,7 @@ public class BitSequenceDataView implements DataView {
                     break;
                 }
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1;
                 }
             }
@@ -115,7 +115,7 @@ public class BitSequenceDataView implements DataView {
                 if (shift == bitLength) {
                     break;
                 }
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1 << shift;
                 }
             }
@@ -126,20 +126,20 @@ public class BitSequenceDataView implements DataView {
     @Override
     public byte getByteExact() {
         guard.run();
-        if (bitSequence.bitLength() != Byte.SIZE) {
+        if (booleanSequence.booleanLength() != Byte.SIZE) {
             throw new DataSizeMismatchException();
         }
         int value = 0;
         if (byteOrder == ByteOrder.BIG_ENDIAN) {
             for (int shift = 0; shift < Byte.SIZE; shift++) {
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1;
                 }
             }
         } else {
             for (int shift = 0; shift < Byte.SIZE; shift++) {
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1 << shift;
                 }
             }
@@ -151,13 +151,13 @@ public class BitSequenceDataView implements DataView {
     public short getUnsignedByte(int index) {
         guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Byte.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             int value = 0;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Byte.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1;
                     }
                     if (index == bitLength) {
@@ -166,7 +166,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Byte.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1 << shift;
                     }
                     if (index == bitLength) {
@@ -183,7 +183,7 @@ public class BitSequenceDataView implements DataView {
     @Override
     public short getUnsignedByteAll() {
         guard.run();
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (bitLength > Byte.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -194,7 +194,7 @@ public class BitSequenceDataView implements DataView {
                     break;
                 }
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1;
                 }
             }
@@ -203,7 +203,7 @@ public class BitSequenceDataView implements DataView {
                 if (shift == bitLength) {
                     break;
                 }
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1 << shift;
                 }
             }
@@ -214,20 +214,20 @@ public class BitSequenceDataView implements DataView {
     @Override
     public short getUnsignedByteExact() {
         guard.run();
-        if (bitSequence.bitLength() != Byte.SIZE) {
+        if (booleanSequence.booleanLength() != Byte.SIZE) {
             throw new DataSizeMismatchException();
         }
         int value = 0;
         if (byteOrder == ByteOrder.BIG_ENDIAN) {
             for (int shift = 0; shift < Byte.SIZE; shift++) {
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1;
                 }
             }
         } else {
             for (int shift = 0; shift < Byte.SIZE; shift++) {
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1 << shift;
                 }
             }
@@ -238,20 +238,20 @@ public class BitSequenceDataView implements DataView {
     @Override
     public int shortLength() {
         guard.run();
-        return (bitSequence.bitLength() + (Short.SIZE - 1)) >>> 4;
+        return (booleanSequence.booleanLength() + (Short.SIZE - 1)) >>> 4;
     }
 
     @Override
     public short getShort(int index) {
         guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Short.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             int value = 0;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Short.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1;
                     }
                     if (index == bitLength) {
@@ -260,7 +260,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Short.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1 << shift;
                     }
                     if (index == bitLength) {
@@ -278,13 +278,13 @@ public class BitSequenceDataView implements DataView {
     public short shortAt(int byteOffset) {
         guard.run();
         int index = ClampedMath.INSTANCE.multiply(byteOffset, Byte.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             int value = 0;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Short.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1;
                     }
                     if (index == bitLength) {
@@ -293,7 +293,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Short.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1 << shift;
                     }
                     if (index == bitLength) {
@@ -310,7 +310,7 @@ public class BitSequenceDataView implements DataView {
     @Override
     public short getShortAll() {
         guard.run();
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (bitLength > Short.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -321,7 +321,7 @@ public class BitSequenceDataView implements DataView {
                     break;
                 }
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1;
                 }
             }
@@ -330,7 +330,7 @@ public class BitSequenceDataView implements DataView {
                 if (shift == bitLength) {
                     break;
                 }
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1 << shift;
                 }
             }
@@ -341,20 +341,20 @@ public class BitSequenceDataView implements DataView {
     @Override
     public short getShortExact() {
         guard.run();
-        if (bitSequence.bitLength() != Short.SIZE) {
+        if (booleanSequence.booleanLength() != Short.SIZE) {
             throw new DataSizeMismatchException();
         }
         int value = 0;
         if (byteOrder == ByteOrder.BIG_ENDIAN) {
             for (int shift = 0; shift < Short.SIZE; shift++) {
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1;
                 }
             }
         } else {
             for (int shift = 0; shift < Short.SIZE; shift++) {
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1 << shift;
                 }
             }
@@ -366,13 +366,13 @@ public class BitSequenceDataView implements DataView {
     public int getUnsignedShort(int index) {
         guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Short.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             int value = 0;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Short.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1;
                     }
                     if (index == bitLength) {
@@ -381,7 +381,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Short.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1 << shift;
                     }
                     if (index == bitLength) {
@@ -399,13 +399,13 @@ public class BitSequenceDataView implements DataView {
     public int unsignedShortAt(int byteOffset) {
         guard.run();
         int index = ClampedMath.INSTANCE.multiply(byteOffset, Byte.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             int value = 0;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Short.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1;
                     }
                     if (index == bitLength) {
@@ -414,7 +414,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Short.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1 << shift;
                     }
                     if (index == bitLength) {
@@ -431,7 +431,7 @@ public class BitSequenceDataView implements DataView {
     @Override
     public int getUnsignedShortAll() {
         guard.run();
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (bitLength > Short.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -442,7 +442,7 @@ public class BitSequenceDataView implements DataView {
                     break;
                 }
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1;
                 }
             }
@@ -451,7 +451,7 @@ public class BitSequenceDataView implements DataView {
                 if (shift == bitLength) {
                     break;
                 }
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1 << shift;
                 }
             }
@@ -462,20 +462,20 @@ public class BitSequenceDataView implements DataView {
     @Override
     public int getUnsignedShortExact() {
         guard.run();
-        if (bitSequence.bitLength() != Short.SIZE) {
+        if (booleanSequence.booleanLength() != Short.SIZE) {
             throw new DataSizeMismatchException();
         }
         int value = 0;
         if (byteOrder == ByteOrder.BIG_ENDIAN) {
             for (int shift = 0; shift < Short.SIZE; shift++) {
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1;
                 }
             }
         } else {
             for (int shift = 0; shift < Short.SIZE; shift++) {
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1 << shift;
                 }
             }
@@ -486,20 +486,20 @@ public class BitSequenceDataView implements DataView {
     @Override
     public int intLength() {
         guard.run();
-        return (bitSequence.bitLength() + (Integer.SIZE - 1)) >>> 5;
+        return (booleanSequence.booleanLength() + (Integer.SIZE - 1)) >>> 5;
     }
 
     @Override
     public int getInt(int index) {
         guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Integer.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             int value = 0;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Integer.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1;
                     }
                     if (index == bitLength) {
@@ -508,7 +508,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Integer.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1 << shift;
                     }
                     if (index == bitLength) {
@@ -526,13 +526,13 @@ public class BitSequenceDataView implements DataView {
     public int intAt(int byteOffset) {
         guard.run();
         int index = ClampedMath.INSTANCE.multiply(byteOffset, Byte.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             int value = 0;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Integer.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1;
                     }
                     if (index == bitLength) {
@@ -541,7 +541,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Integer.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1 << shift;
                     }
                     if (index == bitLength) {
@@ -558,7 +558,7 @@ public class BitSequenceDataView implements DataView {
     @Override
     public int getIntAll() {
         guard.run();
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (bitLength > Integer.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -569,7 +569,7 @@ public class BitSequenceDataView implements DataView {
                     break;
                 }
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1;
                 }
             }
@@ -578,7 +578,7 @@ public class BitSequenceDataView implements DataView {
                 if (shift == bitLength) {
                     break;
                 }
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1 << shift;
                 }
             }
@@ -589,20 +589,20 @@ public class BitSequenceDataView implements DataView {
     @Override
     public int getIntExact() {
         guard.run();
-        if (bitSequence.bitLength() != Integer.SIZE) {
+        if (booleanSequence.booleanLength() != Integer.SIZE) {
             throw new DataSizeMismatchException();
         }
         int value = 0;
         if (byteOrder == ByteOrder.BIG_ENDIAN) {
             for (int shift = 0; shift < Integer.SIZE; shift++) {
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1;
                 }
             }
         } else {
             for (int shift = 0; shift < Integer.SIZE; shift++) {
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1 << shift;
                 }
             }
@@ -614,13 +614,13 @@ public class BitSequenceDataView implements DataView {
     public long getUnsignedInt(int index) {
         guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Integer.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             long value = 0L;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Integer.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1L;
                     }
                     if (index == bitLength) {
@@ -629,7 +629,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Integer.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1L << shift;
                     }
                     if (index == bitLength) {
@@ -647,13 +647,13 @@ public class BitSequenceDataView implements DataView {
     public long unsignedIntAt(int byteOffset) {
         guard.run();
         int index = ClampedMath.INSTANCE.multiply(byteOffset, Byte.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             long value = 0L;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Integer.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1L;
                     }
                     if (index == bitLength) {
@@ -662,7 +662,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Integer.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1L << shift;
                     }
                     if (index == bitLength) {
@@ -679,7 +679,7 @@ public class BitSequenceDataView implements DataView {
     @Override
     public long getUnsignedIntAll() {
         guard.run();
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (bitLength > Integer.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -690,7 +690,7 @@ public class BitSequenceDataView implements DataView {
                     break;
                 }
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1L;
                 }
             }
@@ -699,7 +699,7 @@ public class BitSequenceDataView implements DataView {
                 if (shift == bitLength) {
                     break;
                 }
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1L << shift;
                 }
             }
@@ -710,20 +710,20 @@ public class BitSequenceDataView implements DataView {
     @Override
     public long getUnsignedIntExact() {
         guard.run();
-        if (bitSequence.bitLength() != Integer.SIZE) {
+        if (booleanSequence.booleanLength() != Integer.SIZE) {
             throw new DataSizeMismatchException();
         }
         long value = 0L;
         if (byteOrder == ByteOrder.BIG_ENDIAN) {
             for (int shift = 0; shift < Integer.SIZE; shift++) {
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1L;
                 }
             }
         } else {
             for (int shift = 0; shift < Integer.SIZE; shift++) {
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1L << shift;
                 }
             }
@@ -734,20 +734,20 @@ public class BitSequenceDataView implements DataView {
     @Override
     public int longLength() {
         guard.run();
-        return (bitSequence.bitLength() + (Long.SIZE - 1)) >>> 6;
+        return (booleanSequence.booleanLength() + (Long.SIZE - 1)) >>> 6;
     }
 
     @Override
     public long getLong(int index) {
         guard.run();
         index = ClampedMath.INSTANCE.multiply(index, Long.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             long value = 0L;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Long.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1L;
                     }
                     if (index == bitLength) {
@@ -756,7 +756,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Long.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1L << shift;
                     }
                     if (index == bitLength) {
@@ -774,13 +774,13 @@ public class BitSequenceDataView implements DataView {
     public long longAt(int byteOffset) {
         guard.run();
         int index = ClampedMath.INSTANCE.multiply(byteOffset, Byte.SIZE); // integer overflow exception reserved
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (index < bitLength) {
             long value = 0L;
             if (byteOrder == ByteOrder.BIG_ENDIAN) {
                 for (int shift = 0; shift < Long.SIZE; shift++) {
                     value <<= 1;
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1L;
                     }
                     if (index == bitLength) {
@@ -789,7 +789,7 @@ public class BitSequenceDataView implements DataView {
                 }
             } else {
                 for (int shift = 0; shift < Long.SIZE; shift++) {
-                    if (bitSequence.getBit(index++)) {
+                    if (booleanSequence.getBoolean(index++)) {
                         value |= 1L << shift;
                     }
                     if (index == bitLength) {
@@ -806,7 +806,7 @@ public class BitSequenceDataView implements DataView {
     @Override
     public long getLongAll() {
         guard.run();
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (bitLength > Long.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -814,13 +814,13 @@ public class BitSequenceDataView implements DataView {
         if (byteOrder == ByteOrder.BIG_ENDIAN) {
             for (int shift = 0; shift < bitLength; shift++) {
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1L;
                 }
             }
         } else {
             for (int shift = 0; shift < bitLength; shift++) {
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1L << shift;
                 }
             }
@@ -831,7 +831,7 @@ public class BitSequenceDataView implements DataView {
     @Override
     public long getLongExact() {
         guard.run();
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         if (bitLength != Long.SIZE) {
             throw new DataSizeMismatchException();
         }
@@ -839,13 +839,13 @@ public class BitSequenceDataView implements DataView {
         if (byteOrder == ByteOrder.BIG_ENDIAN) {
             for (int shift = 0; shift < bitLength; shift++) {
                 value <<= 1;
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1L;
                 }
             }
         } else {
             for (int shift = 0; shift < bitLength; shift++) {
-                if (bitSequence.getBit(shift)) {
+                if (booleanSequence.getBoolean(shift)) {
                     value |= 1L << shift;
                 }
             }
@@ -857,10 +857,10 @@ public class BitSequenceDataView implements DataView {
     @Override
     public String toBinaryString() {
         guard.run();
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         final char[] charArray = new char[bitLength];
         for (int index = 0; index < bitLength; index++) {
-            charArray[index] = bitSequence.getBit(index) ? '1' : '0';
+            charArray[index] = booleanSequence.getBoolean(index) ? '1' : '0';
         }
         return new String(charArray);
     }
@@ -869,22 +869,22 @@ public class BitSequenceDataView implements DataView {
     @Override
     public String toHexString(boolean upperCase) {
         guard.run();
-        final int bitLength = bitSequence.bitLength();
+        final int bitLength = booleanSequence.booleanLength();
         int bitIndex;
         final char[] charArray = new char[(bitLength + 0x3) >>> 2];
         int charIndex = 0;
         for (bitIndex = 0; bitIndex < bitLength; bitIndex += 0x4) {
             int digit = 0;
-            if (bitSequence.getBit(bitIndex)) {
+            if (booleanSequence.getBoolean(bitIndex)) {
                 digit |= 0x1;
             }
-            if (bitSequence.getBit(bitIndex + 1)) {
+            if (booleanSequence.getBoolean(bitIndex + 1)) {
                 digit |= 0x2;
             }
-            if (bitSequence.getBit(bitIndex + 2)) {
+            if (booleanSequence.getBoolean(bitIndex + 2)) {
                 digit |= 0x4;
             }
-            if (bitSequence.getBit(bitIndex + 3)) {
+            if (booleanSequence.getBoolean(bitIndex + 3)) {
                 digit |= 0x8;
             }
             if (digit < 0xa) {
@@ -898,16 +898,16 @@ public class BitSequenceDataView implements DataView {
         }
         if (charIndex < charArray.length) {
             int digit = 0;
-            if (bitIndex < bitLength && bitSequence.getBit(bitIndex)) {
+            if (bitIndex < bitLength && booleanSequence.getBoolean(bitIndex)) {
                 digit |= 0x1;
             }
-            if (bitIndex < bitLength && bitSequence.getBit(bitIndex + 1)) {
+            if (bitIndex < bitLength && booleanSequence.getBoolean(bitIndex + 1)) {
                 digit |= 0x2;
             }
-            if (bitIndex < bitLength && bitSequence.getBit(bitIndex + 2)) {
+            if (bitIndex < bitLength && booleanSequence.getBoolean(bitIndex + 2)) {
                 digit |= 0x4;
             }
-            if (bitIndex < bitLength && bitSequence.getBit(bitIndex + 3)) {
+            if (bitIndex < bitLength && booleanSequence.getBoolean(bitIndex + 3)) {
                 digit |= 0x8;
             }
             if (digit < 0xa) {

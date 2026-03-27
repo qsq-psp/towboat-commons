@@ -3,11 +3,13 @@ package mujica.io.fs;
 import mujica.ds.HealthAware;
 import mujica.ds.InvariantException;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.text.format.TowboatCharSequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.function.Consumer;
 
@@ -27,125 +29,166 @@ public abstract class GeneralStringPath implements HealthAware, Path, Serializab
 
     @NotNull
     @Override
-    public abstract FileSystem getFileSystem();
+    public abstract GeneralFileSystem getFileSystem();
 
-    @NotNull
-    protected String getSeparator() {
-        return getFileSystem().getSeparator();
-    }
-
-    @NotNull
-    protected String getCurrentDirectorySymbol() {
-        return ".";
-    }
-
-    @NotNull
-    protected String getParentDirectorySymbol() {
-        return "..";
-    }
-
-    protected void checkSegmentHealth(int start, int end) {
-        if (start == end) {
+    protected void checkSegmentHealth(int currentSeparatorIndex, int nextSeparatorIndex) {
+        if (currentSeparatorIndex == nextSeparatorIndex) {
             throw new InvariantException("empty segment");
         }
     }
 
     @Override
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
-        final int len = string.length();
-        final String sep = getSeparator();
-        if (sep.isEmpty()) {
+        final String separator = getFileSystem().getSeparator();
+        if (separator.isEmpty()) {
             throw new InvariantException("empty separator");
         }
-        int start = 0;
+        int currentSeparatorIndex, nextSeparatorIndex;
+        if (string.startsWith(separator)) {
+            currentSeparatorIndex = separator.length(); // the initial separator marking absolute is not counted
+        } else {
+            currentSeparatorIndex = 0;
+        }
         while (true) {
-            int end = string.indexOf(sep, start);
-            if (end == -1) {
+            nextSeparatorIndex = string.indexOf(separator, currentSeparatorIndex);
+            if (nextSeparatorIndex == -1) {
                 break;
             }
-            if (end != 0) {
-                checkSegmentHealth(start, end);
-            }
-            start = end + sep.length();
-            if (start == len) {
-                throw new InvariantException("separator at end");
-            }
+            checkSegmentHealth(currentSeparatorIndex, nextSeparatorIndex);
+            currentSeparatorIndex = nextSeparatorIndex + separator.length();
         }
+        // string == "" or string == separator is not permitted
+        checkSegmentHealth(currentSeparatorIndex, string.length());
+        // string ending with separator is not permitted
     }
 
     @Override
     public boolean isAbsolute() {
-        return string.startsWith(getSeparator());
+        return string.startsWith(getFileSystem().getSeparator());
     }
 
     @Override
     public Path getRoot() {
-        return getFileSystem().getPath(getSeparator());
+        return getFileSystem().getPath(getFileSystem().getSeparator());
     }
 
     @Override
     public Path getFileName() {
-        final String sep = getSeparator();
-        final int div = string.lastIndexOf(sep);
-        if (div <= 0) {
+        final String separator = getFileSystem().getSeparator();
+        final int separatorIndex = string.lastIndexOf(separator);
+        if (separatorIndex <= 0) { // separatorIndex == -1 for absolute and separatorIndex == 0 for relative
             return this;
         } else {
-            return getFileSystem().getPath(string.substring(div + sep.length()));
+            return getFileSystem().getPath(string.substring(separatorIndex + separator.length()));
         }
     }
 
     @Nullable
     @Override
     public Path getParent() {
-        final int div = string.lastIndexOf(getSeparator());
-        if (div <= 0) {
+        final int separatorIndex = string.lastIndexOf(getFileSystem().getSeparator());
+        if (separatorIndex <= 0) { // separatorIndex == -1 for absolute and separatorIndex == 0 for relative
             return null;
         } else {
-            return getFileSystem().getPath(string.substring(0, div));
+            return getFileSystem().getPath(string.substring(0, separatorIndex));
         }
     }
 
     @Override
     public int getNameCount() {
-        final String sep = getSeparator();
-        int count = 0;
-        int start = 0;
-        while (true) {
-            int end = string.indexOf(sep, start);
-            if (end == -1) {
-                return count;
-            }
-            if (end != 0) {
-                count++;
-            }
-            start = end + sep.length();
+        final String separator = getFileSystem().getSeparator();
+        int currentSeparatorIndex, nextSeparatorIndex;
+        if (string.startsWith(separator)) {
+            currentSeparatorIndex = separator.length(); // the initial separator marking absolute is not counted
+        } else {
+            currentSeparatorIndex = 0;
         }
+        int count = 1; // string == "" or string == separator is not permitted
+        while (true) {
+            nextSeparatorIndex = string.indexOf(separator, currentSeparatorIndex);
+            if (nextSeparatorIndex == -1) {
+                break;
+            }
+            currentSeparatorIndex = nextSeparatorIndex + separator.length();
+            count++;
+        }
+        return count;
     }
 
     @NotNull
     @Override
-    public Path getName(int index) {
-        final String sep = getSeparator();
-        int start = 0;
+    public Path getName(int segmentIndex) {
+        if (segmentIndex < 0) {
+            throw new IllegalArgumentException(); // not IndexOutOfBoundsException
+        }
+        final String separator = getFileSystem().getSeparator();
+        int currentSeparatorIndex, nextSeparatorIndex;
+        if (string.startsWith(separator)) {
+            currentSeparatorIndex = separator.length(); // the initial separator marking absolute is not counted
+        } else {
+            currentSeparatorIndex = 0;
+        }
+        while (segmentIndex-- > 0) {
+            nextSeparatorIndex = string.indexOf(separator, currentSeparatorIndex);
+            if (nextSeparatorIndex == -1) {
+                throw new IllegalArgumentException(); // not IndexOutOfBoundsException
+            }
+            currentSeparatorIndex = nextSeparatorIndex + separator.length();
+        }
+        nextSeparatorIndex = string.indexOf(separator, currentSeparatorIndex);
+        if (nextSeparatorIndex == -1) {
+            nextSeparatorIndex = string.length();
+        }
+        return getFileSystem().getPath(string.substring(currentSeparatorIndex, nextSeparatorIndex));
+    }
+
+    @NotNull
+    @Override
+    public Path subpath(int startSegmentIndex, int endSegmentIndex) {
+        if (!(0 <= startSegmentIndex && startSegmentIndex <= endSegmentIndex)) {
+            throw new IllegalArgumentException(); // not IndexOutOfBoundsException
+        }
+        if (startSegmentIndex == endSegmentIndex) {
+            if (!(endSegmentIndex < getNameCount())) {
+                throw new IllegalArgumentException(); // not IndexOutOfBoundsException
+            }
+            String currentDirectorySymbol = getFileSystem().getCurrentDirectorySymbol();
+            if (string.equals(currentDirectorySymbol)) {
+                return this;
+            } else {
+                return getFileSystem().getPath(currentDirectorySymbol);
+            }
+        }
+        int startIndex = -1;
+        final String separator = getFileSystem().getSeparator();
+        int currentSeparatorIndex, nextSeparatorIndex;
+        if (startSegmentIndex == 0) {
+            startIndex = 0;
+        }
+        if (string.startsWith(separator)) {
+            currentSeparatorIndex = separator.length(); // the initial separator marking absolute is not counted
+        } else {
+            currentSeparatorIndex = 0;
+        }
+        int index = 1; // string == "" or string == separator is not permitted
         while (true) {
-            int end = string.indexOf(sep, start);
-            if (end != 0 && index-- == 0) {
-                if (end == -1) {
-                    end = string.length();
+            nextSeparatorIndex = string.indexOf(separator, currentSeparatorIndex);
+            if (nextSeparatorIndex == -1) {
+                if (endSegmentIndex == index) {
+                    return getFileSystem().getPath(string.substring(startIndex));
                 }
-                return getFileSystem().getPath(string.substring(start, end));
+                break;
             }
-            if (end == -1) {
-                throw new IndexOutOfBoundsException();
+            if (endSegmentIndex == index) {
+                return getFileSystem().getPath(string.substring(startIndex, nextSeparatorIndex));
             }
-            start = end + sep.length();
+            currentSeparatorIndex = nextSeparatorIndex + separator.length();
+            if (startSegmentIndex == index) {
+                startIndex = currentSeparatorIndex;
+            } else
+            index++;
         }
-    }
-
-    @NotNull
-    @Override
-    public Path subpath(int beginIndex, int endIndex) {
-        return null;
+        throw new IllegalArgumentException(); // not IndexOutOfBoundsException
     }
 
     @Override
@@ -166,29 +209,66 @@ public abstract class GeneralStringPath implements HealthAware, Path, Serializab
     @NotNull
     @Override
     public Path resolve(@NotNull Path other) {
-        return null;
+        final String currentDirectorySymbol = getFileSystem().getCurrentDirectorySymbol();
+        if (other.isAbsolute() || this.string.equals(currentDirectorySymbol)) {
+            return other;
+        }
+        if (this.getFileSystem() != other.getFileSystem()) {
+            throw new IllegalArgumentException();
+        }
+        final String otherString = other.toString();
+        if (otherString.equals(currentDirectorySymbol)) {
+            return this;
+        }
+        return getFileSystem().getPath(this.string, otherString);
     }
 
     @NotNull
     @Override
     public Path relativize(@NotNull Path other) {
-        return null;
+        final String separator = getFileSystem().getSeparator();
+        final String currentDirectorySymbol = getFileSystem().getCurrentDirectorySymbol();
+        if (this.string.startsWith(separator)) { // is absolute
+            if (!other.isAbsolute()) {
+                throw new IllegalArgumentException();
+            }
+            if (this.string.length() == separator.length() + currentDirectorySymbol.length() && this.string.endsWith(currentDirectorySymbol)) {
+                return other;
+            }
+        } else {
+            if (other.isAbsolute()) {
+                throw new IllegalArgumentException();
+            }
+            if (this.string.equals(currentDirectorySymbol)) {
+                return other;
+            }
+        }
+        if (this.getFileSystem() != other.getFileSystem()) {
+            throw new IllegalArgumentException();
+        }
+        final String otherString = other.toString();
+        final int commonPrefixLength = TowboatCharSequence.commonPrefixLength(this.string, otherString);
+        return this; // todo
     }
 
     @NotNull
     @Override
     public URI toUri() {
-        return null;
+        try {
+            return new URI(getFileSystem().getUriScheme(), null, string, null);
+        } catch (URISyntaxException e) {
+            throw new AssertionError(e);
+        }
     }
 
     @NotNull
     @Override
     public Path toAbsolutePath() {
-        final String sep = getSeparator();
-        if (string.startsWith(sep)) {
+        final String separator = getFileSystem().getSeparator();
+        if (string.startsWith(separator)) {
             return this;
         } else {
-            return getFileSystem().getPath(sep + string);
+            return getFileSystem().getPath(separator + string);
         }
     }
 

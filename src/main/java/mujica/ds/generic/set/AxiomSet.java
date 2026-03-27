@@ -9,9 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-/**
- * Created on 2025/6/4.
- */
 @CodeHistory(date = "2025/6/4")
 public interface AxiomSet<E> extends Set<E>, DataStructure {
 

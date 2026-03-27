@@ -8,14 +8,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-/**
- * a * x + b * y + c > 0
- */
 @CodeHistory(date = "2018/3/21", project = "aquarium", name = "GeneralLineV2")
 @CodeHistory(date = "2020/3/10", project = "coo", name = "GeneralLine")
 @CodeHistory(date = "2021/9/10", project = "va", name = "Line")
 @CodeHistory(date = "2022/6/6")
-public class HalfPlane extends Jordan2 {
+public class HalfPlane extends Jordan2 { // a * x + b * y + c > 0
 
     private static final long serialVersionUID = 0x6c4eece83f57e51bL;
 

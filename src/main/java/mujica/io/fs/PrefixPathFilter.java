@@ -7,9 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Path;
 
-/**
- * Created on 2026/3/5.
- */
 @CodeHistory(date = "2026/3/5")
 public class PrefixPathFilter implements DirectoryStream.Filter<Path> {
 

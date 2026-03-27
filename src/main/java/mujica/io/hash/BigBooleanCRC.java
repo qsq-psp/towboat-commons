@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.of_boolean.list.BitSequence;
+import mujica.ds.of_boolean.list.BooleanSequence;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 @CodeHistory(date = "2025/4/8", project = "Ultramarine", name = "BigCRC")
 @CodeHistory(date = "2025/4/11")
-public class BigBooleanCRC extends EachBitStreamHash implements BitSequence, Serializable {
+public class BigBooleanCRC extends EachBitStreamHash implements BooleanSequence, Serializable {
 
     private static final long serialVersionUID = 0x6f93d78e9e6d95a5L;
 
@@ -129,16 +129,16 @@ public class BigBooleanCRC extends EachBitStreamHash implements BitSequence, Ser
     @NotNull
     @Override
     public DataView finish() {
-        return new BitSequenceDataView(this, ByteOrder.LITTLE_ENDIAN);
+        return new BooleanSequenceDataView(this, ByteOrder.LITTLE_ENDIAN);
     }
 
     @Override
-    public int bitLength() {
+    public int booleanLength() {
         return current.length;
     }
 
     @Override
-    public boolean getBit(int index) {
+    public boolean getBoolean(int index) {
         return !current[(offset + index) % current.length];
     }
 }

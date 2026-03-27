@@ -59,19 +59,19 @@ public class IPV6AddressValidator extends AbstractFormatValidator.IntervalForm {
                     }
                     state++;
                     if (length > 4) {
-                        return localize(locale, SEGMENT_LONG).replaceQuoted("{segment}", string.subSequence(index - length, length).toString());
+                        return localize(locale, SEGMENT_LONG).replaceQuoted("{segment}", string.subSequence(index - length, index).toString());
                     }
                     length = 0;
                     continue;
                 }
-                if ('0' <= ch && ch <= '9' || 'A' <= ch && ch <= 'Z' || 'a' <= ch && ch <= 'z') {
+                if ('0' <= ch && ch <= '9' || 'A' <= ch && ch <= 'F' || 'a' <= ch && ch <= 'f') {
                     if (state == STATE_START_SINGLE) {
                         return localize(locale, SEGMENT_EMPTY);
                     }
                     if (state == STATE_START_DOUBLE || state == STATE_DOUBLE) {
                         compressedSegmentCount++;
                     }
-                    if (state == STATE_SINGLE) {
+                    if (state == STATE_START || state == STATE_SINGLE) {
                         segmentCount++;
                     }
                     state = STATE_FREE;
@@ -87,7 +87,7 @@ public class IPV6AddressValidator extends AbstractFormatValidator.IntervalForm {
                 compressedSegmentCount++;
             }
             if (length > 4) {
-                return localize(locale, SEGMENT_LONG).replaceQuoted("{segment}", string.subSequence(endIndex - length, length).toString());
+                return localize(locale, SEGMENT_LONG).replaceQuoted("{segment}", string.subSequence(endIndex - length, endIndex).toString());
             }
         }
         if (compressedSegmentCount == 0) {

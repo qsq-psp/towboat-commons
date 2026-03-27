@@ -1,10 +1,12 @@
 package mujica.text.regex;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created on 2025/12/23.
  */
+@CodeHistory(date = "2025/12/23")
 public class AlternationNode extends ContainerNode {
 
     @NotNull

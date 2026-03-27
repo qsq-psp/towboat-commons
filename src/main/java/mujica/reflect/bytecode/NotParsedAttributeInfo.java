@@ -11,16 +11,16 @@ import java.nio.ByteBuffer;
 
 @CodeHistory(date = "2025/9/15")
 @ReferencePage(title = "JVMS12 Attributes", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.7")
-public class NotParsedAttributeInfo extends AttributeInfo {
+class NotParsedAttributeInfo extends AttributeInfo {
 
     private static final long serialVersionUID = 0x1a562ef5c401b03dL;
 
     @NotNull
     final String name;
 
-    byte[] data;
+    private byte[] data;
 
-    public NotParsedAttributeInfo(@NotNull String name) {
+    NotParsedAttributeInfo(@NotNull String name) {
         super();
         this.name = name;
     }

@@ -13,20 +13,20 @@ import java.util.Arrays;
 public class IntAscendingTournamentSort extends SortingAlgorithm<int[]> {
 
     @NotNull
-    private transient int[] array = PublicIntList.EMPTY.array;
+    private transient int[] auxiliary = PublicIntList.EMPTY.array;
 
     public IntAscendingTournamentSort() {
         super();
     }
 
     @NotNull
-    private int[] getArray(int minLength) {
-        int[] array = this.array;
-        if (array.length < minLength) {
-            array = new int[minLength];
-            this.array = array;
+    private int[] getAuxiliary(int minLength) {
+        int[] auxiliary = this.auxiliary;
+        if (auxiliary.length < minLength) {
+            auxiliary = new int[minLength];
+            this.auxiliary = auxiliary;
         }
-        return array;
+        return auxiliary;
     }
 
     @NotNull
@@ -52,7 +52,7 @@ public class IntAscendingTournamentSort extends SortingAlgorithm<int[]> {
         final int height = Integer.SIZE - Integer.numberOfLeadingZeros(length);
         final int offset = 1 << height;
         final int doubleOffset = offset << 1;
-        final int[] arena = getArray(doubleOffset);
+        final int[] arena = getAuxiliary(doubleOffset);
         Arrays.fill(arena, 0, doubleOffset, Integer.MAX_VALUE);
         System.arraycopy(target, startIndex, arena, offset, length);
         for (int leafIndex = offset + length; leafIndex >= offset; leafIndex--) {

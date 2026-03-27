@@ -5,7 +5,6 @@ import mujica.io.hash.SimpleIntSizedCRC;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.reflect.modifier.Stable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @CodeHistory(date = "2025/10/7")
-@Stable(date = "2025/11/28")
 @ReferencePage(title = "GZIP file format specification version 4.3", href = "https://www.rfc-editor.org/rfc/rfc1952.html")
 public class WrapperGzipInputStream extends FilterInputStream {
 

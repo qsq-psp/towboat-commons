@@ -2,14 +2,13 @@ package mujica.algebra.prime;
 
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.algebra.discrete.IntegralMath;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created on 2025/3/19.
- */
+@CodeHistory(date = "2025/3/19")
 public class Decomposer {
 
     public static final Decomposer INSTANCE = new Decomposer();
