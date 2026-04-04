@@ -1,5 +1,6 @@
 package mujica.io.hash;
 
+import mujica.ds.of_byte.view.DataView;
 import mujica.io.function.AsyncProcessor;
 import org.jetbrains.annotations.NotNull;
 

@@ -3,7 +3,7 @@ package mujica.json.io;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.CharSequenceAppender;
+import mujica.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -141,7 +141,13 @@ public class JsonStringBufferWriter extends JsonStringWriter {
     @Override
     public void stringKey(@NotNull String key) {
         anyKey();
-        CharSequenceAppender.Json.INSTANCE.append(key, sb);
+        CharSequenceAppender appender;
+        if ((flags & FLAG_ESCAPE_EXTRA) == 0) {
+            appender = CharSequenceAppender.Json.ESSENTIAL;
+        } else {
+            appender = CharSequenceAppender.Json.EXTRA;
+        }
+        appender.append(key, sb);
         sb.append(':');
     }
 
@@ -171,14 +177,26 @@ public class JsonStringBufferWriter extends JsonStringWriter {
 
     @Override
     public void numberValue(float value) {
-        anyValue();
-        sb.append(value);
+        if ((flags & FLAG_INFINITY_TO_NULL) != 0 && Float.isInfinite(value)) {
+            nullValue();
+        } else if ((flags & FLAG_NAN_TO_NULL) != 0 && Float.isNaN(value)) {
+            nullValue();
+        } else {
+            anyValue();
+            sb.append(value);
+        }
     }
 
     @Override
     public void numberValue(double value) {
-        anyValue();
-        sb.append(value);
+        if ((flags & FLAG_INFINITY_TO_NULL) != 0 && Double.isInfinite(value)) {
+            nullValue();
+        } else if ((flags & FLAG_NAN_TO_NULL) != 0 && Double.isNaN(value)) {
+            nullValue();
+        } else {
+            anyValue();
+            sb.append(value);
+        }
     }
 
     @Override
@@ -196,7 +214,13 @@ public class JsonStringBufferWriter extends JsonStringWriter {
     @Override
     public void stringValue(@NotNull CharSequence value) {
         anyValue();
-        CharSequenceAppender.Json.INSTANCE.append(value, sb);
+        CharSequenceAppender appender;
+        if ((flags & FLAG_ESCAPE_EXTRA) == 0) {
+            appender = CharSequenceAppender.Json.ESSENTIAL;
+        } else {
+            appender = CharSequenceAppender.Json.EXTRA;
+        }
+        appender.append(value, sb);
     }
 
     @Override

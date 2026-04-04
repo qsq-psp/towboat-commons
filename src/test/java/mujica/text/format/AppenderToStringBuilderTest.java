@@ -7,6 +7,7 @@ import mujica.text.number.BinaryAppender;
 import mujica.text.number.HexadecimalAppender;
 import mujica.text.number.IntegralAppender;
 import mujica.text.number.MarkedIntegralAppender;
+import mujica.text.sanitizer.CharSequenceAppender;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

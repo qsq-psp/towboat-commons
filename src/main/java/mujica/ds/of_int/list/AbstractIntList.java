@@ -630,7 +630,7 @@ public abstract class AbstractIntList implements IntList {
         final int n = intLength();
         for (int i = 0; i < n; i++) {
             if (i != 0) {
-                sb.append(",");
+                sb.append(", ");
             }
             sb.append(getInt(i));
         }

@@ -25,22 +25,15 @@ public class AxiomSetTest {
 
     private static final int SIZE = 90;
 
-    private final RandomContext rc = new RandomContext();
+    private static final int STRING_LENGTH = 3;
 
-    @NotNull
-    private String nextString() {
-        final int length = rc.nextMinInt(7, 4) + 1;
-        final char[] ca = new char[length];
-        for (int index = 0; index < length; index++) {
-            ca[index] = (char) ('a' + rc.nextMinInt(26, 6));
-        }
-        return new String(ca);
-    }
+    private final RandomContext rc = new RandomContext();
 
     @NotNull
     private ResizePolicy nextResizePolicy() {
         switch (rc.nextInt(16)) {
             default:
+                // never
             case 0:
                 return LookUpResizePolicy.PAPER;
             case 1:
@@ -122,14 +115,14 @@ public class AxiomSetTest {
             for (int index = 0; index < SIZE; index++) {
                 switch (rc.nextInt(5)) {
                     case 0:
-                        set.contains(nextString());
+                        set.contains(rc.nextString(STRING_LENGTH));
                         break;
                     default:
                     case 1:
-                        set.add(nextString());
+                        set.add(rc.nextString(STRING_LENGTH));
                         break;
                     case 2:
-                        set.remove(nextString());
+                        set.remove(rc.nextString(STRING_LENGTH));
                         break;
                 }
                 String string = set.toString();
@@ -154,7 +147,7 @@ public class AxiomSetTest {
             Set<String> expected = new HashSet<>();
             Set<String> actual = supplier.get();
             for (int index = 0; index < SIZE; index++) {
-                String element = nextString();
+                String element = rc.nextString(STRING_LENGTH);
                 Assert.assertEquals(expected.add(element), actual.add(element)); // no boolean implementation, cast to Object
             }
         }
@@ -173,7 +166,7 @@ public class AxiomSetTest {
             Set<String> expected = new HashSet<>();
             Set<String> actual = supplier.get();
             for (int index = 0; index < SIZE; index++) {
-                String element = nextString();
+                String element = rc.nextString(STRING_LENGTH);
                 expected.add(element);
                 actual.add(element);
                 Assert.assertEquals(expected.size(), actual.size());
@@ -192,13 +185,13 @@ public class AxiomSetTest {
     private void checkRemove(@NotNull Supplier<AxiomSet<String>> supplier) {
         final ArrayList<String> list = new ArrayList<>(SIZE);
         for (int index = 0; index < SIZE; index++) {
-            list.add(nextString());
+            list.add(rc.nextString(STRING_LENGTH));
         }
         for (int repeatIndex = 0; repeatIndex < REPEAT; repeatIndex++) {
             Set<String> expected = new HashSet<>();
             Set<String> actual = supplier.get();
             for (int index = 0; index < SIZE; index++) {
-                String element = nextString();
+                String element = rc.nextString(STRING_LENGTH);
                 expected.add(element);
                 actual.add(element);
                 if (rc.nextBoolean()) {
@@ -223,13 +216,13 @@ public class AxiomSetTest {
     private void checkContains(@NotNull Supplier<AxiomSet<String>> supplier) {
         final ArrayList<String> list = new ArrayList<>(SIZE);
         for (int index = 0; index < SIZE; index++) {
-            list.add(nextString());
+            list.add(rc.nextString(STRING_LENGTH));
         }
         for (int repeatIndex = 0; repeatIndex < REPEAT; repeatIndex++) {
             Set<String> expected = new HashSet<>();
             Set<String> actual = supplier.get();
             for (int index = 0; index < SIZE; index++) {
-                String element = nextString();
+                String element = rc.nextString(STRING_LENGTH);
                 expected.add(element);
                 actual.add(element);
                 if (rc.nextBoolean()) {
@@ -256,7 +249,7 @@ public class AxiomSetTest {
             Set<String> expected = new HashSet<>();
             Set<String> actual = supplier.get();
             for (int index = 0; index < SIZE; index++) {
-                String element = nextString();
+                String element = rc.nextString(STRING_LENGTH);
                 expected.add(element);
                 actual.add(element);
             }
@@ -295,7 +288,7 @@ public class AxiomSetTest {
             Set<String> expected = new HashSet<>();
             Set<String> actual = supplier.get();
             for (int index = 0; index < SIZE; index++) {
-                String element = nextString();
+                String element = rc.nextString(STRING_LENGTH);
                 expected.add(element);
                 actual.add(element);
             }
@@ -339,7 +332,7 @@ public class AxiomSetTest {
             Set<String> actual = supplier.get();
             list.clear();
             for (int index = 0; index < SIZE; index++) {
-                String element = nextString();
+                String element = rc.nextString(STRING_LENGTH);
                 expected.add(element);
                 actual.add(element);
                 if (rc.nextBoolean()) {
@@ -384,7 +377,7 @@ public class AxiomSetTest {
             list.clear();
             AxiomSet<String> set = supplier.get();
             for (int index = 0; index < SIZE; index++) {
-                String element = nextString();
+                String element = rc.nextString(STRING_LENGTH);
                 set.add(element);
                 list.add(element);
             }
@@ -397,7 +390,7 @@ public class AxiomSetTest {
                 }
                 Assert.assertTrue(set.contains(element));
                 if (rc.nextBoolean()) {
-                    set.add(nextString());
+                    set.add(rc.nextString(STRING_LENGTH));
                 } else {
                     set.remove(list.get(rc.nextInt(list.size())));
                 }
@@ -421,7 +414,7 @@ public class AxiomSetTest {
             AxiomSet<String> set = supplier.get();
             int size = rc.nextInt(SIZE);
             for (int index = 0; index < size; index++) {
-                String element = nextString();
+                String element = rc.nextString(STRING_LENGTH);
                 set.add(element);
                 list.add(element);
             }
@@ -435,7 +428,7 @@ public class AxiomSetTest {
                 }
                 Assert.assertFalse(set.contains(element));
                 if (rc.nextBoolean()) {
-                    set.add(nextString());
+                    set.add(rc.nextString(STRING_LENGTH));
                 } else {
                     set.remove(list.get(rc.nextInt(list.size())));
                 }

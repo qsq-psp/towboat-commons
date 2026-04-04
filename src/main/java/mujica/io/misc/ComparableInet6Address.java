@@ -12,6 +12,7 @@ public class ComparableInet6Address extends ComparableInetAddress {
 
     private static final long serialVersionUID = 0xb70f1683f1d7d96aL;
 
+    @Nullable
     final Inet6Address address;
 
     final long high, low;
@@ -31,6 +32,16 @@ public class ComparableInet6Address extends ComparableInetAddress {
         super();
         this.address = address;
         final byte[] data = address.getAddress();
+        this.high = read64(data, 0);
+        this.low = read64(data, Long.BYTES);
+    }
+
+    public ComparableInet6Address(@NotNull byte[] data) {
+        super();
+        if (data.length != 2 * Long.BYTES) {
+            throw new IllegalArgumentException();
+        }
+        this.address = null;
         this.high = read64(data, 0);
         this.low = read64(data, Long.BYTES);
     }

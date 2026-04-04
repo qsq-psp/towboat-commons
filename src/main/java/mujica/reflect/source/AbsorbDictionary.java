@@ -2,18 +2,27 @@ package mujica.reflect.source;
 
 import mujica.io.function.IORunnable;
 import mujica.reflect.modifier.CodeHistory;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
+import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2022/6/6", project = "LeetInAction", name = "MergeProjectDictionary")
@@ -32,8 +41,12 @@ public final class AbsorbDictionary extends DefaultHandler implements IORunnable
         super();
     }
 
-    public static void main(String[] args) throws IOException {
-        (new AbsorbDictionary()).run();
+    public static void main(String[] args) {
+        try {
+            (new AbsorbDictionary()).run();
+        } catch (Exception e) {
+            LOGGER.error("", e);
+        }
     }
 
     @Override
@@ -55,6 +68,11 @@ public final class AbsorbDictionary extends DefaultHandler implements IORunnable
             }
         }
         LOGGER.info("word count {}", wordSet.size());
+        try {
+            write(new StreamResult(System.out));
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
@@ -87,5 +105,43 @@ public final class AbsorbDictionary extends DefaultHandler implements IORunnable
         if (sb != null) {
             sb.append(ch, start, length);
         }
+    }
+
+    private void write(@NotNull Result result) throws Exception {
+        final ArrayList<String> wordList = new ArrayList<>(wordSet);
+        wordList.sort(null);
+        final SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+        factory.setAttribute("indent-number", 4);
+        final TransformerHandler handler = factory.newTransformerHandler();
+        handler.getTransformer().setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        handler.getTransformer().setOutputProperty(OutputKeys.ENCODING, "utf-8");
+        handler.getTransformer().setOutputProperty(OutputKeys.INDENT, "yes");
+        handler.setResult(result);
+        handler.startDocument();
+        final AttributesImpl attributes = new AttributesImpl();
+        {
+            attributes.addAttribute("", "", "name", "CDATA", "ProjectDictionaryState");
+            handler.startElement("", "", "component", attributes);
+            attributes.clear();
+            attributes.addAttribute("", "", "name", "CDATA", getUserName());
+            handler.startElement("", "", "dictionary", attributes);
+            attributes.clear();
+            handler.startElement("", "", "words", attributes);
+            for (String word : wordList) {
+                handler.startElement("", "", "w", attributes);
+                char[] ca = word.toCharArray();
+                handler.characters(ca, 0, ca.length);
+                handler.endElement("", "", "w");
+            }
+            handler.endElement("", "", "words");
+            handler.endElement("", "", "dictionary");
+            handler.endElement("", "", "component");
+        }
+        handler.endDocument();
+    }
+
+    @NotNull
+    private String getUserName() {
+        return Objects.requireNonNullElse(System.getenv("USERNAME"), "USER");
     }
 }

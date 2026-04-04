@@ -12,8 +12,7 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.*;
 import java.nio.file.attribute.FileTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -92,6 +91,35 @@ public final class Directories {
         }
     }
 
+    @NotNull
+    public static List<Path> directoryAsList(@NotNull Path path) throws IOException {
+        final List<Path> list = new ArrayList<>();
+        for (Path subPath : Files.newDirectoryStream(path)) {
+            list.add(subPath);
+        }
+        return list;
+    }
+
+    @NotNull
+    public static List<Path> subDirectoryAsList(@NotNull Path path) throws IOException {
+        final List<Path> list = new ArrayList<>();
+        for (Path subPath : Files.newDirectoryStream(path)) {
+            if (Files.isDirectory(subPath)) {
+                list.add(subPath);
+            }
+        }
+        return list;
+    }
+
+    @NotNull
+    public static Set<Path> directoryAsSet(@NotNull Path path) throws IOException {
+        final Set<Path> set = new HashSet<>();
+        for (Path subPath : Files.newDirectoryStream(path)) {
+            set.add(subPath);
+        }
+        return set;
+    }
+
     private static <E> void forEach(@NotNull Iterable<E> list, @NotNull IOConsumer<? super E> action) throws IOException { // add logger as parameter and move it to IOConsumer
         IOException firstException = null;
         IOException exceptionList = null;
@@ -143,6 +171,10 @@ public final class Directories {
                 Files.copy(srcSubPath, dstSubPath, options);
             });
         }
+    }
+
+    public static void lazyCopy(@NotNull Path src, @NotNull Path dst, CopyOption... options) throws IOException {
+        //
     }
 
     public static void move(@NotNull Path src, @NotNull Path dst, boolean breakOnFailure, CopyOption... options) throws IOException {

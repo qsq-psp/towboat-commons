@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @CodeHistory(date = "2025/3/3", name = "DataSizeStyle")
 @CodeHistory(date = "2026/3/6")
-public class DataSizeAppender extends HexEncoder implements IntegralToStringFunction {
+public class DataSizeAppender extends HexEncoder {
 
     public static final int STYLE_DEC = 0x01;
 
@@ -118,7 +118,7 @@ public class DataSizeAppender extends HexEncoder implements IntegralToStringFunc
             " byte(s)", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"
     };
 
-    @Override
+    // @Override
     public void append(int value, @NotNull StringBuilder out) {
         if (value < 0) {
             throw new IllegalArgumentException("negative data size");
@@ -186,14 +186,14 @@ public class DataSizeAppender extends HexEncoder implements IntegralToStringFunc
     }
 
     @NotNull
-    @Override
+    // @Override
     public String stringify(int value) {
         final StringBuilder sb = new StringBuilder();
         append(value, sb);
         return sb.toString();
     }
 
-    @Override
+    // @Override
     public void append(long value, @NotNull StringBuilder out) {
         if (value < 0L) {
             throw new IllegalArgumentException("negative data size");
@@ -257,7 +257,7 @@ public class DataSizeAppender extends HexEncoder implements IntegralToStringFunc
     }
 
     @NotNull
-    @Override
+    // @Override
     public String stringify(long value) {
         final StringBuilder sb = new StringBuilder();
         append(value, sb);
@@ -268,7 +268,7 @@ public class DataSizeAppender extends HexEncoder implements IntegralToStringFunc
 
     private static final BigInteger BIG_1024 = BigInteger.valueOf(1024L);
 
-    @Override
+    // @Override
     public void append(@NotNull BigInteger value, @NotNull StringBuilder out) {
         if (value.signum() < 0) {
             throw new IllegalArgumentException("negative data size");
@@ -339,7 +339,7 @@ public class DataSizeAppender extends HexEncoder implements IntegralToStringFunc
     }
 
     @NotNull
-    @Override
+    // @Override
     public String stringify(@NotNull BigInteger value) {
         final StringBuilder sb = new StringBuilder();
         append(value, sb);

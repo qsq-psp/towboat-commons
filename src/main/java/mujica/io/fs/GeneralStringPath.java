@@ -3,7 +3,7 @@ package mujica.io.fs;
 import mujica.ds.HealthAware;
 import mujica.ds.InvariantException;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.TowboatCharSequence;
+import mujica.ds.of_char.sequence.TowboatCharSequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

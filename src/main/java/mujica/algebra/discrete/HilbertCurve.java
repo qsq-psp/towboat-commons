@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2026/3/22.
- */
 @CodeHistory(date = "2026/3/22")
 public class HilbertCurve implements DimensionCodec {
 

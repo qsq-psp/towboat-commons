@@ -3,14 +3,12 @@ package mujica.json.entity;
 import io.netty.buffer.ByteBuf;
 import mujica.ds.generic.set.CollectionConstant;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.CharSequenceAppender;
+import mujica.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "JsonConsumer")
@@ -38,7 +36,7 @@ public abstract class JsonHandler {
 
     public void stringKey(@NotNull String key) {
         if (LOGGER.isWarnEnabled()) {
-            LOGGER.warn("stringKey({})", CharSequenceAppender.Json.INSTANCE.stringify(key, (StringBuilder) null));
+            LOGGER.warn("stringKey({})", CharSequenceAppender.Json.ESSENTIAL.stringify(key, (StringBuilder) null));
         }
     }
 
@@ -48,62 +46,62 @@ public abstract class JsonHandler {
         }
     }
 
-    public void objectValue(@Nullable Object value) {
+    public void simpleValue(@Nullable Object value) {
         if (LOGGER.isWarnEnabled()) {
             LOGGER.warn("objectValue({})", value);
         }
     }
 
-    public void nullValue() {
-        objectValue(null);
+    public void skippedValue() {
+        simpleValue(CollectionConstant.UNDEFINED);
     }
 
-    public void booleanValue(boolean value) {
-        objectValue(value);
-    }
-
-    public void numberValue(int value) {
-        objectValue(value);
-    }
-
-    public void numberValue(long value) {
-        objectValue(value);
-    }
-
-    public void numberValue(float value) {
-        objectValue(value);
-    }
-
-    public void numberValue(double value) {
-        objectValue(value);
-    }
-
-    public void numberValue(@NotNull BigInteger value) {
-        objectValue(value);
-    }
-
-    public void numberValue(@NotNull FastNumber value) {
-        objectValue(value);
-    }
-
-    public void stringValue(@NotNull CharSequence value) {
-        objectValue(value.toString());
-    }
-
-    public void stringValue(@NotNull FastString value) {
-        objectValue(value);
-    }
-
-    public void skipped() {
-        objectValue(CollectionConstant.EMPTY);
-    }
-
-    public void skipped(@NotNull ByteBuf value) {
+    public void skippedValue(@NotNull ByteBuf value) {
         try {
-            objectValue(value);
+            simpleValue(value);
         } finally {
             value.release();
         }
+    }
+
+    public void nullValue() {
+        simpleValue(null);
+    }
+
+    public void booleanValue(boolean value) {
+        simpleValue(value);
+    }
+
+    public void numberValue(int value) {
+        simpleValue(value);
+    }
+
+    public void numberValue(long value) {
+        simpleValue(value);
+    }
+
+    public void numberValue(float value) {
+        simpleValue(value);
+    }
+
+    public void numberValue(double value) {
+        simpleValue(value);
+    }
+
+    public void numberValue(@NotNull BigInteger value) {
+        simpleValue(value);
+    }
+
+    public void numberValue(@NotNull FastNumber value) {
+        simpleValue(value);
+    }
+
+    public void stringValue(@NotNull CharSequence value) {
+        simpleValue(value.toString());
+    }
+
+    public void stringValue(@NotNull FastString value) {
+        simpleValue(value);
     }
 
     public void emptyArrayValue() {
@@ -246,22 +244,6 @@ public abstract class JsonHandler {
 
     public void emptyObjectValue() {
         openObject();
-        closeObject();
-    }
-
-    public void annotationValue(@NotNull Annotation annotation) throws ReflectiveOperationException {
-        openObject();
-        for (Method method : annotation.annotationType().getDeclaredMethods()) {
-            stringKey(method.getName());
-            Object object = method.invoke(annotation);
-            if (object instanceof Annotation) {
-                annotationValue((Annotation) object);
-            } else if (object instanceof Enum) {
-                stringValue(object.toString());
-            } else {
-                //...
-            }
-        }
         closeObject();
     }
 }

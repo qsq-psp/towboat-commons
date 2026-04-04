@@ -239,7 +239,6 @@ public class JsonCharSequenceReader implements JsonSyncReader {
         return endIndex;
     }
 
-    @SuppressWarnings("LoopStatementThatDoesntLoop")
     private int readJsonNumber(@NotNull JsonHandler jh, @Index(of = "in") int startIndex) {
         final int length = in.length();
         int endIndex = startIndex + 1;
@@ -257,13 +256,12 @@ public class JsonCharSequenceReader implements JsonSyncReader {
         }
         if (isFractional) {
             String string = in.subSequence(startIndex, endIndex).toString();
-            while ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
+            if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
                 double value = Double.parseDouble(string);
                 if ((flags & FLAG_FRACTIONAL_OVERFLOW_TO_RAW) == 0 || Double.isFinite(value)) {
                     jh.numberValue(value);
                     return endIndex;
                 }
-                break;
             }
             jh.numberValue(new FastNumber(string));
         } else {

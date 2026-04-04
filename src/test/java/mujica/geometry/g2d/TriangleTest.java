@@ -2,14 +2,11 @@ package mujica.geometry.g2d;
 
 import mujica.geometry.Geometry;
 import mujica.geometry.GeometryOperationResult;
-import mujica.io.stream.InputStreamUtil;
+import mujica.io.stream.OIO;
 import mujica.reflect.modifier.CodeHistory;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Created on 2022/10/2.
- */
 @CodeHistory(date = "2022/10/2", project = "Ultramarine")
 @CodeHistory(date = "2025/3/2")
 public class TriangleTest extends G2dTest {
@@ -18,7 +15,7 @@ public class TriangleTest extends G2dTest {
     public void checkSerializable() throws Exception {
         for (int triangleIndex = 0; triangleIndex < TRIANGLE; triangleIndex++) {
             Triangle<Point> triangle = nextTriangle();
-            Assert.assertEquals(triangle, InputStreamUtil.copy(triangle));
+            Assert.assertEquals(triangle, OIO.copy(triangle));
         }
     }
 

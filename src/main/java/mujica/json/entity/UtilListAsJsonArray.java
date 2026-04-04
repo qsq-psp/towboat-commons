@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * Created on 2026/1/6.
- */
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "JsonArray")
 @CodeHistory(date = "2025/9/23", name = "JsonArray")
 @CodeHistory(date = "2025/12/29", name = "GeneralJsonArray")

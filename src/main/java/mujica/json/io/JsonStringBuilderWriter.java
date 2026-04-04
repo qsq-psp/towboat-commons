@@ -1,12 +1,14 @@
 package mujica.json.io;
 
+import io.netty.buffer.ByteBuf;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.CharSequenceAppender;
+import mujica.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
 @CodeHistory(date = "2021/12/30", project = "infrastructure", name = "StringWriter")
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "SimpleJsonStringWriter")
@@ -144,7 +146,13 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
     @Override
     public void stringKey(@NotNull String key) {
         anyKey();
-        CharSequenceAppender.Json.INSTANCE.append(key, sb);
+        CharSequenceAppender appender;
+        if ((flags & FLAG_ESCAPE_EXTRA) == 0) {
+            appender = CharSequenceAppender.Json.ESSENTIAL;
+        } else {
+            appender = CharSequenceAppender.Json.EXTRA;
+        }
+        appender.append(key, sb);
         sb.append(':');
     }
 
@@ -152,6 +160,37 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
     public void stringKey(@NotNull FastString key) {
         anyKey();
         sb.append('"').append(key.string).append('"').append(':');
+    }
+
+    @Override
+    public void skippedValue() { // undo key if there is a key
+        final int state = stack.removeLast();
+        switch (state) {
+            case STATE_START:
+                stack.offerLast(STATE_END);
+                break;
+            case STATE_NEW_ARRAY:
+            case STATE_ARRAY:
+                stack.offerLast(state);
+                break;
+            case STATE_KEY:
+                // todo
+                stack.offerLast(STATE_OBJECT); // or STATE_NEW_OBJECT
+                break;
+            default:
+                stack.offerLast(state);
+                throwState();
+                break; // never
+        }
+    }
+
+    @Override
+    public void skippedValue(@NotNull ByteBuf value) {
+        try {
+            sb.append(value.toString(StandardCharsets.UTF_8));
+        } finally {
+            value.release();
+        }
     }
 
     @Override
@@ -180,14 +219,26 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
 
     @Override
     public void numberValue(float value) {
-        anyValue();
-        sb.append(value);
+        if ((flags & FLAG_INFINITY_TO_NULL) != 0 && Float.isInfinite(value)) {
+            nullValue();
+        } else if ((flags & FLAG_NAN_TO_NULL) != 0 && Float.isNaN(value)) {
+            nullValue();
+        } else {
+            anyValue();
+            sb.append(value);
+        }
     }
 
     @Override
     public void numberValue(double value) {
-        anyValue();
-        sb.append(value);
+        if ((flags & FLAG_INFINITY_TO_NULL) != 0 && Double.isInfinite(value)) {
+            nullValue();
+        } else if ((flags & FLAG_NAN_TO_NULL) != 0 && Double.isNaN(value)) {
+            nullValue();
+        } else {
+            anyValue();
+            sb.append(value);
+        }
     }
 
     @Override
@@ -205,7 +256,13 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
     @Override
     public void stringValue(@NotNull CharSequence value) {
         anyValue();
-        CharSequenceAppender.Json.INSTANCE.append(value, sb);
+        CharSequenceAppender appender;
+        if ((flags & FLAG_ESCAPE_EXTRA) == 0) {
+            appender = CharSequenceAppender.Json.ESSENTIAL;
+        } else {
+            appender = CharSequenceAppender.Json.EXTRA;
+        }
+        appender.append(value, sb);
     }
 
     @Override

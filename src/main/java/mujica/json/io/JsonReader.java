@@ -1,10 +1,12 @@
 package mujica.json.io;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferencePage;
 
 @CodeHistory(date = "2022/6/12", project = "Ultramarine", name = "ReaderStates")
 @CodeHistory(date = "2023/4/29", project = "Ultramarine", name = "ReaderFlags")
 @CodeHistory(date = "2025/10/27")
+@ReferencePage(title = "JSON for Humans", href = "https://json5.org/")
 public interface JsonReader { // built with input and output, used only once
 
     int FLAG_LINE_COMMENT                       = 0x0001;

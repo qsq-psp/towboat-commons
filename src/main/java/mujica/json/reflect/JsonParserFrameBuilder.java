@@ -9,5 +9,5 @@ import org.jetbrains.annotations.NotNull;
 public interface JsonParserFrameBuilder {
 
     @NotNull
-    JsonParserFrame createFrame(@NotNull JsonParser context, int containerType);
+    JsonParserFrame createFrame(@NotNull JsonParserFrame bottom);
 }

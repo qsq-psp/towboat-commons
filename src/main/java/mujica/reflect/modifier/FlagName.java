@@ -1,6 +1,6 @@
 package mujica.reflect.modifier;
 
-import mujica.text.format.CharSequenceAppender;
+import mujica.text.sanitizer.CharSequenceAppender;
 import mujica.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -113,7 +113,7 @@ public class FlagName implements Cloneable, Serializable {
                 array = Arrays.copyOf(array, length);
             }
             if (array[shift] != null && LOGGER.isWarnEnabled()) {
-                CharSequenceAppender appender = CharSequenceAppender.Json.INSTANCE;
+                CharSequenceAppender appender = CharSequenceAppender.Json.ESSENTIAL;
                 LOGGER.warn("flag name {} override name {} shift {}",
                         appender.stringify(name, (StringBuilder) null),
                         appender.stringify(array[shift], (StringBuilder) null),

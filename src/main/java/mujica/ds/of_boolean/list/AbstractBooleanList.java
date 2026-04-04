@@ -1,5 +1,6 @@
 package mujica.ds.of_boolean.list;
 
+import mujica.ds.of_int.list.IntList;
 import mujica.reflect.function.BooleanConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -354,5 +355,65 @@ public abstract class AbstractBooleanList implements BooleanList {
             }
         }
         return c;
+    }
+
+    @Override
+    public boolean equals(@NotNull BooleanList that) {
+        final int n = this.booleanLength();
+        if (that.booleanLength() != n) {
+            return false;
+        }
+        for (int i = 0; i < n; i++) {
+            if (this.getBoolean(i) != that.getBoolean(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return this == o || o instanceof BooleanList && this.equals((BooleanList) o);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 1;
+        final int n = booleanLength();
+        for (int i = 0; i < n; i++) {
+            hash = 31 * hash + (getBoolean(i) ? 1231 : 1237);
+        }
+        return hash;
+    }
+
+    @NotNull
+    @Override
+    public String summaryToString() {
+        return "<size = " + booleanLength() + ">";
+    }
+
+    @NotNull
+    @Override
+    public String detailToString() {
+        final StringBuilder sb = new StringBuilder();
+        stringifyDetail(sb);
+        return sb.toString();
+    }
+
+    public void stringifyDetail(@NotNull StringBuilder sb) {
+        sb.append("[");
+        final int n = booleanLength();
+        for (int i = 0; i < n; i++) {
+            if (i != 0) {
+                sb.append(", ");
+            }
+            sb.append(getBoolean(i));
+        }
+        sb.append("]");
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getName() + " " + summaryToString() + " " + detailToString();
     }
 }

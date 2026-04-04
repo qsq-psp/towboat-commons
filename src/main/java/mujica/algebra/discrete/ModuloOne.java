@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2025/3/3.
- */
 @CodeHistory(date = "2025/3/3")
 public class ModuloOne extends ModularMath {
 
@@ -126,7 +123,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public int multiplyFraction(int number, int numerator, int denominator) {
         if (denominator == 0) {
-            throw new ArithmeticException("Divide by zero");
+            throw new ArithmeticException("divide by zero");
         }
         return 0;
     }
@@ -134,7 +131,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public long multiplyFraction(long number, long numerator, long denominator) {
         if (denominator == 0L) {
-            throw new ArithmeticException("Divide by zero");
+            throw new ArithmeticException("divide by zero");
         }
         return 0L;
     }
@@ -177,7 +174,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public int factorial(int a) {
         if (a < 0) {
-            throw new ArithmeticException("Factorial negative");
+            throw new ArithmeticException("factorial negative");
         }
         return 0;
     }
@@ -185,7 +182,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public long factorial(long a) {
         if (a < 0L) {
-            throw new ArithmeticException("Factorial negative");
+            throw new ArithmeticException("factorial negative");
         }
         return 0L;
     }
@@ -194,7 +191,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public BigInteger factorial(@NotNull BigInteger a) {
         if (a.signum() < 0) {
-            throw new ArithmeticException("Factorial negative");
+            throw new ArithmeticException("factorial negative");
         }
         return BigInteger.ZERO;
     }
@@ -202,7 +199,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public int doubleFactorial(int a) {
         if (a < 0) {
-            throw new ArithmeticException("Double factorial negative");
+            throw new ArithmeticException("double factorial negative");
         }
         return 0;
     }
@@ -210,7 +207,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public long doubleFactorial(long a) {
         if (a < 0L) {
-            throw new ArithmeticException("Double factorial negative");
+            throw new ArithmeticException("double factorial negative");
         }
         return 0L;
     }
@@ -219,7 +216,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public BigInteger doubleFactorial(@NotNull BigInteger a) {
         if (a.signum() < 0) {
-            throw new ArithmeticException("Double factorial negative");
+            throw new ArithmeticException("double factorial negative");
         }
         return BigInteger.ZERO;
     }
@@ -227,7 +224,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public int fibonacci(int i) {
         if (i < 0) {
-            throw new ArithmeticException("Fibonacci negative");
+            throw new ArithmeticException("fibonacci negative");
         }
         return 0;
     }
@@ -235,7 +232,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public long fibonacci(long i) {
         if (i < 0L) {
-            throw new ArithmeticException("Fibonacci negative");
+            throw new ArithmeticException("fibonacci negative");
         }
         return 0L;
     }
@@ -244,7 +241,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public BigInteger fibonacci(@NotNull BigInteger i) {
         if (i.signum() < 0) {
-            throw new ArithmeticException("Fibonacci negative");
+            throw new ArithmeticException("fibonacci negative");
         }
         return BigInteger.ZERO;
     }
@@ -252,7 +249,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public int arrangement(int n, int m) {
         if (!(0 <= m && m <= n)) {
-            throw new ArithmeticException("Bad arrangement arguments");
+            throw new ArithmeticException("bad arrangement arguments");
         }
         return 0;
     }
@@ -260,7 +257,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public long arrangement(long n, long m) {
         if (!(0L <= m && m <= n)) {
-            throw new ArithmeticException("Bad arrangement arguments");
+            throw new ArithmeticException("bad arrangement arguments");
         }
         return 0L;
     }
@@ -268,7 +265,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public BigInteger arrangement(@NotNull BigInteger n, @NotNull BigInteger m) {
         if (!(0 <= m.signum() && m.compareTo(n) <= 0)) {
-            throw new ArithmeticException("Bad arrangement arguments");
+            throw new ArithmeticException("bad arrangement arguments");
         }
         return BigInteger.ZERO;
     }
@@ -276,7 +273,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public int combination(int n, int m) {
         if (!(0 <= m && m <= n)) {
-            throw new ArithmeticException("Bad combination arguments");
+            throw new ArithmeticException("bad combination arguments");
         }
         return 0;
     }
@@ -284,7 +281,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public long combination(long n, long m) {
         if (!(0L <= m && m <= n)) {
-            throw new ArithmeticException("Bad combination arguments");
+            throw new ArithmeticException("bad combination arguments");
         }
         return 0L;
     }
@@ -292,7 +289,7 @@ public class ModuloOne extends ModularMath {
     @Override
     public BigInteger combination(@NotNull BigInteger n, @NotNull BigInteger m) {
         if (!(0 <= m.signum() && m.compareTo(n) <= 0)) {
-            throw new ArithmeticException("Bad combination arguments");
+            throw new ArithmeticException("bad combination arguments");
         }
         return BigInteger.ZERO;
     }

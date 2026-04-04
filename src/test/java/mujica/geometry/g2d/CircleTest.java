@@ -2,7 +2,7 @@ package mujica.geometry.g2d;
 
 import mujica.geometry.Geometry;
 import mujica.geometry.GeometryOperationResult;
-import mujica.io.stream.InputStreamUtil;
+import mujica.io.stream.OIO;
 import mujica.reflect.modifier.CodeHistory;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class CircleTest extends G2dTest {
     public void checkSerializable() throws Exception {
         for (int circleIndex = 0; circleIndex < CIRCLE; circleIndex++) {
             Circle<Point> circle = nextCircle();
-            assertEquals(circle, InputStreamUtil.copy(circle));
+            assertEquals(circle, OIO.copy(circle));
         }
     }
 

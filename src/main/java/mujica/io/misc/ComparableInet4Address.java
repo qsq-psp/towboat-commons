@@ -17,10 +17,7 @@ public class ComparableInet4Address extends ComparableInetAddress {
 
     final int value;
 
-    public ComparableInet4Address(@NotNull Inet4Address address) {
-        super();
-        this.address = address;
-        final byte[] data = address.getAddress();
+    private static int read32(@NotNull byte[] data) {
         int value = 0;
         int shift = Integer.SIZE;
         int index = 0;
@@ -29,7 +26,22 @@ public class ComparableInet4Address extends ComparableInetAddress {
             value |= data[index] << shift;
             index++;
         }
-        this.value = value;
+        return value;
+    }
+
+    public ComparableInet4Address(@NotNull Inet4Address address) {
+        super();
+        this.address = address;
+        this.value = read32(address.getAddress());
+    }
+
+    public ComparableInet4Address(@NotNull byte[] data) {
+        super();
+        if (data.length != 4) {
+            throw new IllegalArgumentException();
+        }
+        this.address = null;
+        this.value = read32(data);
     }
 
     @Override

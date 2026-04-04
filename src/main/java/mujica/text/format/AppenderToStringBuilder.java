@@ -1,10 +1,13 @@
 package mujica.text.format;
 
 import mujica.ds.generic.set.CollectionConstant;
+import mujica.ds.of_char.sequence.TowboatCharSequence;
 import mujica.reflect.modifier.AccessStructure;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.number.DecimalAppender;
 import mujica.text.number.IntegralAppender;
+import mujica.text.number.MarkedIntegralAppender;
+import mujica.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -79,11 +82,6 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
 
     @NotNull
     private String nullString = "null";
-
-    @NotNull
-    public String getNullString() {
-        return nullString;
-    }
 
     @NotNull
     public AppenderToStringBuilder setNullString(@NotNull String nullString) {
@@ -353,6 +351,33 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
         return new MatrixStyle();
     }
 
+    @CodeHistory(date = "2026/3/28")
+    public class IndentStyle extends ArrayStyle {
+
+        @NotNull
+        String indent;
+
+        IndentStyle() {
+            super();
+            final String lineSeparator = System.lineSeparator();
+            left = "[" + lineSeparator;
+            right = lineSeparator + "]";
+            itemSeparator = "," + lineSeparator;
+            indent = "  "; // two spaces
+        }
+
+        @NotNull
+        public IndentStyle setIndent(@NotNull String indent) {
+            this.indent = indent;
+            return this;
+        }
+    }
+
+    @NotNull
+    public IndentStyle newIndentStyle() {
+        return new IndentStyle();
+    }
+
     private static void acceptBooleanTrueFalse(boolean value, @NotNull StringBuilder out) {
         out.append(value ? "True" : "False");
     }
@@ -558,6 +583,7 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
             try {
                 AppenderToStringBuilder instance = new AppenderToStringBuilder();
                 instance.config().use(instance.newArrayStyle().setLeft("{").setRight("}").setEmpty("{ }"), Object.class)
+                        .use((new MarkedIntegralAppender(new IntegralAppender())))
                         .use(CharSequenceAppender.Java.AUTO);
                 return instance;
             } catch (ReflectiveOperationException e) {
@@ -579,7 +605,7 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
             try {
                 AppenderToStringBuilder instance = new AppenderToStringBuilder();
                 instance.config().use(instance.newArrayStyle(), Object.class, int[].class, long[].class)
-                        .use(CharSequenceAppender.Json.INSTANCE);
+                        .use(CharSequenceAppender.Json.ESSENTIAL);
                 return instance;
             } catch (ReflectiveOperationException e) {
                 LOGGER.error("json", e);

@@ -7,10 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Created in va on 2021/9/28, named Affine2Test.
- * Created on 2022/6/26.
- */
 @CodeHistory(date = "2021/9/28", name = "Affine2Test")
 @CodeHistory(date = "2022/6/26")
 public class Transform2Test extends G2dTest {

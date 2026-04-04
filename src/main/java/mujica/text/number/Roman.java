@@ -8,7 +8,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2021/10/26", project = "va")
 @CodeHistory(date = "2022/10/19", project = "Ultramarine")
 @CodeHistory(date = "2025/2/26")
-public class Roman implements IntegralToStringFunction {
+public class Roman extends IntegralAppender {
 
     public static final Roman UPPER = new Roman('I', 'V', 'X', 'L', 'C', 'D', 'M');
 
@@ -126,7 +126,7 @@ public class Roman implements IntegralToStringFunction {
     }
 
     @Override
-    public void append(int value, @NotNull StringBuilder out) {
+    public void acceptInteger(int value, @NotNull StringBuilder out) {
         if (value <= 0) {
             throw new IllegalArgumentException();
         }
@@ -134,7 +134,6 @@ public class Roman implements IntegralToStringFunction {
     }
 
     @NotNull
-    @Override
     public String stringify(int value) {
         if (value <= 0) {
             throw new IllegalArgumentException();
@@ -145,7 +144,7 @@ public class Roman implements IntegralToStringFunction {
     }
 
     @Override
-    public void append(long value, @NotNull StringBuilder out) {
+    public void acceptLong(long value, @NotNull StringBuilder out) {
         if (value <= 0L) {
             throw new IllegalArgumentException();
         }
@@ -153,7 +152,6 @@ public class Roman implements IntegralToStringFunction {
     }
 
     @NotNull
-    @Override
     public String stringify(long value) {
         if (value <= 0) {
             throw new IllegalArgumentException();
@@ -161,16 +159,5 @@ public class Roman implements IntegralToStringFunction {
         final StringBuilder sb = new StringBuilder();
         append(value, 0, sb);
         return sb.toString();
-    }
-
-    @Override
-    public void append(@NotNull BigInteger value, @NotNull StringBuilder out) {
-        //
-    }
-
-    @NotNull
-    @Override
-    public String stringify(@NotNull BigInteger value) {
-        return "";
     }
 }

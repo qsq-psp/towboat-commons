@@ -1,7 +1,7 @@
 package mujica.text.collation;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.CharSequenceAppender;
+import mujica.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -45,9 +45,9 @@ public class Bracket {
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("Bracket[left = ");
-        CharSequenceAppender.Json.INSTANCE.append(left, sb);
+        CharSequenceAppender.Json.ESSENTIAL.append(left, sb);
         sb.append(", right = ");
-        CharSequenceAppender.Json.INSTANCE.append(right, sb);
+        CharSequenceAppender.Json.ESSENTIAL.append(right, sb);
         return sb.append("]").toString();
     }
 }

@@ -1,11 +1,11 @@
 package mujica.reflect.bytecode;
 
-import mujica.json.entity.GeneralJsonArray;
+import mujica.ds.generic.list.TruncateList;
 import mujica.algebra.random.RandomContext;
 import mujica.geometry.GeometryOperationResult;
 import mujica.geometry.g2d.Point;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.number.OrdinalTest;
+import mujica.text.filter.FormatValidatorTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
@@ -58,8 +58,7 @@ public class ProjectClassLoaderTest {
 
     @Test
     public void caseProject3() throws Exception {
-        final Class<?> jsonArrayClass = assertProject(GeneralJsonArray.class);
-        final Class<?> truncateListClass = jsonArrayClass.getSuperclass();
+        final Class<?> truncateListClass = assertProject(TruncateList.class);
         Assert.assertSame(LOADER, truncateListClass.getClassLoader());
         final Class<?> arrayListClass = truncateListClass.getSuperclass();
         Assert.assertFalse(arrayListClass.getClassLoader() instanceof ProjectClassLoader);
@@ -67,10 +66,10 @@ public class ProjectClassLoaderTest {
 
     @Test
     public void caseProject4() throws Exception {
-        final Class<?> ordinalTestClass = assertProject(OrdinalTest.class);
-        final Object ordinalTestObject = ordinalTestClass.getConstructor().newInstance();
-        ordinalTestClass.getDeclaredMethod("caseInt").invoke(ordinalTestObject);
-        ordinalTestClass.getDeclaredMethod("caseLong").invoke(ordinalTestObject);
+        final Class<?> formatValidatorTestClass = assertProject(FormatValidatorTest.class);
+        final Object formatValidatorTestObject = formatValidatorTestClass.getConstructor().newInstance();
+        formatValidatorTestClass.getDeclaredMethod("caseCharsetNamePositive").invoke(formatValidatorTestObject);
+        formatValidatorTestClass.getDeclaredMethod("caseCharsetNameNegative").invoke(formatValidatorTestObject);
     }
 
     private void assertLibrary(@NotNull Class<?> classA) throws ClassNotFoundException {

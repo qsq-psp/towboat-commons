@@ -6,4 +6,11 @@ import mujica.reflect.modifier.CodeHistory;
  * Created on 2025/11/6.
  */
 @CodeHistory(date = "2025/11/6")
-public interface StructureChecked {}
+public interface StructureChecked {
+
+    int STATE_START = 0;
+    int STATE_END = 1;
+    int STATE_ARRAY = 2;
+    int STATE_OBJECT = 3;
+    int STATE_KEY = 4;
+}

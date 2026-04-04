@@ -2,6 +2,7 @@ package mujica.io.function;
 
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.io.IOError;
 import java.io.IOException;
@@ -78,5 +79,60 @@ public interface IOConsumer<T> {
     @NotNull
     default IOConsumer<T> andThen(@NotNull Consumer<? super T> after) {
         return (T t) -> {accept(t); after.accept(t); };
+    }
+
+    default void accumulateAndThrow(@NotNull Iterable<T> iterable) throws IOException {
+        IOException firstException = null;
+        IOException exceptionList = null;
+        for (T item : iterable) {
+            try {
+                accept(item);
+            } catch (IOException e) {
+                if (firstException == null) {
+                    firstException = e;
+                } else {
+                    if (exceptionList == null) {
+                        exceptionList = new IOException("multiple");
+                    }
+                    exceptionList.addSuppressed(firstException);
+                    exceptionList.addSuppressed(e);
+                }
+            }
+        }
+        if (exceptionList != null) {
+            throw exceptionList;
+        }
+        if (firstException != null) {
+            throw firstException;
+        }
+    }
+
+    default void logAccumulateAndThrow(@NotNull Iterable<T> iterable, @NotNull Logger logger) throws IOException {
+        IOException firstException = null;
+        IOException exceptionList = null;
+        int index = 0;
+        for (T item : iterable) {
+            try {
+                accept(item);
+            } catch (IOException e) {
+                logger.error("item {} at index {}", item, index);
+                if (firstException == null) {
+                    firstException = e;
+                } else {
+                    if (exceptionList == null) {
+                        exceptionList = new IOException("multiple");
+                    }
+                    exceptionList.addSuppressed(firstException);
+                    exceptionList.addSuppressed(e);
+                }
+            }
+            index++;
+        }
+        if (exceptionList != null) {
+            throw exceptionList;
+        }
+        if (firstException != null) {
+            throw firstException;
+        }
     }
 }

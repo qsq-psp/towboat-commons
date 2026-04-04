@@ -1,13 +1,12 @@
 package mujica.ds.generic.list;
 
 import mujica.reflect.modifier.CodeHistory;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Objects;
 
-/**
- * Created on 2026/1/24.
- */
 @CodeHistory(date = "2026/1/24")
 public class ElementRepeatList<E> extends PeriodicList<E> {
 
@@ -144,6 +143,39 @@ public class ElementRepeatList<E> extends PeriodicList<E> {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public boolean containsAll(@NotNull Collection<?> that) {
+        if (size == 0) {
+            return that.isEmpty();
+        }
+        for (Object element : that) {
+            if (!Objects.equals(this.element, element)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean removeAll(@NotNull Collection<?> that) {
+        if (size == 0) {
+            return false;
+        }
+        boolean modified = false;
+        for (Object element : that) {
+            if (Objects.equals(this.element, element)) {
+                modified = true;
+                if (--size == 0) {
+                    break;
+                }
+            }
+        }
+        if (modified) {
+            modCount++;
+        }
+        return modified;
     }
 
     @Override

@@ -79,7 +79,7 @@ public class ModuloSomeInt extends ModularMath {
         if (a == Integer.MIN_VALUE) {
             a += mod;
         }
-        // now a is not Integer.MIN_VALUE
+        assert a != Integer.MIN_VALUE;
         a = (a - 1) % mod;
         if (a < 0) {
             a += mod;

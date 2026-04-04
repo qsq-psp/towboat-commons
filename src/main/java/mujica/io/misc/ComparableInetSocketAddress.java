@@ -27,6 +27,13 @@ public class ComparableInetSocketAddress extends ComparableSocketAddress {
         this.port = socketAddress.getPort();
     }
 
+    public ComparableInetSocketAddress(@NotNull ComparableInetAddress inetAddress, int port) {
+        super();
+        this.socketAddress = null;
+        this.inetAddress = inetAddress;
+        this.port = port;
+    }
+
     @Nullable
     @Override
     public InetSocketAddress getSocketAddress() {

@@ -3,13 +3,12 @@ package mujica.text.number;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2021/10/26", project = "va")
 @CodeHistory(date = "2022/10/19", project = "Ultramarine")
 @CodeHistory(date = "2025/2/26")
-public class TraditionalChinese implements IntegralToStringFunction, DecimalToStringFunction {
+public class TraditionalChinese extends IntegralAppender {
 
     public static final TraditionalChinese TRADITIONAL = new TraditionalChinese(
             new char[] {'零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'},
@@ -50,23 +49,21 @@ public class TraditionalChinese implements IntegralToStringFunction, DecimalToSt
     }
 
     @Override
-    public void append(int value, @NotNull StringBuilder out) {
+    public void acceptInteger(int value, @NotNull StringBuilder out) {
         out.append(stringify(value));
     }
 
     @NotNull
-    @Override
     public String stringify(int value) {
         return stringify((long) value);
     }
 
     @Override
-    public void append(long value, @NotNull StringBuilder out) {
+    public void acceptLong(long value, @NotNull StringBuilder out) {
         out.append(stringify(value));
     }
 
     @NotNull
-    @Override
     public String stringify(long value) {
         boolean sign;
         if (value < 0) {
@@ -118,12 +115,11 @@ public class TraditionalChinese implements IntegralToStringFunction, DecimalToSt
     }
 
     @Override
-    public void append(@NotNull BigInteger value, @NotNull StringBuilder out) {
+    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out) {
         out.append(stringify(value));
     }
 
     @NotNull
-    @Override
     public String stringify(@NotNull BigInteger value) {
         BigInteger remainder = value.abs();
         final StringBuilder sb = new StringBuilder();
@@ -188,7 +184,6 @@ public class TraditionalChinese implements IntegralToStringFunction, DecimalToSt
         }
     }
 
-    @Override
     public void append(@NotNull CharSequence num, int numRadix, @NotNull StringBuilder out) {
         final int start = out.length();
         try {
@@ -225,21 +220,9 @@ public class TraditionalChinese implements IntegralToStringFunction, DecimalToSt
     }
 
     @NotNull
-    @Override
     public String stringify(@NotNull CharSequence num, int numRadix) {
         final StringBuilder sb = new StringBuilder();
         append(num, numRadix, sb);
         return sb.toString();
-    }
-
-    @Override
-    public void append(@NotNull BigDecimal decimal, @NotNull StringBuilder out) {
-        // todo
-    }
-
-    @NotNull
-    @Override
-    public String stringify(@NotNull BigDecimal decimal) {
-        return "";
     }
 }

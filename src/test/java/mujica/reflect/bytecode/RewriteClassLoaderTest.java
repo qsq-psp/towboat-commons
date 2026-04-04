@@ -5,7 +5,7 @@ import mujica.io.codec.Base16Charset;
 import mujica.geometry.g2d.Bound;
 import mujica.reflect.basic.TypeUtilTest;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.FormatValidatorTest;
+import mujica.text.filter.FormatValidatorTest;
 import mujica.text.number.RomanTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;

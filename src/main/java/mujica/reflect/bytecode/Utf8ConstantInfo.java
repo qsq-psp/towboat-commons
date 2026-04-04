@@ -3,7 +3,7 @@ package mujica.reflect.bytecode;
 import mujica.io.stream.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.text.format.CharSequenceAppender;
+import mujica.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -126,7 +126,7 @@ class Utf8ConstantInfo extends ConstantInfo {
     public String toString(@NotNull ClassFile context) {
         final StringBuilder sb = new StringBuilder();
         sb.append("#").append(newIndex).append(" utf8 ");
-        CharSequenceAppender.Json.INSTANCE.append(string, sb);
+        CharSequenceAppender.Json.ESSENTIAL.append(string, sb);
         return sb.toString();
     }
 

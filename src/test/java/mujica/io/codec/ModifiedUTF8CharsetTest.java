@@ -70,6 +70,8 @@ public class ModifiedUTF8CharsetTest {
     @Test
     public void case2() throws IOException {
         caseCodec("naïve");
+        caseCodec("Διονύσιος");
+        caseCodec("հնդկահավ");
         caseCodec("Göteborg"); // Gothenburg
         caseCodec("Στοιχεῖα"); // Elements
         caseCodec("La Géométrie"); // geometry
@@ -81,6 +83,7 @@ public class ModifiedUTF8CharsetTest {
         caseCodec("L'Invention nouvelle en l'algèbre");
         caseCodec("Vollständige Anleitung zur Algebra");
         caseCodec("Über die Darstellung ganz willkürlicher Functionen durch Sinus-und Cosinusreihen");
+        caseCodec("ἢ γὰρ ὅτι πάντα τὰ βαρύσταθμα ὕδατα φαῦλα, ἢ ὅτι τοδὶ βαρύσταθμον");
     }
 
     @Test
@@ -92,12 +95,14 @@ public class ModifiedUTF8CharsetTest {
         caseCodec("ゼンゼロ");
         caseCodec("木质压力板");
         caseCodec("(๑•́ ₃ •̀๑)");
+        caseCodec("ინდაური");
         caseCodec("重离子对撞机");
         caseCodec("⁽⁽ଘ( ˊᵕˋ )ଓ⁾⁾");
         caseCodec("《关于费尔巴哈的提纲》");
         caseCodec("一、白炽：火焰，灯，碳弧，石灰光；");
         caseCodec("群馬のほのかを誘って奥多摩の御岳山へ");
         caseCodec("2005年的第23届“量子结构中的空间与时间”索尔维会议");
+        caseCodec("ህመም የስሜቱ ክፍል ብቻ ነው ፡፡ በሁኔታው ተጨባጭ ሁኔታ");
         caseCodec("华盛顿州的LIGO干涉仪则能听到哥伦比亚河上每年春季大坝的泄洪声");
         caseCodec("流感的全名叫influenza，该词的本义就来源于最初的超自然影响力的解释。");
         caseCodec("我们可以使用 vis-viva 方程（机械能守恒）来估计行星的轨道和速度之间的关系");

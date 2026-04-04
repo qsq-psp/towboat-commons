@@ -1,6 +1,6 @@
 package mujica.io.buffer;
 
-import mujica.io.stream.InputStreamUtil;
+import mujica.io.stream.OIO;
 import mujica.io.function.IOConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ public final class ByteBufferUtil {
     @NotNull
     public static ByteBuffer read(@NotNull Consumer<ByteBuffer> consumer, int initialCapacity) {
         BufferOverflowException last = null;
-        for (int capacity = initialCapacity; 0 < capacity && capacity <= InputStreamUtil.MAX_BUFFER_SIZE; capacity <<= 1) {
+        for (int capacity = initialCapacity; 0 < capacity && capacity <= OIO.MAX_BUFFER_SIZE; capacity <<= 1) {
             try {
                 ByteBuffer buffer = ByteBuffer.allocate(capacity);
                 consumer.accept(buffer);
@@ -36,7 +36,7 @@ public final class ByteBufferUtil {
     @NotNull
     public static ByteBuffer read(@NotNull IOConsumer<ByteBuffer> consumer, int initialCapacity) throws IOException {
         BufferOverflowException last = null;
-        for (int capacity = initialCapacity; 0 < capacity && capacity <= InputStreamUtil.MAX_BUFFER_SIZE; capacity <<= 1) {
+        for (int capacity = initialCapacity; 0 < capacity && capacity <= OIO.MAX_BUFFER_SIZE; capacity <<= 1) {
             try {
                 ByteBuffer buffer = ByteBuffer.allocate(capacity);
                 consumer.accept(buffer);
@@ -55,7 +55,7 @@ public final class ByteBufferUtil {
     @NotNull
     public static ByteBuffer read(@NotNull InputStream is, int initialCapacity) throws IOException {
         byte[] oldArray = null;
-        for (int capacity = initialCapacity; 0 < capacity && capacity <= InputStreamUtil.MAX_BUFFER_SIZE; capacity <<= 1) {
+        for (int capacity = initialCapacity; 0 < capacity && capacity <= OIO.MAX_BUFFER_SIZE; capacity <<= 1) {
             byte[] newArray = new byte[capacity];
             int position;
             if (oldArray != null) {
@@ -79,17 +79,17 @@ public final class ByteBufferUtil {
 
     @NotNull
     public static ByteBuffer read(@NotNull Consumer<ByteBuffer> consumer) {
-        return read(consumer, InputStreamUtil.BUFFER_SIZE);
+        return read(consumer, OIO.BUFFER_SIZE);
     }
 
     @NotNull
     public static ByteBuffer read(@NotNull IOConsumer<ByteBuffer> consumer) throws IOException {
-        return read(consumer, InputStreamUtil.BUFFER_SIZE);
+        return read(consumer, OIO.BUFFER_SIZE);
     }
 
     @NotNull
     public static ByteBuffer read(@NotNull InputStream is) throws IOException {
-        return read(is, InputStreamUtil.BUFFER_SIZE);
+        return read(is, OIO.BUFFER_SIZE);
     }
 
     /**

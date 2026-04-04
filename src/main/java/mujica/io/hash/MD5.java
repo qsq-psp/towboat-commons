@@ -1,5 +1,7 @@
 package mujica.io.hash;
 
+import mujica.ds.of_byte.view.DataView;
+import mujica.ds.of_byte.view.IntSequenceDataView;
 import mujica.ds.of_int.list.IntSequence;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;

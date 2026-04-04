@@ -1,6 +1,8 @@
 package mujica.io.hash;
 
 import mujica.ds.of_byte.list.ByteSequence;
+import mujica.ds.of_byte.view.ByteSequenceDataView;
+import mujica.ds.of_byte.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;

@@ -37,7 +37,7 @@ module CDP {
     exports mujica.ds.of_byte.list;
     // exports mujica.ds.of_byte.view;
     exports mujica.ds.of_char;
-    // exports mujica.ds.of_char.sequence;
+    exports mujica.ds.of_char.sequence;
     exports mujica.ds.of_int;
     exports mujica.ds.of_int.list;
     exports mujica.ds.of_int.set;
@@ -49,8 +49,8 @@ module CDP {
     exports mujica.ds.of_double.list;
     exports mujica.text.number;
     exports mujica.text.format;
-    // exports mujica.text.sanitizer;
-    // exports mujica.text.filter;
+    exports mujica.text.filter;
+    exports mujica.text.sanitizer;
     exports mujica.text.collation;
     exports mujica.text.bnf;
     exports mujica.text.regex;

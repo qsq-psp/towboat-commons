@@ -2,7 +2,7 @@ package mujica.geometry.g2d;
 
 import mujica.geometry.Geometry;
 import mujica.geometry.GeometryOperationResult;
-import mujica.io.stream.InputStreamUtil;
+import mujica.io.stream.OIO;
 import mujica.reflect.modifier.CodeHistory;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class BoundTest extends G2dTest {
     public void checkSerializable() throws Exception {
         for (int boundIndex = 0; boundIndex < BOUND; boundIndex++) {
             Bound bound = nextBound();
-            assertEquals(bound, InputStreamUtil.copy(bound));
+            assertEquals(bound, OIO.copy(bound));
         }
     }
 

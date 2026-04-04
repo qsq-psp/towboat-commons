@@ -1,6 +1,7 @@
 package mujica.geometry.g2d;
 
 import mujica.geometry.GeometryOperationResult;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -10,6 +11,10 @@ import java.util.function.Consumer;
  * Created in va on 2021/9/16.
  * Created on 2022/6/5.
  */
+@CodeHistory(date = "2020/4/10", project = "coo", name = "PlanarTransform.Translation")
+@CodeHistory(date = "2021/9/16", project = "va")
+@CodeHistory(date = "2022/6/5", project = "Ultramarine")
+@CodeHistory(date = "2025/3/2")
 public class Translation2 extends Transform2 {
 
     private static final long serialVersionUID = 0x39def2f4f9147a49L;

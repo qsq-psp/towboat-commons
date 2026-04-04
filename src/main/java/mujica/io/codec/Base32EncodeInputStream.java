@@ -1,8 +1,8 @@
 package mujica.io.codec;
 
-import mujica.io.hash.ByteFillPolicy;
-import mujica.io.hash.DataView;
-import mujica.io.hash.LongDataView;
+import mujica.ds.of_byte.view.ByteFillPolicy;
+import mujica.ds.of_byte.view.DataView;
+import mujica.ds.of_byte.view.LongDataView;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 

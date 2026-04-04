@@ -26,9 +26,6 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
         }
     }
 
-    @NotNull
-    private final char[] table;
-
     @CodeHistory(date = "2026/3/6")
     private interface NibbleAppender {
 
@@ -40,13 +37,12 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
         // StringBuffer ...
     }
 
-    @NotNull
-    private final NibbleAppender subsequent = new NibbleAppender() {
+    private static final NibbleAppender UPPER_SUBSEQUENT = new NibbleAppender() {
 
         @NotNull
         @Override
         public NibbleAppender accept(int value, @NotNull StringBuilder out) {
-            out.append(table[0xf & value]);
+            out.append(UPPER_TABLE[0xf & value]);
             return this;
         }
 
@@ -56,43 +52,77 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
         }
     };
 
-    @NotNull
-    private NibbleAppender createLeadingZero() {
-        return new NibbleAppender() {
+    private static final NibbleAppender UPPER_START = new NibbleAppender() {
 
-            @NotNull
-            @Override
-            public NibbleAppender accept(int value, @NotNull StringBuilder out) {
-                value &= 0xf;
-                if (value == 0) {
-                    return this;
-                }
-                out.append(table[value]);
-                return subsequent;
+        @NotNull
+        @Override
+        public NibbleAppender accept(int value, @NotNull StringBuilder out) {
+            value &= 0xf;
+            if (value == 0) {
+                return this;
             }
+            out.append(UPPER_TABLE[value]);
+            return UPPER_SUBSEQUENT;
+        }
 
-            @Override
-            public void finish(@NotNull StringBuilder out) {
-                out.append('0');
+        @Override
+        public void finish(@NotNull StringBuilder out) {
+            out.append('0');
+        }
+    };
+
+    private static final NibbleAppender LOWER_SUBSEQUENT = new NibbleAppender() {
+
+        @NotNull
+        @Override
+        public NibbleAppender accept(int value, @NotNull StringBuilder out) {
+            out.append(LOWER_TABLE[0xf & value]);
+            return this;
+        }
+
+        @Override
+        public void finish(@NotNull StringBuilder out) {
+            // pass
+        }
+    };
+
+    private static final NibbleAppender LOWER_START = new NibbleAppender() {
+
+        @NotNull
+        @Override
+        public NibbleAppender accept(int value, @NotNull StringBuilder out) {
+            value &= 0xf;
+            if (value == 0) {
+                return this;
             }
-        };
-    }
+            out.append(LOWER_TABLE[value]);
+            return LOWER_SUBSEQUENT;
+        }
+
+        @Override
+        public void finish(@NotNull StringBuilder out) {
+            out.append('0');
+        }
+    };
 
     @NotNull
     private final NibbleAppender start;
 
     public HexadecimalAppender(boolean upperCase, boolean pad) {
         super();
-        this.table = upperCase ? UPPER_TABLE : LOWER_TABLE;
-        this.start = pad ? subsequent : createLeadingZero();
-    }
-
-    public boolean isUpperCase() {
-        return this.table == UPPER_TABLE;
-    }
-
-    public boolean isPad() {
-        return start == subsequent;
+        if (upperCase) {
+            if (pad) {
+                start = UPPER_SUBSEQUENT;
+            } else {
+                start = UPPER_START;
+            }
+        } else {
+            if (pad) {
+                start = LOWER_SUBSEQUENT;
+            } else {
+                start = LOWER_START;
+            }
+        }
     }
 
     @Override

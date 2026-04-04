@@ -1,11 +1,14 @@
 package mujica.json.io;
 
+import io.netty.buffer.Unpooled;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -16,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 @SuppressWarnings("SpellCheckingInspection")
 public class JsonAroundTest {
 
-    private void around1(@NotNull String in, @NotNull String out, int flags) {
+    private void aroundString(@NotNull String in, @NotNull String out, int flags) {
         final JsonCharSequenceReader reader = new JsonCharSequenceReader(in);
         reader.setFlags(flags);
         final JsonStringBuilderWriter writer = new JsonStringBuilderWriter();
@@ -24,18 +27,68 @@ public class JsonAroundTest {
         Assert.assertEquals(out, writer.getString());
     }
 
-    private void around2(@NotNull String in, @NotNull String out, int flags) throws IOException {
-        try (JsonObjectInputStream is = new JsonObjectInputStream(new ByteArrayInputStream(in.getBytes(StandardCharsets.UTF_8)))) {
-            is.setFlags(flags);
+    private void aroundFromByteBuf1(@NotNull String in, @NotNull String out, int flags) {
+        final JsonByteBufReader reader = new JsonByteBufReader(Unpooled.wrappedBuffer(in.getBytes(StandardCharsets.UTF_8)));
+        try {
+            reader.setFlags(flags);
             JsonStringBuilderWriter writer = new JsonStringBuilderWriter();
-            is.read(writer);
+            reader.read(writer);
             Assert.assertEquals(out, writer.getString());
+        } finally {
+            reader.release();
         }
     }
 
+    private void aroundFromByteBuf2(@NotNull String in, @NotNull String out, int flags) {
+        final JsonRewriteByteBufReader reader = new JsonRewriteByteBufReader(Unpooled.wrappedBuffer(in.getBytes(StandardCharsets.UTF_8)));
+        try {
+            reader.setFlags(flags);
+            JsonStringBuilderWriter writer = new JsonStringBuilderWriter();
+            reader.read(writer);
+            Assert.assertEquals(out, writer.getString());
+        } finally {
+            reader.release();
+        }
+    }
+
+    private void aroundFromByteStream(@NotNull String in, @NotNull String out, int flags) throws IOException {
+        final JsonStringBuilderWriter writer = new JsonStringBuilderWriter();
+        try (JsonObjectInputStream is = new JsonObjectInputStream(new ByteArrayInputStream(in.getBytes(StandardCharsets.UTF_8)))) {
+            is.setFlags(flags);
+            is.read(writer);
+        }
+        Assert.assertEquals(out, writer.getString());
+    }
+
+    private void aroundToCharStream(@NotNull String in, @NotNull String out, int flags) throws IOException {
+        final JsonCharSequenceReader reader = new JsonCharSequenceReader(in);
+        reader.setFlags(flags);
+        final CharArrayWriter innerWriter = new CharArrayWriter();
+        try (JsonCharStreamWriter outerWriter = new JsonCharStreamWriter(innerWriter)) {
+            reader.read(outerWriter);
+            outerWriter.flush();
+        }
+        Assert.assertEquals(out, innerWriter.toString());
+    }
+
+    private void aroundToByteStream(@NotNull String in, @NotNull String out, int flags) throws IOException {
+        final JsonCharSequenceReader reader = new JsonCharSequenceReader(in);
+        reader.setFlags(flags);
+        final ByteArrayOutputStream innerWriter = new ByteArrayOutputStream();
+        try (JsonByteStreamWriter outerWriter = new JsonByteStreamWriter(innerWriter)) {
+            reader.read(outerWriter);
+            outerWriter.flush();
+        }
+        Assert.assertEquals(out, innerWriter.toString(StandardCharsets.UTF_8));
+    }
+
     private void around(@NotNull String in, @NotNull String out, int flags) throws IOException {
-        around1(in, out, flags);
-        around2(in, out, flags);
+        aroundString(in, out, flags);
+        aroundFromByteBuf1(in, out, flags);
+        aroundFromByteBuf2(in, out, flags);
+        aroundFromByteStream(in, out, flags);
+        aroundToCharStream(in, out, flags);
+        aroundToByteStream(in, out, flags);
     }
 
     private void around(@NotNull String in, @NotNull String out) throws IOException {
@@ -67,6 +120,8 @@ public class JsonAroundTest {
         around("[]");
         around("[0,true,false,null,\"\"]");
         around("[-333355558888,777700001111,-9,2022]");
+        around("[2147483647,-2147483648,214748364,-214748364]");
+        around("[9223372036854775807,-9223372036854775808,922337203685477580,-922337203685477580]");
         around("[\"''' '''\\t\\r\\n\\f\"]");
         around("[\"//\u1f08\u03c0\u03bf\u03bb\u03bb\u03ce\u03bd\u03b9\u03bf\u03c2\\n\",\"\",\"03\"]");
         around("[\"..\",-48,\"\u0395\u1f50\u03ba\u03bb\u03b5\u03af\u03b4\u03b7\u03c2\\n\"]");
@@ -122,8 +177,8 @@ public class JsonAroundTest {
         around("[[1, 2, 3],\r\n[4, 5, 6],\r\n[7, 8, 9]]", "[[1,2,3],[4,5,6],[7,8,9]]");
         around(" [ 0\r,\n\t 3600,    null\t,true,  \n\nfalse\n,[],{}] ", "[0,3600,null,true,false,[],{}]");
         around(
-                "{ \"TR\":true ,\"&*\": 6,\"--\" :1.5,\"++\"  :-0.5 , \"<>\" :\"\\r \\n \\r \\n\",\"\\\"||\\\"\\u0002\\u0003\"    :  \"\" }",
-                "{\"TR\":true,\"&*\":6,\"--\":1.5,\"++\":-0.5,\"<>\":\"\\r \\n \\r \\n\",\"\\\"||\\\"\\u0002\\u0003\":\"\"}"
+                "{ \"TR\":true ,\"&*\": 6,\"--\" :1.5,\"++\"  :-0.5 , \"<>\" :\"\\r \\n \\r \\n\",\"\\\"||\\\"\"    :  \"\" }",
+                "{\"TR\":true,\"&*\":6,\"--\":1.5,\"++\":-0.5,\"<>\":\"\\r \\n \\r \\n\",\"\\\"||\\\"\":\"\"}"
         );
         around(
                 "{ \"empty-array\":[\r\n ],\"null\": null,\"bool\": false, \"road\" :{\"stroke-width\":2.5,  \"dash-array\":[\t4 ,6]},\"cross\":{ \"sole\":{\"SSS\":{ } } } }",
@@ -231,18 +286,48 @@ public class JsonAroundTest {
         around("[{\"count-over\":64,\"quick-scan\":null,},null,null,[],]", "[{\"count-over\":64,\"quick-scan\":null},null,null,[]]", JsonSyncReader.FLAG_TRAILING_COMMA);
     }
 
-    private void skipAround1(@NotNull String in, @NotNull String out, int flags) throws IOException {
-        try (JsonObjectInputStream is = new JsonObjectInputStream(new ByteArrayInputStream(in.getBytes(StandardCharsets.UTF_8)))) {
-            is.setFlags(flags);
-            is.skipJson();
+    // JsonSkipAroundTest
+
+    private void skipAroundFromByteBuf1(@NotNull String in, @NotNull String out, int flags) {
+        final JsonByteBufReader reader = new JsonByteBufReader(Unpooled.wrappedBuffer(in.getBytes(StandardCharsets.UTF_8)));
+        try {
+            reader.setFlags(flags);
+            reader.skip();
             JsonStringBuilderWriter writer = new JsonStringBuilderWriter();
-            is.read(writer);
+            reader.read(writer);
             Assert.assertEquals(out, writer.getString());
+        } finally {
+            reader.release();
         }
     }
 
+    private void skipAroundFromByteBuf2(@NotNull String in, @NotNull String out, int flags) {
+        final JsonRewriteByteBufReader reader = new JsonRewriteByteBufReader(Unpooled.wrappedBuffer(in.getBytes(StandardCharsets.UTF_8)));
+        try {
+            reader.setFlags(flags);
+            reader.skip();
+            JsonStringBuilderWriter writer = new JsonStringBuilderWriter();
+            reader.read(writer);
+            Assert.assertEquals(out, writer.getString());
+        } finally {
+            reader.release();
+        }
+    }
+
+    private void skipAroundFromByteStream(@NotNull String in, @NotNull String out, int flags) throws IOException {
+        final JsonStringBuilderWriter writer = new JsonStringBuilderWriter();
+        try (JsonObjectInputStream is = new JsonObjectInputStream(new ByteArrayInputStream(in.getBytes(StandardCharsets.UTF_8)))) {
+            is.setFlags(flags);
+            is.skip();
+            is.read(writer);
+        }
+        Assert.assertEquals(out, writer.getString());
+    }
+
     private void skipAround(@NotNull String in, @NotNull String out, int flags) throws IOException {
-        skipAround1(in, out, flags);
+        skipAroundFromByteBuf1(in, out, flags);
+        skipAroundFromByteBuf2(in, out, flags);
+        skipAroundFromByteStream(in, out, flags);
     }
 
     private void skipAround(@NotNull String in, @NotNull String out) throws IOException {

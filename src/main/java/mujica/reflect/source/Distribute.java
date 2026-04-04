@@ -11,12 +11,11 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @CodeHistory(date = "2025/12/1", name = "SynchronizeChain")
 @CodeHistory(date = "2026/1/4")
@@ -118,6 +117,7 @@ public final class Distribute {
             Target.class,
             Repeatable.class,
             "", // other annotations not listed here
+            FieldOrder.class,
             Nullable.class,
             NotNull.class,
             DataType.class
@@ -127,12 +127,151 @@ public final class Distribute {
     @CodeHistory(date = "2026/3/23")
     private static class ReformatJava {
 
+        static final String NEGATIVE_FILE_END = "//:~";
+
+        static final Pattern SERIAL_UID_PATTERN = Pattern.compile("\\s*private static final long serialVersionUID = 0([Xx][0-9A-Fa-f]{1,16}[Ll]);\\s*");
+
+        static final Pattern LINE_ANNOTATION_PATTERN = Pattern.compile("\\s*@([A-Z][0-9A-Za-z]*)(\\([^)]*\\))?\\s*");
+
         final HashMap<String, Integer> annotationOrderMap = new HashMap<>();
 
         int defaultAnnotationOrder = -1;
 
+        final ArrayList<AnnotationInOrder> annotationList = new ArrayList<>();
+
         ReformatJava() {
             super();
+            final List<Object> list = ANNOTATION_IN_ORDER;
+            final int size = list.size();
+            for (int index = 0; index < size; index++) {
+                Object item = list.get(index);
+                String name;
+                if (item instanceof String) {
+                    name = (String) item;
+                } else if (item instanceof Class) {
+                    name = ((Class<?>) item).getSimpleName();
+                } else {
+                    continue;
+                }
+                if (name.isEmpty()) {
+                    defaultAnnotationOrder = index;
+                } else {
+                    annotationOrderMap.put(name, index);
+                }
+            }
+        }
+
+        int annotationOrder(@NotNull String annotationName) {
+            return Objects.requireNonNullElseGet(annotationOrderMap.get(annotationName), () -> defaultAnnotationOrder);
+        }
+
+        void reformatJava(@NotNull List<String> lineList) {
+            int size;
+            while (true) {
+                size = lineList.size();
+                if (size == 0) {
+                    break;
+                }
+                String lastLine = lineList.get(size - 1);
+                if (lastLine.isBlank()) {
+                    lineList.remove(size - 1);
+                } else {
+                    if (lastLine.endsWith(NEGATIVE_FILE_END)) {
+                        lastLine = lastLine.substring(0, lastLine.length() - NEGATIVE_FILE_END.length());
+                        lineList.set(size - 1, lastLine);
+                    }
+                    break;
+                }
+            }
+            for (int lineNumber = 0; lineNumber < size; lineNumber++) {
+                String line = lineList.get(lineNumber);
+                Matcher matcher = SERIAL_UID_PATTERN.matcher(line);
+                if (matcher.matches()) {
+                    line = line.substring(0, matcher.start(1)) + matcher.group(1).toLowerCase().replace('l', 'L') + line.substring(matcher.end(1));
+                    lineList.set(lineNumber, line);
+                }
+                matcher = LINE_ANNOTATION_PATTERN.matcher(line);
+                if (matcher.matches()) {
+                    annotationList.add(new AnnotationInOrder(line, lineNumber, annotationOrder(matcher.group(1))));
+                } else {
+                    int annotationListSize = annotationList.size();
+                    if (annotationListSize > 0) {
+                        if (annotationListSize > 1) {
+                            annotationList.sort(null);
+                            int baseLineNumber = lineNumber - annotationListSize;
+                            for (int index = 0; index < annotationListSize; index++) {
+                                lineList.set(baseLineNumber + index, annotationList.get(index).line);
+                            }
+                        }
+                        annotationList.clear();
+                    }
+                }
+            }
+        }
+
+        void transformJava(@NotNull Path src, Path dst, OpenOption... options) throws IOException {
+            final List<String> lineList = Files.readAllLines(src, StandardCharsets.UTF_8);
+            reformatJava(lineList);
+            Files.write(dst, lineList, StandardCharsets.UTF_8, options);
+        }
+
+        boolean isJava(@NotNull Path path) {
+            return path.getFileName().toString().toLowerCase().endsWith(".java");
+        }
+
+        void mergeFile(@NotNull Path src, @NotNull Path dst) {
+            try {
+                if (Files.exists(dst)) {
+                    if (Files.getLastModifiedTime(src).compareTo(Files.getLastModifiedTime(dst)) > 0) {
+                        if (isJava(src)) {
+                            LOGGER.info("overwrite java file from {} to {}", src, dst);
+                            transformJava(src, dst, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+                        } else {
+                            LOGGER.info("overwrite file from {} to {}", src, dst);
+                            Files.copy(src, dst, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+                        }
+                    } else {
+                        LOGGER.trace("ignore file from {} to {}", src, dst);
+                    }
+                } else {
+                    if (isJava(src)) {
+                        LOGGER.info("transform java file from {} to {}", src, dst);
+                        transformJava(src, dst, StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW);
+                    } else {
+                        LOGGER.info("copy file from {} to {}", src, dst);
+                        Files.copy(src, dst, StandardCopyOption.COPY_ATTRIBUTES);
+                    }
+                }
+            } catch (IOException e) {
+                LOGGER.error("merge file from {} to {}", src, dst, e);
+            }
+        }
+
+        void mergeDirectory(@NotNull Path src, @NotNull Path dst) {
+            if (Files.exists(dst)) {
+                return;
+            }
+            try {
+                Files.createDirectory(dst);
+            } catch (IOException e) {
+                LOGGER.error("merge directory from {} to {}", src, dst, e);
+            }
+        }
+
+        void mergeRoot(@NotNull Path src, @NotNull Path dst) {
+            LOGGER.info("merge root from {} to {}", src, dst);
+            try {
+                Files.walk(src).forEach(srcItem -> {
+                    Path dstItem = dst.resolve(src.relativize(srcItem));
+                    if (Files.isRegularFile(srcItem)) {
+                        mergeFile(srcItem, dstItem);
+                    } else if (Files.isDirectory(srcItem)) {
+                        mergeDirectory(srcItem, dstItem);
+                    }
+                });
+            } catch (IOException e) {
+                LOGGER.error("walk {}", src, e);
+            }
         }
     }
 
@@ -143,6 +282,7 @@ public final class Distribute {
     };
 
     public static void main(String[] args) {
+        final ReformatJava reformatJava = new ReformatJava();
         final Path currentPath = Path.of("").toAbsolutePath();
         LOGGER.info("current {}", currentPath);
         for (String[] link : LINKS) {
@@ -159,53 +299,8 @@ public final class Distribute {
                 if (!Files.isDirectory(dstPath)) {
                     continue;
                 }
-                mergeRoot(srcPath, dstPath);
+                reformatJava.mergeRoot(srcPath, dstPath);
             }
-        }
-    }
-
-    private static void mergeRoot(@NotNull Path src, @NotNull Path dst) {
-        LOGGER.info("merge root from {} to {}", src, dst);
-        try {
-            Files.walk(src).forEach(srcItem -> {
-                Path dstItem = dst.resolve(src.relativize(srcItem));
-                if (Files.isRegularFile(srcItem)) {
-                    mergeFile(srcItem, dstItem);
-                } else if (Files.isDirectory(srcItem)) {
-                    mergeDirectory(srcItem, dstItem);
-                }
-            });
-        } catch (IOException e) {
-            LOGGER.error("walk {}", src, e);
-        }
-    }
-
-    private static void mergeFile(@NotNull Path src, @NotNull Path dst) {
-        try {
-            if (Files.exists(dst)) {
-                if (Files.getLastModifiedTime(src).compareTo(Files.getLastModifiedTime(dst)) > 0) {
-                    LOGGER.info("overwrite file from {} to {}", src, dst);
-                    Files.copy(src, dst, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
-                } else {
-                    LOGGER.trace("ignore file from {} to {}", src, dst);
-                }
-            } else {
-                LOGGER.info("copy file from {} to {}", src, dst);
-                Files.copy(src, dst, StandardCopyOption.COPY_ATTRIBUTES);
-            }
-        } catch (IOException e) {
-            LOGGER.error("merge file from {} to {}", src, dst, e);
-        }
-    }
-
-    private static void mergeDirectory(@NotNull Path src, @NotNull Path dst) {
-        if (Files.exists(dst)) {
-            return;
-        }
-        try {
-            Files.createDirectory(dst);
-        } catch (IOException e) {
-            LOGGER.error("merge directory from {} to {}", src, dst, e);
         }
     }
 }

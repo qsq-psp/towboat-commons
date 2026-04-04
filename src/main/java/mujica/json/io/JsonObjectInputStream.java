@@ -22,7 +22,7 @@ import java.util.ArrayList;
 @CodeHistory(date = "2021/1/8", project = "webbiton", name = "JsonInputStreamReader")
 @CodeHistory(date = "2022/8/13", project = "Ultramarine", name = "JsonInputStreamReader")
 @CodeHistory(date = "2026/2/23")
-public class JsonObjectInputStream extends OneBufferDataInputStream implements JsonSyncReader, ObjectInput {
+public class JsonObjectInputStream extends OneBufferDataInputStream implements JsonSyncSkipReader, ObjectInput {
 
     @NotNull
     private final StringBuilder sb = new StringBuilder();
@@ -46,7 +46,17 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
         return flags;
     }
 
-    public void skipJson() throws IOException {
+    @Override
+    public void skip() {
+        try {
+            skipGap();
+            skipJson();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private void skipJson() throws IOException {
         final int octet = super.readUnsignedByte();
         switch (octet) {
             case 'A': case 'B': case 'C': case 'D': case 'E':
@@ -66,19 +76,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
             case '5': case '6': case '7': case '8': case '9':
                 skipJsonLiteral();
                 break;
-            case '"':
-                skipJsonString(octet);
-                break;
-            case '\'':
-                if ((flags & FLAG_APOSTROPHE_QUOTE_STRING) == 0) {
-                    throw new IOException("apostrophe");
-                }
-                skipJsonString(octet);
-                break;
-            case '`':
-                if ((flags & FLAG_GRAVE_ACCENT_QUOTE_STRING) == 0) {
-                    throw new IOException("grave accent");
-                }
+            case '"': case '\'': case '`':
                 skipJsonString(octet);
                 break;
             case '{':
@@ -105,7 +103,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
         }
     }
 
-    private void skipJsonString(int quoteChar) throws IOException {
+    private void skipJsonString(@DataType("u8") int quoteChar) throws IOException {
         while (true) {
             int octet = super.readUnsignedByte();
             if (octet == '\\') {
@@ -272,11 +270,11 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
             if ((flags & FLAG_SKIP_TO_BYTE_BUF) != 0) {
                 teeToByteBuf(byteBuf -> {
                     skipJson();
-                    jh.skipped(byteBuf.retain());
+                    jh.skippedValue(byteBuf.retain());
                 });
             } else {
                 skipJson();
-                jh.skipped();
+                jh.skippedValue();
             }
             return;
         }

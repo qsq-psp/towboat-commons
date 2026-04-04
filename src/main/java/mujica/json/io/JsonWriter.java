@@ -1,13 +1,18 @@
 package mujica.json.io;
 
+import io.netty.buffer.ByteBuf;
 import mujica.ds.of_int.list.CopyOnResizeIntList;
 import mujica.json.entity.JsonHandler;
 import mujica.json.entity.StructureChecked;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.CharSequenceAppender;
+import mujica.text.format.AppenderToStringBuilder;
+import mujica.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.charset.StandardCharsets;
 
 @CodeHistory(date = "2021/12/30", project = "infrastructure", name = "JsonWriter")
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "Writer")
@@ -16,14 +21,25 @@ public abstract class JsonWriter extends JsonHandler implements StructureChecked
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonWriter.class);
 
-    protected static final int STATE_START = 0;
-    protected static final int STATE_END = 1;
-    protected static final int STATE_NEW_ARRAY = 2;
-    protected static final int STATE_ARRAY = 3;
-    protected static final int STATE_NEW_OBJECT = 4;
-    protected static final int STATE_OBJECT = 5;
-    protected static final int STATE_KEY = 6;
-    protected static final int STATE_JSONP = 7;
+    public static final int FLAG_ESCAPE_EXTRA           = 0x01;
+    public static final int FLAG_INFINITY_TO_NULL       = 0x02;
+    public static final int FLAG_NAN_TO_NULL            = 0x04;
+    public static final int FLAG_UPPERCASE_HEX          = 0x10;
+    public static final int FLAG_UPPERCASE_E            = 0x20;
+
+    protected int flags;
+
+    public void setFlags(int flags) {
+        this.flags = flags;
+    }
+
+    public int getFlags() {
+        return flags;
+    }
+
+    public static final int STATE_NEW_ARRAY = 5;
+    public static final int STATE_NEW_OBJECT = 6;
+    public static final int STATE_JSONP = 7;
 
     protected final CopyOnResizeIntList stack = new CopyOnResizeIntList(null);
 
@@ -37,45 +53,90 @@ public abstract class JsonWriter extends JsonHandler implements StructureChecked
         stack.offerLast(STATE_START);
     }
 
-    private static final String[] STATE_NAMES = {
-            "start", "end", "new-array", "array", "new-object", "object", "key", "jsonp"
-    };
-
-    @NotNull
-    protected static String stateToString(int state) {
-        try {
-            return STATE_NAMES[state];
-        } catch (IndexOutOfBoundsException e) { // rare
-            return "unknown(" + state + ")";
-        }
-    }
-
-    @NotNull
-    protected String stateToString() {
-        final StringBuilder sb = new StringBuilder();
-        boolean subsequent = false;
-        sb.append("[");
-        for (int state : stack) {
-            if (subsequent) {
-                sb.append(", ");
-            }
-            sb.append(stateToString(state));
-            subsequent = true;
-        }
-        return sb.append("]").toString();
-    }
-
-    protected void throwState() throws IllegalStateException {
-        throw new IllegalStateException(stateToString());
-    }
-
     public void openJsonp(@NotNull CharSequence name) {
         if (LOGGER.isWarnEnabled()) {
-            LOGGER.warn("openJsonp({})", CharSequenceAppender.Json.INSTANCE.stringify(name, (StringBuilder) null));
+            LOGGER.warn("openJsonp({})", CharSequenceAppender.Json.ESSENTIAL.stringify(name, (StringBuilder) null));
         }
     }
 
     public void closeJsonp() {
         LOGGER.warn("closeJsonp()");
+    }
+
+    @Override
+    public void simpleValue(@Nullable Object value) {
+        LOGGER.error("simpleValue({})", AppenderToStringBuilder.Java.get().apply(value));
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void skippedValue() {
+        LOGGER.error("skippedValue()");
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void skippedValue(@NotNull ByteBuf value) {
+        try {
+            (new JsonByteBufReader(value)).read(this);
+        } finally {
+            value.release();
+        }
+    }
+
+    @CodeHistory(date = "2020/12/16", project = "webbiton", name = "JsonBlobBuilder.State")
+    @CodeHistory(date = "2022/6/12", project = "Ultramarine", name = "WriterStates")
+    @CodeHistory(date = "2026/4/1")
+    private static class Debug {
+
+        private static final String[] STATE_NAMES = {
+                "start", "end", "new-array", "array", "new-object", "object", "key", "jsonp"
+        };
+
+        @NotNull
+        protected static String stateToString(int state) {
+            try {
+                return STATE_NAMES[state];
+            } catch (IndexOutOfBoundsException e) { // rare
+                return "unknown(" + state + ")";
+            }
+        }
+
+        @NotNull
+        protected static String stateToString(@NotNull CopyOnResizeIntList stack) {
+            final StringBuilder sb = new StringBuilder();
+            boolean subsequent = false;
+            sb.append("[");
+            for (int state : stack) {
+                if (subsequent) {
+                    sb.append(", ");
+                }
+                sb.append(stateToString(state));
+                subsequent = true;
+            }
+            return sb.append("]").toString();
+        }
+
+        private Debug() {
+            super();
+        }
+    }
+
+    protected void throwState() throws IllegalStateException {
+        throw new IllegalStateException(Debug.stateToString(stack));
+    }
+
+    @CodeHistory(date = "2026/4/1")
+    protected static class ByteArray {
+
+        protected static final byte[] NULL = "null".getBytes(StandardCharsets.US_ASCII);
+
+        protected static final byte[] TRUE = "true".getBytes(StandardCharsets.US_ASCII);
+
+        protected static final byte[] FALSE = "false".getBytes(StandardCharsets.US_ASCII);
+
+        private ByteArray() {
+            super();
+        }
     }
 }

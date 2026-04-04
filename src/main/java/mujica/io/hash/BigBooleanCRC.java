@@ -1,6 +1,8 @@
 package mujica.io.hash;
 
 import mujica.ds.of_boolean.list.BooleanSequence;
+import mujica.ds.of_byte.view.BooleanSequenceDataView;
+import mujica.ds.of_byte.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
