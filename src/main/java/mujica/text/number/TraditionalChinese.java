@@ -49,7 +49,7 @@ public class TraditionalChinese extends IntegralAppender {
     }
 
     @Override
-    public void acceptInteger(int value, @NotNull StringBuilder out) {
+    public void acceptInt(int value, @NotNull StringBuilder out) {
         out.append(stringify(value));
     }
 

@@ -36,11 +36,6 @@ public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implemen
     @Override
     public abstract GeneralFileSystem getFileSystem();
 
-    @NotNull
-    protected String getSeparator() {
-        return getFileSystem().getSeparator();
-    }
-
     @Override
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
         // Floyd loop algorithm
@@ -67,7 +62,8 @@ public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implemen
     }
 
     @Override
-    public Path getRoot() {
+    @Nullable
+    public GeneralPrefixPath<P> getRoot() {
         GeneralPrefixPath<P> node = this;
         while (node.parent != null) {
             node = node.parent;

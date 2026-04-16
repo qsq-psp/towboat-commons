@@ -11,7 +11,7 @@ public abstract class JsonStringWriter extends JsonWriter {
     public abstract CharSequence getCharSequence();
 
     @NotNull
-    public CharSequence getString() {
+    public String getString() {
         return getCharSequence().toString();
     }
 }

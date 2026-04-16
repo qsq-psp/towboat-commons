@@ -126,7 +126,7 @@ public class Roman extends IntegralAppender {
     }
 
     @Override
-    public void acceptInteger(int value, @NotNull StringBuilder out) {
+    public void acceptInt(int value, @NotNull StringBuilder out) {
         if (value <= 0) {
             throw new IllegalArgumentException();
         }

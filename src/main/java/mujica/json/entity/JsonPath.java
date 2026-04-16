@@ -1,11 +1,13 @@
 package mujica.json.entity;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2026/4/3.
- */
-public interface JsonPath {
+import java.io.Serializable;
+
+@CodeHistory(date = "2025/10/2", name = "AbstractKeyList")
+@CodeHistory(date = "2026/4/3")
+public interface JsonPath extends Serializable {
 
     @NotNull
     static JsonPathSegment of(int value) {

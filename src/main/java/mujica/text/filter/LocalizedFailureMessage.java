@@ -7,9 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.Serializable;
 import java.util.function.Supplier;
 
-/**
- * Created on 2025/9/11.
- */
 @CodeHistory(date = "2025/9/11")
 interface LocalizedFailureMessage extends Supplier<String>, Serializable {
 

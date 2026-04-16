@@ -1,11 +1,13 @@
 package mujica.text.regex;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2021/10/17", project = "va")
 @CodeHistory(date = "2022/3/28", project = "infrastructure")
 @CodeHistory(date = "2025/5/22")
+@DirectSubclass({AlphaTransition.class, EpsilonTransition.class})
 public class Transition {
 
     protected final int s0, s1;

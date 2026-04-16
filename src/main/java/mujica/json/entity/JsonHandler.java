@@ -14,9 +14,14 @@ import java.math.BigInteger;
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "JsonConsumer")
 @CodeHistory(date = "2025/10/12", name = "JsonConsumer")
 @CodeHistory(date = "2026/1/4")
-public abstract class JsonHandler {
+public abstract class JsonHandler implements TypePreference {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonHandler.class);
+
+    @Override
+    public int typePreference() {
+        return 0;
+    }
 
     public void openArray() {
         LOGGER.warn("openArray()");
@@ -101,7 +106,7 @@ public abstract class JsonHandler {
     }
 
     public void stringValue(@NotNull FastString value) {
-        simpleValue(value);
+        simpleValue(value.toString());
     }
 
     public void emptyArrayValue() {

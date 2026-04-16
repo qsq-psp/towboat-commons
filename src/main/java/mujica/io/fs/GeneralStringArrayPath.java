@@ -14,32 +14,53 @@ import java.util.function.Consumer;
  * Created on 2026/3/27.
  */
 @CodeHistory(date = "2026/3/27")
-public class GeneralStringArrayPath implements HealthAware, Path, Serializable {
+public abstract class GeneralStringArrayPath implements HealthAware, Path, Serializable {
 
-    @Override
-    public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
-        //
+    @NotNull
+    protected final String[] segments;
+
+    protected GeneralStringArrayPath(@NotNull String[] segments) {
+        super();
+        this.segments = segments;
     }
 
     @NotNull
     @Override
-    public FileSystem getFileSystem() {
-        return null;
+    public abstract GeneralFileSystem getFileSystem();
+
+    @Override
+    public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
+        if (segments.length == 0) {
+            consumer.accept(new RuntimeException("no segment"));
+        }
+        for (String segment : segments) {
+            if (segment == null) {
+                consumer.accept(new RuntimeException("null segment"));
+            }
+        }
     }
 
     @Override
     public boolean isAbsolute() {
-        return false;
+        return getFileSystem().getRootSymbol().equals(segments[0]);
     }
 
     @Override
     public Path getRoot() {
-        return null;
+        if (isAbsolute()) {
+            return getFileSystem().getRoot();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public Path getFileName() {
-        return null;
+        final int index = segments.length - 1;
+        if (index == 0) {
+            return this;
+        }
+        return getFileSystem().getPath(segments[index]);
     }
 
     @Override

@@ -2,6 +2,7 @@ package mujica.ds.generic.heap;
 
 import mujica.ds.generic.ComparableComparator;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +13,7 @@ import java.util.function.UnaryOperator;
 
 @CodeHistory(date = "2025/5/23", project = "Ultramarine", name = "PriorityHeap")
 @CodeHistory(date = "2025/6/2")
+@DirectSubclass({ArrayPriorityQueue.class, ListPriorityQueue.class, BinomialQueue.class, SisterPriorityQueue.class, BiasedPriorityQueue.class})
 @Name(value = "优先队列", language = "zh")
 public abstract class AbstractPriorityQueue<E> extends AbstractCollection<E> implements PriorityQueue<E> {
 

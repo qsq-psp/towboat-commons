@@ -29,8 +29,8 @@ public class MarkedIntegralAppender extends IntegralAppender {
     }
 
     @Override
-    public void acceptCharacter(char value, @NotNull StringBuilder out) {
-        appender.acceptCharacter(value, out.append("(char) "));
+    public void acceptChar(char value, @NotNull StringBuilder out) {
+        appender.acceptChar(value, out.append("(char) "));
     }
 
     @Override

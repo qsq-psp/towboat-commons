@@ -11,11 +11,10 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-/**
- * Created on 2026/3/13.
- */
 @CodeHistory(date = "2026/3/13")
 public class CopyOnResizeBooleanList extends AbstractBooleanList {
+
+    private static final long serialVersionUID = 0xE04C062731DD528CL;
 
     @NotNull
     final ResizePolicy policy;

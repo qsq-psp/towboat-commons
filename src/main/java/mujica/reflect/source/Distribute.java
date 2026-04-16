@@ -117,6 +117,7 @@ public final class Distribute {
             Target.class,
             Repeatable.class,
             "", // other annotations not listed here
+            DirectSubclass.class,
             FieldOrder.class,
             Nullable.class,
             NotNull.class,
@@ -131,7 +132,7 @@ public final class Distribute {
 
         static final Pattern SERIAL_UID_PATTERN = Pattern.compile("\\s*private static final long serialVersionUID = 0([Xx][0-9A-Fa-f]{1,16}[Ll]);\\s*");
 
-        static final Pattern LINE_ANNOTATION_PATTERN = Pattern.compile("\\s*@([A-Z][0-9A-Za-z]*)(\\([^)]*\\))?\\s*");
+        static final Pattern LINE_ANNOTATION_PATTERN = Pattern.compile("\\s*@([A-Z][0-9A-Za-z]*)(\\([^)]*\\))?\\s*"); // do not match @interface, which is annotation declaration
 
         final HashMap<String, Integer> annotationOrderMap = new HashMap<>();
 
@@ -213,6 +214,7 @@ public final class Distribute {
             final List<String> lineList = Files.readAllLines(src, StandardCharsets.UTF_8);
             reformatJava(lineList);
             Files.write(dst, lineList, StandardCharsets.UTF_8, options);
+            Files.setLastModifiedTime(dst, Files.getLastModifiedTime(src));
         }
 
         boolean isJava(@NotNull Path path) {

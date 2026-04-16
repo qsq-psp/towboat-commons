@@ -2,6 +2,7 @@ package mujica.ds.generic.heap;
 
 import mujica.ds.generic.list.TruncateList;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +11,7 @@ import java.util.function.Predicate;
 
 @CodeHistory(date = "2025/5/23", project = "Ultramarine", name = "ListPriorityHeap")
 @CodeHistory(date = "2025/6/8")
+@DirectSubclass({BinaryPriorityQueue.class, NAryPriorityQueue.class})
 public abstract class ListPriorityQueue<E> extends AbstractPriorityQueue<E> {
 
     @NotNull
@@ -127,47 +129,6 @@ public abstract class ListPriorityQueue<E> extends AbstractPriorityQueue<E> {
     @Override
     public void clear() {
         list.clear();
-    }
-
-    private class IteratorImpl implements Iterator<E> {
-
-        int index;
-
-        int lastRemove; // if remove() is not used, there is no extra processing
-
-        int expectedModCount = modCount;
-
-        @Override
-        public boolean hasNext() {
-            return index < list.size();
-        }
-
-        @Override
-        public E next() {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            try {
-                E element = list.get(index);
-                index++; // if index out of bounds index remain unchanged
-                return element;
-            } catch (IndexOutOfBoundsException e) {
-                throw new NoSuchElementException();
-            }
-        }
-
-        @Override
-        public void remove() {
-            if (index == lastRemove) {
-                throw new IllegalStateException();
-            }
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            lastRemove = --index;
-            ListPriorityQueue.this.remove(lastRemove);
-            expectedModCount = modCount;
-        }
     }
 
     @NotNull

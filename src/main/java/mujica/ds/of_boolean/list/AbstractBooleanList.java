@@ -1,6 +1,5 @@
 package mujica.ds.of_boolean.list;
 
-import mujica.ds.of_int.list.IntList;
 import mujica.reflect.function.BooleanConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +15,8 @@ import java.util.function.Consumer;
  */
 @CodeHistory(date = "2026/3/12")
 public abstract class AbstractBooleanList implements BooleanList {
+
+    private static final long serialVersionUID = 0xA07A3F46493F7F8DL;
 
     protected AbstractBooleanList() {
         super();
@@ -230,7 +231,7 @@ public abstract class AbstractBooleanList implements BooleanList {
     }
 
     @Override
-    public abstract boolean getBoolean(int index);
+    public abstract boolean getBoolean(int i);
 
     @Override
     public boolean getFirst() {

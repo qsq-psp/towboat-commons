@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created on 2026/2/21.
- */
 @CodeHistory(date = "2026/2/21")
 public class ConcatenationBracketNode extends BracketNode {
 

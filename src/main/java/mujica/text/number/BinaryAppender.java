@@ -123,7 +123,7 @@ public class BinaryAppender extends IntegralAppender {
     }
 
     @Override
-    public void acceptInteger(int value, @NotNull StringBuilder out) {
+    public void acceptInt(int value, @NotNull StringBuilder out) {
         out.append("0b");
         BitAppender appender = start;
         int shift = Integer.SIZE;

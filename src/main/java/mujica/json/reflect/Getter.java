@@ -1,9 +1,7 @@
 package mujica.json.reflect;
 
-import mujica.ds.generic.set.CollectionConstant;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandles;
 
@@ -11,16 +9,50 @@ import java.lang.invoke.MethodHandles;
 @CodeHistory(date = "2025/11/14")
 class Getter {
 
-    Getter() { // for finding usage
-        super(); // pass
+    static final Getter NOP = new Getter();
+
+    Getter() {
+        super();
     }
 
-    protected Object invoke(@Nullable Object self) {
-        return CollectionConstant.UNDEFINED;
+    protected Object get(Object self) throws Throwable {
+        return null;
+    }
+    
+    protected boolean getBoolean(Object self) throws Throwable {
+        return (Boolean) get(self);
+    }
+
+    protected byte getByte(Object self) throws Throwable {
+        return (Byte) get(self);
+    }
+
+    protected char getChar(Object self) throws Throwable {
+        return (Character) get(self);
+    }
+
+    protected short getShort(Object self) throws Throwable {
+        return (Short) get(self);
+    }
+    
+    protected int getInt(Object self) throws Throwable {
+        return (Integer) get(self);
+    }
+    
+    protected long getLong(Object self) throws Throwable {
+        return (Long) get(self);
+    }
+    
+    protected float getFloat(Object self) throws Throwable {
+        return (Float) get(self);
+    }
+    
+    protected double getDouble(Object self) throws Throwable {
+        return (Double) get(self);
     }
 
     @NotNull
-    protected Getter tryUnreflect(@NotNull MethodHandles.Lookup lookup) {
-        return this; // if fail to unreflect
+    protected Getter unreflect(@NotNull MethodHandles.Lookup lookup) throws Throwable {
+        return this;
     }
 }

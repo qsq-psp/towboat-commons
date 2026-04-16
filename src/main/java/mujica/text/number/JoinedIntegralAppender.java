@@ -46,24 +46,24 @@ public class JoinedIntegralAppender extends IntegralAppender {
     }
 
     @Override
-    public void acceptCharacter(char value, @NotNull StringBuilder out) {
+    public void acceptChar(char value, @NotNull StringBuilder out) {
         final int length = parts.length;
         for (int index = 0; index < length; index++) {
             if (index != 0) {
                 out.append(separator);
             }
-            parts[index].acceptCharacter(value, out);
+            parts[index].acceptChar(value, out);
         }
     }
 
     @Override
-    public void acceptInteger(int value, @NotNull StringBuilder out) {
+    public void acceptInt(int value, @NotNull StringBuilder out) {
         final int length = parts.length;
         for (int index = 0; index < length; index++) {
             if (index != 0) {
                 out.append(separator);
             }
-            parts[index].acceptInteger(value, out);
+            parts[index].acceptInt(value, out);
         }
     }
 

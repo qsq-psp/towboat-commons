@@ -346,10 +346,11 @@ public class CharSequenceAppender {
     public static final class Json {
 
         @ReferencePage(title = "Introducing JSON", href = "https://www.json.org/json-en.html")
-        public static final CharSequenceAppender ESSENTIAL = new QuoteAppender(
-                (new IntMapEscapeAppender()).escapeNTR().escapeBackspace().escapeFormFeed()
-                        .escapeBackSlash().escapeQuotationMark(),
-                "\"");
+        public static final CharSequenceAppender ESSENTIAL_CORE = (new IntMapEscapeAppender())
+                .escapeNTR().escapeBackspace().escapeFormFeed().escapeBackSlash().escapeQuotationMark();
+
+        @ReferencePage(title = "Introducing JSON", href = "https://www.json.org/json-en.html")
+        public static final CharSequenceAppender ESSENTIAL = new QuoteAppender(ESSENTIAL_CORE, "\"");
 
         public static final CharSequenceAppender EXTRA = new QuoteAppender(
                 (new IntMapEscapeAppender()).escapeControlU().escapeFormatU().escapeWhitespaceU().escapeNTR()

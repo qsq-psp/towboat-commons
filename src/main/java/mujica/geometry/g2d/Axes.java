@@ -2,6 +2,7 @@ package mujica.geometry.g2d;
 
 import mujica.geometry.GeometryOperationResult;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2020/4/10", project = "coo", name = "PlanarTransform.Orthogonal")
 @CodeHistory(date = "2022/6/26")
 @ReferencePage(title = "Rotation and Translation (2D)", href = "https://www.cs.usfca.edu/~galles/visualization/RotateTranslate2D.html")
+@DirectSubclass({Affine2.class})
 public class Axes extends ViewportTransform {
 
     private static final long serialVersionUID = 0x5d227d99fa9b185cL;

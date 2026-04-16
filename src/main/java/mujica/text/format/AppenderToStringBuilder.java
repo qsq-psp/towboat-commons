@@ -5,6 +5,7 @@ import mujica.ds.of_char.sequence.TowboatCharSequence;
 import mujica.reflect.modifier.AccessStructure;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.number.DecimalAppender;
+import mujica.text.number.DefaultIntegralAppender;
 import mujica.text.number.IntegralAppender;
 import mujica.text.number.MarkedIntegralAppender;
 import mujica.text.sanitizer.CharSequenceAppender;
@@ -457,10 +458,10 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
             method = lookup.findVirtual(IntegralAppender.class, "acceptShort", MethodType.methodType(void.class, short.class, StringBuilder.class)).bindTo(appender);
             methods.put(Short.class, method);
             methods.put(short.class, method);
-            method = lookup.findVirtual(IntegralAppender.class, "acceptCharacter", MethodType.methodType(void.class, char.class, StringBuilder.class)).bindTo(appender);
+            method = lookup.findVirtual(IntegralAppender.class, "acceptChar", MethodType.methodType(void.class, char.class, StringBuilder.class)).bindTo(appender);
             methods.put(Character.class, method);
             methods.put(char.class, method);
-            method = lookup.findVirtual(IntegralAppender.class, "acceptInteger", MethodType.methodType(void.class, int.class, StringBuilder.class)).bindTo(appender);
+            method = lookup.findVirtual(IntegralAppender.class, "acceptInt", MethodType.methodType(void.class, int.class, StringBuilder.class)).bindTo(appender);
             methods.put(Integer.class, method);
             methods.put(int.class, method);
             method = lookup.findVirtual(IntegralAppender.class, "acceptLong", MethodType.methodType(void.class, long.class, StringBuilder.class)).bindTo(appender);
@@ -523,11 +524,11 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
         public Config numberIntegral() throws ReflectiveOperationException {
             MethodHandle method;
             method = lookup.findVirtual(AppenderToStringBuilder.class, "acceptInt", MethodType.methodType(void.class, Number.class, StringBuilder.class)).bindTo(AppenderToStringBuilder.this);
-            for (Class<?> clazz : IntegralAppender.NUMBER_INT_CLASSES) {
+            for (Class<?> clazz : DefaultIntegralAppender.NUMBER_INT_CLASSES) {
                 methods.put(clazz, method);
             }
             method = lookup.findVirtual(AppenderToStringBuilder.class, "acceptLong", MethodType.methodType(void.class, Number.class, StringBuilder.class)).bindTo(AppenderToStringBuilder.this);
-            for (Class<?> clazz : IntegralAppender.NUMBER_LONG_CLASSES) {
+            for (Class<?> clazz : DefaultIntegralAppender.NUMBER_LONG_CLASSES) {
                 methods.put(clazz, method);
             }
             return this;

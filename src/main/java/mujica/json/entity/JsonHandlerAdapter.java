@@ -1,19 +1,19 @@
 package mujica.json.entity;
 
 import io.netty.buffer.ByteBuf;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2026/4/1.
- */
+@CodeHistory(date = "2026/4/1")
 public class JsonHandlerAdapter<H extends JsonHandler> extends JsonHandler {
 
+    @NotNull
     protected H h;
 
-    public JsonHandlerAdapter(H h) {
+    public JsonHandlerAdapter(@NotNull H h) {
         super();
         this.h = h;
     }

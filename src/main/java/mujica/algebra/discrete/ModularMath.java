@@ -1,5 +1,6 @@
 package mujica.algebra.discrete;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -7,6 +8,7 @@ import java.math.BigInteger;
 /**
  * Created on 2025/2/27.
  */
+@CodeHistory(date = "2025/2/27")
 public abstract class ModularMath extends IntegralMath {
 
     protected static final int ONE = 0;

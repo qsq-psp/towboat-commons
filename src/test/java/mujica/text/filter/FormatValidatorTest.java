@@ -2,7 +2,6 @@ package mujica.text.filter;
 
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.text.filter.*;
 import org.junit.Assert;
 import org.junit.Test;
 

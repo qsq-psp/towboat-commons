@@ -147,7 +147,7 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
     public void stringKey(@NotNull String key) {
         anyKey();
         CharSequenceAppender appender;
-        if ((flags & FLAG_ESCAPE_EXTRA) == 0) {
+        if ((flags & ConfigFlags.ESCAPE_EXTRA) == 0) {
             appender = CharSequenceAppender.Json.ESSENTIAL;
         } else {
             appender = CharSequenceAppender.Json.EXTRA;
@@ -219,9 +219,9 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
 
     @Override
     public void numberValue(float value) {
-        if ((flags & FLAG_INFINITY_TO_NULL) != 0 && Float.isInfinite(value)) {
+        if ((flags & ConfigFlags.INFINITY_TO_NULL) != 0 && Float.isInfinite(value)) {
             nullValue();
-        } else if ((flags & FLAG_NAN_TO_NULL) != 0 && Float.isNaN(value)) {
+        } else if ((flags & ConfigFlags.NAN_TO_NULL) != 0 && Float.isNaN(value)) {
             nullValue();
         } else {
             anyValue();
@@ -231,9 +231,9 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
 
     @Override
     public void numberValue(double value) {
-        if ((flags & FLAG_INFINITY_TO_NULL) != 0 && Double.isInfinite(value)) {
+        if ((flags & ConfigFlags.INFINITY_TO_NULL) != 0 && Double.isInfinite(value)) {
             nullValue();
-        } else if ((flags & FLAG_NAN_TO_NULL) != 0 && Double.isNaN(value)) {
+        } else if ((flags & ConfigFlags.NAN_TO_NULL) != 0 && Double.isNaN(value)) {
             nullValue();
         } else {
             anyValue();
@@ -257,7 +257,7 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
     public void stringValue(@NotNull CharSequence value) {
         anyValue();
         CharSequenceAppender appender;
-        if ((flags & FLAG_ESCAPE_EXTRA) == 0) {
+        if ((flags & ConfigFlags.ESCAPE_EXTRA) == 0) {
             appender = CharSequenceAppender.Json.ESSENTIAL;
         } else {
             appender = CharSequenceAppender.Json.EXTRA;

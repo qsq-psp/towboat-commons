@@ -1,5 +1,6 @@
 package mujica.json.entity;
 
+import mujica.json.reflect.ContainerConfig;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +34,19 @@ class UtilMapAsJsonObject<T extends Map<String, Object>> extends JsonObject {
     }
 
     @Override
-    public void setObject(@NotNull String name, Object value) {
-        map.put(name, value);
+    public void setObject(@NotNull String name, Object value, @NotNull ContainerConfig.ObjectAction action) {
+        switch (action) {
+            case PUT:
+                map.put(name, value);
+                break;
+            case PUT_IF_PRESENT:
+                if (map.containsKey(name)) {
+                    map.put(name, value);
+                }
+                break;
+            case PUT_IF_ABSENT:
+                map.putIfAbsent(name, value);
+                break;
+        }
     }
 }

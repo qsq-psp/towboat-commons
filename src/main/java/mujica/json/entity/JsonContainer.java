@@ -1,6 +1,7 @@
 package mujica.json.entity;
 
 import mujica.ds.generic.Slot;
+import mujica.json.reflect.ContainerConfig;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,11 +9,23 @@ import java.io.Serializable;
 import java.util.Collection;
 
 @CodeHistory(date = "2025/9/25")
-public interface JsonContainer<K> extends Serializable {
+public abstract class JsonContainer<K> implements Serializable {
 
     @NotNull
-    Collection<K> keyCollection();
+    protected ContainerConfig config;
 
     @NotNull
-    Slot<Object> getSlot(@NotNull K key);
+    public ContainerConfig getConfig() {
+        return config;
+    }
+
+    public void setConfig(@NotNull ContainerConfig config) {
+        this.config = config;
+    }
+
+    @NotNull
+    public abstract Collection<K> keyCollection();
+
+    @NotNull
+    public abstract Slot<Object> getSlot(@NotNull K key);
 }

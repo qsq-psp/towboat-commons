@@ -25,7 +25,7 @@ public class ArrayCovarianceTest {
     public void caseByte1() {
         final Object target = new byte[4];
         Assert.assertEquals(Object.class, target.getClass().getSuperclass());
-        Assert.assertEquals(byte.class, target.getClass().componentType());
+        Assert.assertEquals(byte.class, target.getClass().getComponentType());
         Assert.assertFalse(target instanceof Object[]);
         Assert.assertFalse(target instanceof Byte[]);
     }
@@ -34,7 +34,7 @@ public class ArrayCovarianceTest {
     public void caseByte2() {
         final Object target = new byte[3][3];
         Assert.assertEquals(Object.class, target.getClass().getSuperclass());
-        Assert.assertEquals(byte[].class, target.getClass().componentType());
+        Assert.assertEquals(byte[].class, target.getClass().getComponentType());
         Assert.assertTrue(target instanceof Object[]);
         Assert.assertFalse(target instanceof Object[][]);
     }
@@ -43,7 +43,7 @@ public class ArrayCovarianceTest {
     public void caseByte3() {
         final Object target = new byte[2][2][2];
         Assert.assertEquals(Object.class, target.getClass().getSuperclass());
-        Assert.assertEquals(byte[][].class, target.getClass().componentType());
+        Assert.assertEquals(byte[][].class, target.getClass().getComponentType());
         Assert.assertTrue(target instanceof Object[]);
         Assert.assertTrue(target instanceof Object[][]);
         Assert.assertFalse(target instanceof Object[][][]);
@@ -59,7 +59,7 @@ public class ArrayCovarianceTest {
     public void caseInt1() {
         final Object target = new int[4];
         Assert.assertEquals(Object.class, target.getClass().getSuperclass());
-        Assert.assertEquals(int.class, target.getClass().componentType());
+        Assert.assertEquals(int.class, target.getClass().getComponentType());
         Assert.assertFalse(target instanceof Object[]);
         Assert.assertFalse(target instanceof Integer[]);
     }
@@ -68,7 +68,7 @@ public class ArrayCovarianceTest {
     public void caseInt2() {
         final Object target = new int[3][3];
         Assert.assertEquals(Object.class, target.getClass().getSuperclass());
-        Assert.assertEquals(int[].class, target.getClass().componentType());
+        Assert.assertEquals(int[].class, target.getClass().getComponentType());
         Assert.assertTrue(target instanceof Object[]);
         Assert.assertFalse(target instanceof Object[][]);
     }
@@ -77,7 +77,7 @@ public class ArrayCovarianceTest {
     public void caseInt3() {
         final Object target = new int[2][2][2];
         Assert.assertEquals(Object.class, target.getClass().getSuperclass());
-        Assert.assertEquals(int[][].class, target.getClass().componentType());
+        Assert.assertEquals(int[][].class, target.getClass().getComponentType());
         Assert.assertTrue(target instanceof Object[]);
         Assert.assertTrue(target instanceof Object[][]);
         Assert.assertFalse(target instanceof Object[][][]);

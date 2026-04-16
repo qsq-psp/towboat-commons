@@ -16,4 +16,8 @@ public final class BigConstants {
     public static final BigInteger COUNT_LONG = BigInteger.ONE.shiftLeft(Long.SIZE);
 
     public static final BigInteger MAX_UNSIGNED_LONG = COUNT_LONG.subtract(BigInteger.ONE);
+
+    private BigConstants() {
+        super();
+    }
 }

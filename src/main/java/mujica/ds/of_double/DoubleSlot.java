@@ -2,6 +2,9 @@ package mujica.ds.of_double;
 
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.DoubleSupplier;
 
 @CodeHistory(date = "2018/7/3", project = "existence", name = "HasDoubleValue")
 @CodeHistory(date = "2024/1/20", project = "Ultramarine")
@@ -20,4 +23,16 @@ public interface DoubleSlot {
     double getDouble();
 
     void setDouble(double newValue);
+
+    default void setDouble(@NotNull DoubleSlot newValueSlot) {
+        setDouble(newValueSlot.getDouble());
+    }
+
+    default void setDouble(@NotNull Number newNumberValue) {
+        setDouble(newNumberValue.doubleValue());
+    }
+
+    default void setDouble(@NotNull DoubleSupplier newValueSupplier) {
+        setDouble(newValueSupplier.getAsDouble());
+    }
 }

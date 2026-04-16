@@ -36,21 +36,21 @@ public class PaddedRadix extends IntegralAppender {
 
     @Override
     public void acceptByte(byte value, @NotNull StringBuilder out) {
-        acceptInteger(value, out);
+        acceptInt(value, out);
     }
 
     @Override
     public void acceptShort(short value, @NotNull StringBuilder out) {
-        acceptInteger(value, out);
+        acceptInt(value, out);
     }
 
     @Override
-    public void acceptCharacter(char value, @NotNull StringBuilder out) {
-        acceptInteger(value, out);
+    public void acceptChar(char value, @NotNull StringBuilder out) {
+        acceptInt(value, out);
     }
 
     @Override
-    public void acceptInteger(int value, @NotNull StringBuilder out) {
+    public void acceptInt(int value, @NotNull StringBuilder out) {
         if (value == 0 && minLength == 0) {
             return;
         }

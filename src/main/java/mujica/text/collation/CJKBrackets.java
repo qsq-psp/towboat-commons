@@ -1,8 +1,11 @@
 package mujica.text.collation;
 
+import mujica.reflect.modifier.CodeHistory;
+
 /**
  * Created on 2026/3/14.
  */
+@CodeHistory(date = "2026/3/14")
 public interface CJKBrackets {
 
     Bracket ZH_SINGLE_QUOTE = new Bracket("\u2018", "\u2019");

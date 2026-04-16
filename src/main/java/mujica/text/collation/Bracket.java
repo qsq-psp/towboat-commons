@@ -4,9 +4,6 @@ import mujica.reflect.modifier.CodeHistory;
 import mujica.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2026/3/4.
- */
 @CodeHistory(date = "2026/3/4")
 public class Bracket {
 

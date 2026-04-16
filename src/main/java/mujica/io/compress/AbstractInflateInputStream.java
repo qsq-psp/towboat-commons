@@ -2,6 +2,7 @@ package mujica.io.compress;
 
 import mujica.io.function.IOFunction;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +13,7 @@ import java.io.InputStream;
 @CodeHistory(date = "2025/10/19", name = "TowboatInflaterInputStream")
 @CodeHistory(date = "2025/11/7")
 @ReferencePage(title = "DEFLATE Compressed Data Format Specification version 1.3", href = "https://www.rfc-editor.org/rfc/rfc1951.html")
+@DirectSubclass({JdkInflateInputStream.class, ResidueInflateInputStream.class})
 public abstract class AbstractInflateInputStream extends FilterInputStream {
 
     protected static final int MAX_RUN_BUFFER_DISTANCE = 1 << 15;

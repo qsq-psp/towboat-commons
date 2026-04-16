@@ -14,16 +14,16 @@ public interface IntSlot {
 
     void setInt(int newValue);
 
-    default void setInt(@NotNull IntSlot newValue) {
-        setInt(newValue.getInt());
+    default void setInt(@NotNull IntSlot newValueSlot) {
+        setInt(newValueSlot.getInt());
     }
 
-    default void setInt(@NotNull Number newValue) {
-        setInt(newValue.intValue());
+    default void setInt(@NotNull Number newNumberValue) {
+        setInt(newNumberValue.intValue());
     }
 
-    default void setInt(@NotNull IntSupplier supplier) {
-        setInt(supplier.getAsInt());
+    default void setInt(@NotNull IntSupplier newValueSupplier) {
+        setInt(newValueSupplier.getAsInt());
     }
 
     default int updateInt(int newValue) {

@@ -13,7 +13,7 @@ import java.util.List;
 @CodeHistory(date = "2022/5/19", project = "Ultramarine", name = "StringUtility")
 @CodeHistory(date = "2023/4/20", project = "Ultramarine", name = "StringMetrics")
 @CodeHistory(date = "2026/3/14")
-public abstract class TowboatCharSequence implements CharSequence, Serializable { // move to ds.of_char
+public abstract class TowboatCharSequence implements CharSequence, Serializable {
 
     public static final List<Class<? extends CharSequence>> CHAR_SEQUENCE_CLASSES = List.of(
             String.class,

@@ -35,7 +35,8 @@ module CDP {
     exports mujica.ds.of_boolean.list;
     exports mujica.ds.of_byte;
     exports mujica.ds.of_byte.list;
-    // exports mujica.ds.of_byte.view;
+    exports mujica.ds.of_byte.view;
+    exports mujica.ds.of_byte.run;
     exports mujica.ds.of_char;
     exports mujica.ds.of_char.sequence;
     exports mujica.ds.of_int;
@@ -60,8 +61,10 @@ module CDP {
     exports mujica.algebra.symbol;
     exports mujica.geometry;
     exports mujica.geometry.g2d;
-    exports mujica.json.io;
     exports mujica.json.entity;
+    exports mujica.json.io;
+    exports mujica.json.modifier;
+    exports mujica.json.reflect;
     exports mujica.netty.concurrent;
 
     provides java.nio.charset.spi.CharsetProvider with TowboatCharsetProvider;

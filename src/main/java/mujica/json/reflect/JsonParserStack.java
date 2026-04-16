@@ -6,53 +6,53 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/12/20")
-class JsonParserStack extends JsonHandlerAdapter<JsonParserFrame> {
+class JsonParserStack extends JsonHandlerAdapter<NopFrame> {
 
-    public JsonParserStack(JsonParserFrame h) {
-        super(h);
+    public JsonParserStack(@NotNull NopFrame frame) {
+        super(frame);
     }
 
     @Override
     protected void afterValue() {
-        h.topType = null;
-        h.key = null;
+        h.shape = null;
+        h.setKey(null);
     }
 
     @Override
     public void openArray() {
-        h.topType = JsonParserFrame.StructureType.ARRAY;
+        h.shape = NopFrame.StructureShape.ARRAY;
         h = h.open();
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public void closeArray() {
-        h.bottom.structureValue(h.close());
-        h = h.bottom;
+        h.parent.structureValue(h.close());
+        h = h.parent;
         afterValue();
     }
 
     @Override
     public void openObject() {
-        h.topType = JsonParserFrame.StructureType.OBJECT;
+        h.shape = NopFrame.StructureShape.OBJECT;
         h = h.open();
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public void closeObject() {
-        h.bottom.structureValue(h.close());
-        h = h.bottom;
+        h.parent.structureValue(h.close());
+        h = h.parent;
         afterValue();
     }
 
     @Override
     public void stringKey(@NotNull String key) {
-        h.key = key;
+        h.setKey(key);
     }
 
     @Override
     public void stringKey(@NotNull FastString key) {
-        h.key = key;
+        h.setKey(key);
     }
 }

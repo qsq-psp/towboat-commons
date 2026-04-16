@@ -1,5 +1,6 @@
 package mujica.io.compress;
 
+import mujica.ds.of_byte.run.CyclicArrayRunBuffer;
 import mujica.io.stream.BufferedLimitedUniversalDataInputStream;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.number.HexEncoder;

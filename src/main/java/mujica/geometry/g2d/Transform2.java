@@ -3,6 +3,7 @@ package mujica.geometry.g2d;
 import mujica.geometry.Geometry;
 import mujica.geometry.GeometryOperationResult;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +12,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2020/4/10", project = "coo", name = "PlanarTransform")
 @CodeHistory(date = "2022/6/5", project = "Ultramarine")
 @CodeHistory(date = "2024/4/1")
+@DirectSubclass({Translation2.class})
 public class Transform2 extends Geometry implements FunctionalTransform2, Comparable<Transform2> {
 
     private static final long serialVersionUID = 0x62657cbd9cfbec19L;

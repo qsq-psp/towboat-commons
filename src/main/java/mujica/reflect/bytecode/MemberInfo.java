@@ -3,6 +3,7 @@ package mujica.reflect.bytecode;
 import mujica.io.stream.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;
@@ -15,6 +16,7 @@ import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
 
 @CodeHistory(date = "2025/9/19")
+@DirectSubclass({FieldInfo.class, MethodInfo.class})
 public abstract class MemberInfo implements ClassFileNode.Dependent, BiConsumer<AttributeInfo.Statistics, String> {
 
     private static final long serialVersionUID = 0xd47608dcbc6ce532L;

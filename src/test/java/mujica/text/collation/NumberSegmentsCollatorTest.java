@@ -1,5 +1,6 @@
 package mujica.text.collation;
 
+import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.junit.Assert;
 import org.junit.Test;
@@ -72,11 +73,21 @@ public class NumberSegmentsCollatorTest {
         Assert.assertEquals(0, collator.normalizedCompare("w04792374923749", "w00000000000000004792374923749"));
     }
 
-    public void checkSymmetry() {
-        //
-    }
+    private static final int REPEAT = 500;
 
-    public void checkTransitivity() {
-        //
+    private static final int STRING_LENGTH = 8;
+
+    private final RandomContext rc = new RandomContext();
+
+    @Test
+    public void checkSymmetry() {
+        final NumberSegmentsCollator collator = new NumberSegmentsCollator();
+        for (int repeatIndex = 0; repeatIndex < REPEAT; repeatIndex++) {
+            String a = rc.nextString(STRING_LENGTH);
+            String b = rc.nextString(STRING_LENGTH);
+            int ab = collator.normalizedCompare(a, b);
+            int ba = collator.normalizedCompare(b, a);
+            Assert.assertEquals(0, ab + ba);
+        }
     }
 }

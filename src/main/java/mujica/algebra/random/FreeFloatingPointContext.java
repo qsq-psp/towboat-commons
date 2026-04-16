@@ -1,9 +1,13 @@
 package mujica.algebra.random;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ConstantComposition;
+import mujica.reflect.modifier.ConstantInterface;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/3/11")
+@ConstantInterface(composition = ConstantComposition.OR)
 public class FreeFloatingPointContext extends RandomContext {
 
     public static final int FP_NORMAL         = 0x01;
@@ -12,6 +16,7 @@ public class FreeFloatingPointContext extends RandomContext {
     public static final int FP_INFINITY       = 0x08;
     public static final int FP_NAN            = 0x10;
 
+    @MagicConstant(flagsFromClass = FreeFloatingPointContext.class)
     final int flags;
 
     public FreeFloatingPointContext(@NotNull RandomSource source, int flags) {

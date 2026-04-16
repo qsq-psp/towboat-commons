@@ -5,8 +5,10 @@ import mujica.ds.of_int.list.CopyOnResizeIntList;
 import mujica.json.entity.JsonHandler;
 import mujica.json.entity.StructureChecked;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.text.format.AppenderToStringBuilder;
 import mujica.text.sanitizer.CharSequenceAppender;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -17,16 +19,22 @@ import java.nio.charset.StandardCharsets;
 @CodeHistory(date = "2021/12/30", project = "infrastructure", name = "JsonWriter")
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "Writer")
 @CodeHistory(date = "2026/1/6")
+@DirectSubclass({JsonStringWriter.class, JsonStreamWriter.class, JsonByteBufWriter.class})
 public abstract class JsonWriter extends JsonHandler implements StructureChecked {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonWriter.class);
 
-    public static final int FLAG_ESCAPE_EXTRA           = 0x01;
-    public static final int FLAG_INFINITY_TO_NULL       = 0x02;
-    public static final int FLAG_NAN_TO_NULL            = 0x04;
-    public static final int FLAG_UPPERCASE_HEX          = 0x10;
-    public static final int FLAG_UPPERCASE_E            = 0x20;
+    @CodeHistory(date = "2026/4/7")
+    protected interface ConfigFlags {
 
+        int ESCAPE_EXTRA = 0x01;
+        int INFINITY_TO_NULL = 0x02;
+        int NAN_TO_NULL = 0x04;
+        int UPPERCASE_HEX = 0x10;
+        int UPPERCASE_E = 0x20;
+    }
+
+    @MagicConstant(flagsFromClass = ConfigFlags.class)
     protected int flags;
 
     public void setFlags(int flags) {
@@ -37,6 +45,7 @@ public abstract class JsonWriter extends JsonHandler implements StructureChecked
         return flags;
     }
 
+    // additional states to mujica.json.entity.StructureChecked
     public static final int STATE_NEW_ARRAY = 5;
     public static final int STATE_NEW_OBJECT = 6;
     public static final int STATE_JSONP = 7;
@@ -90,7 +99,7 @@ public abstract class JsonWriter extends JsonHandler implements StructureChecked
     private static class Debug {
 
         private static final String[] STATE_NAMES = {
-                "start", "end", "new-array", "array", "new-object", "object", "key", "jsonp"
+                "start", "end", "array", "object", "key", "new-array", "new-object", "jsonp"
         };
 
         @NotNull

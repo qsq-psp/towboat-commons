@@ -69,7 +69,11 @@ public abstract class GeneralStringPath implements HealthAware, Path, Serializab
 
     @Override
     public Path getRoot() {
-        return getFileSystem().getPath(getFileSystem().getSeparator());
+        if (isAbsolute()) {
+            return getFileSystem().getRoot();
+        } else {
+            return null;
+        }
     }
 
     @Override

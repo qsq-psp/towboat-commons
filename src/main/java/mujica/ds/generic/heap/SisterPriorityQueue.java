@@ -3,12 +3,14 @@ package mujica.ds.generic.heap;
 import mujica.ds.of_boolean.PublicBooleanSlot;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 @CodeHistory(date = "2025/6/4")
+@DirectSubclass({FibonacciHeap.class, PairingHeap.class})
 public abstract class SisterPriorityQueue<E> extends AbstractPriorityQueue<E> {
 
     private static final long serialVersionUID = 0x2a88baf27bc3dad9L;

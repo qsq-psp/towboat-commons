@@ -2,6 +2,7 @@ package mujica.algebra.discrete;
 
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.algebra.prime.Decomposer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -15,6 +16,10 @@ import java.util.Map;
  * Moved into Ultramarine on 2023/4/1.
  * Recreated on 2025/2/26.
  */
+@CodeHistory(date = "2018/11/29", project = "mmc", name = "Factor")
+@CodeHistory(date = "2021/7/17", project = "LeetInAction", name = "DiscreteMath")
+@CodeHistory(date = "2023/4/1", project = "Ultramarine")
+@CodeHistory(date = "2025/2/26")
 public class IntegralMath {
 
     public static final IntegralMath INSTANCE = new IntegralMath();

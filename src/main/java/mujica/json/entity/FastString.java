@@ -1,5 +1,6 @@
 package mujica.json.entity;
 
+import mujica.ds.of_char.sequence.TowboatCharSequence;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,7 +8,7 @@ import java.io.Serializable;
 
 @CodeHistory(date = "2022/6/1", project = "Ultramarine", name = "TypedString")
 @CodeHistory(date = "2025/10/11")
-public final class FastString implements Serializable {
+public final class FastString extends TowboatCharSequence implements Serializable {
 
     private static final long serialVersionUID = 0xe6acf0939adaa8c6L;
 
@@ -17,6 +18,22 @@ public final class FastString implements Serializable {
     public FastString(@NotNull String string) {
         super();
         this.string = string;
+    }
+
+    @Override
+    public int length() {
+        return string.length();
+    }
+
+    @Override
+    public char charAt(int index) {
+        return string.charAt(index);
+    }
+
+    @NotNull
+    @Override
+    public char[] toCharArray() {
+        return string.toCharArray();
     }
 
     @Override
@@ -30,6 +47,7 @@ public final class FastString implements Serializable {
     }
 
     @Override
+    @NotNull
     public String toString() {
         return string;
     }

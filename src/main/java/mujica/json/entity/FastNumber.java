@@ -18,6 +18,10 @@ public final class FastNumber extends Number {
         this.value = value;
     }
 
+    public boolean isZero() {
+        return value.equals("0"); // todo: dot
+    }
+
     @Override
     public int intValue() {
         return Integer.parseInt(value);

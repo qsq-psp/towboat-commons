@@ -32,9 +32,12 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
         @NotNull
         NibbleAppender accept(int value, @NotNull StringBuilder out);
 
+        @NotNull
+        NibbleAppender accept(int value, @NotNull StringBuffer out);
+
         void finish(@NotNull StringBuilder out);
 
-        // StringBuffer ...
+        void finish(@NotNull StringBuffer out);
     }
 
     private static final NibbleAppender UPPER_SUBSEQUENT = new NibbleAppender() {
@@ -46,9 +49,26 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
             return this;
         }
 
+        @NotNull
+        @Override
+        public NibbleAppender accept(int value, @NotNull StringBuffer out) {
+            out.append(UPPER_TABLE[0xf & value]);
+            return this;
+        }
+
         @Override
         public void finish(@NotNull StringBuilder out) {
             // pass
+        }
+
+        @Override
+        public void finish(@NotNull StringBuffer out) {
+            // pass
+        }
+
+        @Override
+        public String toString() {
+            return "upper, pad";
         }
     };
 
@@ -65,9 +85,30 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
             return UPPER_SUBSEQUENT;
         }
 
+        @NotNull
+        @Override
+        public NibbleAppender accept(int value, @NotNull StringBuffer out) {
+            value &= 0xf;
+            if (value == 0) {
+                return this;
+            }
+            out.append(UPPER_TABLE[value]);
+            return UPPER_SUBSEQUENT;
+        }
+
         @Override
         public void finish(@NotNull StringBuilder out) {
             out.append('0');
+        }
+
+        @Override
+        public void finish(@NotNull StringBuffer out) {
+            out.append('0');
+        }
+
+        @Override
+        public String toString() {
+            return "upper, no-pad";
         }
     };
 
@@ -80,9 +121,26 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
             return this;
         }
 
+        @NotNull
+        @Override
+        public NibbleAppender accept(int value, @NotNull StringBuffer out) {
+            out.append(LOWER_TABLE[0xf & value]);
+            return this;
+        }
+
         @Override
         public void finish(@NotNull StringBuilder out) {
             // pass
+        }
+
+        @Override
+        public void finish(@NotNull StringBuffer out) {
+            // pass
+        }
+
+        @Override
+        public String toString() {
+            return "lower, pad";
         }
     };
 
@@ -99,9 +157,30 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
             return LOWER_SUBSEQUENT;
         }
 
+        @NotNull
+        @Override
+        public NibbleAppender accept(int value, @NotNull StringBuffer out) {
+            value &= 0xf;
+            if (value == 0) {
+                return this;
+            }
+            out.append(LOWER_TABLE[value]);
+            return LOWER_SUBSEQUENT;
+        }
+
         @Override
         public void finish(@NotNull StringBuilder out) {
             out.append('0');
+        }
+
+        @Override
+        public void finish(@NotNull StringBuffer out) {
+            out.append('0');
+        }
+
+        @Override
+        public String toString() {
+            return "lower, no-pad";
         }
     };
 
@@ -136,12 +215,12 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
     }
 
     @Override
-    public void acceptCharacter(char value, @NotNull StringBuilder out) {
+    public void acceptChar(char value, @NotNull StringBuilder out) {
         start.accept(value >> 12, out.append("0x")).accept(value >> 8, out).accept(value >> 4, out).accept(value, out).finish(out);
     }
 
     @Override
-    public void acceptInteger(int value, @NotNull StringBuilder out) {
+    public void acceptInt(int value, @NotNull StringBuilder out) {
         out.append("0x");
         NibbleAppender appender = start;
         int shift = Integer.SIZE;
@@ -167,5 +246,10 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
     @Override
     public void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out) {
         out.append("0x").append(value.toString(16));
+    }
+
+    @Override
+    public String toString() {
+        return "HexadecimalAppender[" + start + "]";
     }
 }

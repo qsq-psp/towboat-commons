@@ -1,11 +1,11 @@
 package mujica.json.entity;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ConstantComposition;
+import mujica.reflect.modifier.ConstantInterface;
 
-/**
- * Created on 2025/11/6.
- */
 @CodeHistory(date = "2025/11/6")
+@ConstantInterface(composition = ConstantComposition.NEVER)
 public interface StructureChecked {
 
     int STATE_START = 0;

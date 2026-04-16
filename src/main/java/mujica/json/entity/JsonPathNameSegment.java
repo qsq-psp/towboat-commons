@@ -5,6 +5,8 @@ package mujica.json.entity;
  */
 class JsonPathNameSegment extends JsonPathSegment {
 
+    private static final long serialVersionUID = 0xDC05C82AE31349DFL;
+
     final String value;
 
     JsonPathNameSegment(String value) {

@@ -3,6 +3,7 @@ package mujica.io.compress;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
+import mujica.ds.of_byte.run.*;
 import mujica.ds.of_int.list.*;
 import mujica.ds.of_int.map.CompatibleIntMap;
 import mujica.ds.of_int.map.CompatibleIntSlotMap;
@@ -143,7 +144,7 @@ public class InflateTest {
                 dos.flush();
             }
             byte[] compressed = bos.toByteArray();
-            byte[] actual = expected;
+            byte[] actual = null;
             InputStream is = null;
             try {
                 is = nextInflateInputStream(new ByteArrayInputStream(compressed));
@@ -153,6 +154,9 @@ public class InflateTest {
             } catch (Throwable e) {
                 if (is != null) {
                     System.out.println(is);
+                }
+                if (actual != null) {
+                    System.out.println(ByteBufUtil.hexDump(actual));
                 }
                 throw e;
             } finally {
@@ -201,7 +205,7 @@ public class InflateTest {
                 dos.flush();
             }
             byte[] compressed = bos.toByteArray();
-            byte[] actual = expected;
+            byte[] actual = null;
             InputStream is = null;
             try {
                 is = WrapperZlibInputStream.create(new ByteArrayInputStream(compressed), nextInflateInputStreamConstructor2());
@@ -211,6 +215,9 @@ public class InflateTest {
             } catch (Throwable e) {
                 if (is != null) {
                     System.out.println(is);
+                }
+                if (actual != null) {
+                    System.out.println(ByteBufUtil.hexDump(actual));
                 }
                 throw e;
             } finally {
@@ -258,7 +265,7 @@ public class InflateTest {
                 gos.flush();
             }
             byte[] compressed = bos.toByteArray();
-            byte[] actual = expected;
+            byte[] actual = null;
             InputStream is = null;
             try {
                 is = WrapperGzipInputStream.create(new ByteArrayInputStream(compressed), nextInflateInputStreamConstructor1());
@@ -268,6 +275,9 @@ public class InflateTest {
             } catch (Throwable e) {
                 if (is != null) {
                     System.out.println(is);
+                }
+                if (actual != null) {
+                    System.out.println(ByteBufUtil.hexDump(actual));
                 }
                 throw e;
             } finally {

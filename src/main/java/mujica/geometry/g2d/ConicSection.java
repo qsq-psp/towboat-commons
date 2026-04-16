@@ -2,6 +2,7 @@ package mujica.geometry.g2d;
 
 import mujica.geometry.GeometryOperationResult;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,6 +10,7 @@ import java.util.function.Consumer;
 
 @CodeHistory(date = "2024/2/17", project = "Ultramarine")
 @CodeHistory(date = "2025/3/2")
+@DirectSubclass({Ellipse.class, Parabola.class, Hyperbola.class})
 public abstract class ConicSection<P extends Point, Q extends Point> extends OriginJordan2<P> {
 
     @NotNull

@@ -1,10 +1,12 @@
 package mujica.ds.of_int.list;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2025/6/6")
+@DirectSubclass({ShiftResizePolicy.class, TwiceResizePolicy.class, HalfResizePolicy.class, Order1ResizePolicy.class, Order2ResizePolicy.class, Order3ResizePolicy.class, ModuloLookUpResizePolicy.class})
 public abstract class ResizePolicy extends AbstractIntList {
 
     private static final long serialVersionUID = 0xe7b4b4a342f3c493L;
@@ -100,61 +102,6 @@ public abstract class ResizePolicy extends AbstractIntList {
             throw new IllegalArgumentException();
         } else {
             return policy;
-        }
-    }
-
-    @CodeHistory(date = "2025/7/1")
-    public static class Order2 extends ResizePolicy {
-
-        private static final long serialVersionUID = 0x7e5c74e47d6fc6dfL;
-
-        private final int p0, p1, p2;
-
-        public Order2(int p0, int p1, int p2) {
-            super();
-            if (p0 < 0 || p1 < 0 || p2 <= 0) {
-                throw new IllegalArgumentException();
-            }
-            this.p0 = p0;
-            this.p1 = p1;
-            this.p2 = p2;
-        }
-
-        @Override
-        public int intLength() {
-            return 0;
-        }
-
-        @Override
-        public int getInt(int index) {
-            return Math.addExact(p0, Math.multiplyExact(Math.addExact(p1, Math.multiplyExact(p2, index)), index));
-        }
-    }
-
-    @CodeHistory(date = "2025/7/1")
-    public static class Order3 extends ResizePolicy {
-
-        private static final long serialVersionUID = 0x5b6d827aad3d0339L;
-
-        private final int p0, p3;
-
-        public Order3(int p0, int p3) {
-            super();
-            if (p0 < 0 || p3 <= 0) {
-                throw new IllegalArgumentException();
-            }
-            this.p0 = p0;
-            this.p3 = p3;
-        }
-
-        @Override
-        public int intLength() {
-            return 0;
-        }
-
-        @Override
-        public int getInt(int index) {
-            return Math.addExact(p0, Math.multiplyExact(Math.multiplyExact(p3, index), Math.multiplyExact(index, index)));
         }
     }
 

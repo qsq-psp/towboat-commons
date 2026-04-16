@@ -1,10 +1,12 @@
 package mujica.text.collation;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created on 2026/2/21.
  */
+@CodeHistory(date = "2026/2/21")
 public class EpsilonBracketNode extends BracketNode {
 
     private static final long serialVersionUID = 0x755CC452ECA28F82L;

@@ -1,7 +1,6 @@
 package mujica.text.sanitizer;
 
 import mujica.ds.of_int.list.CopyOnResizeIntList;
-import mujica.ds.of_int.list.CopyOnWriteIntList;
 import mujica.ds.of_int.list.IntAscendingBubbleSort;
 import mujica.ds.of_int.list.IntList;
 import mujica.ds.of_int.map.CompatibleIntMap;
@@ -11,8 +10,6 @@ import mujica.reflect.modifier.AccessStructure;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.number.HexadecimalAppender;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 
 @CodeHistory(date = "2026/1/11")
 public class IntMapEscapeAppender extends CharSequenceAppender {
@@ -363,7 +360,7 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
                     out.setCharAt(position, '\\');
                 } else if (value == HEX4) {
                     int position = out.length();
-                    hex.acceptCharacter(key, out);
+                    hex.acceptChar(key, out);
                     out.setCharAt(position, '\\');
                     out.setCharAt(position + 1, 'u');
                 } else {

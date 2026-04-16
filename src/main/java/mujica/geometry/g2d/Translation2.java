@@ -2,19 +2,16 @@ package mujica.geometry.g2d;
 
 import mujica.geometry.GeometryOperationResult;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-/**
- * Created in coo on 2020/4/10, named PlanarTransform.Translation.
- * Created in va on 2021/9/16.
- * Created on 2022/6/5.
- */
 @CodeHistory(date = "2020/4/10", project = "coo", name = "PlanarTransform.Translation")
 @CodeHistory(date = "2021/9/16", project = "va")
 @CodeHistory(date = "2022/6/5", project = "Ultramarine")
 @CodeHistory(date = "2025/3/2")
+@DirectSubclass({Flip2.class, ViewportTransform.class})
 public class Translation2 extends Transform2 {
 
     private static final long serialVersionUID = 0x39def2f4f9147a49L;

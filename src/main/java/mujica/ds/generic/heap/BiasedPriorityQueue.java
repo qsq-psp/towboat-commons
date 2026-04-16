@@ -3,12 +3,14 @@ package mujica.ds.generic.heap;
 import mujica.ds.of_boolean.PublicBooleanSlot;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 @CodeHistory(date = "2025/6/2")
+@DirectSubclass({LeftListTree.class, SkewHeap.class})
 public abstract class BiasedPriorityQueue<E> extends AbstractPriorityQueue<E> {
 
     private static final long serialVersionUID = 0x39e726abbb9a1b07L;

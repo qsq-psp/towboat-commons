@@ -1,11 +1,13 @@
 package mujica.algebra.discrete;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
 @CodeHistory(date = "2025/3/1")
+@DirectSubclass({SignedCodeModifier.class, SignedVectorModifier.class, VectorOrderModifier.class})
 public class DimensionCodecModifier implements DimensionCodec {
 
     @NotNull

@@ -13,9 +13,6 @@ import java.io.Writer;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
-/**
- * Created on 2026/3/31.
- */
 @CodeHistory(date = "2026/3/31")
 public class JsonCharStreamWriter extends JsonStreamWriter {
 
@@ -172,7 +169,7 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
                     int digit = 0xf & (ch >> shift);
                     if (digit < 0xa) {
                         out.write('0' + digit);
-                    } else if ((flags & FLAG_UPPERCASE_HEX) != 0) {
+                    } else if ((flags & ConfigFlags.UPPERCASE_HEX) != 0) {
                         out.write(Base16Case.UPPER_CONSTANT + digit);
                     } else {
                         out.write(Base16Case.LOWER_CONSTANT + digit);
@@ -281,7 +278,7 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
         try {
             anyKey();
             out.write('"');
-            if ((flags & FLAG_ESCAPE_EXTRA) == 0) {
+            if ((flags & ConfigFlags.ESCAPE_EXTRA) == 0) {
                 escapeString(key);
             } else {
                 escapeStringExtra(key);
@@ -363,20 +360,20 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
             anyValue();
             if (Float.isFinite(value)) {
                 String string = String.valueOf(value);
-                if ((flags & FLAG_UPPERCASE_E) != 0) {
+                if ((flags & ConfigFlags.UPPERCASE_E) != 0) {
                     string = string.toUpperCase();
                 } else {
                     string = string.toLowerCase();
                 }
                 out.write(string);
             } else if (Float.isNaN(value)) {
-                if ((flags & FLAG_NAN_TO_NULL) != 0) {
+                if ((flags & ConfigFlags.NAN_TO_NULL) != 0) {
                     out.write("null");
                 } else {
                     out.write("NaN");
                 }
             } else {
-                if ((flags & FLAG_INFINITY_TO_NULL) != 0) {
+                if ((flags & ConfigFlags.INFINITY_TO_NULL) != 0) {
                     out.write("null");
                 } else if (value > 0.0f) {
                     out.write("Infinity");
@@ -395,20 +392,20 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
             anyValue();
             if (Double.isFinite(value)) {
                 String string = String.valueOf(value);
-                if ((flags & FLAG_UPPERCASE_E) != 0) {
+                if ((flags & ConfigFlags.UPPERCASE_E) != 0) {
                     string = string.toUpperCase();
                 } else {
                     string = string.toLowerCase();
                 }
                 out.write(string);
             } else if (Double.isNaN(value)) {
-                if ((flags & FLAG_NAN_TO_NULL) != 0) {
+                if ((flags & ConfigFlags.NAN_TO_NULL) != 0) {
                     out.write("null");
                 } else {
                     out.write("NaN");
                 }
             } else {
-                if ((flags & FLAG_INFINITY_TO_NULL) != 0) {
+                if ((flags & ConfigFlags.INFINITY_TO_NULL) != 0) {
                     out.write("null");
                 } else if (value > 0.0f) {
                     out.write("Infinity");
@@ -446,7 +443,7 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
         try {
             anyValue();
             out.write('"');
-            if ((flags & FLAG_ESCAPE_EXTRA) == 0) {
+            if ((flags & ConfigFlags.ESCAPE_EXTRA) == 0) {
                 escapeString(value.toString());
             } else {
                 escapeStringExtra(value.toString());

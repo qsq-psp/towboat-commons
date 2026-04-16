@@ -9,13 +9,6 @@ import java.text.CollationKey;
  */
 public class BracketFirstCollationKey extends CollationKey {
 
-    /**
-     * CollationKey constructor.
-     *
-     * @param source the source string
-     * @throws NullPointerException if {@code source} is null
-     * @since 1.6
-     */
     BracketFirstCollationKey(@NotNull String source) {
         super(source);
     }

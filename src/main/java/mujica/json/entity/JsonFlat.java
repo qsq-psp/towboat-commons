@@ -7,7 +7,7 @@ import java.util.Collection;
 /**
  * Created on 2026/4/3.
  */
-public abstract class JsonFlat implements JsonContainer<JsonPath> {
+public abstract class JsonFlat extends JsonContainer<JsonPath> {
 
     @NotNull
     @Override

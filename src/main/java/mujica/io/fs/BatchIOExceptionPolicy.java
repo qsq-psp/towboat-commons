@@ -1,8 +1,11 @@
 package mujica.io.fs;
 
+import mujica.reflect.modifier.CodeHistory;
+
 /**
  * Created on 2026/3/14.
  */
+@CodeHistory(date = "2026/3/14")
 public enum BatchIOExceptionPolicy {
 
     BREAK, CONTINUE, ROLLBACK;
