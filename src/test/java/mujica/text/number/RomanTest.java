@@ -11,20 +11,36 @@ import java.util.Set;
 @SuppressWarnings("SpellCheckingInspection")
 public class RomanTest {
 
+    private final StringBuilder sb = new StringBuilder();
+
+    @NotNull
+    private String stringify(@NotNull Roman roman, int value) {
+        sb.delete(0, sb.length());
+        roman.acceptInt(value, sb);
+        return sb.toString();
+    }
+
+    @NotNull
+    private String stringify(@NotNull Roman roman, long value) {
+        sb.delete(0, sb.length());
+        roman.acceptLong(value, sb);
+        return sb.toString();
+    }
+
     @NotNull
     private String caseStringify(int value) {
-        final String result = Roman.UPPER.stringify(value);
-        Assert.assertEquals(result, Roman.LOWER.stringify(value).toUpperCase());
-        Assert.assertEquals(result, Roman.UPPER.stringify((long) value));
-        Assert.assertEquals(result, Roman.LOWER.stringify((long) value).toUpperCase());
+        final String result = stringify(Roman.UPPER, value);
+        Assert.assertEquals(result, stringify(Roman.LOWER, value).toUpperCase());
+        Assert.assertEquals(result, stringify(Roman.UPPER, (long) value));
+        Assert.assertEquals(result, stringify(Roman.LOWER, (long) value).toUpperCase());
         return result;
     }
 
     private void caseStringify(@NotNull Set<String> expected, int value) {
-        Assert.assertTrue(expected.contains(Roman.UPPER.stringify(value)));
-        Assert.assertTrue(expected.contains(Roman.LOWER.stringify(value).toUpperCase()));
-        Assert.assertTrue(expected.contains(Roman.UPPER.stringify((long) value)));
-        Assert.assertTrue(expected.contains(Roman.LOWER.stringify((long) value).toUpperCase()));
+        Assert.assertTrue(expected.contains(stringify(Roman.UPPER, value)));
+        Assert.assertTrue(expected.contains(stringify(Roman.LOWER, value).toUpperCase()));
+        Assert.assertTrue(expected.contains(stringify(Roman.UPPER, (long) value)));
+        Assert.assertTrue(expected.contains(stringify(Roman.LOWER, (long) value).toUpperCase()));
     }
     
     @Test

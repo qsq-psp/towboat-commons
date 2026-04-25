@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
@@ -120,21 +121,39 @@ public class JsonContext extends ReflectConfig {
 
     JsonContext(long flags) {
         super(flags);
-        flags &= ~(JsonHint.UNSIGNED | JsonHint.DERIVED);
+    }
+
+    public JsonContext() {
+        super();
+    }
+
+    @NotNull
+    public JsonContext loadBasic() {
+        final long flags = this.flags & ~(JsonHint.UNSIGNED | JsonHint.DERIVED);
         reflectCache.put(boolean.class, new BooleanType(flags & ~JsonHint.NULLABLE));
         reflectCache.put(Boolean.class, new BooleanType(flags));
         reflectCache.put(byte.class, new ByteType(flags & ~JsonHint.NULLABLE));
         reflectCache.put(Byte.class, new ByteType(flags));
         reflectCache.put(int.class, new IntType(flags & ~JsonHint.NULLABLE));
         reflectCache.put(Integer.class, new IntType(flags));
-        reflectCache.put(int[].class, new IntArrayType(flags, (IntType) reflectCache.get(int.class)));
         reflectCache.put(long.class, new LongType(flags & ~JsonHint.NULLABLE));
         reflectCache.put(Long.class, new LongType(flags));
+        reflectCache.put(BigInteger.class, new BigIntegerType(flags));
         reflectCache.put(FastNumber.class, new FastNumberType(flags));
+        return this;
     }
 
-    JsonContext() {
-        this(0L);
+    @NotNull
+    public JsonContext loadOptimized() {
+        final long flags = this.flags & ~(JsonHint.UNSIGNED | JsonHint.DERIVED);
+        reflectCache.put(int[].class, new IntArrayType(flags, (IntType) reflectCache.get(int.class)));
+        return this;
+    }
+
+    @NotNull
+    public JsonContext unloadOptimized() {
+        reflectCache.remove(int[].class);
+        return this;
     }
 
     public void parse(@NotNull JsonSyncReader reader, @NotNull Object root) {

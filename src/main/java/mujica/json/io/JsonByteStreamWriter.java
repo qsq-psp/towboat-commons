@@ -13,9 +13,6 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
 
-/**
- * Created on 2026/4/1.
- */
 @CodeHistory(date = "2026/4/1")
 public class JsonByteStreamWriter extends JsonStreamWriter {
 
@@ -313,7 +310,7 @@ public class JsonByteStreamWriter extends JsonStreamWriter {
         try {
             anyKey();
             out.write('"');
-            writeString(key.string);
+            writeString(key.toString());
             out.write('"');
             out.write(':');
         } catch (IOException e) {
@@ -431,7 +428,7 @@ public class JsonByteStreamWriter extends JsonStreamWriter {
         try {
             anyValue();
             out.write('"');
-            writeString(value.string);
+            writeString(value.toString());
             out.write('"');
         } catch (IOException e) {
             throw new UncheckedIOException(e);

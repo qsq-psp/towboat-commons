@@ -37,38 +37,6 @@ public class SignedVectorModifier extends DimensionCodecModifier {
         }
     }
 
-    @Override
-    public int encode4(@NotNull byte[] in) {
-        for (int i = 0; i < 4; i++) {
-            in[i] = BitInterleave.signedToUnsigned(in[i]);
-        }
-        return codec.encode4(in);
-    }
-
-    @Override
-    public void decode4(int in, @NotNull byte[] out) {
-        codec.decode4(in, out);
-        for (int i = 0; i < 4; i++) {
-            out[i] = BitInterleave.unsignedToSigned(out[i]);
-        }
-    }
-
-    @Override
-    public long encode8(@NotNull byte[] in) {
-        for (int i = 0; i < 8; i++) {
-            in[i] = BitInterleave.signedToUnsigned(in[i]);
-        }
-        return codec.encode8(in);
-    }
-
-    @Override
-    public void decode8(long in, @NotNull byte[] out) {
-        codec.decode8(in, out);
-        for (int i = 0; i < 8; i++) {
-            out[i] = BitInterleave.unsignedToSigned(out[i]);
-        }
-    }
-
     @NotNull
     @Override
     public BigInteger encodeN(@NotNull BigInteger[] in) {

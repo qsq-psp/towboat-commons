@@ -8,6 +8,7 @@ import mujica.io.codec.UTF8PushPullDecoder;
 import mujica.io.stream.OneBufferDataInputStream;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.JsonHandler;
+import mujica.json.entity.TypePreference;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
@@ -266,16 +267,15 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
     }
 
     private void readJson(@NotNull JsonHandler jh) throws IOException {
-        if ((flags & (FLAG_SKIP_VALUE | FLAG_SKIP_TO_BYTE_BUF)) != 0) {
-            if ((flags & FLAG_SKIP_TO_BYTE_BUF) != 0) {
-                teeToByteBuf(byteBuf -> {
-                    skipJson();
-                    jh.skippedValue(byteBuf.retain());
-                });
-            } else {
+        if (jh.testTypePreference(TypePreference.FLAG_SKIP_TO_BYTE_BUF)) {
+            teeToByteBuf(byteBuf -> {
                 skipJson();
-                jh.skippedValue();
-            }
+                jh.skippedValue(byteBuf.retain());
+            });
+            return;
+        } else if (jh.testTypePreference(TypePreference.FLAG_SKIP_VALUE)) {
+            skipJson();
+            jh.skippedValue();
             return;
         }
         final int octet = super.readUnsignedByte();
@@ -362,20 +362,12 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
                 if ((flags & FLAG_INFINITY_NAN_EXTENSION) == 0) {
                     throw new IOException("infinity");
                 }
-                if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
-                    jh.numberValue(Double.POSITIVE_INFINITY);
-                } else {
-                    jh.numberValue(new FastNumber(string));
-                }
+                jh.numberValue(Double.POSITIVE_INFINITY);
             case "NaN":
                 if ((flags & FLAG_INFINITY_NAN_EXTENSION) == 0) {
                     throw new IOException("not a number");
                 }
-                if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
-                    jh.numberValue(Double.NaN);
-                } else {
-                    jh.numberValue(new FastNumber(string));
-                }
+                jh.numberValue(Double.NaN);
                 break;
             default:
                 throw new IOException("unrecognized " + string);
@@ -385,7 +377,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
     @SuppressWarnings("LoopStatementThatDoesntLoop")
     private void readJsonLiteral(@NotNull JsonHandler jh) throws IOException {
         sb.delete(0, sb.length());
-        boolean isFractional = (flags & FLAG_INTEGRAL_FORCE_TO_FRACTIONAL) != 0;
+        boolean isFractional = jh.testTypePreference(TypePreference.FLAG_INTEGRAL_FORCE_TO_FRACTIONAL);
         while (true) {
             int octet = read();
             if ('0' <= octet && octet <= '9' || octet == '+' || octet == '-') {
@@ -403,7 +395,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
         if (isFractional) {
             String string = sb.toString();
             LABEL:
-            while ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
+            while (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_FORCE_TO_RAW)) {
                 double value = Double.parseDouble(string);
                 while (true) {
                     if (Double.isFinite(value)) {
@@ -418,7 +410,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
                             throw new IOException("negative infinity");
                         }
                         break;
-                    } else if ((flags & FLAG_FRACTIONAL_OVERFLOW_TO_RAW) == 0) {
+                    } else if (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_OVERFLOW_TO_RAW)) {
                         break;
                     }
                     break LABEL;
@@ -435,7 +427,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
     @SuppressWarnings("LoopStatementThatDoesntLoop")
     private void readJsonNumber(@NotNull JsonHandler jh) throws IOException {
         sb.delete(0, sb.length());
-        boolean isFractional = (flags & FLAG_INTEGRAL_FORCE_TO_FRACTIONAL) != 0;
+        boolean isFractional = jh.testTypePreference(TypePreference.FLAG_INTEGRAL_FORCE_TO_FRACTIONAL);
         while (true) {
             int octet = read();
             if ('0' <= octet && octet <= '9' || octet == '+' || octet == '-') {
@@ -452,9 +444,9 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
         }
         if (isFractional) {
             String string = sb.toString();
-            while ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
+            while (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_FORCE_TO_RAW)) {
                 double value = Double.parseDouble(string);
-                if ((flags & FLAG_FRACTIONAL_OVERFLOW_TO_RAW) == 0 || Double.isFinite(value)) {
+                if (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_OVERFLOW_TO_RAW) || Double.isFinite(value)) {
                     jh.numberValue(value);
                     return;
                 }
@@ -467,7 +459,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
     }
 
     private void parseJsonInteger(@NotNull JsonHandler jh) {
-        if ((flags & FLAG_INTEGRAL_FORCE_TO_RAW) != 0) {
+        if (jh.testTypePreference(TypePreference.FLAG_INTEGRAL_FORCE_TO_RAW)) {
             jh.numberValue(new FastNumber(sb.toString()));
             return;
         }
@@ -490,14 +482,14 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
                 } else {
                     jh.numberValue(longValue);
                 }
-            } else if ((flags & FLAG_INTEGRAL_OVERFLOW_TO_FRACTIONAL) != 0) {
+            } else if (jh.testTypePreference(TypePreference.FLAG_INTEGRAL_OVERFLOW_TO_FRACTIONAL)) {
                 double doubleValue = bigValue.doubleValue();
-                if ((flags & FLAG_FRACTIONAL_OVERFLOW_TO_RAW) == 0 || Double.isFinite(doubleValue)) {
+                if (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_OVERFLOW_TO_RAW) || Double.isFinite(doubleValue)) {
                     jh.numberValue(doubleValue);
                 } else {
                     jh.numberValue(new FastNumber(sb.toString()));
                 }
-            } else if ((flags & FLAG_INTEGRAL_OVERFLOW_TO_RAW) != 0) {
+            } else if (jh.testTypePreference(TypePreference.FLAG_INTEGRAL_OVERFLOW_TO_RAW)) {
                 jh.numberValue(new FastNumber(sb.toString()));
             } else {
                 jh.numberValue(bigValue);

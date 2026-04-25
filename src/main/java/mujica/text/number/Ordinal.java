@@ -7,13 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2025/2/26")
-public class Ordinal extends IntegralAppender {
+public class Ordinal implements IntegralAppender {
+
+    private static final long serialVersionUID = 0x7F194AFD4E00D24DL;
 
     public static final Ordinal INSTANCE = new Ordinal();
 
     @NotNull
-    public static String ordinalSuffix(long value) {
-        switch (Math.abs((int) (value % 100))) {
+    public static String ordinalSuffix(int value) {
+        switch (Math.abs(value % 100)) {
             case 1: case 21: case 31: case 41:
             case 51: case 61: case 71: case 81: case 91:
                 return "st";
@@ -38,7 +40,17 @@ public class Ordinal extends IntegralAppender {
     }
 
     @Override
+    public void acceptByte(byte value, @NotNull StringBuffer out) {
+        acceptInt(value, out);
+    }
+
+    @Override
     public void acceptShort(short value, @NotNull StringBuilder out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptShort(short value, @NotNull StringBuffer out) {
         acceptInt(value, out);
     }
 
@@ -48,13 +60,28 @@ public class Ordinal extends IntegralAppender {
     }
 
     @Override
+    public void acceptChar(char value, @NotNull StringBuffer out) {
+        acceptInt(value, out);
+    }
+
+    @Override
     public void acceptInt(int value, @NotNull StringBuilder out) {
         out.append(value).append(ordinalSuffix(value));
     }
 
     @Override
-    public void acceptLong(long value, @NotNull StringBuilder out) {
+    public void acceptInt(int value, @NotNull StringBuffer out) {
         out.append(value).append(ordinalSuffix(value));
+    }
+
+    @Override
+    public void acceptLong(long value, @NotNull StringBuilder out) {
+        out.append(value).append(ordinalSuffix((int) (value % 100L)));
+    }
+
+    @Override
+    public void acceptLong(long value, @NotNull StringBuffer out) {
+        out.append(value).append(ordinalSuffix((int) (value % 100L)));
     }
 
     @Override
@@ -62,4 +89,8 @@ public class Ordinal extends IntegralAppender {
         out.append(value).append(ordinalSuffix(value.mod(BigConstants.HUNDRED).intValue()));
     }
 
+    @Override
+    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuffer out) {
+        out.append(value).append(ordinalSuffix(value.mod(BigConstants.HUNDRED).intValue()));
+    }
 }

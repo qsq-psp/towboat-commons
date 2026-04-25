@@ -4,10 +4,9 @@ import mujica.ds.generic.set.CollectionConstant;
 import mujica.ds.of_char.sequence.TowboatCharSequence;
 import mujica.reflect.modifier.AccessStructure;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.number.DecimalAppender;
-import mujica.text.number.DefaultIntegralAppender;
+import mujica.text.number.DefaultNumberAppender;
 import mujica.text.number.IntegralAppender;
-import mujica.text.number.MarkedIntegralAppender;
+import mujica.text.number.MarkedNumberAppender;
 import mujica.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -524,11 +523,11 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
         public Config numberIntegral() throws ReflectiveOperationException {
             MethodHandle method;
             method = lookup.findVirtual(AppenderToStringBuilder.class, "acceptInt", MethodType.methodType(void.class, Number.class, StringBuilder.class)).bindTo(AppenderToStringBuilder.this);
-            for (Class<?> clazz : DefaultIntegralAppender.NUMBER_INT_CLASSES) {
+            for (Class<?> clazz : DefaultNumberAppender.NUMBER_INT_CLASSES) {
                 methods.put(clazz, method);
             }
             method = lookup.findVirtual(AppenderToStringBuilder.class, "acceptLong", MethodType.methodType(void.class, Number.class, StringBuilder.class)).bindTo(AppenderToStringBuilder.this);
-            for (Class<?> clazz : DefaultIntegralAppender.NUMBER_LONG_CLASSES) {
+            for (Class<?> clazz : DefaultNumberAppender.NUMBER_LONG_CLASSES) {
                 methods.put(clazz, method);
             }
             return this;
@@ -538,11 +537,11 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
         public Config numberDecimal() throws ReflectiveOperationException {
             MethodHandle method;
             method = lookup.findVirtual(AppenderToStringBuilder.class, "acceptFloat", MethodType.methodType(void.class, Number.class, StringBuilder.class)).bindTo(AppenderToStringBuilder.this);
-            for (Class<?> clazz : DecimalAppender.NUMBER_FLOAT_CLASSES) {
+            for (Class<?> clazz : DefaultNumberAppender.NUMBER_FLOAT_CLASSES) {
                 methods.put(clazz, method);
             }
             method = lookup.findVirtual(AppenderToStringBuilder.class, "acceptDouble", MethodType.methodType(void.class, Number.class, StringBuilder.class)).bindTo(AppenderToStringBuilder.this);
-            for (Class<?> clazz : DecimalAppender.NUMBER_DOUBLE_CLASSES) {
+            for (Class<?> clazz : DefaultNumberAppender.NUMBER_DOUBLE_CLASSES) {
                 methods.put(clazz, method);
             }
             return this;
@@ -584,7 +583,7 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
             try {
                 AppenderToStringBuilder instance = new AppenderToStringBuilder();
                 instance.config().use(instance.newArrayStyle().setLeft("{").setRight("}").setEmpty("{ }"), Object.class)
-                        .use((new MarkedIntegralAppender(new IntegralAppender())))
+                        .use(MarkedNumberAppender.INSTANCE)
                         .use(CharSequenceAppender.Java.AUTO);
                 return instance;
             } catch (ReflectiveOperationException e) {

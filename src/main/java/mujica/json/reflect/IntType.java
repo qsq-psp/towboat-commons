@@ -96,15 +96,15 @@ class IntType extends JsonType implements IntSlot {
         return this;
     }
 
-    protected int intFrom(long longValue) {
+    int intFrom(long longValue) {
         return (int) longValue;
     }
 
-    protected int intFrom(@NotNull BigInteger bigInteger) {
+    int intFrom(@NotNull BigInteger bigInteger) {
         return bigInteger.intValueExact();
     }
 
-    protected int intFrom(@NotNull Object object) {
+    int intFrom(@NotNull Object object) {
         if (object instanceof Integer) {
             return (Integer) object;
         }
@@ -185,14 +185,17 @@ class IntType extends JsonType implements IntSlot {
 
     @Override
     void to(@NotNull Setter setter, @Nullable Object self) throws Throwable {
-        if (state == CollectionConstant.PRESENT) {
-            setter.setInt(self, value);
-        } else if (state == CollectionConstant.EMPTY) {
-            setter.set(self, null);
-        } else {
-            throw new IllegalStateException();
+        try {
+            if (state == CollectionConstant.PRESENT) {
+                setter.setInt(self, value);
+            } else if (state == CollectionConstant.EMPTY) {
+                setter.set(self, null);
+            } else {
+                throw new IllegalStateException();
+            }
+        } finally {
+            state = CollectionConstant.UNDEFINED;
         }
-        state = CollectionConstant.UNDEFINED;
     }
 
     @Deprecated
@@ -210,35 +213,38 @@ class IntType extends JsonType implements IntSlot {
 
     @Override
     void to(@NotNull JsonHandler out, @NotNull JsonContext context) {
-        if (state == CollectionConstant.PRESENT) {
-            if (value > 0) {
-                out.numberValue(value);
-            } else if (value < 0) {
-                if ((flags & JsonHint.UNSIGNED) == 0L) {
+        try {
+            if (state == CollectionConstant.PRESENT) {
+                if (value > 0) {
                     out.numberValue(value);
+                } else if (value < 0) {
+                    if ((flags & JsonHint.UNSIGNED) == 0L) {
+                        out.numberValue(value);
+                    } else {
+                        out.numberValue(0xffffffffL & value);
+                    }
+                } else if ((flags & (((long) JsonEmpty.FROM_ZERO_INTEGRAL) << UNDEFINED_SHIFT)) != 0L) {
+                    context.getLogger().debug("zero int to undefined");
+                    out.skippedValue();
+                } else if ((flags & (((long) JsonEmpty.FROM_ZERO_INTEGRAL) << NULL_SHIFT)) != 0L) {
+                    context.getLogger().debug("zero int to null");
+                    out.nullValue();
                 } else {
-                    out.numberValue(0xffffffffL & value);
+                    out.numberValue(0);
                 }
-            } else if ((flags & (((long) JsonEmpty.FROM_ZERO_INTEGRAL) << UNDEFINED_SHIFT)) != 0L) {
-                context.getLogger().debug("zero int to undefined");
-                out.skippedValue();
-            } else if ((flags & (((long) JsonEmpty.FROM_ZERO_INTEGRAL) << NULL_SHIFT)) != 0L) {
-                context.getLogger().debug("zero int to null");
-                out.nullValue();
+            } else if (state == CollectionConstant.EMPTY) {
+                if ((flags & (((long) JsonEmpty.FROM_NULL) << UNDEFINED_SHIFT)) != 0L) {
+                    context.getLogger().debug("null to undefined");
+                    out.skippedValue();
+                } else {
+                    out.nullValue();
+                }
             } else {
-                out.numberValue(0);
+                throw new IllegalStateException();
             }
-        } else if (state == CollectionConstant.EMPTY) {
-            if ((flags & (((long) JsonEmpty.FROM_NULL) << UNDEFINED_SHIFT)) != 0L) {
-                context.getLogger().debug("null to undefined");
-                out.skippedValue();
-            } else {
-                out.nullValue();
-            }
-        } else {
-            throw new IllegalStateException();
+        } finally {
+            state = CollectionConstant.UNDEFINED;
         }
-        state = CollectionConstant.UNDEFINED;
     }
 
     int toInt() {

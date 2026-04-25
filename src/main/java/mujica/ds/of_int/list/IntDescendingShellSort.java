@@ -34,17 +34,17 @@ public class IntDescendingShellSort extends SortingAlgorithm<int[]> {
         return apply(array, startIndex, endIndex, 1);
     }
 
-    private long apply(@NotNull int[] array, int fromIndex, int toIndex, int stride) {
-        if (fromIndex + stride >= toIndex) {
+    private long apply(@NotNull int[] array, int startIndex, int endIndex, int stride) {
+        if (startIndex + stride >= endIndex) {
             return 0L;
         }
-        long operation = apply(array, fromIndex, toIndex, stride * 3 + 1);
-        for (int i = fromIndex + stride; i < toIndex; i++) {
+        long operation = apply(array, startIndex, endIndex, stride * 3 + 1);
+        for (int i = startIndex + stride; i < endIndex; i++) {
             int j = i;
             int value = array[j];
             while (true) {
                 int k = j - stride;
-                if (k >= fromIndex && array[k] < value) {
+                if (k >= startIndex && array[k] < value) {
                     array[j] = array[j - stride];
                     j -= stride;
                     operation++;

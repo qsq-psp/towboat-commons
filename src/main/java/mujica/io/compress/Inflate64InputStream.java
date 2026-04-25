@@ -124,7 +124,7 @@ public class Inflate64InputStream extends FilterInputStream implements BooleanSe
             }
             int symbol = decodeMap.getInt(code);
             if (symbol != 0) {
-                if (symbol < 0) {
+                if (symbol < 0) { // symbol 0 mapped to -1
                     symbol++;
                 }
                 return symbol;

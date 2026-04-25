@@ -295,7 +295,7 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
         try {
             anyKey();
             out.write('"');
-            out.write(key.string);
+            out.write(key.toString());
             out.write('"');
             out.write(':');
         } catch (IOException e) {
@@ -360,7 +360,7 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
             anyValue();
             if (Float.isFinite(value)) {
                 String string = String.valueOf(value);
-                if ((flags & ConfigFlags.UPPERCASE_E) != 0) {
+                if ((flags & ConfigFlags.UPPERCASE_E) != 0) { // is there e?
                     string = string.toUpperCase();
                 } else {
                     string = string.toLowerCase();
@@ -432,7 +432,13 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
     public void numberValue(@NotNull FastNumber value) {
         try {
             anyValue();
-            out.write(value.toString());
+            String string = value.toString();
+            if ((flags & ConfigFlags.UPPERCASE_E) != 0) {
+                string = string.toUpperCase();
+            } else {
+                string = string.toLowerCase();
+            }
+            out.write(string);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -459,7 +465,7 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
         try {
             anyValue();
             out.write('"');
-            out.write(value.string);
+            out.write(value.toString());
             out.write('"');
         } catch (IOException e) {
             throw new UncheckedIOException(e);

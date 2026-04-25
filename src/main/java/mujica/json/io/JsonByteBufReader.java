@@ -6,6 +6,7 @@ import mujica.algebra.discrete.BigConstants;
 import mujica.io.codec.Base16Case;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.JsonHandler;
+import mujica.json.entity.TypePreference;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
@@ -264,15 +265,13 @@ public class JsonByteBufReader extends DefaultByteBufHolder implements JsonSyncS
     private void readJson(@NotNull JsonHandler jh) {
         // gap already skipped now
         final ByteBuf data = content();
-        if ((flags & (FLAG_SKIP_VALUE | FLAG_SKIP_TO_BYTE_BUF)) != 0) {
-            if ((flags & FLAG_SKIP_TO_BYTE_BUF) != 0) {
-                int startIndex = data.readerIndex();
-                skipJson();
-                jh.skippedValue(data.slice(startIndex, data.readerIndex() - startIndex));
-            } else {
-                skipJson();
-                jh.skippedValue();
-            }
+        if (jh.testTypePreference(TypePreference.FLAG_SKIP_TO_BYTE_BUF)) {
+            int startIndex = data.readerIndex();
+            skipJson();
+            jh.skippedValue(data.slice(startIndex, data.readerIndex() - startIndex));
+        } else if (jh.testTypePreference(TypePreference.FLAG_SKIP_VALUE)) {
+            skipJson();
+            jh.skippedValue();
             return;
         }
         final int x = data.readUnsignedByte();
@@ -282,22 +281,14 @@ public class JsonByteBufReader extends DefaultByteBufHolder implements JsonSyncS
                     throw new RuntimeException("infinity");
                 }
                 skipWord("Infinity");
-                if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
-                    jh.numberValue(Double.POSITIVE_INFINITY);
-                } else {
-                    jh.numberValue(new FastNumber("Infinity"));
-                }
+                jh.numberValue(new FastNumber("Infinity"));
                 break;
             case 'N':
                 if ((flags & FLAG_INFINITY_NAN_EXTENSION) == 0) {
                     throw new RuntimeException("not a number");
                 }
                 skipWord("NaN");
-                if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
-                    jh.numberValue(Double.NaN);
-                } else {
-                    jh.numberValue(new FastNumber("NaN"));
-                }
+                jh.numberValue(new FastNumber("NaN"));
                 break;
             case 'f':
                 skipWord("false");
@@ -345,7 +336,7 @@ public class JsonByteBufReader extends DefaultByteBufHolder implements JsonSyncS
         final ByteBuf data = content();
         final int startIndex = data.readerIndex() - 1;
         int endIndex = data.writerIndex();
-        boolean isFractional = (flags & FLAG_INTEGRAL_FORCE_TO_FRACTIONAL) != 0;
+        boolean isFractional = jh.testTypePreference(TypePreference.FLAG_INTEGRAL_FORCE_TO_FRACTIONAL);
         while (data.isReadable()) {
             int x = data.readByte();
             if ('0' <= x && x <= '9') {
@@ -367,9 +358,9 @@ public class JsonByteBufReader extends DefaultByteBufHolder implements JsonSyncS
     }
 
     private void readJsonLiteral(@NotNull JsonHandler jh, @NotNull String string) {
-        if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
+        if (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_FORCE_TO_RAW)) {
             double value = Double.parseDouble(string);
-            if ((flags & FLAG_FRACTIONAL_OVERFLOW_TO_RAW) == 0 || Double.isFinite(value)) {
+            if (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_OVERFLOW_TO_RAW) || Double.isFinite(value)) {
                 jh.numberValue(value);
                 return;
             }
@@ -379,7 +370,7 @@ public class JsonByteBufReader extends DefaultByteBufHolder implements JsonSyncS
 
     private void readJsonLiteral(@NotNull JsonHandler jh, @NotNull ByteBuf data, int startIndex, int endIndex) {
         final int length = endIndex - startIndex;
-        if ((flags & FLAG_INTEGRAL_FORCE_TO_RAW) != 0) {
+        if (jh.testTypePreference(TypePreference.FLAG_INTEGRAL_FORCE_TO_RAW)) {
             jh.numberValue(new FastNumber(data.toString(startIndex, length, StandardCharsets.US_ASCII)));
             return;
         }
@@ -433,14 +424,14 @@ public class JsonByteBufReader extends DefaultByteBufHolder implements JsonSyncS
                 } else {
                     jh.numberValue(longValue);
                 }
-            } else if ((flags & FLAG_INTEGRAL_OVERFLOW_TO_FRACTIONAL) != 0) {
+            } else if (jh.testTypePreference(TypePreference.FLAG_INTEGRAL_OVERFLOW_TO_FRACTIONAL)) {
                 double doubleValue = bigValue.doubleValue();
-                if ((flags & FLAG_FRACTIONAL_OVERFLOW_TO_RAW) == 0 || Double.isFinite(doubleValue)) {
+                if (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_OVERFLOW_TO_RAW) || Double.isFinite(doubleValue)) {
                     jh.numberValue(doubleValue);
                 } else {
                     jh.numberValue(new FastNumber(string));
                 }
-            } else if ((flags & FLAG_INTEGRAL_OVERFLOW_TO_RAW) != 0) {
+            } else if (jh.testTypePreference(TypePreference.FLAG_INTEGRAL_OVERFLOW_TO_RAW)) {
                 jh.numberValue(new FastNumber(string));
             } else {
                 jh.numberValue(bigValue);

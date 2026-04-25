@@ -8,7 +8,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2021/10/26", project = "va")
 @CodeHistory(date = "2022/10/19", project = "Ultramarine")
 @CodeHistory(date = "2025/2/26")
-public class Roman extends IntegralAppender {
+public class Roman implements IntegralAppender {
 
     public static final Roman UPPER = new Roman('I', 'V', 'X', 'L', 'C', 'D', 'M');
 
@@ -31,7 +31,47 @@ public class Roman extends IntegralAppender {
         this.n1000 = n1000;
     }
 
+    @Override
+    public void acceptByte(byte value, @NotNull StringBuilder out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptByte(byte value, @NotNull StringBuffer out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptShort(short value, @NotNull StringBuilder out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptShort(short value, @NotNull StringBuffer out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptChar(char value, @NotNull StringBuilder out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptChar(char value, @NotNull StringBuffer out) {
+        acceptInt(value, out);
+    }
+
     private void overline(int level, @NotNull StringBuilder out) {
+        while (level >= 2) {
+            out.append(OVERLINE2);
+            level -= 2;
+        }
+        if (level >= 1) {
+            out.append(OVERLINE1);
+        }
+    }
+
+    private void overline(int level, @NotNull StringBuffer out) {
         while (level >= 2) {
             out.append(OVERLINE2);
             level -= 2;
@@ -125,6 +165,90 @@ public class Roman extends IntegralAppender {
         }
     }
 
+    private void append(long value, int level, @NotNull StringBuffer out) {
+        if (value >= 4000L) {
+            append(value / 1000L, level + 1, out);
+            value %= 1000L;
+        } else {
+            while (value >= 1000L) {
+                value -= 1000L;
+                out.append(n1000);
+                overline(level, out);
+            }
+        }
+        if (value >= 900L) {
+            value -= 900L;
+            out.append(n100);
+            overline(level, out);
+            out.append(n1000);
+            overline(level, out);
+        }
+        if (value >= 500L) {
+            value -= 500L;
+            out.append(n500);
+            overline(level, out);
+        }
+        if (value >= 400L) {
+            value -= 400L;
+            out.append(n100);
+            overline(level, out);
+            out.append(n500);
+            overline(level, out);
+        }
+        while (value >= 100L) {
+            value -= 100L;
+            out.append(n100);
+            overline(level, out);
+        }
+        if (value >= 90L) {
+            value -= 90L;
+            out.append(n10);
+            overline(level, out);
+            out.append(n100);
+            overline(level, out);
+        }
+        if (value >= 50L) {
+            value -= 50L;
+            out.append(n50);
+            overline(level, out);
+        }
+        if (value >= 40L) {
+            value -= 40L;
+            out.append(n10);
+            overline(level, out);
+            out.append(n50);
+            overline(level, out);
+        }
+        while (value >= 10L) {
+            value -= 10L;
+            out.append(n10);
+            overline(level, out);
+        }
+        if (value >= 9L) {
+            value -= 9L;
+            out.append(n1);
+            overline(level, out);
+            out.append(n10);
+        }
+        if (value >= 5L) {
+            value -= 5L;
+            out.append(n5);
+            overline(level, out);
+        }
+        if (value >= 4L) {
+            value -= 4L;
+            out.append(n1);
+            overline(level, out);
+            out.append(n5);
+            overline(level, out);
+        }
+        while (value >= 1L) {
+            value--;
+            out.append(n1);
+            overline(level, out);
+        }
+    }
+
     @Override
     public void acceptInt(int value, @NotNull StringBuilder out) {
         if (value <= 0) {
@@ -133,14 +257,12 @@ public class Roman extends IntegralAppender {
         append(value, 0, out);
     }
 
-    @NotNull
-    public String stringify(int value) {
+    @Override
+    public void acceptInt(int value, @NotNull StringBuffer out) {
         if (value <= 0) {
             throw new IllegalArgumentException();
         }
-        final StringBuilder sb = new StringBuilder();
-        append(value, 0, sb);
-        return sb.toString();
+        append(value, 0, out);
     }
 
     @Override
@@ -151,13 +273,21 @@ public class Roman extends IntegralAppender {
         append(value, 0, out);
     }
 
-    @NotNull
-    public String stringify(long value) {
-        if (value <= 0) {
+    @Override
+    public void acceptLong(long value, @NotNull StringBuffer out) {
+        if (value <= 0L) {
             throw new IllegalArgumentException();
         }
-        final StringBuilder sb = new StringBuilder();
-        append(value, 0, sb);
-        return sb.toString();
+        append(value, 0, out);
+    }
+
+    @Override
+    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out) {
+        acceptLong(value.longValueExact(), out);
+    }
+
+    @Override
+    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuffer out) {
+        acceptLong(value.longValueExact(), out);
     }
 }

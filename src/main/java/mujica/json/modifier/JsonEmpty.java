@@ -27,8 +27,7 @@ public @interface JsonEmpty {
     int FROM_EMPTY_STRING       = 0x0040;
     int FROM_BLANK_STRING       = 0x0080;
     int FROM_EMPTY_ARRAY        = 0x0200;
-    int FROM_EMPTY_OBJECT       = 0x0400;
-    int FROM_LOOP_OBJECT        = 0x0800;
+    int FROM_LOOP_OBJECT        = 0x0400;
 
     @MagicConstant(flagsFromClass = JsonEmpty.class)
     int toNull() default -1;

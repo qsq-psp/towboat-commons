@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2026/4/3")
-public class PlainObjectFrame extends NopFrame {
+class PlainObjectFrame extends NopFrame {
 
     @NotNull
     final PlainObjectType type;
@@ -18,7 +18,7 @@ public class PlainObjectFrame extends NopFrame {
     @NotNull
     final Object self;
 
-    public PlainObjectFrame(@NotNull NopFrame bottom, @NotNull PlainObjectType type, @NotNull Object self) {
+    PlainObjectFrame(@NotNull NopFrame bottom, @NotNull PlainObjectType type, @NotNull Object self) {
         super(bottom);
         this.type = type;
         this.self = self;
@@ -37,7 +37,7 @@ public class PlainObjectFrame extends NopFrame {
 
     @NotNull
     @Override
-    public NopFrame open() {
+    NopFrame open() {
         final PlainObjectField field = fieldForKey();
         if (field != null) {
             try {
@@ -56,7 +56,7 @@ public class PlainObjectFrame extends NopFrame {
 
     @Nullable
     @Override
-    public Object close() {
+    Object close() {
         return self;
     }
 

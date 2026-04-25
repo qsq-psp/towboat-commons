@@ -30,14 +30,14 @@ class JavaArrayFrame extends NopFrame {
 
     @NotNull
     @Override
-    public NopFrame open() {
+    NopFrame open() {
         setKey(null);
         return type.componentType.createFrame(this);
     }
 
     @Nullable
     @Override
-    public Object close() {
+    Object close() {
         final int length = list.size();
         try {
             Object array = type.builder.get(length);

@@ -7,5 +7,5 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/2/6")
 public interface BytePivotSelector {
 
-    byte select(@NotNull byte[] array, @Index(of = "array") int fromIndex, @Index(of = "array", inclusive = false) int toIndex);
+    byte select(@NotNull byte[] array, @Index(of = "array") int startIndex, @Index(of = "array", inclusive = false) int endIndex);
 }

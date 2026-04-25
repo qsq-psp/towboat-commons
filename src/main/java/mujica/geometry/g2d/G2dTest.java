@@ -117,43 +117,4 @@ public class G2dTest {
     public Tangent nextTangent() {
         return new Tangent(rc.nextInt(), rc.nextGaussian());
     }
-
-    @Nullable
-    public static Object copy(@Nullable Object obj) throws Exception {
-        if (obj == null) {
-            return null;
-        }
-        final ByteBuf buf = Unpooled.buffer();
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new ByteBufOutputStream(buf));
-            oos.writeObject(obj);
-            oos.flush();
-            oos.close();
-            ObjectInputStream ois = new ObjectInputStream(new ByteBufInputStream(buf));
-            return ois.readObject();
-        } finally {
-            buf.release();
-        }
-    }
-
-    @Nullable
-    public static Object tryCopy(@Nullable Object obj) {
-        if (obj == null) {
-            return null;
-        }
-        final ByteBuf buf = Unpooled.buffer();
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new ByteBufOutputStream(buf));
-            oos.writeObject(obj);
-            oos.flush();
-            oos.close();
-            ObjectInputStream ois = new ObjectInputStream(new ByteBufInputStream(buf));
-            return ois.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            buf.release();
-        }
-    }
 }

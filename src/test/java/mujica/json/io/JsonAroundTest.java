@@ -113,6 +113,9 @@ public class JsonAroundTest {
         around("\"fjwoijriowejfmoi\\t\"");
         around("\"\\r\\n\\\\\"");
         around("\"\\\\goat\\\\bison\"");
+        around("\"This sentence contains three a’s, three c’s, two d’s, twenty-six e’s, five f’s, three g’s, eight h’s, " +
+                "thirteen i’s, two l’s, sixteen n’s, nine o’s, six r’s, twenty-seven s’s, twenty-two t’s, two u’s, " +
+                "five v’s, eight w’s, four x’s, five y’s, and only one z.\"");
     }
 
     @Test
@@ -137,6 +140,7 @@ public class JsonAroundTest {
     public void caseObject() throws IOException {
         around("{}");
         around("{\"gg\":\"0456\",\"[\":\"(\",\"}\":\"*\"}");
+        around("{\".\\r\":\"\\n.\",\"\\\\\":\"\\\\\\\\\",\"..\\\"\":\"*\\\"*\\\"*\"}");
         around("{\"#\":\"==++\",\"''''\":\"1123\",\"\":\"\",\"][\":\"ABC!\"}");
         around("{\"\u03a0\u03bb\u03ac\u03c4\u03c9\u03bd柏拉图\":\"\u03a3\u03c9\u03ba\u03c1\u03ac\u03c4\u03b7\u03c2苏格拉底\"}");
         around("{\"before\":\"如果你从事的是宇宙学研究，那么每周都可能收到一些人的信件，电子邮件或传真，描述他们关于宇宙的理论。没错，" +

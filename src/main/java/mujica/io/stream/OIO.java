@@ -20,7 +20,7 @@ public final class OIO {
     public static Object copy(Object obj) throws Exception {
         final ByteBuf buf = Unpooled.buffer();
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new ByteBufOutputStream(buf));
+            ObjectOutputStream oos = new ObjectOutputStream(new ByteBufOutputStream(buf)); // use ByteArrayOutputStream
             oos.writeObject(obj);
             oos.flush();
             oos.close();

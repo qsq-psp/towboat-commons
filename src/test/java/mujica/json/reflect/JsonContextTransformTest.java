@@ -7,7 +7,7 @@ import org.junit.Test;
 @CodeHistory(date = "2026/4/11")
 public class JsonContextTransformTest {
 
-    static final JsonContext CONTEXT = new JsonContext();
+    static final JsonContext CONTEXT = (new JsonContext()).loadBasic();
 
     @Test
     public void case1() {

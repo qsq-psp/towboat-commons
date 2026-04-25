@@ -28,14 +28,14 @@ class UtilCollectionFrame extends NopFrame {
 
     @NotNull
     @Override
-    public NopFrame open() {
+    NopFrame open() {
         setKey(null);
         return componentType.createFrame(this);
     }
 
     @Nullable
     @Override
-    public Object close() {
+    Object close() {
         return collection;
     }
 

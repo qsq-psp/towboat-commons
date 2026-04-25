@@ -92,11 +92,11 @@ class LongType extends JsonType implements LongSlot {
         return this;
     }
 
-    protected long longFrom(@NotNull BigInteger bigInteger) {
+    long longFrom(@NotNull BigInteger bigInteger) {
         return bigInteger.longValueExact();
     }
 
-    protected long longFrom(@NotNull Object object) {
+    long longFrom(@NotNull Object object) {
         if (object instanceof Integer) {
             return (Integer) object;
         }

@@ -24,26 +24,6 @@ public interface DimensionCodec {
     void decode2(long in, @NotNull int[] out);
 
     /**
-     * @param in length = 4
-     */
-    int encode4(@NotNull byte[] in);
-
-    /**
-     * @param out length = 4 to put method return value
-     */
-    void decode4(int in, @NotNull byte[] out);
-
-    /**
-     * @param in length = 8
-     */
-    long encode8(@NotNull byte[] in);
-
-    /**
-     * @param out length = 8 to put method return value
-     */
-    void decode8(long in, @NotNull byte[] out);
-
-    /**
      * @param in length known, content not null
      */
     @NotNull

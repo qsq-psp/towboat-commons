@@ -7,6 +7,7 @@ module CDP {
     requires java.base;
     requires java.compiler;
     requires java.desktop;
+    requires java.management;
 
     requires annotations;
     requires org.slf4j;
@@ -65,6 +66,7 @@ module CDP {
     exports mujica.json.io;
     exports mujica.json.modifier;
     exports mujica.json.reflect;
+    exports mujica.json.provided;
     exports mujica.netty.concurrent;
 
     provides java.nio.charset.spi.CharsetProvider with TowboatCharsetProvider;

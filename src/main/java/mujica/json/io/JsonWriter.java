@@ -25,13 +25,20 @@ public abstract class JsonWriter extends JsonHandler implements StructureChecked
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonWriter.class);
 
     @CodeHistory(date = "2026/4/7")
-    protected interface ConfigFlags {
+    protected interface ConfigFlags { // some are not always available
 
-        int ESCAPE_EXTRA = 0x01;
-        int INFINITY_TO_NULL = 0x02;
-        int NAN_TO_NULL = 0x04;
-        int UPPERCASE_HEX = 0x10;
-        int UPPERCASE_E = 0x20;
+        int INFINITY_TO_NULL        = 0x0001;
+        int INFINITY_AS_IS          = 0x0002;
+        int NAN_TO_NULL             = 0x0004;
+        int NAN_AS_IS               = 0x0008;
+        int UPPERCASE_HEX           = 0x0010;
+        int UPPERCASE_E             = 0x0020;
+        int PLUS_SIGN               = 0x0040;
+        int ESCAPE_EXTRA            = 0x0080;
+        int COMMA_SPACE             = 0x0100;
+        int COLON_SPACE             = 0x0200;
+        int NO_QUOTE_FAST_KEY       = 0x0400;
+        int NO_QUOTE_PROPER_KEY     = 0x0800;
     }
 
     @MagicConstant(flagsFromClass = ConfigFlags.class)

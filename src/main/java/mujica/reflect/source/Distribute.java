@@ -13,6 +13,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,15 +24,32 @@ public final class Distribute {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Distribute.class);
 
-    @NotNull
-    final String includedRoot;
+    public static void main(String[] args) {
+        Distribute distribute;
+        distribute = new Distribute("D:\\Java\\CRYCHIC\\src");
+        distribute.cleanAndWrite("D:\\Java\\MyGO\\src");
+        distribute = new Distribute("D:\\Java\\MyGO\\src");
+        distribute.overwrite("D:\\Java\\Mujica\\src");
+        distribute = new Distribute("D:\\Java\\Mujica\\src");
+        distribute.merge("D:\\Java\\AveMujica\\src");
+    }
 
     @NotNull
-    final List<String> excludedList = new ArrayList<>();
+    final Path srcRoot;
 
-    Distribute(@NotNull String includedRoot) {
+    @NotNull
+    final Path dstRoot;
+
+    @NotNull
+    final HashSet<Path> excludedSrc = new HashSet<>();
+
+    @NotNull
+    final HashSet<Path> includedDst = new HashSet<>();
+
+    Distribute(@NotNull String srcRoot) {
         super();
-        this.includedRoot = includedRoot;
+        this.srcRoot = Path.of(srcRoot);
+        this.dstRoot = Path.of(srcRoot); // ?
     }
 
     @NotNull
@@ -41,14 +59,14 @@ public final class Distribute {
 
     @NotNull
     Distribute exclude(@NotNull String path) {
-        excludedList.add(path);
+        // excludedList.add(path);
         return this;
     }
 
     @Nullable
     Path getSourceRoot() {
         final Path currentPath = Path.of("").toAbsolutePath();
-        final Path sourceRoot = Path.of(includedRoot).toAbsolutePath();
+        final Path sourceRoot = srcRoot.toAbsolutePath();
         if (Files.isDirectory(sourceRoot) && sourceRoot.startsWith(currentPath)) {
             return sourceRoot;
         } else {
@@ -56,7 +74,7 @@ public final class Distribute {
         }
     }
 
-    void merge(@NotNull String target) {
+    void cleanAndWrite(@NotNull String target) {
         //
     }
 
@@ -64,8 +82,54 @@ public final class Distribute {
         //
     }
 
-    void cleanAndWrite(@NotNull String target) {
+    void merge(@NotNull String target) {
         //
+    }
+
+    @CodeHistory(date = "2026/4/25")
+    private class CleanVisitor implements FileVisitor<Path> {
+
+        @NotNull
+        final ArrayList<Path> toDelete = new ArrayList<>();
+
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+            if (includedDst.contains(dir)) {
+                return FileVisitResult.SKIP_SUBTREE;
+            } else {
+                return FileVisitResult.CONTINUE;
+            }
+        }
+
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+            if (!includedDst.contains(file)) {
+                toDelete.add(file);
+            }
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) {
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+            return FileVisitResult.CONTINUE;
+        }
+
+        void doDelete() {
+            LOGGER.info("{} path(s) to delete", toDelete.size());
+            for (Path path : toDelete) {
+                try {
+                    Files.delete(path);
+                    LOGGER.info("deleted {}", path);
+                } catch (IOException e) {
+                    LOGGER.warn("deleting {}", path, e);
+                }
+            }
+        }
     }
 
     @CodeHistory(date = "2025/10/11", project = "LeetInAction", name = "PriorityAnnotation")
@@ -283,7 +347,7 @@ public final class Distribute {
             {"D:\\Java\\Mujica\\src", "D:\\Java\\AveMujica\\src"}
     };
 
-    public static void main(String[] args) {
+    public static void main0(String[] args) {
         final ReformatJava reformatJava = new ReformatJava();
         final Path currentPath = Path.of("").toAbsolutePath();
         LOGGER.info("current {}", currentPath);

@@ -18,7 +18,7 @@ class UtilMapAsJsonObject<T extends Map<String, Object>> extends JsonObject {
     protected T map;
 
     UtilMapAsJsonObject(@NotNull T map) {
-        super();
+        super(new ContainerConfig()); // remove
         this.map = map;
     }
 
@@ -39,13 +39,23 @@ class UtilMapAsJsonObject<T extends Map<String, Object>> extends JsonObject {
             case PUT:
                 map.put(name, value);
                 break;
+            case PUT_IF_ABSENT:
+                if (!map.containsKey(name)) {
+                    map.put(name, value);
+                }
+                break;
             case PUT_IF_PRESENT:
                 if (map.containsKey(name)) {
                     map.put(name, value);
                 }
                 break;
-            case PUT_IF_ABSENT:
+            case PUT_IF_NULL:
                 map.putIfAbsent(name, value);
+                break;
+            case PUT_IF_NOT_NULL:
+                if (map.get(name) != null) {
+                    map.put(name, value);
+                }
                 break;
         }
     }

@@ -23,6 +23,8 @@ public class UnsignedTriangle implements DimensionCodec {
 
     private static final long MASK = (1L << Integer.SIZE) - 1L;
 
+    private static final long LIMIT = (1L << (Long.SIZE - 1)) - (1L << (Integer.SIZE - 1));
+
     /**
      * @param t triangle side length
      * @return t * (t + 1) / 2, without overflow
@@ -33,6 +35,24 @@ public class UnsignedTriangle implements DimensionCodec {
         } else {
             return t * ((t + 1L) >> 1L);
         }
+    }
+
+    /**
+     * @param s >= t * (t + 1) / 2
+     * @return maximum t
+     */
+    private long inverseTriangleArea(long s) {
+        long l = 0L;
+        long h = MASK;
+        while (l < h) {
+            long t = (l + h + 1L) >>> 1;
+            if (s >= triangleArea(t)) {
+                l = t;
+            } else {
+                h = t - 1L;
+            }
+        }
+        return l;
     }
 
     @Override
@@ -47,46 +67,36 @@ public class UnsignedTriangle implements DimensionCodec {
         }
     }
 
-    private static final long POSITIVE_LIMIT = (1L << (Long.SIZE - 1)) - (1L << Integer.SIZE);
-
-    private static final long NEGATIVE_LIMIT = (1L << (Long.SIZE - 1)) + (1L << Integer.SIZE);
-
     @Override
     public void decode2(long in, @NotNull int[] out) {
         if (in >= 0) {
-            if (in < POSITIVE_LIMIT) {
-                //
+            if (in < LIMIT) {
+                long t = inverseTriangleArea(in);
+                long y = in - triangleArea(t);
+                out[1] = (int) y;
+                out[0] = (int) (t - y);
+                return;
             }
         } else {
-            if (NEGATIVE_LIMIT <= in) {
-                //
+            if (-LIMIT <= in) {
+                in = -in - (MASK + 1L);
+                long t = inverseTriangleArea(in);
+                long y = in - triangleArea(t);
+                out[1] = (int) y;
+                out[0] = (int) (t - y);
+                return;
             }
         }
-    }
-
-    @Override
-    public int encode4(@NotNull byte[] in) {
-        return 0;
-    }
-
-    @Override
-    public void decode4(int in, @NotNull byte[] out) {
-
-    }
-
-    @Override
-    public long encode8(@NotNull byte[] in) {
-        return 0;
-    }
-
-    @Override
-    public void decode8(long in, @NotNull byte[] out) {
-
+        out[1] = (int) (in - LIMIT);
+        out[0] = -1 - out[1];
     }
 
     @NotNull
     @Override
     public BigInteger encodeN(@NotNull BigInteger[] in) {
+        if (in.length != 2) {
+            throw new UnsupportedOperationException();
+        }
         return null;
     }
 

@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import mujica.ds.generic.set.CollectionConstant;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.text.sanitizer.CharSequenceAppender;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -21,6 +22,10 @@ public abstract class JsonHandler implements TypePreference {
     @Override
     public int typePreference() {
         return 0;
+    }
+
+    public boolean testTypePreference(@MagicConstant(flagsFromClass = TypePreference.class) int flag) {
+        return (typePreference() & flag) != 0;
     }
 
     public void openArray() {
@@ -47,7 +52,7 @@ public abstract class JsonHandler implements TypePreference {
 
     public void stringKey(@NotNull FastString key) {
         if (LOGGER.isWarnEnabled()) {
-            LOGGER.warn("stringKey(fast\"{}\")", key.string);
+            LOGGER.warn("stringKey(fast\"{}\")", key.toString());
         }
     }
 

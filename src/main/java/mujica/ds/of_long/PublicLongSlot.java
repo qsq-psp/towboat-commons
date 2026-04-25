@@ -2,6 +2,7 @@ package mujica.ds.of_long;
 
 import mujica.algebra.discrete.IntegralMath;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.FieldOrder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map;
 @CodeHistory(date = "2023/12/1", project = "Ultramarine", name = "LongQuantity")
 @CodeHistory(date = "2023/12/6", project = "Ultramarine", name = "LongBox")
 @CodeHistory(date = "2025/3/9")
+@FieldOrder("value") // only "value", not "long"
 public class PublicLongSlot extends Number implements LongSlot, Comparable<PublicLongSlot>, Cloneable {
 
     private static final long serialVersionUID = 0xb0ca00edf2e5e344L;

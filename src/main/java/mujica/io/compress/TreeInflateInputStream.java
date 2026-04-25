@@ -2,6 +2,8 @@ package mujica.io.compress;
 
 import io.netty.handler.codec.CodecException;
 import mujica.ds.of_byte.run.RunBuffer;
+import mujica.json.entity.JsonHandler;
+import mujica.json.entity.JsonStructure;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,24 +14,48 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 @CodeHistory(date = "2025/11/9")
-public class TreeInflateInputStream extends ResidueInflateInputStream {
+public class TreeInflateInputStream extends ResidueInflateInputStream implements JsonStructure {
 
     @CodeHistory(date = "2018/10/17", project = "TubeM", name = "HuffmanTreeNode")
     @CodeHistory(date = "2025/11/9")
-    private static class HuffmanNode {
+    private static class HuffmanNode implements JsonStructure {
 
         HuffmanNode left, right;
 
         int symbol = -1;
 
         long useCount;
+
+        @Override
+        public void json(@NotNull JsonHandler jh) {
+            jh.openObject();
+            {
+                if (symbol != -1) {
+                    jh.stringKey("symbol");
+                    jh.numberValue(symbol);
+                }
+                if (useCount != 0L) {
+                    jh.stringKey("use");
+                    jh.numberValue(useCount);
+                }
+                if (left != null) {
+                    jh.stringKey("left");
+                    left.json(jh);
+                }
+                if (right != null) {
+                    jh.stringKey("right");
+                    right.json(jh);
+                }
+            }
+            jh.closeObject();
+        }
     }
 
     @NotNull
     private final HuffmanNode codeLengthDecodeRoot, literalLengthDecodeRoot, distanceDecodeRoot;
 
     @NotNull
-    private long[] blockStatistics = new long[8];
+    private final long[] blockStatistics = new long[8];
 
     private static final int BS_FIXED_HUFFMAN_BLOCK_COUNT       = 0;
     private static final int BS_FIXED_HUFFMAN_COPY_BYTES        = 1;
@@ -282,6 +308,36 @@ public class TreeInflateInputStream extends ResidueInflateInputStream {
                 node = node.right;
             }
         }
-        throw new CodecException();
+        throw new CompressAlgorithmException("no symbol for code");
+    }
+
+    @Override
+    public void json(@NotNull JsonHandler jh) {
+        jh.openObject();
+        {
+            jh.stringKey("fixedHuffmanBlockCount");
+            jh.numberValue(blockStatistics[BS_FIXED_HUFFMAN_BLOCK_COUNT]);
+            jh.stringKey("fixedHuffmanCopyBytes");
+            jh.numberValue(blockStatistics[BS_FIXED_HUFFMAN_COPY_BYTES]);
+            jh.stringKey("fixedHuffmanDecodeBytes");
+            jh.numberValue(blockStatistics[BS_FIXED_HUFFMAN_DECODE_BYTES]);
+            jh.stringKey("dynamicHuffmanBlockCount");
+            jh.numberValue(blockStatistics[BS_DYNAMIC_HUFFMAN_BLOCK_COUNT]);
+            jh.stringKey("dynamicHuffmanCopyBytes");
+            jh.numberValue(blockStatistics[BS_DYNAMIC_HUFFMAN_COPY_BYTES]);
+            jh.stringKey("dynamicHuffmanDecodeBytes");
+            jh.numberValue(blockStatistics[BS_DYNAMIC_HUFFMAN_DECODE_BYTES]);
+            jh.stringKey("noCompressionBlockCount");
+            jh.numberValue(blockStatistics[BS_NO_COMPRESSION_BLOCK_COUNT]);
+            jh.stringKey("noCompressionCopyBytes");
+            jh.numberValue(blockStatistics[BS_NO_COMPRESSION_COPY_BYTES]);
+            jh.stringKey("codeLengthTree");
+            codeLengthDecodeRoot.json(jh);
+            jh.stringKey("literalLengthTree");
+            literalLengthDecodeRoot.json(jh);
+            jh.stringKey("distanceTree");
+            distanceDecodeRoot.json(jh);
+        }
+        jh.closeObject();
     }
 }

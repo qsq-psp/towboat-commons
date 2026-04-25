@@ -18,6 +18,17 @@ public final class FastNumber extends Number {
         this.value = value;
     }
 
+    public boolean isDecimal() {
+        final int length = value.length();
+        for (int index = 0; index < length; index++) {
+            int ch = value.charAt(index);
+            if (ch == '.' || ch == 'e' || ch == 'E') {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isZero() {
         return value.equals("0"); // todo: dot
     }

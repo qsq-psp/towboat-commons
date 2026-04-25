@@ -3,8 +3,8 @@ package mujica.json.io;
 import io.netty.buffer.Unpooled;
 import mujica.io.codec.Base16Case;
 import mujica.io.stream.OIO;
-import mujica.json.entity.FastNumber;
 import mujica.json.entity.JsonHandler;
+import mujica.json.entity.TypePreference;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
@@ -148,19 +148,18 @@ public class JsonByteBufferReader implements JsonSyncReader {
 
     private void readJson(@NotNull JsonHandler jh) {
         // gap already skipped now
-        if ((flags & (FLAG_SKIP_VALUE | FLAG_SKIP_TO_BYTE_BUF)) != 0) {
-            if ((flags & FLAG_SKIP_TO_BYTE_BUF) != 0) {
-                int start = byteBuffer.position();
-                skipJson();
-                int position = byteBuffer.position();
-                int limit = byteBuffer.limit();
-                ByteBuffer slice = byteBuffer.position(start).limit(position).slice();
-                byteBuffer.limit(limit).position(position);
-                jh.skippedValue(Unpooled.wrappedBuffer(slice));
-            } else {
-                skipJson();
-                jh.skippedValue();
-            }
+        if (jh.testTypePreference(TypePreference.FLAG_SKIP_TO_BYTE_BUF)) {
+            int start = byteBuffer.position();
+            skipJson();
+            int position = byteBuffer.position();
+            int limit = byteBuffer.limit();
+            ByteBuffer slice = byteBuffer.position(start).limit(position).slice();
+            byteBuffer.limit(limit).position(position);
+            jh.skippedValue(Unpooled.wrappedBuffer(slice));
+            return;
+        } else if (jh.testTypePreference(TypePreference.FLAG_SKIP_VALUE)) {
+            skipJson();
+            jh.skippedValue();
             return;
         }
         final int x = byteBuffer.get();
@@ -170,22 +169,14 @@ public class JsonByteBufferReader implements JsonSyncReader {
                     throw new RuntimeException("infinity");
                 }
                 skipWord("Infinity");
-                if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
-                    jh.numberValue(Double.POSITIVE_INFINITY);
-                } else {
-                    jh.numberValue(new FastNumber("Infinity"));
-                }
+                jh.numberValue(Double.POSITIVE_INFINITY);
                 break;
             case 'N':
                 if ((flags & FLAG_INFINITY_NAN_EXTENSION) == 0) {
                     throw new RuntimeException("not a number");
                 }
                 skipWord("NaN");
-                if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
-                    jh.numberValue(Double.NaN);
-                } else {
-                    jh.numberValue(new FastNumber("NaN"));
-                }
+                jh.numberValue(Double.NaN);
                 break;
             case 'f':
                 skipWord("false");

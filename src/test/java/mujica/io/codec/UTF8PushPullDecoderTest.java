@@ -84,6 +84,7 @@ public class UTF8PushPullDecoderTest {
         caseCodec("101 Switching Protocols");
         caseCodec("<packaging>jar</packaging>");
         caseCodec("QFN1cHByZXNzV2FybmluZ3MoIlNwZWxsQ2hlY2tpbmdJbnNwZWN0aW9uIik=");
+        caseCodec("Miku, Rin, Len, Luka, Meiko, Kaito, Gumi, Teto");
     }
 
     @Test

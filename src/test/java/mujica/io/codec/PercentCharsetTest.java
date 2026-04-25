@@ -67,6 +67,10 @@ public class PercentCharsetTest {
                 "DIRECTIONALITY_POP_DIRECTIONAL_ISOLATE;",
                 "DIRECTIONALITY_POP_DIRECTIONAL_ISOLATE;"
         );
+        caseUri(
+                "innate,nosocomial,septicemia,pyemia,endotoxemia,methicillin,pyrogenicity,pyrogen,invasin,toxemia,bacteremia,glycylcycline,hyaluronidase,catalase,adhesin",
+                "innate,nosocomial,septicemia,pyemia,endotoxemia,methicillin,pyrogenicity,pyrogen,invasin,toxemia,bacteremia,glycylcycline,hyaluronidase,catalase,adhesin"
+        );
     }
 
     @Test

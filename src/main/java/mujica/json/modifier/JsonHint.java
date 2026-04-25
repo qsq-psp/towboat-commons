@@ -31,16 +31,17 @@ public @interface JsonHint {
     int CLEAR_COLLECTION            = 0x0000_0800;
     int DYNAMIC_TYPE                = 0x0000_1000;
     int ALWAYS_BUILD                = 0x0000_2000;
-    int RANDOM_ORDER                = 0x0000_4000;
-    int USE_METHOD_HANDLE           = 0x0000_8000;
-    int IGNORE_FIELDS               = 0x0001_0000;
-    int IGNORE_SETTERS              = 0x0002_0000;
-    int IGNORE_GETTERS              = 0x0004_0000;
-    int IGNORE_SUPER_CLASS          = 0x0008_0000;
-    int IGNORE_SUPER_INTERFACE      = 0x0010_0000;
-    int COLLECT_NON_PUBLIC          = 0x0020_0000;
-    int SEALED                      = 0x0040_0000;
-    int DERIVED                     = 0x0080_0000;
+    int STRICT_ORDER                = 0x0000_4000;
+    int RANDOM_ORDER                = 0x0000_8000;
+    int USE_METHOD_HANDLE           = 0x0001_0000;
+    int IGNORE_FIELDS               = 0x0002_0000;
+    int IGNORE_SETTERS              = 0x0004_0000;
+    int IGNORE_GETTERS              = 0x0008_0000;
+    int IGNORE_SUPER_CLASS          = 0x0010_0000;
+    int IGNORE_SUPER_INTERFACE      = 0x0020_0000;
+    int COLLECT_NON_PUBLIC          = 0x0040_0000;
+    int SEALED                      = 0x0080_0000;
+    int DERIVED                     = 0x0100_0000;
 
     @MagicConstant(flagsFromClass = JsonHint.class)
     int value();

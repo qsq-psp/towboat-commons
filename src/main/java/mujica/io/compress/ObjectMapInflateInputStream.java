@@ -26,7 +26,35 @@ public class ObjectMapInflateInputStream extends ResidueInflateInputStream {
 
         @Override
         public int compareTo(@NotNull TruncateList<Boolean> that) {
-            return 0;
+            // for analysis; not used
+            final int thisSize = this.size();
+            final int thatSize = that.size();
+            final int minSize = Math.min(thisSize, thatSize);
+            for (int index = 0; index < minSize; index++) {
+                boolean thisBit = this.get(index);
+                if (thisBit != that.get(index)) {
+                    if (thisBit) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                }
+            }
+            if (thisSize > thatSize) {
+                if (this.get(thatSize)) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            } else if (thisSize < thatSize) {
+                if (that.get(thisSize)) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            } else {
+                return 0;
+            }
         }
     }
 
@@ -337,6 +365,6 @@ public class ObjectMapInflateInputStream extends ResidueInflateInputStream {
                 return symbol;
             }
         }
-        throw new CodecException();
+        throw new CompressAlgorithmException("no symbol for code");
     }
 }

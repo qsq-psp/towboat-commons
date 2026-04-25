@@ -2,6 +2,7 @@ package mujica.ds.of_int;
 
 import mujica.algebra.discrete.IntegralMath;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.FieldOrder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 @CodeHistory(date = "2022/7/2", project = "Ultramarine", name = "Counter")
 @CodeHistory(date = "2024/1/20", project = "Ultramarine")
 @CodeHistory(date = "2025/3/9")
+@FieldOrder("value") // only "value", not "int"
 public class PublicIntSlot extends Number implements IntSlot, Comparable<PublicIntSlot>, Cloneable {
 
     private static final long serialVersionUID = 0xf76e70d00282fbbdL;

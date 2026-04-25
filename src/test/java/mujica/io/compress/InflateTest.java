@@ -95,6 +95,7 @@ public class InflateTest {
         return nextRunBuffer(AbstractInflateInputStream.MAX_RUN_BUFFER_DISTANCE + fc.nextInt(0x1000));
     }
 
+    @NotNull
     private Supplier<IntMap> nextDecodeMapSupplier() {
         switch (fc.nextInt(2)) {
             case 0:
@@ -156,7 +157,7 @@ public class InflateTest {
                     System.out.println(is);
                 }
                 if (actual != null) {
-                    System.out.println(ByteBufUtil.hexDump(actual));
+                    System.out.println(ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(actual)));
                 }
                 throw e;
             } finally {
@@ -217,7 +218,7 @@ public class InflateTest {
                     System.out.println(is);
                 }
                 if (actual != null) {
-                    System.out.println(ByteBufUtil.hexDump(actual));
+                    System.out.println(ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(actual)));
                 }
                 throw e;
             } finally {
@@ -277,7 +278,7 @@ public class InflateTest {
                     System.out.println(is);
                 }
                 if (actual != null) {
-                    System.out.println(ByteBufUtil.hexDump(actual));
+                    System.out.println(ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(actual)));
                 }
                 throw e;
             } finally {

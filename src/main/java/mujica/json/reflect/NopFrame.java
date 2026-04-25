@@ -55,12 +55,12 @@ class NopFrame extends JsonHandler { // frames are short-lived small objects
     }
 
     @NotNull
-    public NopFrame open() {
+    NopFrame open() {
         return new NopFrame(this);
     }
 
     @Nullable
-    public Object close() {
+    Object close() {
         return CollectionConstant.UNDEFINED;
     }
 

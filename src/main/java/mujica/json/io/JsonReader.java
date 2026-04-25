@@ -21,14 +21,6 @@ public interface JsonReader { // built with input and output, used only once
     int FLAG_TRAILING_COMMA                     = 0x0020;
     int FLAG_PLUS_SIGN_NUMBER                   = 0x0040;
     int FLAG_INFINITY_NAN_EXTENSION             = 0x0080;
-    int FLAG_INTEGRAL_OVERFLOW_TO_FRACTIONAL    = 0x0100;
-    int FLAG_INTEGRAL_OVERFLOW_TO_RAW           = 0x0200;
-    int FLAG_FRACTIONAL_OVERFLOW_TO_RAW         = 0x0400;
-    int FLAG_INTEGRAL_FORCE_TO_FRACTIONAL       = 0x0800;
-    int FLAG_INTEGRAL_FORCE_TO_RAW              = 0x1000;
-    int FLAG_FRACTIONAL_FORCE_TO_RAW            = 0x2000;
-    int FLAG_SKIP_VALUE                         = 0x4000;
-    int FLAG_SKIP_TO_BYTE_BUF                   = 0x8000;
 
     void setFlags(int flags);
 

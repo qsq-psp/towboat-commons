@@ -1,5 +1,6 @@
 package mujica.json.io;
 
+import io.netty.buffer.ByteBuf;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.FastString;
 import mujica.reflect.modifier.CodeHistory;
@@ -7,6 +8,7 @@ import mujica.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
 @CodeHistory(date = "2026/1/7", name = "StringBufferJsonWriter")
 @CodeHistory(date = "2026/3/24")
@@ -24,15 +26,16 @@ public class JsonStringBufferWriter extends JsonStringWriter {
         this(new StringBuffer());
     }
 
-    @Override
-    public void reset() {
-        sb.delete(0, sb.length());
-    }
-
     @NotNull
     @Override
     public StringBuffer getCharSequence() {
         return sb;
+    }
+
+    @Override
+    public void reset() {
+        super.reset(); // reset stack
+        sb.delete(0, sb.length());
     }
 
     protected void anyKey() {
@@ -70,6 +73,38 @@ public class JsonStringBufferWriter extends JsonStringWriter {
                 stack.offerLast(state);
                 throwState();
                 break; // never
+        }
+    }
+
+    protected boolean undoKey() {
+        final int length = sb.length();
+        int index = length;
+        int ch = sb.charAt(--index);
+        if (ch != ':') {
+            throw new IllegalStateException();
+        }
+        ch = sb.charAt(--index);
+        if (ch != '"') {
+            throw new IllegalStateException();
+        }
+        while (true) {
+            ch = sb.charAt(--index);
+            if (ch == '"') {
+                ch = sb.charAt(--index);
+                if (ch != '\\') {
+                    break;
+                }
+            }
+        }
+        if (ch == '{') {
+            sb.delete(index + 1, length);
+            return true;
+        } else if (ch == ',') {
+            sb.delete(index, length);
+            return false;
+        } else {
+            System.out.println(sb);
+            throw new IllegalStateException("ch = " + ch);
         }
     }
 
@@ -145,7 +180,11 @@ public class JsonStringBufferWriter extends JsonStringWriter {
         if ((flags & ConfigFlags.ESCAPE_EXTRA) == 0) {
             appender = CharSequenceAppender.Json.ESSENTIAL;
         } else {
-            appender = CharSequenceAppender.Json.EXTRA;
+            if ((flags & ConfigFlags.UPPERCASE_HEX) == 0) {
+                appender = CharSequenceAppender.Json.EXTRA_LOWER;
+            } else {
+                appender = CharSequenceAppender.Json.EXTRA_UPPER;
+            }
         }
         appender.append(key, sb);
         sb.append(':');
@@ -154,7 +193,47 @@ public class JsonStringBufferWriter extends JsonStringWriter {
     @Override
     public void stringKey(@NotNull FastString key) {
         anyKey();
-        sb.append('"').append(key.string).append('"').append(':');
+        sb.append('"').append(key.toString()).append('"').append(':');
+    }
+
+    @Override
+    public void skippedValue() { // undo key if there is a key
+        final int state = stack.removeLast();
+        switch (state) {
+            case STATE_START:
+                stack.offerLast(STATE_END);
+                break;
+            case STATE_NEW_ARRAY:
+            case STATE_ARRAY:
+                stack.offerLast(state);
+                break;
+            case STATE_KEY:
+                if (undoKey()) {
+                    stack.offerLast(STATE_NEW_OBJECT);
+                } else {
+                    stack.offerLast(STATE_OBJECT);
+                }
+                break;
+            default:
+                stack.offerLast(state);
+                throwState();
+                break; // never
+        }
+    }
+
+    @Override
+    public void skippedValue(@NotNull ByteBuf value) {
+        try {
+            sb.append(value.toString(StandardCharsets.UTF_8));
+        } finally {
+            value.release();
+        }
+    }
+
+    @Override
+    public void nullValue() {
+        anyValue();
+        sb.append("null");
     }
 
     @Override
@@ -218,7 +297,11 @@ public class JsonStringBufferWriter extends JsonStringWriter {
         if ((flags & ConfigFlags.ESCAPE_EXTRA) == 0) {
             appender = CharSequenceAppender.Json.ESSENTIAL;
         } else {
-            appender = CharSequenceAppender.Json.EXTRA;
+            if ((flags & ConfigFlags.UPPERCASE_HEX) == 0) {
+                appender = CharSequenceAppender.Json.EXTRA_LOWER;
+            } else {
+                appender = CharSequenceAppender.Json.EXTRA_UPPER;
+            }
         }
         appender.append(value, sb);
     }
@@ -226,7 +309,7 @@ public class JsonStringBufferWriter extends JsonStringWriter {
     @Override
     public void stringValue(@NotNull FastString value) {
         anyValue();
-        sb.append('"').append(value.string).append('"');
+        sb.append('"').append(value.toString()).append('"');
     }
 
     @Override

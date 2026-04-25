@@ -8,7 +8,7 @@ import java.math.BigInteger;
 
 @CodeHistory(date = "2025/3/1")
 @DirectSubclass({SignedCodeModifier.class, SignedVectorModifier.class, VectorOrderModifier.class})
-public class DimensionCodecModifier implements DimensionCodec {
+public class DimensionCodecModifier implements DimensionCodec { // the base modifier class remains unchanged (identity transform)
 
     @NotNull
     public final DimensionCodec codec;
@@ -16,7 +16,6 @@ public class DimensionCodecModifier implements DimensionCodec {
     public DimensionCodecModifier(@NotNull DimensionCodec codec) {
         super();
         this.codec = codec;
-        // the base modifier class remains unchanged (identity transform)
     }
 
     @Override
@@ -37,26 +36,6 @@ public class DimensionCodecModifier implements DimensionCodec {
     @Override
     public void decode2(long in, @NotNull int[] out) {
         codec.decode2(in, out);
-    }
-
-    @Override
-    public int encode4(@NotNull byte[] in) {
-        return codec.encode4(in);
-    }
-
-    @Override
-    public void decode4(int in, @NotNull byte[] out) {
-        codec.decode4(in, out);
-    }
-
-    @Override
-    public long encode8(@NotNull byte[] in) {
-        return codec.encode8(in);
-    }
-
-    @Override
-    public void decode8(long in, @NotNull byte[] out) {
-        codec.decode8(in, out);
     }
 
     @NotNull

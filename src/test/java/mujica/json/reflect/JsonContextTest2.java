@@ -1,16 +1,24 @@
 package mujica.json.reflect;
 
+import mujica.algebra.discrete.BigConstants;
+import mujica.ds.of_int.PublicIntSlot;
+import mujica.json.modifier.JsonEmpty;
+import mujica.json.modifier.JsonHint;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.FieldOrder;
 import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigInteger;
+
 @SuppressWarnings("unused")
 @CodeHistory(date = "2026/4/12")
+@FieldOrder({"high", "low", "slot", "appliedChaos", "toiletPaper"})
 public class JsonContextTest2 {
 
-    static final JsonContext CONTEXT = new JsonContext();
+    static final JsonContext CONTEXT = (new JsonContext()).loadBasic();
 
     public static final int TOSHIBA_SCHNEIDER_INVERTER_CORPORATION = 0x0179;
 
@@ -39,6 +47,59 @@ public class JsonContextTest2 {
         mix = (mix & 0xffffffff_00000000L) | (value & 0x00000000_ffffffffL);
     }
 
+    public static long longLongAgo = 2236L;
+
+    public transient double doubleKill = 7.7;
+
+    @CodeHistory(date = "2026/4/21")
+    @ReferencePage(title = "Algorithms Jeff Erickson 4.2", href = "http://jeffe.cs.illinois.edu/teaching/algorithms/")
+    @ReferencePage(title = "Algorithms Jeff Erickson 4.2", href = "http://algorithms.wtf")
+    public static class AppliedChaos {
+
+        private int museum;
+
+        private float mime;
+
+        private double forth;
+
+        private BigInteger gold = BigConstants.HUNDRED;
+
+        private BigInteger getGold() {
+            return gold;
+        }
+
+        private void setGold(BigInteger gold) {
+            this.gold = gold;
+        }
+
+        @Name(value = "void", language = "json")
+        public Integer ball;
+    }
+
+    @JsonHint(JsonHint.NULLABLE)
+    public AppliedChaos appliedChaos;
+
+    @CodeHistory(date = "2026/4/21")
+    @ReferencePage(title = "Algorithms Jeff Erickson 4.2", href = "http://jeffe.cs.illinois.edu/teaching/algorithms/")
+    @ReferencePage(title = "Algorithms Jeff Erickson 4.2", href = "http://algorithms.wtf")
+    @FieldOrder({"import", "export"})
+    public static class ToiletPaperLandscapeArchitecture {
+
+        @Name(value = "import", language = "json")
+        public int[] importValues;
+
+        @Name(value = "export", language = "json")
+        public int[][] exportValues;
+    }
+
+    @JsonHint(JsonHint.NULLABLE)
+    @JsonEmpty(toUndefined = JsonEmpty.FROM_NULL)
+    public ToiletPaperLandscapeArchitecture toiletPaper;
+
+    @JsonHint(JsonHint.NULLABLE)
+    @JsonEmpty(toUndefined = JsonEmpty.FROM_NULL)
+    public final PublicIntSlot slot = new PublicIntSlot();
+
     @Test
     public void caseParse1() {
         final JsonContextTest2 instance = new JsonContextTest2();
@@ -52,6 +113,6 @@ public class JsonContextTest2 {
         final JsonContextTest2 instance = new JsonContextTest2();
         instance.setHigh(30);
         instance.setLow(26);
-        Assert.assertEquals("{\"high\":30,\"low\":26}", CONTEXT.stringify(instance));
+        Assert.assertEquals("{\"high\":30,\"low\":26,\"slot\":{\"value\":0},\"appliedChaos\":null}", CONTEXT.stringify(instance));
     }
 }

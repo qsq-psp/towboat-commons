@@ -83,6 +83,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
         }
     }
 
+    //*
     @Override
     public int read(@NotNull byte[] array, int offset, int length) throws IOException {
         if (length <= 0) {
@@ -146,6 +147,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                             state &= STATE_LAST_BLOCK_FREE;
                         }
                     }
+                    break;
                 case STATE_TRAILING_BITS: {
                     int data = readTrailingBit();
                     if (data == -1) {
@@ -170,6 +172,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
             }
         }
     }
+    //*/
 
     private void readBlock() throws IOException {
         state = STATE_NO_COMPRESSION + readBits(3);

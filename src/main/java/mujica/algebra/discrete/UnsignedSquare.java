@@ -58,34 +58,30 @@ public class UnsignedSquare implements DimensionCodec {
         }
     }
 
-    @Override
-    public int encode4(@NotNull byte[] in) {
-        return 0;
-    }
-
-    @Override
-    public void decode4(int in, @NotNull byte[] out) {
-        //
-    }
-
-    @Override
-    public long encode8(@NotNull byte[] in) {
-        return 0;
-    }
-
-    @Override
-    public void decode8(long in, @NotNull byte[] out) {
-        //
-    }
-
     @NotNull
     @Override
     public BigInteger encodeN(@NotNull BigInteger[] in) {
-        return in[0];
+        if (in.length != 2) {
+            throw new UnsupportedOperationException();
+        }
+        final BigInteger x = in[0];
+        final BigInteger y = in[1];
+        if (x.compareTo(y) > 0) {
+            return x.multiply(x).add(y);
+        } else {
+            return y.multiply(y.add(BigInteger.TWO)).add(x);
+        }
     }
 
     @Override
     public void decodeN(@NotNull BigInteger in, @NotNull BigInteger[] out) {
-        //
+        final BigInteger[] m = in.sqrtAndRemainder();
+        if (m[0].compareTo(m[1]) > 0) {
+            out[0] = m[0];
+            out[1] = m[1];
+        } else {
+            out[0] = m[1].subtract(m[0]);
+            out[1] = m[0];
+        }
     }
 }

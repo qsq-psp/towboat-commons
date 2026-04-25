@@ -6,9 +6,6 @@ import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
 
-/**
- * Created on 2025/11/15.
- */
 @CodeHistory(date = "2025/11/15")
 public class ZipSampleRunner extends Runner {
 

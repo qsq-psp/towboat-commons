@@ -1,12 +1,14 @@
 package mujica.ds.of_double;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.FieldOrder;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2018/7/3", project = "existence", name = "MtDouble")
 @CodeHistory(date = "2020/2/22", project = "coo", name = "DoubleModel")
 @CodeHistory(date = "2024/1/20", project = "Ultramarine")
 @CodeHistory(date = "2025/3/21")
+@FieldOrder("value") // only "value", not "double"
 public class PublicDoubleSlot extends Number implements DoubleSlot, Comparable<PublicDoubleSlot>, Cloneable {
 
     private static final long serialVersionUID = 0x6a6bc6ef5338a773L;

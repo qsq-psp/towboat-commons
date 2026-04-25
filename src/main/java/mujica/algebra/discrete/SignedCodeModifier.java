@@ -31,26 +31,6 @@ public class SignedCodeModifier extends DimensionCodecModifier {
         codec.decode2(BitInterleave.signedToUnsigned(in), out);
     }
 
-    @Override
-    public int encode4(@NotNull byte[] in) {
-        return BitInterleave.unsignedToSigned(codec.encode4(in));
-    }
-
-    @Override
-    public void decode4(int in, @NotNull byte[] out) {
-        codec.decode4(BitInterleave.signedToUnsigned(in), out);
-    }
-
-    @Override
-    public long encode8(@NotNull byte[] in) {
-        return BitInterleave.unsignedToSigned(codec.encode8(in));
-    }
-
-    @Override
-    public void decode8(long in, @NotNull byte[] out) {
-        codec.decode8(BitInterleave.signedToUnsigned(in), out);
-    }
-
     @NotNull
     @Override
     public BigInteger encodeN(@NotNull BigInteger[] in) {

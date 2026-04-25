@@ -91,7 +91,7 @@ class BooleanType extends JsonType implements BooleanSlot {
         return this;
     }
 
-    protected boolean booleanFrom(@NotNull Object object) {
+    boolean booleanFrom(@NotNull Object object) {
         if (object instanceof Boolean) {
             return (Boolean) object;
         }
@@ -113,7 +113,7 @@ class BooleanType extends JsonType implements BooleanSlot {
     }
 
     @NotNull
-    protected CollectionConstant stateFrom(Object object) {
+    CollectionConstant stateFrom(Object object) {
         if (object == null) {
             if ((flags & JsonHint.NULLABLE) != 0L) {
                 return CollectionConstant.EMPTY;

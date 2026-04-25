@@ -704,15 +704,15 @@ public class RandomContext implements Serializable {
         }
     }
 
-    public <T> void shuffleArray(@NotNull T[] array, int fromIndex, int toIndex) {
-        final int length = toIndex - fromIndex;
+    public <T> void shuffleArray(@NotNull T[] array, int startIndex, int endIndex) {
+        final int length = endIndex - startIndex;
         if (length > 1) {
             for (int i = 1; i < length; i++) {
                 int j = nextInt(i + 1);
                 if (i != j) {
-                    T t = array[fromIndex + i];
-                    array[fromIndex + i] = array[fromIndex + j];
-                    array[fromIndex + j] = t;
+                    T t = array[startIndex + i];
+                    array[startIndex + i] = array[startIndex + j];
+                    array[startIndex + j] = t;
                 }
             }
         }

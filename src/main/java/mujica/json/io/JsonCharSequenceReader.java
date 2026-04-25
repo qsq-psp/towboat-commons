@@ -4,6 +4,7 @@ import mujica.algebra.discrete.BigConstants;
 import mujica.io.codec.Base16Case;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.JsonHandler;
+import mujica.json.entity.TypePreference;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
@@ -169,20 +170,12 @@ public class JsonCharSequenceReader implements JsonSyncReader {
                 if ((flags & FLAG_INFINITY_NAN_EXTENSION) == 0) {
                     throw new RuntimeException("infinity");
                 }
-                if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
-                    jh.numberValue(Double.POSITIVE_INFINITY);
-                } else {
-                    jh.numberValue(new FastNumber(string));
-                }
+                jh.numberValue(Double.POSITIVE_INFINITY);
             case "NaN":
                 if ((flags & FLAG_INFINITY_NAN_EXTENSION) == 0) {
                     throw new RuntimeException("not a number");
                 }
-                if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
-                    jh.numberValue(Double.NaN);
-                } else {
-                    jh.numberValue(new FastNumber(string));
-                }
+                jh.numberValue(Double.NaN);
                 break;
             default:
                 throw new RuntimeException("unrecognized " + string);
@@ -194,7 +187,7 @@ public class JsonCharSequenceReader implements JsonSyncReader {
     private int readJsonLiteral(@NotNull JsonHandler jh, @Index(of = "in") int startIndex) {
         final int length = in.length();
         int endIndex = startIndex + 1;
-        boolean isFractional = (flags & FLAG_INTEGRAL_FORCE_TO_FRACTIONAL) != 0;
+        boolean isFractional = jh.testTypePreference(TypePreference.FLAG_INTEGRAL_FORCE_TO_FRACTIONAL);
         while (endIndex < length) {
             int ch = in.charAt(endIndex);
             if ('0' <= ch && ch <= '9' || ch == '+' || ch == '-') {
@@ -209,7 +202,7 @@ public class JsonCharSequenceReader implements JsonSyncReader {
         if (isFractional) {
             String string = in.subSequence(startIndex, endIndex).toString();
             LABEL:
-            while ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
+            while (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_FORCE_TO_RAW)) {
                 double value = Double.parseDouble(string);
                 while (true) {
                     if (Double.isFinite(value)) {
@@ -224,7 +217,7 @@ public class JsonCharSequenceReader implements JsonSyncReader {
                             throw new RuntimeException("negative infinity");
                         }
                         break;
-                    } else if ((flags & FLAG_FRACTIONAL_OVERFLOW_TO_RAW) == 0) {
+                    } else if (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_OVERFLOW_TO_RAW)) {
                         break;
                     }
                     break LABEL;
@@ -242,7 +235,7 @@ public class JsonCharSequenceReader implements JsonSyncReader {
     private int readJsonNumber(@NotNull JsonHandler jh, @Index(of = "in") int startIndex) {
         final int length = in.length();
         int endIndex = startIndex + 1;
-        boolean isFractional = (flags & FLAG_INTEGRAL_FORCE_TO_FRACTIONAL) != 0;
+        boolean isFractional = jh.testTypePreference(TypePreference.FLAG_INTEGRAL_FORCE_TO_FRACTIONAL);
         while (endIndex < length) {
             int octet = in.charAt(endIndex);
             if ('0' <= octet && octet <= '9' || octet == '+' || octet == '-') {
@@ -256,9 +249,9 @@ public class JsonCharSequenceReader implements JsonSyncReader {
         }
         if (isFractional) {
             String string = in.subSequence(startIndex, endIndex).toString();
-            if ((flags & FLAG_FRACTIONAL_FORCE_TO_RAW) == 0) {
+            if (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_FORCE_TO_RAW)) {
                 double value = Double.parseDouble(string);
-                if ((flags & FLAG_FRACTIONAL_OVERFLOW_TO_RAW) == 0 || Double.isFinite(value)) {
+                if (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_OVERFLOW_TO_RAW) || Double.isFinite(value)) {
                     jh.numberValue(value);
                     return endIndex;
                 }
@@ -271,7 +264,7 @@ public class JsonCharSequenceReader implements JsonSyncReader {
     }
 
     private void parseJsonInteger(@NotNull JsonHandler jh, @NotNull CharSequence string) {
-        if ((flags & FLAG_INTEGRAL_FORCE_TO_RAW) != 0) {
+        if (jh.testTypePreference(TypePreference.FLAG_INTEGRAL_FORCE_TO_RAW)) {
             jh.numberValue(new FastNumber(string.toString()));
             return;
         }
@@ -294,14 +287,14 @@ public class JsonCharSequenceReader implements JsonSyncReader {
                 } else {
                     jh.numberValue(longValue);
                 }
-            } else if ((flags & FLAG_INTEGRAL_OVERFLOW_TO_FRACTIONAL) != 0) {
+            } else if (jh.testTypePreference(TypePreference.FLAG_INTEGRAL_OVERFLOW_TO_FRACTIONAL)) {
                 double doubleValue = bigValue.doubleValue();
-                if ((flags & FLAG_FRACTIONAL_OVERFLOW_TO_RAW) == 0 || Double.isFinite(doubleValue)) {
+                if (!jh.testTypePreference(TypePreference.FLAG_FRACTIONAL_OVERFLOW_TO_RAW) || Double.isFinite(doubleValue)) {
                     jh.numberValue(doubleValue);
                 } else {
                     jh.numberValue(new FastNumber(string.toString()));
                 }
-            } else if ((flags & FLAG_INTEGRAL_OVERFLOW_TO_RAW) != 0) {
+            } else if (jh.testTypePreference(TypePreference.FLAG_INTEGRAL_OVERFLOW_TO_RAW)) {
                 jh.numberValue(new FastNumber(string.toString()));
             } else {
                 jh.numberValue(bigValue);

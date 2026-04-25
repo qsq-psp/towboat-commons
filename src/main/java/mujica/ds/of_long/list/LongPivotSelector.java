@@ -10,5 +10,5 @@ import org.jetbrains.annotations.NotNull;
 @FunctionalInterface
 public interface LongPivotSelector {
 
-    long select(@NotNull long[] array, @Index(of = "array") int fromIndex, @Index(of = "array", inclusive = false) int toIndex);
+    long select(@NotNull long[] array, @Index(of = "array") int startIndex, @Index(of = "array", inclusive = false) int endIndex);
 }

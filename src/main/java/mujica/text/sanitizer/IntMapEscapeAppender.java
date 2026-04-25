@@ -31,8 +31,16 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
         this.hex = hex;
     }
 
+    public IntMapEscapeAppender(@NotNull IntMapEscapeAppender that, boolean upperCase) {
+        this(that.map, new HexadecimalAppender(upperCase, true));
+    }
+
+    public IntMapEscapeAppender(boolean upperCase) {
+        this(new CompatibleIntMap(), new HexadecimalAppender(upperCase, true));
+    }
+
     public IntMapEscapeAppender() {
-        this(new CompatibleIntMap(), new HexadecimalAppender(false, true));
+        this(false);
     }
 
     @NotNull
@@ -372,14 +380,32 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
         }
     }
 
-    public static void main(String[] args) {
-        final IntMapEscapeAppender appender = new IntMapEscapeAppender();
-        appender.escapeFormatU();
-        final IntList intList = new CopyOnResizeIntList(null);
-        ((IterableIntMap) appender.map).forEachKey(intList::offerLast);
-        intList.sort(IntAscendingBubbleSort.INSTANCE);
-        for (int ch : intList) {
-            System.out.printf("case 0x%04x: ", ch);
+    @Override
+    public void append(@NotNull CharSequence string, @NotNull StringBuffer out) {
+        append(string, 0, string.length(), out);
+    }
+
+    @Override
+    public void append(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull StringBuffer out) {
+        for (int index = startIndex; index < endIndex; index++) {
+            char key = string.charAt(index);
+            int value = map.getInt(key);
+            if (value > 0) {
+                if (value == HEX2) {
+                    int position = out.length();
+                    hex.acceptByte((byte) key, out);
+                    out.setCharAt(position, '\\');
+                } else if (value == HEX4) {
+                    int position = out.length();
+                    hex.acceptChar(key, out);
+                    out.setCharAt(position, '\\');
+                    out.setCharAt(position + 1, 'u');
+                } else {
+                    out.append('\\').append((char) value);
+                }
+            } else {
+                out.append(key);
+            }
         }
     }
 }

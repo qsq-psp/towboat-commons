@@ -14,6 +14,11 @@ public abstract class JsonContainer<K> implements Serializable {
     @NotNull
     protected ContainerConfig config;
 
+    protected JsonContainer(@NotNull ContainerConfig config) {
+        super();
+        this.config = config;
+    }
+
     @NotNull
     public ContainerConfig getConfig() {
         return config;

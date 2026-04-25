@@ -30,29 +30,12 @@ public class HilbertCurve implements DimensionCodec {
 
     }
 
-    @Override
-    public int encode4(@NotNull byte[] in) {
-        return 0;
-    }
-
-    @Override
-    public void decode4(int in, @NotNull byte[] out) {
-
-    }
-
-    @Override
-    public long encode8(@NotNull byte[] in) {
-        return 0;
-    }
-
-    @Override
-    public void decode8(long in, @NotNull byte[] out) {
-
-    }
-
     @NotNull
     @Override
     public BigInteger encodeN(@NotNull BigInteger[] in) {
+        if (in.length != 2) {
+            throw new UnsupportedOperationException();
+        }
         return null;
     }
 

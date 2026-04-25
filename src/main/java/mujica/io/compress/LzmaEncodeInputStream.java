@@ -6,6 +6,7 @@ import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 @CodeHistory(date = "2025/11/19")
@@ -15,8 +16,10 @@ public class LzmaEncodeInputStream extends FilterInputStream {
 
     @Name(value = "literal context bits")
     private final int lc;
+
     @Name(value = "literal position state bits")
     private final int lp;
+
     @Name(value = "position state bits")
     private final int pb;
 
@@ -34,5 +37,10 @@ public class LzmaEncodeInputStream extends FilterInputStream {
             throw new IllegalArgumentException();
         }
         this.pb = pb;
+    }
+
+    @Override
+    public int read() throws IOException {
+        return super.read();
     }
 }

@@ -94,19 +94,19 @@ class ByteType extends JsonType implements ByteSlot {
         return this;
     }
 
-    protected byte byteFrom(int intValue) {
+    byte byteFrom(int intValue) {
         return (byte) intValue;
     }
 
-    protected byte byteFrom(long longValue) {
+    byte byteFrom(long longValue) {
         return (byte) longValue;
     }
 
-    protected byte byteFrom(@NotNull BigInteger bigInteger) {
+    byte byteFrom(@NotNull BigInteger bigInteger) {
         return bigInteger.byteValueExact();
     }
 
-    protected byte byteFrom(@NotNull Object object) {
+    byte byteFrom(@NotNull Object object) {
         if (object instanceof Integer) {
             return byteFrom((int) object);
         }

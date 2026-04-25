@@ -79,24 +79,6 @@ public class ArrayCopyRunBuffer extends ArrayRunBuffer {
         return data;
     }
 
-    /*
-    @Override
-    public int copy(int distance, @NotNull byte[] array, int offset, int length) {
-        if (length <= 0) {
-            return 0;
-        }
-        checkDistance(distance);
-        final int index = position - distance;
-        if (index < 0) {
-            throw new IllegalArgumentException("dictionary");
-        }
-        length = Math.min(length, distance);
-        System.arraycopy(this.array, index, array, offset, length);
-        putFully(array, offset, length);
-        return length;
-    }
-    //*/
-
     @Override
     public void clear() {
         position = 0;

@@ -1,6 +1,7 @@
 package mujica.ds.of_long;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.FieldOrder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.LongSupplier;

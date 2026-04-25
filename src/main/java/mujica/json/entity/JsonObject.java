@@ -28,8 +28,8 @@ public abstract class JsonObject extends JsonContainer<String> {
         return new UtilMapAsJsonObject<>(new TreeMap<>());
     }
 
-    protected JsonObject() {
-        super();
+    protected JsonObject(@NotNull ContainerConfig config) {
+        super(config);
     }
 
     @NotNull

@@ -352,9 +352,15 @@ public class CharSequenceAppender {
         @ReferencePage(title = "Introducing JSON", href = "https://www.json.org/json-en.html")
         public static final CharSequenceAppender ESSENTIAL = new QuoteAppender(ESSENTIAL_CORE, "\"");
 
-        public static final CharSequenceAppender EXTRA = new QuoteAppender(
-                (new IntMapEscapeAppender()).escapeControlU().escapeFormatU().escapeWhitespaceU().escapeNTR()
-                        .escapeBackspace().escapeFormFeed().escapeBackSlash().escapeQuotationMark(),
+        private static final IntMapEscapeAppender EXTRA_LOWER_CORE = (new IntMapEscapeAppender(false))
+                .escapeControlU().escapeFormatU().escapeWhitespaceU().escapeNTR()
+                .escapeBackspace().escapeFormFeed().escapeBackSlash().escapeQuotationMark();
+
+        public static final CharSequenceAppender EXTRA_LOWER = new QuoteAppender(EXTRA_LOWER_CORE, "\"");
+
+        public static final CharSequenceAppender EXTRA_UPPER = new QuoteAppender(
+                (new IntMapEscapeAppender(EXTRA_LOWER_CORE, true)).escapeControlU().escapeFormatU().escapeWhitespaceU()
+                        .escapeNTR().escapeBackspace().escapeFormFeed().escapeBackSlash().escapeQuotationMark(),
                 "\"");
 
         private Json() {

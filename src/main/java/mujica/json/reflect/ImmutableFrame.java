@@ -22,13 +22,13 @@ class ImmutableFrame extends NopFrame {
 
     @NotNull
     @Override
-    public NopFrame open() {
+    NopFrame open() {
         return context.forClass(key.getClass()).createFrame(this);
     }
 
     @Nullable
     @Override
-    public Object close() {
+    Object close() {
         return key;
     }
 }

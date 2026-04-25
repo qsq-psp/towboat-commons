@@ -28,23 +28,27 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
         this(new StringBuilder());
     }
 
-    @Override
-    public void reset() {
-        super.reset();
-        sb.delete(0, sb.length());
-    }
-
     @NotNull
     @Override
     public StringBuilder getCharSequence() {
         return sb;
     }
 
+    @Override
+    public void reset() {
+        super.reset(); // reset stack
+        sb.delete(0, sb.length());
+    }
+
+    protected void appendComma() {
+        sb.append(',');
+    }
+
     protected void anyKey() {
         final int state = stack.removeLast();
         switch (state) {
             case STATE_OBJECT:
-                sb.append(',');
+                appendComma();
                 // no break here
             case STATE_NEW_OBJECT:
                 break;
@@ -63,7 +67,7 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
                 stack.offerLast(STATE_END);
                 break;
             case STATE_ARRAY:
-                sb.append(',');
+                appendComma();
                 // no break here
             case STATE_NEW_ARRAY:
                 stack.offerLast(STATE_ARRAY);
@@ -75,6 +79,37 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
                 stack.offerLast(state);
                 throwState();
                 break; // never
+        }
+    }
+
+    protected boolean undoKey() {
+        final int length = sb.length();
+        int index = length - 1;
+        int ch = sb.charAt(index--);
+        if (ch != ':') {
+            throw new IllegalStateException();
+        }
+        ch = sb.charAt(index--);
+        if (ch != '"') {
+            throw new IllegalStateException();
+        }
+        while (true) {
+            ch = sb.charAt(index--);
+            if (ch == '"') {
+                ch = sb.charAt(index--);
+                if (ch != '\\') {
+                    break;
+                }
+            }
+        }
+        if (ch == '{') {
+            sb.delete(index + 2, length);
+            return true;
+        } else if (ch == ',') {
+            sb.delete(index + 1, length);
+            return false;
+        } else {
+            throw new IllegalStateException();
         }
     }
 
@@ -150,7 +185,11 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
         if ((flags & ConfigFlags.ESCAPE_EXTRA) == 0) {
             appender = CharSequenceAppender.Json.ESSENTIAL;
         } else {
-            appender = CharSequenceAppender.Json.EXTRA;
+            if ((flags & ConfigFlags.UPPERCASE_HEX) == 0) {
+                appender = CharSequenceAppender.Json.EXTRA_LOWER;
+            } else {
+                appender = CharSequenceAppender.Json.EXTRA_UPPER;
+            }
         }
         appender.append(key, sb);
         sb.append(':');
@@ -159,7 +198,7 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
     @Override
     public void stringKey(@NotNull FastString key) {
         anyKey();
-        sb.append('"').append(key.string).append('"').append(':');
+        sb.append('"').append(key.toString()).append("\":");
     }
 
     @Override
@@ -174,8 +213,11 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
                 stack.offerLast(state);
                 break;
             case STATE_KEY:
-                // todo
-                stack.offerLast(STATE_OBJECT); // or STATE_NEW_OBJECT
+                if (undoKey()) {
+                    stack.offerLast(STATE_NEW_OBJECT);
+                } else {
+                    stack.offerLast(STATE_OBJECT);
+                }
                 break;
             default:
                 stack.offerLast(state);
@@ -260,7 +302,11 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
         if ((flags & ConfigFlags.ESCAPE_EXTRA) == 0) {
             appender = CharSequenceAppender.Json.ESSENTIAL;
         } else {
-            appender = CharSequenceAppender.Json.EXTRA;
+            if ((flags & ConfigFlags.UPPERCASE_HEX) == 0) {
+                appender = CharSequenceAppender.Json.EXTRA_LOWER;
+            } else {
+                appender = CharSequenceAppender.Json.EXTRA_UPPER;
+            }
         }
         appender.append(value, sb);
     }
@@ -268,18 +314,18 @@ public class JsonStringBuilderWriter extends JsonStringWriter {
     @Override
     public void stringValue(@NotNull FastString value) {
         anyValue();
-        sb.append('"').append(value.string).append('"');
+        sb.append('"').append(value.toString()).append('"');
     }
 
     @Override
     public void emptyArrayValue() {
         anyValue();
-        sb.append('[').append(']');
+        sb.append("[]");
     }
 
     @Override
     public void emptyObjectValue() {
         anyValue();
-        sb.append('{').append('}');
+        sb.append("{}");
     }
 }

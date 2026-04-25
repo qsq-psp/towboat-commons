@@ -2,8 +2,8 @@ package mujica.ds.generic.heap;
 
 import io.netty.buffer.ByteBufUtil;
 import mujica.ds.of_int.PublicIntSlot;
-import mujica.io.buffer.JdkObjectCodec;
 import mujica.algebra.random.RandomContext;
+import mujica.io.stream.OIO;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -165,7 +165,7 @@ public class HeapTest {
                     src.offer(element);
                     PublicIntSlot.increase(map, element);
                 }
-                dst = (PriorityQueue<String>) JdkObjectCodec.copy(src);
+                dst = (PriorityQueue<String>) OIO.copy(src);
                 src.checkHealth(errorCollector::addError);
                 dst.checkHealth(errorCollector::addError);
                 for (int index = 0; index < size; index++) {

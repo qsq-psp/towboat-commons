@@ -90,15 +90,7 @@ class PlainObjectType extends BuiltType {
                 value = null;
                 Collection<PlainObjectField> fields = fieldCollection();
                 if (fields.isEmpty()) {
-                    if ((flags & (((long) JsonEmpty.FROM_EMPTY_OBJECT) << UNDEFINED_SHIFT)) != 0L) {
-                        context.getLogger().debug("empty object to undefined");
-                        out.skippedValue();
-                    } else if ((flags & (((long) JsonEmpty.FROM_EMPTY_OBJECT) << NULL_SHIFT)) != 0L) {
-                        context.getLogger().debug("empty object to null");
-                        out.nullValue();
-                    } else {
-                        out.emptyObjectValue();
-                    }
+                    out.emptyObjectValue();
                 } else {
                     out.openObject();
                     if ((flags & JsonHint.RANDOM_ORDER) != 0L) {

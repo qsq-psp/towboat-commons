@@ -76,9 +76,14 @@ public class TableInflateInputStream extends ResidueInflateInputStream {
                 case STATE_TRAILING_BYTES:
                     return readTrailingByte();
                 default:
-                    throw new CodecException();
+                    throw new CompressAlgorithmException();
             }
         }
+    }
+
+    @Override
+    public int read(@NotNull byte[] array, int offset, int length) throws IOException {
+        return super.read(array, offset, length); // todo
     }
 
     private void readBlock() throws IOException {
@@ -173,8 +178,6 @@ public class TableInflateInputStream extends ResidueInflateInputStream {
             }
             putSymbol(decodeTable, commonNextCode[codeLength]++, codeLength, maxLength, symbol);
         }
-        // System.out.println("alphabet = " + Arrays.toString(Arrays.copyOf(commonAlphabet, alphabetSize)));
-        // System.out.println("decodeTable = " + Arrays.toString(Arrays.copyOf(decodeTable, 1 << maxLength)));
     }
 
     @NotNull
@@ -244,7 +247,7 @@ public class TableInflateInputStream extends ResidueInflateInputStream {
         try {
             int symbol = decodeTable[getBits(maxLength)];
             if (symbol == 0) {
-                throw new CodecException();
+                throw new CompressAlgorithmException("no symbol for code");
             }
             skipBits(0xf & symbol);
             return symbol >> 4;

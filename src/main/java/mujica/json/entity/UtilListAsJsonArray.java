@@ -19,7 +19,7 @@ class UtilListAsJsonArray<T extends List<Object>> extends JsonArray {
     protected T list;
 
     UtilListAsJsonArray(@NotNull T list) {
-        super();
+        super(new ContainerConfig()); // remove
         this.list = list;
     }
 

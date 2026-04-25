@@ -8,61 +8,29 @@ import java.math.BigInteger;
 
 @CodeHistory(date = "2025/2/25", name = "IntegralToStringFunction")
 @CodeHistory(date = "2026/3/7")
-public class IntegralAppender implements Serializable {
+public interface IntegralAppender extends Serializable {
 
-    private static final long serialVersionUID = 0x2F0E41CC5A5B2066L;
+    void acceptByte(byte value, @NotNull StringBuilder out);
 
-    public IntegralAppender() {
-        super();
-    }
+    void acceptByte(byte value, @NotNull StringBuffer out);
 
-    public void acceptByte(byte value, @NotNull StringBuilder out) {
-        out.append(value);
-    }
+    void acceptShort(short value, @NotNull StringBuilder out);
 
-    public void acceptShort(short value, @NotNull StringBuilder out) {
-        out.append(value);
-    }
+    void acceptShort(short value, @NotNull StringBuffer out);
 
-    public void acceptChar(char value, @NotNull StringBuilder out) {
-        out.append((int) value);
-    }
+    void acceptChar(char value, @NotNull StringBuilder out);
 
-    public void acceptInt(int value, @NotNull StringBuilder out) {
-        out.append(value);
-    }
+    void acceptChar(char value, @NotNull StringBuffer out);
 
-    public void acceptLong(long value, @NotNull StringBuilder out) {
-        out.append(value);
-    }
+    void acceptInt(int value, @NotNull StringBuilder out);
 
-    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out) {
-        out.append(value.toString(10));
-    }
+    void acceptInt(int value, @NotNull StringBuffer out);
 
-    @CodeHistory(date = "2026/3/8")
-    public static class Unsigned extends IntegralAppender {
+    void acceptLong(long value, @NotNull StringBuilder out);
 
-        private static final long serialVersionUID = 0xAA1A0277D25B2120L;
+    void acceptLong(long value, @NotNull StringBuffer out);
 
-        @Override
-        public void acceptByte(byte value, @NotNull StringBuilder out) {
-            out.append(0xff & value);
-        }
+    void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out);
 
-        @Override
-        public void acceptShort(short value, @NotNull StringBuilder out) {
-            out.append(0xffff & value);
-        }
-
-        @Override
-        public void acceptInt(int value, @NotNull StringBuilder out) {
-            out.append(Integer.toUnsignedString(value));
-        }
-
-        @Override
-        public void acceptLong(long value, @NotNull StringBuilder out) {
-            out.append(Long.toUnsignedString(value));
-        }
-    }
+    void acceptBig(@NotNull BigInteger value, @NotNull StringBuffer out);
 }

@@ -34,6 +34,10 @@ public class CacheAdapter<H extends JsonHandler> extends JsonHandlerAdapter<H> {
 
     @Override
     public void stringKey(@NotNull String key) {
+        if (testTypePreference(FLAG_DO_NOT_CACHE_STRING_KEY)) {
+            h.stringKey(key);
+            return;
+        }
         final Object object = map.get(key);
         if (object instanceof String) {
             h.stringKey((String) object);
@@ -47,6 +51,10 @@ public class CacheAdapter<H extends JsonHandler> extends JsonHandlerAdapter<H> {
 
     @Override
     public void stringKey(@NotNull FastString key) {
+        if (testTypePreference(FLAG_DO_NOT_CACHE_FAST_STRING_KEY)) {
+            h.stringKey(key);
+            return;
+        }
         final Object object = map.get(key.toString());
         if (object instanceof FastString) {
             h.stringKey((FastString) object);
@@ -59,7 +67,9 @@ public class CacheAdapter<H extends JsonHandler> extends JsonHandlerAdapter<H> {
     @Override
     public void stringValue(@NotNull CharSequence value) {
         beforeValue();
-        if (value instanceof String) {
+        if (testTypePreference(FLAG_DO_NOT_CACHE_STRING_VALUE) || !(value instanceof String)) {
+            h.stringValue(value);
+        } else {
             Object object = map.get(value);
             if (object instanceof String) {
                 h.stringValue((String) object);
@@ -69,8 +79,6 @@ public class CacheAdapter<H extends JsonHandler> extends JsonHandlerAdapter<H> {
                 map.put(value, value);
                 h.stringValue(value);
             }
-        } else {
-            h.stringValue(value);
         }
         afterValue();
     }
@@ -78,12 +86,16 @@ public class CacheAdapter<H extends JsonHandler> extends JsonHandlerAdapter<H> {
     @Override
     public void stringValue(@NotNull FastString value) {
         beforeValue();
-        final Object object = map.get(value.toString());
-        if (object instanceof FastString) {
-            h.stringKey((FastString) object);
+        if (testTypePreference(FLAG_DO_NOT_CACHE_FAST_STRING_VALUE)) {
+            h.stringValue(value);
         } else {
-            map.put(value.toString(), value);
-            h.stringKey(value);
+            Object object = map.get(value.toString());
+            if (object instanceof FastString) {
+                h.stringValue((FastString) object);
+            } else {
+                map.put(value.toString(), value);
+                h.stringValue(value);
+            }
         }
         afterValue();
     }

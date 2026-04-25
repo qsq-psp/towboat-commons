@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2026/3/6")
-public class HexadecimalAppender extends IntegralAppender implements Base16Case {
+public class HexadecimalAppender extends DefaultNumberAppender implements Base16Case { // Base16Appender
 
     private static final long serialVersionUID = 0xE3B5B7095A05C245L;
 
@@ -210,7 +210,17 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
     }
 
     @Override
+    public void acceptByte(byte value, @NotNull StringBuffer out) {
+        start.accept(value >> 4, out.append("0x")).accept(value, out).finish(out);
+    }
+
+    @Override
     public void acceptShort(short value, @NotNull StringBuilder out) {
+        start.accept(value >> 12, out.append("0x")).accept(value >> 8, out).accept(value >> 4, out).accept(value, out).finish(out);
+    }
+
+    @Override
+    public void acceptShort(short value, @NotNull StringBuffer out) {
         start.accept(value >> 12, out.append("0x")).accept(value >> 8, out).accept(value >> 4, out).accept(value, out).finish(out);
     }
 
@@ -220,7 +230,24 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
     }
 
     @Override
+    public void acceptChar(char value, @NotNull StringBuffer out) {
+        start.accept(value >> 12, out.append("0x")).accept(value >> 8, out).accept(value >> 4, out).accept(value, out).finish(out);
+    }
+
+    @Override
     public void acceptInt(int value, @NotNull StringBuilder out) {
+        out.append("0x");
+        NibbleAppender appender = start;
+        int shift = Integer.SIZE;
+        do {
+            shift -= 4;
+            appender = appender.accept(value >> shift, out);
+        } while (shift > 0);
+        appender.finish(out);
+    }
+
+    @Override
+    public void acceptInt(int value, @NotNull StringBuffer out) {
         out.append("0x");
         NibbleAppender appender = start;
         int shift = Integer.SIZE;
@@ -244,7 +271,24 @@ public class HexadecimalAppender extends IntegralAppender implements Base16Case 
     }
 
     @Override
+    public void acceptLong(long value, @NotNull StringBuffer out) {
+        out.append("0x");
+        NibbleAppender appender = start;
+        int shift = Long.SIZE;
+        do {
+            shift -= 4;
+            appender = appender.accept((int) (value >> shift), out);
+        } while (shift > 0);
+        appender.finish(out);
+    }
+
+    @Override
     public void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out) {
+        out.append("0x").append(value.toString(16));
+    }
+
+    @Override
+    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuffer out) {
         out.append("0x").append(value.toString(16));
     }
 

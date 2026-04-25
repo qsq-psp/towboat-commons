@@ -8,7 +8,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2021/10/26", project = "va")
 @CodeHistory(date = "2022/10/19", project = "Ultramarine")
 @CodeHistory(date = "2025/2/26")
-public class TraditionalChinese extends IntegralAppender {
+public class TraditionalChinese implements IntegralAppender {
 
     public static final TraditionalChinese TRADITIONAL = new TraditionalChinese(
             new char[] {'零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'},
@@ -33,8 +33,37 @@ public class TraditionalChinese extends IntegralAppender {
         this.exponent = exponent;
     }
 
+    @Override
+    public void acceptByte(byte value, @NotNull StringBuilder out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptByte(byte value, @NotNull StringBuffer out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptShort(short value, @NotNull StringBuilder out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptShort(short value, @NotNull StringBuffer out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptChar(char value, @NotNull StringBuilder out) {
+        acceptInt(value, out);
+    }
+
+    @Override
+    public void acceptChar(char value, @NotNull StringBuffer out) {
+        acceptInt(value, out);
+    }
+
     protected void fillZero(@NotNull StringBuilder sb, int e1, int e2) {
-        // System.out.println("sb = " + sb + ", e1 = " + e1 + ", e2 = " + e2);
         int e0 = 4;
         if (e1 <= 16 && 16 <= e2) {
             e0 = 16;
@@ -53,6 +82,11 @@ public class TraditionalChinese extends IntegralAppender {
         out.append(stringify(value));
     }
 
+    @Override
+    public void acceptInt(int value, @NotNull StringBuffer out) {
+        out.append(stringify(value));
+    }
+
     @NotNull
     public String stringify(int value) {
         return stringify((long) value);
@@ -60,6 +94,11 @@ public class TraditionalChinese extends IntegralAppender {
 
     @Override
     public void acceptLong(long value, @NotNull StringBuilder out) {
+        out.append(stringify(value));
+    }
+
+    @Override
+    public void acceptLong(long value, @NotNull StringBuffer out) {
         out.append(stringify(value));
     }
 
@@ -116,6 +155,11 @@ public class TraditionalChinese extends IntegralAppender {
 
     @Override
     public void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out) {
+        out.append(stringify(value));
+    }
+
+    @Override
+    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuffer out) {
         out.append(stringify(value));
     }
 

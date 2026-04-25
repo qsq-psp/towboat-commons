@@ -10,9 +10,6 @@ import java.net.URI;
 import java.nio.file.*;
 import java.util.function.Consumer;
 
-/**
- * Created on 2026/3/27.
- */
 @CodeHistory(date = "2026/3/27")
 public abstract class GeneralStringArrayPath implements HealthAware, Path, Serializable {
 

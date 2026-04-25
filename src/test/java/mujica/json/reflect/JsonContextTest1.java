@@ -13,7 +13,7 @@ import org.junit.Test;
 @FieldOrder({"aQuickBrownFoxJumpsOverTheLazyDog", "enabled", "lineNumber", "errorCount", "core"})
 public class JsonContextTest1 {
 
-    static final JsonContext CONTEXT = new JsonContext();
+    static final JsonContext CONTEXT = (new JsonContext()).loadBasic();
 
     public static final int VACUUM_PRESSURE_GAUGE = 5;
 
@@ -28,6 +28,10 @@ public class JsonContextTest1 {
     @Name(value = "狐狸狗", language = "zh")
     public int aQuickBrownFoxJumpsOverTheLazyDog;
 
+    @Name(value = "水母包", language = "zh")
+    public transient Object lazyBadgersMoveUniqueWaxyJellyfishPackets;
+
+    @CodeHistory(date = "2026/4/10")
     @FieldOrder({"styleCode", "developing"})
     public static class Inside1 {
 
