@@ -10,6 +10,7 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2026/1/2")
@@ -107,7 +108,14 @@ class BooleanType extends JsonType implements BooleanSlot {
             }
         }
         if ((flags & JsonHint.CAST_FROM_STRING) != 0L && object instanceof CharSequence) {
-            return Boolean.parseBoolean(object.toString());
+            String string = object.toString();
+            if (string.equals("true")) {
+                return true;
+            } else if (string.equals("false")) {
+                return false;
+            } else {
+                throw new RuntimeException("parse boolean");
+            }
         }
         throw new ClassCastException(object.getClass() + " to boolean");
     }

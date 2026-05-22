@@ -10,7 +10,7 @@ import java.io.Serializable;
 @CodeHistory(date = "2026/3/18")
 public interface DecimalAppender extends Serializable {
 
-    void acceptFloat(float value, @NotNull StringBuilder out);
+    void append(float value, @NotNull StringBuilder out);
 
-    void acceptDouble(double value, @NotNull StringBuilder out);
+    void append(double value, @NotNull StringBuilder out);
 }

@@ -4,6 +4,8 @@ import mujica.ds.of_int.set.IntSet;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
 @CodeHistory(date = "2026/3/16")
 public class IntSetAsBooleanList extends AbstractBooleanList {
 
@@ -11,6 +13,11 @@ public class IntSetAsBooleanList extends AbstractBooleanList {
 
     @NotNull
     IntSet intSet;
+
+    public IntSetAsBooleanList(@NotNull IntSet intSet) {
+        super();
+        this.intSet = intSet;
+    }
 
     @NotNull
     public IntSet getIntSet() {
@@ -21,9 +28,25 @@ public class IntSetAsBooleanList extends AbstractBooleanList {
         this.intSet = intSet;
     }
 
-    public IntSetAsBooleanList(@NotNull IntSet intSet) {
-        super();
-        this.intSet = intSet;
+    @NotNull
+    @Override
+    public IntSetAsBooleanList duplicate() {
+        return new IntSetAsBooleanList(intSet.duplicate());
+    }
+
+    @Override
+    public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
+        intSet.checkHealth(consumer);
+    }
+
+    @Override
+    public void checkHealth() throws RuntimeException {
+        intSet.checkHealth();
+    }
+
+    @Override
+    public boolean isHealthy() {
+        return intSet.isHealthy();
     }
 
     @Override

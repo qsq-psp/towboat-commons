@@ -3,12 +3,10 @@ package mujica.text.number;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigInteger;
-
 @CodeHistory(date = "2021/10/26", project = "va")
 @CodeHistory(date = "2022/10/19", project = "Ultramarine")
 @CodeHistory(date = "2025/2/28")
-public class RomanCompact implements IntegralAppender {
+public class RomanCompact extends IntegralAdapter {
 
     public static final RomanCompact UPPER = new RomanCompact(
             new char[] {'\u2160', '\u2161', '\u2162', '\u2163', '\u2164', '\u2165', '\u2166', '\u2167', '\u2168', '\u2169', '\u216a', '\u216b'},
@@ -38,47 +36,7 @@ public class RomanCompact implements IntegralAppender {
         this.n1000 = n1000;
     }
 
-    @Override
-    public void acceptByte(byte value, @NotNull StringBuilder out) {
-        acceptInt(value, out);
-    }
-
-    @Override
-    public void acceptByte(byte value, @NotNull StringBuffer out) {
-        acceptInt(value, out);
-    }
-
-    @Override
-    public void acceptShort(short value, @NotNull StringBuilder out) {
-        acceptInt(value, out);
-    }
-
-    @Override
-    public void acceptShort(short value, @NotNull StringBuffer out) {
-        acceptInt(value, out);
-    }
-
-    @Override
-    public void acceptChar(char value, @NotNull StringBuilder out) {
-        acceptInt(value, out);
-    }
-
-    @Override
-    public void acceptChar(char value, @NotNull StringBuffer out) {
-        acceptInt(value, out);
-    }
-
     private void overline(int level, @NotNull StringBuilder out) {
-        while (level >= 2) {
-            out.append(OVERLINE2);
-            level -= 2;
-        }
-        if (level >= 1) {
-            out.append(OVERLINE1);
-        }
-    }
-
-    private void overline(int level, @NotNull StringBuffer out) {
         while (level >= 2) {
             out.append(OVERLINE2);
             level -= 2;
@@ -153,6 +111,32 @@ public class RomanCompact implements IntegralAppender {
         }
     }
 
+    @Override
+    public void append(int value, @NotNull StringBuilder out) {
+        if (value <= 0L) {
+            throw new IllegalArgumentException();
+        }
+        number(value, 0, out);
+    }
+
+    @Override
+    public void append(long value, @NotNull StringBuilder out) {
+        if (value <= 0L) {
+            throw new IllegalArgumentException();
+        }
+        number(value, 0, out);
+    }
+
+    private void overline(int level, @NotNull StringBuffer out) {
+        while (level >= 2) {
+            out.append(OVERLINE2);
+            level -= 2;
+        }
+        if (level >= 1) {
+            out.append(OVERLINE1);
+        }
+    }
+
     private void number(long value, int level, @NotNull StringBuffer out) {
         if (value >= 4000L) {
             number(value / 1000L, level + 1, out);
@@ -219,7 +203,7 @@ public class RomanCompact implements IntegralAppender {
     }
 
     @Override
-    public void acceptInt(int value, @NotNull StringBuilder out) {
+    public void append(int value, @NotNull StringBuffer out) {
         if (value <= 0L) {
             throw new IllegalArgumentException();
         }
@@ -227,56 +211,10 @@ public class RomanCompact implements IntegralAppender {
     }
 
     @Override
-    public void acceptInt(int value, @NotNull StringBuffer out) {
+    public void append(long value, @NotNull StringBuffer out) {
         if (value <= 0L) {
             throw new IllegalArgumentException();
         }
         number(value, 0, out);
-    }
-
-    @NotNull
-    public String stringify(int value) {
-        if (value <= 0) {
-            throw new IllegalArgumentException();
-        }
-        final StringBuilder sb = new StringBuilder();
-        number(value, 0, sb);
-        return sb.toString();
-    }
-
-    @Override
-    public void acceptLong(long value, @NotNull StringBuilder out) {
-        if (value <= 0L) {
-            throw new IllegalArgumentException();
-        }
-        number(value, 0, out);
-    }
-
-    @Override
-    public void acceptLong(long value, @NotNull StringBuffer out) {
-        if (value <= 0L) {
-            throw new IllegalArgumentException();
-        }
-        number(value, 0, out);
-    }
-
-    @NotNull
-    public String stringify(long value) {
-        if (value <= 0) {
-            throw new IllegalArgumentException();
-        }
-        final StringBuilder sb = new StringBuilder();
-        number(value, 0, sb);
-        return sb.toString();
-    }
-
-    @Override
-    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out) {
-        acceptLong(value.longValueExact(), out);
-    }
-
-    @Override
-    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuffer out) {
-        acceptLong(value.longValueExact(), out);
     }
 }

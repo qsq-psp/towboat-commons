@@ -1,6 +1,5 @@
 package mujica.ds.generic.list;
 
-import mujica.ds.SortingAlgorithm;
 import mujica.ds.generic.set.CollectionConstant;
 import mujica.ds.of_int.IntSlot;
 import mujica.reflect.modifier.CodeHistory;

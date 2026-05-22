@@ -1,0 +1,3 @@
+mujica.json.provided.ThrowableTransformer java.awt.AWTError java.awt.AWTException
+mujica.json.provided.desktop.BasicStrokeTransformer java.awt.BasicStroke
+mujica.json.provided.desktop.RectangleTransformer java.awt.Rectangle

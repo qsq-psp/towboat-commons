@@ -16,14 +16,14 @@ public class RomanTest {
     @NotNull
     private String stringify(@NotNull Roman roman, int value) {
         sb.delete(0, sb.length());
-        roman.acceptInt(value, sb);
+        roman.append(value, sb);
         return sb.toString();
     }
 
     @NotNull
     private String stringify(@NotNull Roman roman, long value) {
         sb.delete(0, sb.length());
-        roman.acceptLong(value, sb);
+        roman.append(value, sb);
         return sb.toString();
     }
 

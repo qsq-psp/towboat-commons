@@ -187,7 +187,7 @@ public class SegmentTreeIntervalIntSet extends IntervalIntSet {
     }
 
     @Override
-    public long longLength() {
+    public long intLengthAsLong() {
         return root.longLength(min, max);
     }
 

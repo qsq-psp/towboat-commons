@@ -9,6 +9,10 @@ public final class BigConstants {
 
     public static final BigInteger HUNDRED = BigInteger.valueOf(100L);
 
+    public static final BigInteger MIN_INT = BigInteger.valueOf(Integer.MIN_VALUE);
+
+    public static final BigInteger MAX_INT = BigInteger.valueOf(Integer.MAX_VALUE);
+
     public static final BigInteger MIN_LONG = BigInteger.valueOf(Long.MIN_VALUE);
 
     public static final BigInteger MAX_LONG = BigInteger.valueOf(Long.MAX_VALUE);

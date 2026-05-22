@@ -34,8 +34,8 @@ public abstract class JsonArray extends JsonContainer<Integer> {
         return new UtilListAsJsonArray<>(new TruncateList<>());
     }
 
-    protected JsonArray(@NotNull ContainerConfig config) {
-        super(config);
+    protected JsonArray() {
+        super();
     }
 
     public abstract int size();

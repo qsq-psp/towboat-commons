@@ -3,6 +3,7 @@ package mujica.io.compress;
 import mujica.reflect.modifier.CodeHistory;
 import org.junit.runner.RunWith;
 
+@CodeHistory(date = "2025/10/22", project = "nettyon", name = "GzipTest")
 @CodeHistory(date = "2025/11/15")
 @SuppressWarnings({"SpellCheckingInspection", "unused"})
 @RunWith(ZipSampleRunner.class)

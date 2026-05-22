@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.TimeZone;
 
+@CodeHistory(date = "2022/1/10", project = "infrastructure", name = "TimeZoneValue")
 @CodeHistory(date = "2022/7/12", project = "Ultramarine", name = "TimeZoneValueSerializer")
 @CodeHistory(date = "2026/4/12")
 public class TimeZoneTransformer implements JsonContextTransformer<TimeZone>, JsonStructure {

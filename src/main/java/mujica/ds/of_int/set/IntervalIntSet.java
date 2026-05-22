@@ -1,14 +1,22 @@
 package mujica.ds.of_int.set;
 
+import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 /**
  * Created on 2026/1/17.
  */
+@CodeHistory(date = "2026/1/17")
+@DirectSubclass({IntInterval.class, NavigableIntMapAsIntervalIntSet.class, SegmentTreeIntervalIntSet.class})
 public abstract class IntervalIntSet extends NavigableIntSet {
+
+    private static final long serialVersionUID = 0xDF952E9F0A10BC52L;
 
     protected IntervalIntSet() {
         super();
@@ -20,7 +28,7 @@ public abstract class IntervalIntSet extends NavigableIntSet {
 
     @Override
     public int intLength() {
-        final long n = longLength();
+        final long n = intLengthAsLong();
         if (n < Integer.MAX_VALUE) {
             return (int) n;
         } else {
@@ -28,7 +36,7 @@ public abstract class IntervalIntSet extends NavigableIntSet {
         }
     }
 
-    public long longLength() {
+    public long intLengthAsLong() {
         long n = 0L;
         for (int ignore : this) {
             n++;
@@ -85,21 +93,21 @@ public abstract class IntervalIntSet extends NavigableIntSet {
     }
 
     @NotNull
-    public Iterator<Interval> ascendingIntervalIterator() {
+    public Iterator<IntInterval> ascendingIntervalIterator() {
         final Iterator<Integer> iterator = ascendingIterator();
-        final ArrayList<Interval> list = new ArrayList<>();
-        SimpleInterval interval = null;
+        final ArrayList<IntInterval> list = new ArrayList<>();
+        PrivateIntInterval interval = null;
         while (iterator.hasNext()) {
             int key = iterator.next();
             if (interval != null) {
-                if (interval.right + 1 == key) {
-                    interval.right++;
+                if (interval.getRight() + 1 == key) {
+                    interval.setRight(interval.getRight() + 1);
                     continue;
                 } else {
                     list.add(interval);
                 }
             }
-            interval = new SimpleInterval(key, key);
+            interval = new PrivateIntInterval(key, key);
         }
         if (interval != null) {
             list.add(interval);
@@ -108,25 +116,31 @@ public abstract class IntervalIntSet extends NavigableIntSet {
     }
 
     @NotNull
-    public Iterator<Interval> descendingIntervalIterator() {
+    public Iterator<IntInterval> descendingIntervalIterator() {
         final Iterator<Integer> iterator = descendingIterator();
-        final ArrayList<Interval> list = new ArrayList<>();
-        SimpleInterval interval = null;
+        final ArrayList<IntInterval> list = new ArrayList<>();
+        PrivateIntInterval interval = null;
         while (iterator.hasNext()) {
             int key = iterator.next();
             if (interval != null) {
-                if (interval.left - 1 == key) {
-                    interval.left++;
+                if (interval.getLeft() - 1 == key) {
+                    interval.setLeft(interval.getLeft() - 1);
                     continue;
                 } else {
                     list.add(interval);
                 }
             }
-            interval = new SimpleInterval(key, key);
+            interval = new PrivateIntInterval(key, key);
         }
         if (interval != null) {
             list.add(interval);
         }
         return list.iterator();
+    }
+
+    @NotNull
+    @Override
+    public Spliterator<Integer> spliterator() {
+        return Spliterators.spliterator(iterator(), intLengthAsLong(), Spliterator.DISTINCT | Spliterator.SIZED);
     }
 }

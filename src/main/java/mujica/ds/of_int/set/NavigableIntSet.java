@@ -15,6 +15,8 @@ import java.util.function.IntConsumer;
 @CodeHistory(date = "2026/1/17")
 public abstract class NavigableIntSet extends IntSet {
 
+    private static final long serialVersionUID = 0x09DAE57FDA577EDEL;
+
     protected NavigableIntSet() {
         super();
     }

@@ -18,8 +18,6 @@ public class CharsetTransformer implements JsonContextTransformer<Charset>, Json
 
     public static final CharsetTransformer INSTANCE = new CharsetTransformer();
 
-    static final FastString NAME = new FastString("name");
-
     static final FastString ALIASES = new FastString("aliases");
 
     static final FastString REGISTERED = new FastString("registered");
@@ -38,7 +36,7 @@ public class CharsetTransformer implements JsonContextTransformer<Charset>, Json
     public void transform(Charset in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(NAME);
+            out.stringKey(ClassLoaderTransformer.NAME);
             out.stringValue(in.name());
             out.stringKey(ALIASES);
             out.arrayValue(in.aliases());

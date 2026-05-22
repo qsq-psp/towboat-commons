@@ -1,5 +1,7 @@
 package mujica.reflect.source;
 
+import mujica.ds.of_boolean.list.BooleanList;
+import mujica.ds.of_boolean.list.CopyOnResizeBooleanList;
 import mujica.reflect.modifier.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,18 +22,14 @@ import java.util.regex.Pattern;
 
 @CodeHistory(date = "2025/12/1", name = "SynchronizeChain")
 @CodeHistory(date = "2026/1/4")
-public final class Distribute {
+public final class Distribute implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Distribute.class);
 
     public static void main(String[] args) {
-        Distribute distribute;
-        distribute = new Distribute("D:\\Java\\CRYCHIC\\src");
-        distribute.cleanAndWrite("D:\\Java\\MyGO\\src");
-        distribute = new Distribute("D:\\Java\\MyGO\\src");
-        distribute.overwrite("D:\\Java\\Mujica\\src");
-        distribute = new Distribute("D:\\Java\\Mujica\\src");
-        distribute.merge("D:\\Java\\AveMujica\\src");
+        (new Distribute("D:\\Java\\CRYCHIC\\src", "D:\\Java\\MyGO\\src")).run();
+        (new Distribute("D:\\Java\\MyGO\\src", "D:\\Java\\Mujica\\src")).run();
+        (new Distribute("D:\\Java\\Mujica\\src", "D:\\Java\\AveMujica\\src")).run();
     }
 
     @NotNull
@@ -46,44 +44,86 @@ public final class Distribute {
     @NotNull
     final HashSet<Path> includedDst = new HashSet<>();
 
-    Distribute(@NotNull String srcRoot) {
+    Distribute(@NotNull String srcRoot, @NotNull String dstRoot) {
         super();
-        this.srcRoot = Path.of(srcRoot);
-        this.dstRoot = Path.of(srcRoot); // ?
+        this.srcRoot = Path.of(srcRoot).toAbsolutePath();
+        this.dstRoot = Path.of(dstRoot).toAbsolutePath();
     }
 
     @NotNull
-    static Distribute include(@NotNull String path) {
-        return new Distribute(path);
-    }
-
-    @NotNull
-    Distribute exclude(@NotNull String path) {
-        // excludedList.add(path);
+    Distribute excludeSrc(@NotNull String path) {
+        excludedSrc.add(Path.of(path));
         return this;
     }
 
-    @Nullable
-    Path getSourceRoot() {
-        final Path currentPath = Path.of("").toAbsolutePath();
-        final Path sourceRoot = srcRoot.toAbsolutePath();
-        if (Files.isDirectory(sourceRoot) && sourceRoot.startsWith(currentPath)) {
-            return sourceRoot;
-        } else {
-            return null;
+    @NotNull
+    Distribute includeDst(@NotNull String path) {
+        includedDst.add(Path.of(path));
+        return this;
+    }
+
+    @Override
+    public void run() {
+        try {
+            {
+                Path currentPath = Path.of("").toAbsolutePath();
+                if (!srcRoot.startsWith(currentPath)) {
+                    return;
+                }
+            }
+            {
+                MergeVisitor visitor = new MergeVisitor();
+                Files.walkFileTree(srcRoot, visitor);
+            }
+            {
+                CleanVisitor visitor = new CleanVisitor();
+                Files.walkFileTree(dstRoot, visitor);
+                visitor.doDelete();
+            }
+        } catch (IOException e) {
+            LOGGER.error("{}", this, e);
         }
     }
 
-    void cleanAndWrite(@NotNull String target) {
-        //
-    }
+    @CodeHistory(date = "2026/5/1")
+    private class MergeVisitor implements FileVisitor<Path> {
 
-    void overwrite(@NotNull String target) {
-        //
-    }
+        final ReformatJava reformatJava = new ReformatJava();
 
-    void merge(@NotNull String target) {
-        //
+        @Override
+        public FileVisitResult preVisitDirectory(Path src, BasicFileAttributes attrs) throws IOException {
+            final Path dst = dstRoot.resolve(srcRoot.relativize(src));
+            if (Files.exists(dst)) {
+                if (!Files.isDirectory(dst)) {
+                    LOGGER.warn("expect a directory {}", dst);
+                }
+            } else {
+                Files.createDirectory(dst);
+            }
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFile(Path src, BasicFileAttributes attrs) {
+            final Path dst = dstRoot.resolve(srcRoot.relativize(src));
+            includedDst.add(dst);
+            reformatJava.mergeFile(src, dst);
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) {
+            LOGGER.warn("{}", file, exc);
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+            if (exc != null) {
+                LOGGER.warn("{}", dir, exc);
+            }
+            return FileVisitResult.CONTINUE;
+        }
     }
 
     @CodeHistory(date = "2026/4/25")
@@ -92,18 +132,27 @@ public final class Distribute {
         @NotNull
         final ArrayList<Path> toDelete = new ArrayList<>();
 
+        final BooleanList isDirectoryEmptyStack = new CopyOnResizeBooleanList(null);
+
+        boolean isDirectoryEmpty;
+
         @Override
         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+            isDirectoryEmptyStack.offerLast(isDirectoryEmpty);
             if (includedDst.contains(dir)) {
+                isDirectoryEmpty = false;
                 return FileVisitResult.SKIP_SUBTREE;
             } else {
+                isDirectoryEmpty = true;
                 return FileVisitResult.CONTINUE;
             }
         }
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-            if (!includedDst.contains(file)) {
+            if (includedDst.contains(file)) {
+                isDirectoryEmpty = false;
+            } else {
                 toDelete.add(file);
             }
             return FileVisitResult.CONTINUE;
@@ -111,11 +160,20 @@ public final class Distribute {
 
         @Override
         public FileVisitResult visitFileFailed(Path file, IOException exc) {
+            LOGGER.warn("{}", file, exc);
             return FileVisitResult.CONTINUE;
         }
 
         @Override
         public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+            if (exc != null) {
+                LOGGER.warn("{}", dir, exc);
+            }
+            if (isDirectoryEmpty) {
+                toDelete.add(dir);
+                isDirectoryEmpty = isDirectoryEmptyStack.getLast();
+            }
+            isDirectoryEmptyStack.removeLast();
             return FileVisitResult.CONTINUE;
         }
 
@@ -123,6 +181,7 @@ public final class Distribute {
             LOGGER.info("{} path(s) to delete", toDelete.size());
             for (Path path : toDelete) {
                 try {
+                    // Files.getLastModifiedTime(path);
                     Files.delete(path);
                     LOGGER.info("deleted {}", path);
                 } catch (IOException e) {
@@ -337,35 +396,6 @@ public final class Distribute {
                 });
             } catch (IOException e) {
                 LOGGER.error("walk {}", src, e);
-            }
-        }
-    }
-
-    private static final String[][] LINKS = {
-            {"D:\\Java\\CRYCHIC\\src", "D:\\Java\\MyGO\\src"},
-            {"D:\\Java\\MyGO\\src", "D:\\Java\\Mujica\\src"},
-            {"D:\\Java\\Mujica\\src", "D:\\Java\\AveMujica\\src"}
-    };
-
-    public static void main0(String[] args) {
-        final ReformatJava reformatJava = new ReformatJava();
-        final Path currentPath = Path.of("").toAbsolutePath();
-        LOGGER.info("current {}", currentPath);
-        for (String[] link : LINKS) {
-            int size = link.length;
-            if (size <= 1) {
-                continue;
-            }
-            Path srcPath = Path.of(link[0]);
-            if (!(Files.isDirectory(srcPath) && srcPath.startsWith(currentPath))) {
-                continue;
-            }
-            for (int index = 1; index < size; index++) {
-                Path dstPath = Path.of(link[index]);
-                if (!Files.isDirectory(dstPath)) {
-                    continue;
-                }
-                reformatJava.mergeRoot(srcPath, dstPath);
             }
         }
     }

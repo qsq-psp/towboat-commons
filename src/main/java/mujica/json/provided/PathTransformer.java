@@ -11,6 +11,8 @@ import java.nio.file.Path;
 @CodeHistory(date = "2026/4/21")
 public class PathTransformer implements JsonContextTransformer<Path> {
 
+    public static final PathTransformer INSTANCE = new PathTransformer();
+
     @Override
     public void transform(Path in, @NotNull JsonHandler out, JsonContext context) {
         out.stringValue(in.toString());

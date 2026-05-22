@@ -3,6 +3,7 @@ package mujica.ds.of_int.map;
 import mujica.ds.of_int.IntSlot;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.ds.of_int.list.IntEntryConsumer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.function.IntConsumer;
 /**
  * Created on 2026/1/12.
  */
+@CodeHistory(date = "2026/1/12")
 public abstract class NavigableIntMap extends IterableIntMap {
 
     protected NavigableIntMap() {

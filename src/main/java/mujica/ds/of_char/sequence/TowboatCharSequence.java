@@ -1,6 +1,8 @@
 package mujica.ds.of_char.sequence;
 
+import mujica.json.entity.FastString;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @CodeHistory(date = "2022/5/19", project = "Ultramarine", name = "StringUtility")
 @CodeHistory(date = "2023/4/20", project = "Ultramarine", name = "StringMetrics")
 @CodeHistory(date = "2026/3/14")
+@DirectSubclass({EmptyCharSequence.class, UnitCharSequence.class, FilteredCharSequence.class, ArrayRepeatCharSequence.class, FastString.class})
 public abstract class TowboatCharSequence implements CharSequence, Serializable {
 
     public static final List<Class<? extends CharSequence>> CHAR_SEQUENCE_CLASSES = List.of(
@@ -22,6 +25,40 @@ public abstract class TowboatCharSequence implements CharSequence, Serializable 
             CharBuffer.class,
             TowboatCharSequence.class
     );
+
+    public static boolean equals(@NotNull CharSequence a, int aOffset, @NotNull CharSequence b, int bOffset, int length) {
+        for (int index = 0; index < length; index++) {
+            if (a.charAt(aOffset++) != b.charAt(bOffset++)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean equals(@NotNull CharSequence a, @NotNull CharSequence b) {
+        final int length = a.length();
+        if (length != b.length()) {
+            return false;
+        }
+        return equals(a, 0, b, 0, length);
+    }
+
+    public static boolean startsWith(@NotNull CharSequence string, @NotNull CharSequence prefix) {
+        final int prefixLength = prefix.length();
+        if (string.length() < prefixLength) {
+            return false;
+        }
+        return equals(string, 0, prefix, 0, prefixLength);
+    }
+
+    public static boolean endsWith(@NotNull CharSequence string, @NotNull CharSequence suffix) {
+        final int suffixLength = suffix.length();
+        final int stringLength = string.length();
+        if (stringLength < suffixLength) {
+            return false;
+        }
+        return equals(string, stringLength - suffixLength, suffix, 0, suffixLength);
+    }
 
     public static int commonPrefixLength(@NotNull CharSequence a, @NotNull CharSequence b) {
         final int length = Math.min(a.length(), b.length());

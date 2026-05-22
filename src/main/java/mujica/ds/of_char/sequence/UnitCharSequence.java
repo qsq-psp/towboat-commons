@@ -1,10 +1,9 @@
 package mujica.ds.of_char.sequence;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2026/3/7.
- */
+@CodeHistory(date = "2026/3/7")
 public class UnitCharSequence extends TowboatCharSequence {
 
     private static final long serialVersionUID = 0x8ABBFFDCB78EB24CL;

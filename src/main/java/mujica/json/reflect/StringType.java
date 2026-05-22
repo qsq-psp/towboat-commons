@@ -13,9 +13,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.AnnotatedElement;
 import java.math.BigInteger;
 
-/**
- * Created on 2026/4/16.
- */
 @CodeHistory(date = "2021/12/31", project = "infrastructure", name = "JsonStringType")
 @CodeHistory(date = "2022/8/6", project = "Ultramarine", name = "JsonStringType")
 @CodeHistory(date = "2026/4/16")
@@ -32,6 +29,48 @@ class StringType extends JsonType {
     }
 
     @NotNull
+    StringType fromString(@NotNull String string) {
+        if (string.length() > maxLength) {
+            throw new IllegalArgumentException("too long String");
+        }
+        value = string;
+        state = CollectionConstant.PRESENT;
+        return this;
+    }
+
+    @Override
+    JsonType from(@NotNull Getter getter, @Nullable Object self) throws Throwable {
+        from(getter.get(self));
+        return this;
+    }
+
+    @NotNull
+    @Override
+    JsonType from(@Nullable Object object) {
+        if (object instanceof CharSequence) {
+            return fromString(object.toString());
+        }
+        if (object == null) {
+            return from();
+        }
+        if (object instanceof Number) {
+            if ((flags & JsonHint.CAST_FROM_INTEGRAL) != 0L) {
+                if (object instanceof Integer || object instanceof Long || object instanceof BigInteger) {
+                    return fromString(object.toString());
+                }
+            }
+            if ((flags & JsonHint.CAST_FROM_DECIMAL) != 0L) {
+                if (object instanceof Float || object instanceof Double) {
+                    return fromString(object.toString());
+                }
+            }
+        } else if ((flags & JsonHint.CAST_FROM_BOOLEAN) != 0L && object instanceof Boolean) {
+            return fromString(object.toString());
+        }
+        throw new ClassCastException(object.getClass() + " to String");
+    }
+
+    @NotNull
     @Override
     JsonType from() {
         if ((flags & JsonHint.NULLABLE) != 0L) {
@@ -43,78 +82,64 @@ class StringType extends JsonType {
         return this;
     }
 
-    void fromString(@NotNull String string) {
-        if (string.length() > maxLength) {
-            throw new IllegalArgumentException("too long String");
-        }
-        value = string;
-        state = CollectionConstant.PRESENT;
-    }
-
     @NotNull
     @Override
     JsonType from(boolean newValue) {
         if ((flags & JsonHint.CAST_FROM_BOOLEAN) != 0L) {
-            fromString(String.valueOf(newValue));
+            return fromString(String.valueOf(newValue));
         } else {
             throw new ClassCastException("boolean to String");
         }
-        return this;
     }
 
     @NotNull
     @Override
     JsonType from(int newValue) {
         if ((flags & JsonHint.CAST_FROM_INTEGRAL) != 0L) {
-            fromString(String.valueOf(newValue));
+            return fromString(String.valueOf(newValue));
         } else {
             throw new ClassCastException("int to String");
         }
-        return this;
     }
 
     @NotNull
     @Override
     JsonType from(long newValue) {
         if ((flags & JsonHint.CAST_FROM_INTEGRAL) != 0L) {
-            fromString(String.valueOf(newValue));
+            return fromString(String.valueOf(newValue));
         } else {
             throw new ClassCastException("long to String");
         }
-        return this;
     }
 
     @NotNull
     @Override
     JsonType from(float newValue) {
         if ((flags & JsonHint.CAST_FROM_DECIMAL) != 0L) {
-            fromString(String.valueOf(newValue));
+            return fromString(String.valueOf(newValue));
         } else {
-            throw new ClassCastException("long to String");
+            throw new ClassCastException("float to String");
         }
-        return this;
     }
 
     @NotNull
     @Override
     JsonType from(double newValue) {
         if ((flags & JsonHint.CAST_FROM_DECIMAL) != 0L) {
-            fromString(String.valueOf(newValue));
+            return fromString(String.valueOf(newValue));
         } else {
-            throw new ClassCastException("long to String");
+            throw new ClassCastException("double to String");
         }
-        return this;
     }
 
     @NotNull
     @Override
     JsonType from(@NotNull BigInteger newValue) {
         if ((flags & JsonHint.CAST_FROM_INTEGRAL) != 0L) {
-            fromString(newValue.toString());
+            return fromString(newValue.toString());
         } else {
             throw new ClassCastException("BigInteger to String");
         }
-        return this;
     }
 
     @NotNull
@@ -129,15 +154,13 @@ class StringType extends JsonType {
                 throw new ClassCastException("FastNumber (integral) to String");
             }
         }
-        fromString(newValue.toString());
-        return this;
+        return fromString(newValue.toString());
     }
 
     @NotNull
     @Override
     JsonType from(@NotNull CharSequence newValue) {
-        fromString(newValue.toString());
-        return this;
+        return fromString(newValue.toString());
     }
 
     @Override
@@ -159,7 +182,12 @@ class StringType extends JsonType {
         if (state == CollectionConstant.PRESENT) {
             try {
                 if (value == null) {
-                    out.nullValue();
+                    if ((flags & (((long) JsonEmpty.FROM_NULL) << UNDEFINED_SHIFT)) != 0L) {
+                        context.getLogger().debug("null String to undefined");
+                        out.skippedValue();
+                    } else {
+                        out.nullValue();
+                    }
                 } else if (value.isEmpty()) {
                     if ((flags & (((long) JsonEmpty.FROM_EMPTY_STRING) << UNDEFINED_SHIFT)) != 0L) {
                         context.getLogger().debug("empty String to undefined");

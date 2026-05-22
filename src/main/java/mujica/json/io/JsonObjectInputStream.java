@@ -1,6 +1,7 @@
 package mujica.json.io;
 
 import mujica.algebra.discrete.BigConstants;
+import mujica.ds.of_boolean.list.CopyOnResizeBooleanList;
 import mujica.ds.of_int.list.CopyOnResizeIntList;
 import mujica.ds.of_int.list.PublicIntList;
 import mujica.io.codec.Base16Case;
@@ -693,10 +694,106 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
             if ('a' <= octet && octet <= 'z') {
                 sb.append((char) octet);
             } else {
+                unread(octet);
                 break;
             }
         }
-        return Boolean.parseBoolean(sb.toString());
+        final String string = sb.toString();
+        if (string.equals("true")) {
+            return true;
+        } else if (string.equals("false")) {
+            return false;
+        } else {
+            throw new IOException("boolean");
+        }
+    }
+
+    @NotNull
+    public boolean[] readBooleanArray1D() throws IOException {
+        skipGap();
+        if (super.readUnsignedByte() != '[') {
+            throw new IOException("open array");
+        }
+        CopyOnResizeBooleanList booleanList = null;
+        boolean comma = false;
+        while (true) {
+            skipGap();
+            int octet = super.readUnsignedByte();
+            if (octet == ',') {
+                if (comma) {
+                    throw new IOException("duplicate comma");
+                }
+                if (booleanList == null && (flags & FLAG_LEADING_COMMA) == 0) {
+                    throw new IOException("leading comma");
+                }
+                comma = true;
+                continue;
+            } else if (octet == ']') {
+                if (comma && (flags & FLAG_TRAILING_COMMA) == 0) {
+                    throw new IOException("trailing comma");
+                }
+                break;
+            }
+            if (comma || booleanList == null) {
+                unread(octet);
+                if (booleanList == null) {
+                    booleanList = new CopyOnResizeBooleanList(null);
+                }
+                booleanList.offerLast(readBoolean());
+                comma = false;
+            } else {
+                throw new IOException("missing comma");
+            }
+        }
+        if (booleanList == null) {
+            return new boolean[0];
+        } else {
+            return booleanList.toBooleanArray();
+        }
+    }
+
+    @NotNull
+    public boolean[][] readBooleanArray2D() throws IOException {
+        skipGap();
+        if (super.readUnsignedByte() != '[') {
+            throw new IOException("open array");
+        }
+        ArrayList<boolean[]> list = null;
+        boolean comma = false;
+        while (true) {
+            skipGap();
+            int octet = super.readUnsignedByte();
+            if (octet == ',') {
+                if (comma) {
+                    throw new IOException("duplicate comma");
+                }
+                if (list == null && (flags & FLAG_LEADING_COMMA) == 0) {
+                    throw new IOException("leading comma");
+                }
+                comma = true;
+                continue;
+            } else if (octet == ']') {
+                if (comma && (flags & FLAG_TRAILING_COMMA) == 0) {
+                    throw new IOException("trailing comma");
+                }
+                break;
+            }
+            if (comma || list == null) {
+                unread(octet);
+                if (list == null) {
+                    list = new ArrayList<>();
+                }
+                list.add(readBooleanArray1D());
+                comma = false;
+            } else {
+                throw new IOException("missing comma");
+            }
+        }
+        if (list == null) {
+            return new boolean[0][0];
+        } else {
+            return list.toArray(new boolean[0][0]);
+        }
     }
 
     @Override

@@ -40,6 +40,9 @@ module CDP {
     exports mujica.ds.of_byte.run;
     exports mujica.ds.of_char;
     exports mujica.ds.of_char.sequence;
+    exports mujica.ds.of_char.filter;
+    exports mujica.ds.of_char.sanitizer;
+    exports mujica.ds.of_char.collation;
     exports mujica.ds.of_int;
     exports mujica.ds.of_int.list;
     exports mujica.ds.of_int.set;
@@ -51,9 +54,6 @@ module CDP {
     exports mujica.ds.of_double.list;
     exports mujica.text.number;
     exports mujica.text.format;
-    exports mujica.text.filter;
-    exports mujica.text.sanitizer;
-    exports mujica.text.collation;
     exports mujica.text.bnf;
     exports mujica.text.regex;
     exports mujica.algebra.discrete;
@@ -68,6 +68,7 @@ module CDP {
     exports mujica.json.reflect;
     exports mujica.json.provided;
     exports mujica.netty.concurrent;
+    exports mujica.netty.mysql;
 
     provides java.nio.charset.spi.CharsetProvider with TowboatCharsetProvider;
     provides java.nio.file.spi.FileTypeDetector with ExtensionFileTypeDetector.Cached;

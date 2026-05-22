@@ -1,6 +1,7 @@
 package mujica.ds.of_int.set;
 
 import mujica.ds.of_int.IntSlot;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -11,7 +12,10 @@ import java.util.function.IntPredicate;
 /**
  * Created on 2026/1/18.
  */
+@CodeHistory(date = "2026/1/18")
 public class JdkNavigableIntSet extends NavigableIntSet {
+
+    private static final long serialVersionUID = 0x25E91AE0E8513718L;
 
     @NotNull
     final NavigableSet<Integer> set;

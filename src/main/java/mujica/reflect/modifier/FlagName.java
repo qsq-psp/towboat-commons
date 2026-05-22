@@ -1,6 +1,6 @@
 package mujica.reflect.modifier;
 
-import mujica.text.sanitizer.CharSequenceAppender;
+import mujica.ds.of_char.sanitizer.CharSequenceAppender;
 import mujica.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

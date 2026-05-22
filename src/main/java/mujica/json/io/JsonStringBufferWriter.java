@@ -4,11 +4,14 @@ import io.netty.buffer.ByteBuf;
 import mujica.json.entity.FastNumber;
 import mujica.json.entity.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.sanitizer.CharSequenceAppender;
+import mujica.ds.of_char.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
+import java.text.FieldPosition;
+import java.text.NumberFormat;
 
 @CodeHistory(date = "2026/1/7", name = "StringBufferJsonWriter")
 @CodeHistory(date = "2026/3/24")
@@ -17,13 +20,24 @@ public class JsonStringBufferWriter extends JsonStringWriter {
     @NotNull
     protected final StringBuffer sb;
 
-    public JsonStringBufferWriter(@NotNull StringBuffer sb) {
+    @NotNull
+    protected NumberFormat numberFormat;
+
+    @NotNull
+    protected FieldPosition fieldPosition = new FieldPosition(NumberFormat.INTEGER_FIELD);
+
+    public JsonStringBufferWriter(@NotNull StringBuffer sb, @NotNull NumberFormat numberFormat) {
         super();
         this.sb = sb;
+        this.numberFormat = numberFormat;
+    }
+
+    public JsonStringBufferWriter(@NotNull NumberFormat numberFormat) {
+        this(new StringBuffer(), numberFormat);
     }
 
     public JsonStringBufferWriter() {
-        this(new StringBuffer());
+        this(new StringBuffer(), new DecimalFormat("#"));
     }
 
     @NotNull
@@ -244,44 +258,56 @@ public class JsonStringBufferWriter extends JsonStringWriter {
 
     @Override
     public void numberValue(int value) {
-        anyValue();
-        sb.append(value);
+        numberValue((long) value);
     }
 
     @Override
     public void numberValue(long value) {
         anyValue();
-        sb.append(value);
+        numberFormat.format(value, sb, fieldPosition);
     }
 
     @Override
     public void numberValue(float value) {
-        if ((flags & ConfigFlags.INFINITY_TO_NULL) != 0 && Float.isInfinite(value)) {
-            nullValue();
-        } else if ((flags & ConfigFlags.NAN_TO_NULL) != 0 && Float.isNaN(value)) {
-            nullValue();
-        } else {
-            anyValue();
-            sb.append(value);
-        }
+        numberValue((double) value);
     }
 
     @Override
     public void numberValue(double value) {
-        if ((flags & ConfigFlags.INFINITY_TO_NULL) != 0 && Double.isInfinite(value)) {
-            nullValue();
-        } else if ((flags & ConfigFlags.NAN_TO_NULL) != 0 && Double.isNaN(value)) {
-            nullValue();
+        anyValue();
+        if (Double.isFinite(value)) {
+            numberFormat.format(value, sb, fieldPosition);
+        } else if (Double.isNaN(value)) {
+            if ((flags & ConfigFlags.NAN_TO_NULL) != 0) {
+                sb.append("null");
+            } else if ((flags & ConfigFlags.NAN_AS_IS) != 0) {
+                sb.append("NaN");
+            } else {
+                throw new IllegalArgumentException("NaN");
+            }
         } else {
-            anyValue();
-            sb.append(value);
+            if ((flags & ConfigFlags.INFINITY_TO_NULL) != 0) {
+                sb.append("null");
+            } else if ((flags & ConfigFlags.INFINITY_AS_IS) != 0) {
+                if (value > 0.0) {
+                    if ((flags & ConfigFlags.PLUS_SIGN) != 0) {
+                        sb.append("+Infinity");
+                    } else {
+                        sb.append("Infinity");
+                    }
+                } else {
+                    sb.append("-Infinity");
+                }
+            } else {
+                throw new IllegalArgumentException("infinity");
+            }
         }
     }
 
     @Override
     public void numberValue(@NotNull BigInteger value) {
         anyValue();
-        sb.append(value);
+        numberFormat.format(value, sb, fieldPosition);
     }
 
     @Override

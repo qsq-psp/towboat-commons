@@ -18,7 +18,7 @@ public abstract class IntervalIntMap extends NavigableIntMap {
     @Override
     public abstract IntervalIntMap duplicate();
 
-    public int intervalleft(int inKey) {
+    public int intervalLeft(int inKey) {
         final int value = getInt(inKey);
         int outKey = inKey;
         do {
@@ -27,7 +27,7 @@ public abstract class IntervalIntMap extends NavigableIntMap {
         return outKey;
     }
 
-    public int intervalright(int inKey) {
+    public int intervalRight(int inKey) {
         final int value = getInt(inKey);
         int outKey = inKey;
         do {
@@ -85,21 +85,21 @@ public abstract class IntervalIntMap extends NavigableIntMap {
     }
 
     @NotNull
-    public Iterator<IntValueInterval> ascendingIntervalIterator() {
+    public Iterator<IntValueIntInterval> ascendingIntervalIterator() {
         final Iterator<Entry> iterator = ascendingIterator();
-        final ArrayList<IntValueInterval> list = new ArrayList<>();
-        SimpleIntValueInterval interval = null;
+        final ArrayList<IntValueIntInterval> list = new ArrayList<>();
+        PrivateIntValueInterval interval = null;
         while (iterator.hasNext()) {
             Entry entry = iterator.next();
             if (interval != null) {
-                if (interval.value == entry.getIntValue() && interval.right + 1 == entry.getIntKey()) {
-                    interval.right++;
+                if (interval.getInt() == entry.getIntValue() && interval.getRight() + 1 == entry.getIntKey()) {
+                    interval.setRight(interval.getRight() + 1);
                     continue;
                 } else {
                     list.add(interval);
                 }
             }
-            interval = new SimpleIntValueInterval(entry.getIntKey(), entry.getIntKey(), entry.getIntValue());
+            interval = new PrivateIntValueInterval(entry.getIntKey(), entry.getIntKey(), entry.getIntValue());
         }
         if (interval != null) {
             list.add(interval);
@@ -108,21 +108,21 @@ public abstract class IntervalIntMap extends NavigableIntMap {
     }
 
     @NotNull
-    public Iterator<IntValueInterval> descendingIntervalIterator() {
+    public Iterator<IntValueIntInterval> descendingIntervalIterator() {
         final Iterator<Entry> iterator = descendingIterator();
-        final ArrayList<IntValueInterval> list = new ArrayList<>();
-        SimpleIntValueInterval interval = null;
+        final ArrayList<IntValueIntInterval> list = new ArrayList<>();
+        PrivateIntValueInterval interval = null;
         while (iterator.hasNext()) {
             Entry entry = iterator.next();
             if (interval != null) {
-                if (interval.value == entry.getIntValue() && interval.left - 1 == entry.getIntKey()) {
-                    interval.left++;
+                if (interval.getInt() == entry.getIntValue() && interval.getLeft() - 1 == entry.getIntKey()) {
+                    interval.setLeft(interval.getLeft() - 1);
                     continue;
                 } else {
                     list.add(interval);
                 }
             }
-            interval = new SimpleIntValueInterval(entry.getIntKey(), entry.getIntKey(), entry.getIntValue());
+            interval = new PrivateIntValueInterval(entry.getIntKey(), entry.getIntKey(), entry.getIntValue());
         }
         if (interval != null) {
             list.add(interval);
@@ -131,17 +131,17 @@ public abstract class IntervalIntMap extends NavigableIntMap {
     }
 
     public void ascendingForEachInterval(@NotNull IntValueIntervalConsumer action) {
-        final Iterator<IntValueInterval> iterator = ascendingIntervalIterator();
+        final Iterator<IntValueIntInterval> iterator = ascendingIntervalIterator();
         while (iterator.hasNext()) {
-            IntValueInterval interval = iterator.next();
+            IntValueIntInterval interval = iterator.next();
             action.accept(interval.getLeft(), interval.getRight(), interval.getInt());
         }
     }
 
     public void descendingForEachInterval(@NotNull IntValueIntervalConsumer action) {
-        final Iterator<IntValueInterval> iterator = descendingIntervalIterator();
+        final Iterator<IntValueIntInterval> iterator = descendingIntervalIterator();
         while (iterator.hasNext()) {
-            IntValueInterval interval = iterator.next();
+            IntValueIntInterval interval = iterator.next();
             action.accept(interval.getLeft(), interval.getRight(), interval.getInt());
         }
     }

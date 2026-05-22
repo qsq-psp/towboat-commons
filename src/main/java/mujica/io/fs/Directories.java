@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
+import java.nio.channels.FileChannel;
 import java.nio.file.*;
 import java.nio.file.attribute.FileTime;
 import java.util.*;
@@ -55,6 +56,24 @@ public final class Directories {
                 return false;
             }
         });
+    }
+
+    public static void clear(@NotNull Path path) throws IOException {
+        if (Files.isRegularFile(path)) {
+            clearRegularFile(path);
+        } else if (Files.isDirectory(path)) {
+            clearDirectory(path);
+        } else {
+            throw new IOException();
+        }
+    }
+
+    public static void clearRegularFile(@NotNull Path path) throws IOException {
+        FileChannel.open(path).truncate(0L).close();
+    }
+
+    public static void clearDirectory(@NotNull Path path) throws IOException {
+        // todo
     }
 
     private static long uncheckedSize(@NotNull Path path) {

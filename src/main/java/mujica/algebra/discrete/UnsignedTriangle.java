@@ -97,11 +97,15 @@ public class UnsignedTriangle implements DimensionCodec {
         if (in.length != 2) {
             throw new UnsupportedOperationException();
         }
-        return null;
+        return in[0];
     }
 
     @Override
     public void decodeN(@NotNull BigInteger in, @NotNull BigInteger[] out) {
-
+        if (out.length != 2) {
+            throw new UnsupportedOperationException();
+        }
+        out[0] = in;
+        out[1] = in;
     }
 }

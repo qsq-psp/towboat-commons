@@ -4,7 +4,7 @@ import mujica.json.entity.FastString;
 import mujica.json.entity.JsonHandler;
 import mujica.json.modifier.JsonHint;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.sanitizer.CharSequenceAppender;
+import mujica.ds.of_char.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;

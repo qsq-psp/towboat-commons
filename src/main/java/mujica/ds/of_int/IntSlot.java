@@ -32,16 +32,16 @@ public interface IntSlot {
         return oldValue;
     }
 
-    default int updateInt(@NotNull IntSlot newValue) {
-        return updateInt(newValue.getInt());
+    default int updateInt(@NotNull IntSlot newValueSlot) {
+        return updateInt(newValueSlot.getInt());
     }
 
-    default int updateInt(@NotNull Number newValue) {
-        return updateInt(newValue.intValue());
+    default int updateInt(@NotNull Number newNumberValue) {
+        return updateInt(newNumberValue.intValue());
     }
 
-    default int updateInt(@NotNull IntSupplier newValue) {
-        return updateInt(newValue.getAsInt());
+    default int updateInt(@NotNull IntSupplier newValueSupplier) {
+        return updateInt(newValueSupplier.getAsInt());
     }
 
     static void exchangeInt(@NotNull IntSlot a, @NotNull IntSlot b) {
@@ -55,18 +55,18 @@ public interface IntSlot {
     }
 
     @NotNull
-    default IntSlot boxInt(@NotNull IntSlot newValue) {
-        return boxInt(newValue.getInt());
+    default IntSlot boxInt(@NotNull IntSlot newValueSlot) {
+        return boxInt(newValueSlot.getInt());
     }
 
     @NotNull
-    default IntSlot boxInt(@NotNull Number newValue) {
-        return boxInt(newValue.intValue());
+    default IntSlot boxInt(@NotNull Number newNumberValue) {
+        return boxInt(newNumberValue.intValue());
     }
 
     @NotNull
-    default IntSlot boxInt(@NotNull IntSupplier newValue) {
-        return boxInt(newValue.getAsInt());
+    default IntSlot boxInt(@NotNull IntSupplier newValueSupplier) {
+        return boxInt(newValueSupplier.getAsInt());
     }
 
     @NotNull

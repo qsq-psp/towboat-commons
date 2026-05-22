@@ -1,10 +1,12 @@
 package mujica.ds.of_char.sequence;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2026/1/8")
+@DirectSubclass({SlicedCharSequence.class, CharReversedCharSequence.class, CodePointReversedCharSequence.class})
 public abstract class FilteredCharSequence extends TowboatCharSequence {
 
     private static final long serialVersionUID = 0x0F6535B784955850L;

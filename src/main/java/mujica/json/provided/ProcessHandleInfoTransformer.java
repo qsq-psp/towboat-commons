@@ -45,7 +45,10 @@ public class ProcessHandleInfoTransformer implements JsonContextTransformer<Proc
                 out.stringKey(START);
                 InstantTransformer.INSTANCE.transform(start, out, context);
             });
-            // duration
+            in.totalCpuDuration().ifPresent(duration -> {
+                out.stringKey(DURATION);
+                DurationTransformer.INSTANCE.transform(duration, out, context);
+            });
             in.user().ifPresent(user -> {
                 out.stringKey(USER);
                 out.stringValue(user);

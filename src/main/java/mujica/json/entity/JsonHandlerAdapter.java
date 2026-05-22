@@ -2,12 +2,14 @@ package mujica.json.entity;
 
 import io.netty.buffer.ByteBuf;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 
 @CodeHistory(date = "2026/4/1")
+@DirectSubclass({StructureCheckAdapter.class, CacheAdapter.class, UndoKeyJsonHandlerAdapter.class})
 public class JsonHandlerAdapter<H extends JsonHandler> extends JsonHandler {
 
     @NotNull

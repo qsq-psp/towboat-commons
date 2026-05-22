@@ -35,4 +35,52 @@ public interface DoubleSlot {
     default void setDouble(@NotNull DoubleSupplier newValueSupplier) {
         setDouble(newValueSupplier.getAsDouble());
     }
+
+    default double updateDouble(double newValue) {
+        final double oldValue = getDouble();
+        setDouble(newValue);
+        return oldValue;
+    }
+
+    default double updateDouble(@NotNull DoubleSlot newValueSlot) {
+        return updateDouble(newValueSlot.getDouble());
+    }
+
+    default double updateDouble(@NotNull Number newNumberValue) {
+        return updateDouble(newNumberValue.doubleValue());
+    }
+
+    default double updateDouble(@NotNull DoubleSupplier newValueSupplier) {
+        return updateDouble(newValueSupplier.getAsDouble());
+    }
+
+    static void exchangeDouble(@NotNull DoubleSlot a, @NotNull DoubleSlot b) {
+        a.setDouble(b.updateDouble(a.getDouble()));
+    }
+
+    @NotNull
+    default DoubleSlot boxDouble(double newValue) {
+        setDouble(newValue);
+        return this;
+    }
+
+    @NotNull
+    default DoubleSlot boxDouble(@NotNull DoubleSlot newValueSlot) {
+        return boxDouble(newValueSlot.getDouble());
+    }
+
+    @NotNull
+    default DoubleSlot boxDouble(@NotNull Number newNumberValue) {
+        return boxDouble(newNumberValue.doubleValue());
+    }
+
+    @NotNull
+    default DoubleSlot boxDouble(@NotNull DoubleSupplier newValueSupplier) {
+        return boxDouble(newValueSupplier.getAsDouble());
+    }
+
+    @NotNull
+    default DoubleSlot swapDouble(@NotNull DoubleSlot that) {
+        return boxDouble(that.updateDouble(getDouble()));
+    }
 }

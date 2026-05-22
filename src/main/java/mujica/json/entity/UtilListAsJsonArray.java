@@ -4,6 +4,7 @@ import mujica.json.reflect.ContainerConfig;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -19,7 +20,7 @@ class UtilListAsJsonArray<T extends List<Object>> extends JsonArray {
     protected T list;
 
     UtilListAsJsonArray(@NotNull T list) {
-        super(new ContainerConfig()); // remove
+        super();
         this.list = list;
     }
 
@@ -43,9 +44,14 @@ class UtilListAsJsonArray<T extends List<Object>> extends JsonArray {
     public Consumer<Object> consumer(@NotNull ContainerConfig.ArrayAction action) {
         switch (action) {
             case NEW:
+                list.clear();
+                if (list instanceof ArrayList) {
+                    ((ArrayList<?>) list).trimToSize();
+                }
+                return new ConsumerImpl(0);
             case CLEAR:
                 list.clear();
-                // no break here
+                return new ConsumerImpl(0);
             case COVER:
                 return new ConsumerImpl(0);
             case APPEND:
@@ -55,6 +61,7 @@ class UtilListAsJsonArray<T extends List<Object>> extends JsonArray {
         }
     }
 
+    @CodeHistory(date = "2026/4/13")
     private class ConsumerImpl implements Consumer<Object> {
 
         int index;

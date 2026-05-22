@@ -110,7 +110,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                             return 1;
                         } else {
                             length = in.read(array, offset, Math.min(length, remainingLength));
-                            if (length < 0) {
+                            if (length <= 0) {
                                 throw new EOFException();
                             }
                             runBuffer.putFully(array, offset, length);

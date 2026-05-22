@@ -20,6 +20,52 @@ public class JsonObjectInputStreamTest {
 
     private final FuzzyContext fc = new FuzzyContext();
 
+    private void assertArrayEquals(@NotNull boolean[] expected, @NotNull boolean[] actual) {
+        Assert.assertArrayEquals(new Object[] {expected}, new Object[] {actual});
+    }
+
+    private void readBooleanArray1D(@NotNull String in, @NotNull boolean[] out) throws IOException {
+        try (JsonObjectInputStream is = new JsonObjectInputStream(new ByteArrayInputStream(in.getBytes(StandardCharsets.UTF_8)))) {
+            assertArrayEquals(out, is.readBooleanArray1D());
+        }
+    }
+
+    @Test
+    public void caseReadBooleanArray1D() throws IOException {
+        readBooleanArray1D(" [    ]", new boolean[] {});
+        readBooleanArray1D("[ false ]", new boolean[] {false});
+        readBooleanArray1D("[\ntrue\n]\n\n\n\n", new boolean[] {true});
+        readBooleanArray1D("[false,true]", new boolean[] {false, true});
+        readBooleanArray1D("\r\n[false, true, false, true]", new boolean[] {false, true, false, true});
+    }
+
+    private void readBadBooleanArray1D(@NotNull String in) {
+        try (JsonObjectInputStream is = new JsonObjectInputStream(new ByteArrayInputStream(in.getBytes(StandardCharsets.UTF_8)))) {
+            Assert.fail(Arrays.toString(is.readBooleanArray1D()));
+        } catch (Exception ignore) {} // AssertionError is not caught
+    }
+
+    @Test
+    public void caseReadBadBooleanArray1D() {
+        readBadBooleanArray1D("");
+        readBadBooleanArray1D("[");
+        readBadBooleanArray1D(" ]");
+        readBadBooleanArray1D("],[");
+        readBadBooleanArray1D("[0]");
+        readBadBooleanArray1D("[1]\r\n");
+        readBadBooleanArray1D("[tr ue]");
+        readBadBooleanArray1D("[ fal se  ]");
+        readBadBooleanArray1D("[true true true]");
+        readBadBooleanArray1D("[false, null, true]");
+        readBadBooleanArray1D("[false, NaN, false, true]");
+        readBadBooleanArray1D("[true, true, false, java]");
+        readBadBooleanArray1D("([true, true, false])");
+        readBadBooleanArray1D("[[true, true, false]]");
+        readBadBooleanArray1D("[true; true; false]");
+        readBadBooleanArray1D("[true, true, false, ]");
+        readBadBooleanArray1D("[, true, true, false]");
+    }
+
     private void readIntArray1D(@NotNull String in, @NotNull int[] out) throws IOException {
         try (JsonObjectInputStream is = new JsonObjectInputStream(new ByteArrayInputStream(in.getBytes(StandardCharsets.UTF_8)))) {
             Assert.assertArrayEquals(out, is.readIntArray1D());

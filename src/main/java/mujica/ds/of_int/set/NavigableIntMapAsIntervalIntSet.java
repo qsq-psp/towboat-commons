@@ -51,7 +51,7 @@ public class NavigableIntMapAsIntervalIntSet extends IntervalIntSet {
     }
 
     @Override
-    public long longLength() {
+    public long intLengthAsLong() {
         long n = 0L;
         for (IntMap.Entry entry : map) {
             n = n + 1L + entry.getIntValue() - entry.getIntKey();

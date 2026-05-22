@@ -4,6 +4,7 @@ import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.FlagName;
 
 @CodeHistory(date = "2025/11/6")
+@Deprecated
 final class JsonReaderFlagNames {
 
     static final FlagName FLAG_NAME = (new FlagName())

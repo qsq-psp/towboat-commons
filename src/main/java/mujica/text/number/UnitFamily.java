@@ -24,4 +24,8 @@ public class UnitFamily {
 
     @NotNull
     final ArrayList<Unit> unitList = new ArrayList<>();
+
+    public UnitFamily() {
+        super();
+    }
 }

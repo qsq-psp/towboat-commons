@@ -25,7 +25,7 @@ public abstract class RewriteClassLoader extends ProjectClassLoader {
     }
 
     @CodeHistory(date = "2025/9/28")
-    public static class UsingStream extends RewriteClassLoader {
+    static class UsingStream extends RewriteClassLoader {
 
         public UsingStream(@NotNull Predicate<String> predicate, @NotNull UnaryOperator<ClassFile> operator) {
             super(predicate, operator);
@@ -64,7 +64,7 @@ public abstract class RewriteClassLoader extends ProjectClassLoader {
     }
 
     @CodeHistory(date = "2025/9/28")
-    public static class UsingBuffer extends RewriteClassLoader {
+    static class UsingBuffer extends RewriteClassLoader {
 
         public UsingBuffer(@NotNull Predicate<String> predicate, @NotNull UnaryOperator<ClassFile> operator) {
             super(predicate, operator);

@@ -3,7 +3,7 @@ package mujica.json.entity;
 import io.netty.buffer.ByteBuf;
 import mujica.ds.generic.set.CollectionConstant;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.sanitizer.CharSequenceAppender;
+import mujica.ds.of_char.sanitizer.CharSequenceAppender;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

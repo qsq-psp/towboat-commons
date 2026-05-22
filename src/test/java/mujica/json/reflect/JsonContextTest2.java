@@ -53,7 +53,6 @@ public class JsonContextTest2 {
 
     @CodeHistory(date = "2026/4/21")
     @ReferencePage(title = "Algorithms Jeff Erickson 4.2", href = "http://jeffe.cs.illinois.edu/teaching/algorithms/")
-    @ReferencePage(title = "Algorithms Jeff Erickson 4.2", href = "http://algorithms.wtf")
     public static class AppliedChaos {
 
         private int museum;
@@ -81,7 +80,6 @@ public class JsonContextTest2 {
 
     @CodeHistory(date = "2026/4/21")
     @ReferencePage(title = "Algorithms Jeff Erickson 4.2", href = "http://jeffe.cs.illinois.edu/teaching/algorithms/")
-    @ReferencePage(title = "Algorithms Jeff Erickson 4.2", href = "http://algorithms.wtf")
     @FieldOrder({"import", "export"})
     public static class ToiletPaperLandscapeArchitecture {
 

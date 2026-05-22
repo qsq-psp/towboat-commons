@@ -1,6 +1,5 @@
 package mujica.ds.generic.list;
 
-import mujica.ds.SortingAlgorithm;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;

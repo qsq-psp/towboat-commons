@@ -1,12 +1,14 @@
 package mujica.algebra.discrete;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
 @CodeHistory(date = "2023/10/6", project = "Ultramarine")
 @CodeHistory(date = "2025/2/28")
+@DirectSubclass({DimensionCodecModifier.class, BitInterleave.class, UnsignedSquare.class, UnsignedTriangle.class, HilbertCurve.class})
 public interface DimensionCodec {
 
     boolean vectorSigned();

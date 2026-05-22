@@ -33,6 +33,20 @@ public class ProcessHandleTransformer implements JsonContextTransformer<ProcessH
 
     static final FastString ALIVE = new FastString("alive");
 
+    private static <T> void streamForEach(@NotNull Stream<T> stream, @NotNull Runnable before, @NotNull Consumer<T> consumer, @NotNull Runnable after) {
+        final PublicBooleanSlot notEmpty = new PublicBooleanSlot(false);
+        stream.forEach(item -> {
+            if (!notEmpty.getBoolean()) {
+                notEmpty.setBoolean(true);
+                before.run();
+            }
+            consumer.accept(item);
+        });
+        if (notEmpty.getBoolean()) {
+            after.run();
+        }
+    }
+
     @Override
     public void transform(ProcessHandle in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
@@ -60,19 +74,5 @@ public class ProcessHandleTransformer implements JsonContextTransformer<ProcessH
     @Override
     public void json(@NotNull JsonHandler jh) {
         transform(ProcessHandle.current(), jh, null);
-    }
-
-    private static <T> void streamForEach(@NotNull Stream<T> stream, @NotNull Runnable before, @NotNull Consumer<T> consumer, @NotNull Runnable after) {
-        final PublicBooleanSlot notEmpty = new PublicBooleanSlot(false);
-        stream.forEach(item -> {
-            if (!notEmpty.getBoolean()) {
-                notEmpty.setBoolean(true);
-                before.run();
-            }
-            consumer.accept(item);
-        });
-        if (notEmpty.getBoolean()) {
-            after.run();
-        }
     }
 }

@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.DefaultByteBufHolder;
 import mujica.json.entity.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.sanitizer.CharSequenceAppender;
+import mujica.ds.of_char.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
@@ -304,7 +304,7 @@ public class JsonByteBufWriter extends JsonWriter implements ByteBufHolder {
     @Override
     public void numberValue(int value) {
         anyValue();
-        if (value > 0) { // move to Base10Appender
+        if (value > 0) { // move to SignedBase10Appender
             value = -value;
         } else if (value < 0) {
             data.writeByte('-');
@@ -332,7 +332,7 @@ public class JsonByteBufWriter extends JsonWriter implements ByteBufHolder {
     @Override
     public void numberValue(long value) {
         anyValue();
-        if (value > 0) { // move to Base10Appender
+        if (value > 0) { // move to SignedBase10Appender
             value = -value;
         } else if (value < 0) {
             data.writeByte('-');

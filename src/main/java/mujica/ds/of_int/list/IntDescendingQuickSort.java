@@ -1,14 +1,16 @@
 package mujica.ds.of_int.list;
 
-import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.SortingAlgorithm;
 import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.IntSlot;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/3/15", name = "QuickSort")
 @CodeHistory(date = "2025/12/23")
+@Name(value = "递减快速排序", language = "zh")
 @ReferencePage(title = "快速排序", href = "https://oi-wiki.org/basic/quick-sort/")
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
 public class IntDescendingQuickSort extends SortingAlgorithm<int[]> {
@@ -90,7 +92,13 @@ public class IntDescendingQuickSort extends SortingAlgorithm<int[]> {
                 break;
             }
         }
+        if (startWriteIndex == endIndex) {
+            throw new RuntimeException("too small pivot");
+        }
         operationCount += sort(array, startIndex, startWriteIndex);
+        if (startIndex == endWriteIndex) {
+            throw new RuntimeException("too large pivot");
+        }
         operationCount += sort(array, endWriteIndex, endIndex);
         while (startWriteIndex < endWriteIndex) {
             array[startWriteIndex++] = pivot;

@@ -2,7 +2,7 @@ package mujica.json.io;
 
 import mujica.json.entity.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.sanitizer.CharSequenceAppender;
+import mujica.ds.of_char.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2021/4/23", project = "webbiton", name = "FormattedJsonBlobBuilder")

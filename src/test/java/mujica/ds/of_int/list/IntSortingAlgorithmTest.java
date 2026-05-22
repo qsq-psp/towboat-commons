@@ -1,7 +1,7 @@
 package mujica.ds.of_int.list;
 
 import mujica.algebra.random.FuzzyContext;
-import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.SortingAlgorithm;
 import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.ds.of_int.set.IntSet;
@@ -47,6 +47,7 @@ public class IntSortingAlgorithmTest {
         checkAscending(new IntAscendingQuickSort(SelectFirstIntAsPivot.INSTANCE));
         checkAscending(new IntAscendingQuickSort(SelectTwoIntMeanAsPivot.INSTANCE));
         checkAscending(new IntAscendingQuickSort(SelectThreeIntMedianAsPivot.INSTANCE));
+        checkAscending(new IntAscendingQuickSort(new SelectRandomIntAsPivot(fc)));
         checkAscending(new IntAscendingRadixSort(10));
         checkAscending(IntAscendingSelectionSort.INSTANCE);
         checkAscending(new IntAscendingTournamentSort());
@@ -95,6 +96,7 @@ public class IntSortingAlgorithmTest {
         checkDescending(new IntDescendingQuickSort(SelectFirstIntAsPivot.INSTANCE));
         checkDescending(new IntDescendingQuickSort(SelectTwoIntMeanAsPivot.INSTANCE));
         checkDescending(new IntDescendingQuickSort(SelectThreeIntMedianAsPivot.INSTANCE));
+        checkDescending(new IntDescendingQuickSort(new SelectRandomIntAsPivot(fc)));
         checkDescending(new IntDescendingRadixSort(10));
         checkDescending(IntDescendingSelectionSort.INSTANCE);
         checkDescending(new IntDescendingTournamentSort());
@@ -145,6 +147,7 @@ public class IntSortingAlgorithmTest {
         fuzzAscending(new IntAscendingQuickSort(SelectFirstIntAsPivot.INSTANCE));
         fuzzAscending(new IntAscendingQuickSort(SelectTwoIntMeanAsPivot.INSTANCE));
         fuzzAscending(new IntAscendingQuickSort(SelectThreeIntMedianAsPivot.INSTANCE));
+        fuzzAscending(new IntAscendingQuickSort(new SelectRandomIntAsPivot(fc)));
         fuzzAscending(new IntAscendingRadixSort(10));
         fuzzAscending(IntAscendingSelectionSort.INSTANCE);
         fuzzAscending(new IntAscendingTournamentSort());
@@ -185,6 +188,7 @@ public class IntSortingAlgorithmTest {
         fuzzAscendingUnique(new IntAscendingQuickSort(SelectFirstIntAsPivot.INSTANCE));
         fuzzAscendingUnique(new IntAscendingQuickSort(SelectTwoIntMeanAsPivot.INSTANCE));
         fuzzAscendingUnique(new IntAscendingQuickSort(SelectThreeIntMedianAsPivot.INSTANCE));
+        fuzzAscendingUnique(new IntAscendingQuickSort(new SelectRandomIntAsPivot(fc)));
         fuzzAscendingUnique(new IntAscendingRadixSort(10));
         fuzzAscendingUnique(IntAscendingSelectionSort.INSTANCE);
     }
@@ -213,6 +217,7 @@ public class IntSortingAlgorithmTest {
         fuzzDescending(new IntDescendingQuickSort(SelectFirstIntAsPivot.INSTANCE));
         fuzzDescending(new IntDescendingQuickSort(SelectTwoIntMeanAsPivot.INSTANCE));
         fuzzDescending(new IntDescendingQuickSort(SelectThreeIntMedianAsPivot.INSTANCE));
+        fuzzDescending(new IntDescendingQuickSort(new SelectRandomIntAsPivot(fc)));
         fuzzDescending(new IntDescendingRadixSort(10));
         fuzzDescending(IntDescendingSelectionSort.INSTANCE);
         fuzzDescending(new IntDescendingTournamentSort());
@@ -253,6 +258,7 @@ public class IntSortingAlgorithmTest {
         fuzzDescendingUnique(new IntDescendingQuickSort(SelectFirstIntAsPivot.INSTANCE));
         fuzzDescendingUnique(new IntDescendingQuickSort(SelectTwoIntMeanAsPivot.INSTANCE));
         fuzzDescendingUnique(new IntDescendingQuickSort(SelectThreeIntMedianAsPivot.INSTANCE));
+        fuzzDescendingUnique(new IntDescendingQuickSort(new SelectRandomIntAsPivot(fc)));
         fuzzDescendingUnique(new IntDescendingRadixSort(10));
         fuzzDescendingUnique(IntDescendingSelectionSort.INSTANCE);
     }

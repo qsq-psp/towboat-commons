@@ -75,6 +75,9 @@ public class UnsignedSquare implements DimensionCodec {
 
     @Override
     public void decodeN(@NotNull BigInteger in, @NotNull BigInteger[] out) {
+        if (out.length != 2) {
+            throw new UnsupportedOperationException();
+        }
         final BigInteger[] m = in.sqrtAndRemainder();
         if (m[0].compareTo(m[1]) > 0) {
             out[0] = m[0];

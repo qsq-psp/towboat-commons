@@ -1,12 +1,14 @@
 package mujica.json.entity;
 
 import mujica.ds.generic.set.CollectionConstant;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Created on 2026/4/1.
  */
+@CodeHistory(date = "2026/4/1")
 public class UndoKeyJsonHandlerAdapter<H extends JsonHandler> extends JsonHandlerAdapter<H> {
 
     Object key;

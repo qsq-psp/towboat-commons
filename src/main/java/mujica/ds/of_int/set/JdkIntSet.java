@@ -12,6 +12,8 @@ import java.util.function.IntPredicate;
  */
 public class JdkIntSet extends IntSet {
 
+    private static final long serialVersionUID = 0x1EF0AA3683ED4B1DL;
+
     @NotNull
     final Set<Integer> set;
 

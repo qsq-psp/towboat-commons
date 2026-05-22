@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Created on 2026/1/25.
- */
 @CodeHistory(date = "2026/1/25")
 public class SequenceRepeatList<E> extends PeriodicList<E> {
 

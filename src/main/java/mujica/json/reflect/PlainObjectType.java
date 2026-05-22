@@ -73,8 +73,8 @@ class PlainObjectType extends BuiltType {
     void to(@NotNull Setter setter, @Nullable Object self) throws Throwable {
         if (state == CollectionConstant.PRESENT) {
             Object object = value;
-            state = CollectionConstant.UNDEFINED;
             value = null;
+            state = CollectionConstant.UNDEFINED;
             setter.set(self, object);
         } else {
             throw new IllegalStateException();

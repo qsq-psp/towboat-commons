@@ -91,17 +91,8 @@ class JavaArrayType extends BuiltType {
                 throw new NullPointerException();
             }
         } else {
-            try {
-                value = builder.get(1);
-                if (value != null) {
-                    Array.set(value, 0, object);
-                }
-                state = CollectionConstant.PRESENT;
-            } catch (Throwable e) {
-                e.printStackTrace();
-                value = null;
-                throw new ClassCastException(object.getClass() + " to array");
-            }
+            value = object;
+            state = CollectionConstant.PRESENT;
         }
         return this;
     }

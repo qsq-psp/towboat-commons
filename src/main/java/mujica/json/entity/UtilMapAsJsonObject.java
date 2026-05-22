@@ -18,7 +18,7 @@ class UtilMapAsJsonObject<T extends Map<String, Object>> extends JsonObject {
     protected T map;
 
     UtilMapAsJsonObject(@NotNull T map) {
-        super(new ContainerConfig()); // remove
+        super();
         this.map = map;
     }
 

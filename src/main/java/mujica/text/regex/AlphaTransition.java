@@ -1,5 +1,6 @@
 package mujica.text.regex;
 
+import mujica.ds.of_int.set.IntSet;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,9 +12,9 @@ import java.util.function.IntPredicate;
 public class AlphaTransition extends Transition implements IntPredicate {
 
     @NotNull
-    protected final IntPredicate predicate;
+    protected final IntSet predicate;
 
-    public AlphaTransition(int s0, int s1, @NotNull IntPredicate predicate) {
+    public AlphaTransition(int s0, int s1, @NotNull IntSet predicate) {
         super(s0, s1);
         this.predicate = predicate;
     }
@@ -36,6 +37,6 @@ public class AlphaTransition extends Transition implements IntPredicate {
 
     @Override
     public boolean test(int value) {
-        return predicate.test(value);
+        return predicate.contains(value);
     }
 }

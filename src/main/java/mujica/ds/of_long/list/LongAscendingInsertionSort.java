@@ -1,6 +1,6 @@
 package mujica.ds.of_long.list;
 
-import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.SortingAlgorithm;
 import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.IntSlot;
 import mujica.reflect.modifier.CodeHistory;

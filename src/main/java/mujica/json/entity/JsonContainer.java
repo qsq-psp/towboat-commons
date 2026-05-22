@@ -11,21 +11,8 @@ import java.util.Collection;
 @CodeHistory(date = "2025/9/25")
 public abstract class JsonContainer<K> implements Serializable {
 
-    @NotNull
-    protected ContainerConfig config;
-
-    protected JsonContainer(@NotNull ContainerConfig config) {
+    protected JsonContainer() {
         super();
-        this.config = config;
-    }
-
-    @NotNull
-    public ContainerConfig getConfig() {
-        return config;
-    }
-
-    public void setConfig(@NotNull ContainerConfig config) {
-        this.config = config;
     }
 
     @NotNull

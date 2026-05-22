@@ -1,6 +1,6 @@
 package mujica.ds.of_int.list;
 
-import mujica.ds.SortingAlgorithm;
+import mujica.ds.generic.list.SortingAlgorithm;
 import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.reflect.modifier.CodeHistory;
@@ -119,7 +119,7 @@ public abstract class AbstractIntList implements IntList {
         }
 
         @Override
-        public boolean tryAdvance(IntConsumer action) {
+        public boolean tryAdvance(@NotNull IntConsumer action) {
             if (position < limit) {
                 action.accept(getInt(position)); // no check for commodification; simple and fast
                 return true;
@@ -213,9 +213,9 @@ public abstract class AbstractIntList implements IntList {
     @NotNull
     @Override
     public int[] toIntArray() {
-        final int[] array = new int[intLength()];
-        getAll(array, 0);
-        return array;
+        final int[] a = new int[intLength()];
+        getAll(a, 0);
+        return a;
     }
 
     @Override

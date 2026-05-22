@@ -18,24 +18,7 @@ public class MaskedIntListAsBooleanList extends AbstractBooleanList {
     @NotNull
     IntList intList;
 
-    @NotNull
-    public IntList getIntList() {
-        return intList;
-    }
-
-    public void setIntList(@NotNull IntList intList) {
-        this.intList = intList;
-    }
-
     int mask;
-
-    public int getMask() {
-        return mask;
-    }
-
-    public void setMask(int mask) {
-        this.mask = mask;
-    }
 
     public MaskedIntListAsBooleanList(@NotNull IntList intList, int mask) {
         super();
@@ -45,6 +28,29 @@ public class MaskedIntListAsBooleanList extends AbstractBooleanList {
 
     public MaskedIntListAsBooleanList(@NotNull IntList intList) {
         this(intList, 1);
+    }
+
+    @NotNull
+    public IntList getIntList() {
+        return intList;
+    }
+
+    public void setIntList(@NotNull IntList intList) {
+        this.intList = intList;
+    }
+
+    public int getMask() {
+        return mask;
+    }
+
+    public void setMask(int mask) {
+        this.mask = mask;
+    }
+
+    @NotNull
+    @Override
+    public MaskedIntListAsBooleanList duplicate() {
+        return new MaskedIntListAsBooleanList(intList.duplicate(), mask);
     }
 
     @Override

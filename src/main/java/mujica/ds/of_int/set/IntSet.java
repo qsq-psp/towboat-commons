@@ -20,6 +20,8 @@ import java.util.function.IntPredicate;
 @CodeHistory(date = "2025/6/25")
 public abstract class IntSet implements IntCollection {
 
+    private static final long serialVersionUID = 0x2A143B198117AD2FL;
+
     protected IntSet() {
         super();
     }

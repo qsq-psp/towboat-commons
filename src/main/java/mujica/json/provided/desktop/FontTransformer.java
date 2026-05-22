@@ -16,8 +16,6 @@ public class FontTransformer implements JsonContextTransformer<Font>, JsonStruct
 
     public static final FontTransformer INSTANCE = new FontTransformer();
 
-    static final FastString NAME = new FastString("name");
-
     static final FastString POSTSCRIPT_NAME = new FastString("postscriptName");
 
     static final FastString FONT_FACE_NAME = new FastString("fontFaceName");
@@ -38,7 +36,7 @@ public class FontTransformer implements JsonContextTransformer<Font>, JsonStruct
         {
             String name = in.getFontName();
             if (name != null) {
-                out.stringKey(NAME);
+                out.stringKey(DataFlavorTransformer.NAME);
                 out.stringValue(name);
             }
             name = in.getPSName();

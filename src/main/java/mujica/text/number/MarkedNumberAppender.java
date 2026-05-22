@@ -38,40 +38,40 @@ public class MarkedNumberAppender extends DefaultNumberAppender {
     }
 
     @Override
-    public void acceptByte(byte value, @NotNull StringBuilder out) {
-        integralAppender.acceptByte(value, out.append("(byte) "));
+    public void append(byte value, @NotNull StringBuilder out) {
+        integralAppender.append(value, out.append("(byte) "));
     }
 
     @Override
-    public void acceptShort(short value, @NotNull StringBuilder out) {
-        integralAppender.acceptShort(value, out.append("(short) "));
+    public void append(short value, @NotNull StringBuilder out) {
+        integralAppender.append(value, out.append("(short) "));
     }
 
     @Override
-    public void acceptChar(char value, @NotNull StringBuilder out) {
-        integralAppender.acceptChar(value, out.append("(char) "));
+    public void append(char value, @NotNull StringBuilder out) {
+        integralAppender.append(value, out.append("(char) "));
     }
 
     @Override
-    public void acceptLong(long value, @NotNull StringBuilder out) {
-        integralAppender.acceptLong(value, out);
+    public void append(long value, @NotNull StringBuilder out) {
+        integralAppender.append(value, out);
         out.append("L");
     }
 
     @Override
-    public void acceptBig(@NotNull BigInteger value, @NotNull StringBuilder out) {
-        integralAppender.acceptBig(value, out.append("(big) "));
+    public void append(@NotNull BigInteger value, @NotNull StringBuilder out) {
+        integralAppender.append(value, out.append("(big) "));
     }
 
     @Override
-    public void acceptFloat(float value, @NotNull StringBuilder out) {
-        decimalAppender.acceptFloat(value, out);
+    public void append(float value, @NotNull StringBuilder out) {
+        decimalAppender.append(value, out);
         out.append("F");
     }
 
     @Override
-    public void acceptDouble(double value, @NotNull StringBuilder out) {
-        decimalAppender.acceptDouble(value, out);
+    public void append(double value, @NotNull StringBuilder out) {
+        decimalAppender.append(value, out);
         out.append("D");
     }
 }

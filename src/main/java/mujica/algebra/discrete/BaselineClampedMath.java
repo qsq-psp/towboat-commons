@@ -67,34 +67,26 @@ class BaselineClampedMath extends ClampedMath {
         return d;
     }
 
-    private static final BigInteger BIG_MIN_INT = BigInteger.valueOf(Integer.MIN_VALUE);
-
-    private static final BigInteger BIG_MAX_INT = BigInteger.valueOf(Integer.MAX_VALUE);
-
     @Override
     public int multiply(int x, int y) {
         final BigInteger p = BigInteger.valueOf(x).multiply(BigInteger.valueOf(y));
-        if (p.compareTo(BIG_MIN_INT) < 0) {
+        if (p.compareTo(BigConstants.MIN_INT) < 0) {
             return Integer.MIN_VALUE;
         }
-        if (p.compareTo(BIG_MAX_INT) > 0) {
+        if (p.compareTo(BigConstants.MAX_INT) > 0) {
             return Integer.MAX_VALUE;
         }
         return p.intValueExact();
     }
 
-    private static final BigInteger BIG_MIN_LONG = BigInteger.valueOf(Long.MIN_VALUE);
-
-    private static final BigInteger BIG_MAX_LONG = BigInteger.valueOf(Long.MAX_VALUE);
-
     @Override
     public long multiply(long x, long y) {
         final BigInteger p = BigInteger.valueOf(x).multiply(BigInteger.valueOf(y));
-        if (p.compareTo(BIG_MIN_LONG) < 0) {
-            return Integer.MIN_VALUE;
+        if (p.compareTo(BigConstants.MIN_LONG) < 0) {
+            return Long.MIN_VALUE;
         }
-        if (p.compareTo(BIG_MAX_LONG) > 0) {
-            return Integer.MAX_VALUE;
+        if (p.compareTo(BigConstants.MAX_LONG) > 0) {
+            return Long.MAX_VALUE;
         }
         return p.longValueExact();
     }

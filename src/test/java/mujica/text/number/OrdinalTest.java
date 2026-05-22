@@ -7,7 +7,7 @@ import org.junit.Test;
 @CodeHistory(date = "2025/3/1")
 public class OrdinalTest {
 
-    /*
+    //*
     @Test
     public void caseInt() {
         final Ordinal instance = Ordinal.INSTANCE;

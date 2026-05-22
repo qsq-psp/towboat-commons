@@ -12,7 +12,7 @@ class BaselineIntegralMath extends IntegralMath {
     public int abs(int a) {
         a = Math.abs(a);
         if (a < 0) {
-            throw new ArithmeticException("Absolute value overflow");
+            throw new ArithmeticException("absolute value overflow");
         }
         return a;
     }
@@ -21,7 +21,7 @@ class BaselineIntegralMath extends IntegralMath {
     public long abs(long a) {
         a = Math.abs(a);
         if (a < 0L) {
-            throw new ArithmeticException("Absolute value overflow");
+            throw new ArithmeticException("absolute value overflow");
         }
         return a;
     }
@@ -63,10 +63,10 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public int divideExact(int x, int y) {
         if (x % y != 0) {
-            throw new ArithmeticException("Can not divide exact");
+            throw new ArithmeticException("can not divide exact");
         }
         if (y == -1 && x == Integer.MIN_VALUE) {
-            throw new ArithmeticException("Divide int overflow");
+            throw new ArithmeticException("divide int overflow");
         }
         return x / y;
     }
@@ -74,10 +74,10 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public long divideExact(long x, long y) {
         if (x % y != 0L) {
-            throw new ArithmeticException("Can not divide exact");
+            throw new ArithmeticException("can not divide exact");
         }
         if (y == -1L && x == Long.MIN_VALUE) {
-            throw new ArithmeticException("Divide long overflow");
+            throw new ArithmeticException("divide long overflow");
         }
         return x / y;
     }
@@ -121,7 +121,7 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public int factorial(int a) {
         if (a < 0) {
-            throw new ArithmeticException("Factorial negative");
+            throw new ArithmeticException("factorial negative");
         }
         int f = 1;
         while (a > 1) { // multiply from the larger tail so it overflows earlier
@@ -134,7 +134,7 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public long factorial(long a) {
         if (a < 0L) {
-            throw new ArithmeticException("Factorial negative");
+            throw new ArithmeticException("factorial negative");
         }
         long f = 1L;
         while (a > 1L) { // multiply from the larger tail so it overflows earlier
@@ -147,7 +147,7 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public int doubleFactorial(int a) {
         if (a < 0) {
-            throw new ArithmeticException("Double factorial negative");
+            throw new ArithmeticException("double factorial negative");
         }
         int f = 1;
         while (a > 1) { // multiply from the larger tail so it overflows earlier
@@ -160,7 +160,7 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public long doubleFactorial(long a) {
         if (a < 0L) {
-            throw new ArithmeticException("Double factorial negative");
+            throw new ArithmeticException("double factorial negative");
         }
         long f = 1L;
         while (a > 1L) { // multiply from the larger tail so it overflows earlier
@@ -174,7 +174,7 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public BigInteger doubleFactorial(@NotNull BigInteger a) {
         if (a.signum() < 0) {
-            throw new ArithmeticException("Double factorial negative");
+            throw new ArithmeticException("double factorial negative");
         }
         BigInteger product = BigInteger.ONE;
         for (; a.signum() > 0; a = a.subtract(BigInteger.TWO)) {
@@ -186,7 +186,7 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public int fibonacci(int i) {
         if (i < 0) {
-            throw new ArithmeticException("Negative fibonacci");
+            throw new ArithmeticException("fibonacci negative");
         }
         if (i < 2) {
             return i; // F(0) = 0, F(1) = 1
@@ -204,7 +204,7 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public long fibonacci(long i) {
         if (i < 0L) {
-            throw new ArithmeticException("Negative fibonacci");
+            throw new ArithmeticException("fibonacci negative");
         }
         if (i < 2L) {
             return i; // F(0) = 0, F(1) = 1
@@ -224,7 +224,7 @@ class BaselineIntegralMath extends IntegralMath {
     public BigInteger fibonacci(@NotNull BigInteger i) {
         final int ii = i.intValueExact();
         if (ii < 0) {
-            throw new ArithmeticException("Negative fibonacci");
+            throw new ArithmeticException("fibonacci negative");
         }
         if (ii <= 2) {
             if (ii == 0) {
@@ -338,7 +338,7 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public int gcd(int a, int b) {
         if (a <= 0 || b <= 0) {
-            throw new ArithmeticException("non-positive gcd");
+            throw new ArithmeticException("gcd negative");
         }
         return recursiveGcd(a, b);
     }
@@ -353,7 +353,7 @@ class BaselineIntegralMath extends IntegralMath {
     @Override
     public long gcd(long a, long b) {
         if (a <= 0L || b <= 0L) {
-            throw new ArithmeticException("non-positive gcd");
+            throw new ArithmeticException("gcd negative");
         }
         return recursiveGcd(a, b);
     }

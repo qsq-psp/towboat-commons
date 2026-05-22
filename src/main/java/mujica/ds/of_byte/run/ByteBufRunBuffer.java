@@ -85,7 +85,7 @@ public class ByteBufRunBuffer extends RunBuffer implements ByteBufHolder {
         return this;
     }
 
-    @Override
+    @Override // both RunBuffer and ReferenceCounted
     public boolean release() {
         return data.release();
     }

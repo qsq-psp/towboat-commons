@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2026/4/8")
+@Deprecated
 class SlotGetter extends Getter {
 
     @NotNull

@@ -3,9 +3,6 @@ package mujica.ds.of_byte.list;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2026/4/19.
- */
 @CodeHistory(date = "2026/4/19")
 public class SelectByteRangeCenterAsPivot implements BytePivotSelector {
 

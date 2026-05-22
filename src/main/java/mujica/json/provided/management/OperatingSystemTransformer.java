@@ -16,8 +16,6 @@ public class OperatingSystemTransformer implements JsonContextTransformer<Operat
 
     public static final OperatingSystemTransformer INSTANCE = new OperatingSystemTransformer();
 
-    static final FastString NAME = new FastString("name");
-
     @Name(value = "architecture", language = "en")
     @Name(value = "架构", language = "zh")
     static final FastString ARCH = new FastString("arch");
@@ -32,7 +30,7 @@ public class OperatingSystemTransformer implements JsonContextTransformer<Operat
     public void transform(OperatingSystemMXBean in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(NAME);
+            out.stringKey(BufferPoolTransformer.NAME);
             out.stringValue(in.getName());
             out.stringKey(ARCH);
             out.stringValue(in.getArch());

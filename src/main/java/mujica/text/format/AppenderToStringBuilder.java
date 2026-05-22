@@ -4,10 +4,11 @@ import mujica.ds.generic.set.CollectionConstant;
 import mujica.ds.of_char.sequence.TowboatCharSequence;
 import mujica.reflect.modifier.AccessStructure;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.text.number.DecimalAppender;
 import mujica.text.number.DefaultNumberAppender;
 import mujica.text.number.IntegralAppender;
 import mujica.text.number.MarkedNumberAppender;
-import mujica.text.sanitizer.CharSequenceAppender;
+import mujica.ds.of_char.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -451,21 +452,33 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
         @NotNull
         public Config use(@NotNull IntegralAppender appender) throws ReflectiveOperationException {
             MethodHandle method;
-            method = lookup.findVirtual(IntegralAppender.class, "acceptByte", MethodType.methodType(void.class, byte.class, StringBuilder.class)).bindTo(appender);
+            method = lookup.findVirtual(IntegralAppender.class, "append", MethodType.methodType(void.class, byte.class, StringBuilder.class)).bindTo(appender);
             methods.put(Byte.class, method);
             methods.put(byte.class, method);
-            method = lookup.findVirtual(IntegralAppender.class, "acceptShort", MethodType.methodType(void.class, short.class, StringBuilder.class)).bindTo(appender);
+            method = lookup.findVirtual(IntegralAppender.class, "append", MethodType.methodType(void.class, short.class, StringBuilder.class)).bindTo(appender);
             methods.put(Short.class, method);
             methods.put(short.class, method);
-            method = lookup.findVirtual(IntegralAppender.class, "acceptChar", MethodType.methodType(void.class, char.class, StringBuilder.class)).bindTo(appender);
+            method = lookup.findVirtual(IntegralAppender.class, "append", MethodType.methodType(void.class, char.class, StringBuilder.class)).bindTo(appender);
             methods.put(Character.class, method);
             methods.put(char.class, method);
-            method = lookup.findVirtual(IntegralAppender.class, "acceptInt", MethodType.methodType(void.class, int.class, StringBuilder.class)).bindTo(appender);
+            method = lookup.findVirtual(IntegralAppender.class, "append", MethodType.methodType(void.class, int.class, StringBuilder.class)).bindTo(appender);
             methods.put(Integer.class, method);
             methods.put(int.class, method);
-            method = lookup.findVirtual(IntegralAppender.class, "acceptLong", MethodType.methodType(void.class, long.class, StringBuilder.class)).bindTo(appender);
+            method = lookup.findVirtual(IntegralAppender.class, "append", MethodType.methodType(void.class, long.class, StringBuilder.class)).bindTo(appender);
             methods.put(Long.class, method);
             methods.put(long.class, method);
+            return this;
+        }
+
+        @NotNull
+        public Config use(@NotNull DecimalAppender appender) throws ReflectiveOperationException {
+            MethodHandle method;
+            method = lookup.findVirtual(DecimalAppender.class, "append", MethodType.methodType(void.class, float.class, StringBuilder.class)).bindTo(appender);
+            methods.put(Float.class, method);
+            methods.put(float.class, method);
+            method = lookup.findVirtual(DecimalAppender.class, "append", MethodType.methodType(void.class, double.class, StringBuilder.class)).bindTo(appender);
+            methods.put(Double.class, method);
+            methods.put(double.class, method);
             return this;
         }
 
@@ -583,7 +596,7 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
             try {
                 AppenderToStringBuilder instance = new AppenderToStringBuilder();
                 instance.config().use(instance.newArrayStyle().setLeft("{").setRight("}").setEmpty("{ }"), Object.class)
-                        .use(MarkedNumberAppender.INSTANCE)
+                        .use((IntegralAppender) MarkedNumberAppender.INSTANCE)
                         .use(CharSequenceAppender.Java.AUTO);
                 return instance;
             } catch (ReflectiveOperationException e) {

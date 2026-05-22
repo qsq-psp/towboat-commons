@@ -152,7 +152,7 @@ public class ObjectMapInflateInputStream extends ResidueInflateInputStream {
                         } else {
                             length = Math.min(length, remainingLength);
                             length = in.read(array, offset, length);
-                            if (length == -1) {
+                            if (length <= 0) {
                                 throw new EOFException();
                             }
                             remainingLength -= length;

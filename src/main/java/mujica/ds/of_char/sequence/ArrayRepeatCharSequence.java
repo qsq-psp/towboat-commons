@@ -3,9 +3,6 @@ package mujica.ds.of_char.sequence;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2026/3/15.
- */
 @CodeHistory(date = "2026/3/15")
 public class ArrayRepeatCharSequence extends TowboatCharSequence {
 

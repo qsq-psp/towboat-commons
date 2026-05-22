@@ -1,6 +1,7 @@
 package mujica.json.reflect;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,6 +9,7 @@ import java.lang.invoke.MethodHandles;
 
 @CodeHistory(date = "2022/6/5", project = "Ultramarine")
 @CodeHistory(date = "2025/11/14")
+@DirectSubclass({ClassicalFieldSetter.class, ClassicalMethodSetter.class, MethodHandleSetter.class})
 class Setter {
 
     static final Setter NOP = new Setter();

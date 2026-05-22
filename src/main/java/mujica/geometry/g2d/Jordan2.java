@@ -4,6 +4,7 @@ import mujica.algebra.random.RandomContext;
 import mujica.geometry.Geometry;
 import mujica.geometry.GeometryOperationResult;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,7 @@ import java.util.function.Predicate;
 @CodeHistory(date = "2020/7/20", project = "coo", name = "RestrictionArea")
 @CodeHistory(date = "2022/6/5", project = "Ultramarine")
 @CodeHistory(date = "2025/3/2")
+@DirectSubclass({Bound.class, Line.class, HalfPlane.class, Triangle.class, OriginJordan2.class})
 public class Jordan2 extends Geometry implements Predicate<Point> {
 
     private static final long serialVersionUID = 0x727888394fd493bbL;

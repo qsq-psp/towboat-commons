@@ -24,14 +24,10 @@ public abstract class AbstractBooleanList implements BooleanList {
 
     @NotNull
     @Override
-    public AbstractBooleanList duplicate() {
-        throw new UnsupportedOperationException();
-    }
+    public abstract AbstractBooleanList duplicate();
 
     @Override
-    public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
-        // pass; always healthy
-    }
+    public abstract void checkHealth(@NotNull Consumer<RuntimeException> consumer);
 
     @Override
     public abstract int booleanLength();

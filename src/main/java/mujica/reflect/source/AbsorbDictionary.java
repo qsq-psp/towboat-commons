@@ -120,7 +120,7 @@ public final class AbsorbDictionary extends DefaultHandler implements IORunnable
         final ArrayList<String> wordList = new ArrayList<>(wordSet);
         wordList.sort(null);
         final SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-        factory.setAttribute("indent-number", 4);
+        factory.setAttribute("indent-number", 2);
         final TransformerHandler handler = factory.newTransformerHandler();
         handler.getTransformer().setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         handler.getTransformer().setOutputProperty(OutputKeys.ENCODING, "utf-8");

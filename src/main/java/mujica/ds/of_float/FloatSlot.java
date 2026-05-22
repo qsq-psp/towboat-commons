@@ -24,4 +24,52 @@ public interface FloatSlot {
     default void setFloat(@NotNull FloatSupplier newValueSupplier) {
         setFloat(newValueSupplier.getAsFloat());
     }
+
+    default float updateFloat(float newValue) {
+        final float oldValue = getFloat();
+        setFloat(newValue);
+        return oldValue;
+    }
+
+    default float updateFloat(@NotNull FloatSlot newValueSlot) {
+        return updateFloat(newValueSlot.getFloat());
+    }
+
+    default float updateFloat(@NotNull Number newNumberValue) {
+        return updateFloat(newNumberValue.floatValue());
+    }
+
+    default float updateFloat(@NotNull FloatSupplier newValueSupplier) {
+        return updateFloat(newValueSupplier.getAsFloat());
+    }
+
+    static void exchangeFloat(@NotNull FloatSlot a, @NotNull FloatSlot b) {
+        a.setFloat(b.updateFloat(a.getFloat()));
+    }
+
+    @NotNull
+    default FloatSlot boxFloat(float newValue) {
+        setFloat(newValue);
+        return this;
+    }
+
+    @NotNull
+    default FloatSlot boxFloat(@NotNull FloatSlot newValueSlot) {
+        return boxFloat(newValueSlot.getFloat());
+    }
+
+    @NotNull
+    default FloatSlot boxFloat(@NotNull Number newNumberValue) {
+        return boxFloat(newNumberValue.floatValue());
+    }
+
+    @NotNull
+    default FloatSlot boxFloat(@NotNull FloatSupplier newValueSupplier) {
+        return boxFloat(newValueSupplier.getAsFloat());
+    }
+
+    @NotNull
+    default FloatSlot swapFloat(@NotNull FloatSlot that) {
+        return boxFloat(that.updateFloat(getFloat()));
+    }
 }
