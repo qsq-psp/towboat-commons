@@ -1,7 +1,7 @@
 package mujica.json.reflect;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonHint;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.ds.of_char.sanitizer.CharSequenceAppender;

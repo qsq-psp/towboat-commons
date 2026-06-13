@@ -1,8 +1,8 @@
 package mujica.json.reflect;
 
 import mujica.ds.generic.set.CollectionConstant;
-import mujica.json.entity.FastNumber;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastNumber;
+import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;
 import mujica.json.modifier.JsonHint;
 import mujica.json.modifier.MaxStringLength;

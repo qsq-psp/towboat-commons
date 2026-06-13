@@ -1,6 +1,7 @@
 package mujica.ds.of_char.sanitizer;
 
 import io.netty.buffer.ByteBuf;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintStream;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * Created on 2026/5/4.
  */
+@CodeHistory(date = "2026/5/4")
 public class NormalizeAppender extends CharSequenceAppender {
 
     @NotNull

@@ -1,9 +1,9 @@
 package mujica.io.compress;
 
-import mujica.ds.of_byte.run.CyclicArrayRunBuffer;
+import mujica.ds.i8.run.CyclicArrayRunBuffer;
 import mujica.io.stream.BufferedLimitedUniversalDataInputStream;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.number.HexEncoder;
+import mujica.ds.of_char.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.runner.Description;

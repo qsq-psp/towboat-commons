@@ -2,6 +2,7 @@ package mujica.ds.of_long.list;
 
 import mujica.ds.generic.list.SortingAlgorithm;
 import mujica.ds.generic.list.MonotonicityDirection;
+import mujica.ds.of_int.list.PublicIntList;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import mujica.reflect.modifier.ReferencePage;
@@ -15,22 +16,26 @@ import java.lang.ref.SoftReference;
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
 public class LongAscendingMergeSort extends SortingAlgorithm<long[]> {
 
-    private transient SoftReference<long[]> reference;
+    private transient long[] shared;
+
+    public LongAscendingMergeSort(boolean hasShared) {
+        super();
+        if (hasShared) {
+            shared = new long[0]; // PublicLongList.EMPTY.array;
+        }
+    }
 
     @NotNull
-    public long[] getTempArray(int minLength) {
-        {
-            SoftReference<long[]> reference = this.reference;
-            if (reference != null) {
-                long[] referent = reference.get();
-                if (referent != null && minLength <= referent.length) {
-                    return referent;
-                }
+    private long[] getShared(int minLength) {
+        long[] array = shared;
+        if (array != null) {
+            if (array.length < minLength) {
+                array = new long[minLength];
+                shared = array;
             }
+            return array;
         }
-        final long[] array = new long[minLength];
-        this.reference = new SoftReference<>(array);
-        return array;
+        return new long[minLength];
     }
 
     @NotNull
@@ -45,12 +50,17 @@ public class LongAscendingMergeSort extends SortingAlgorithm<long[]> {
     }
 
     @Override
+    public boolean returnsReverseOrderNumber() {
+        return true;
+    }
+
+    @Override
     public long sort(@NotNull long[] target, int startIndex, int endIndex) {
         final int length = endIndex - startIndex;
         if (length < 2) {
             return 0L;
         }
-        return apply(target, startIndex, getTempArray(length), 0, length);
+        return apply(target, startIndex, getShared(length), 0, length);
     }
 
     private long apply(@NotNull long[] target, @Index(of = "target") int targetOffset,

@@ -1,9 +1,9 @@
 package mujica.json.provided;
 
-import mujica.ds.of_boolean.PublicBooleanSlot;
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
-import mujica.json.entity.JsonStructure;
+import mujica.ds.bit.PublicBitSlot;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
+import mujica.json.handler.JsonStructure;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.Name;
@@ -34,15 +34,15 @@ public class ProcessHandleTransformer implements JsonContextTransformer<ProcessH
     static final FastString ALIVE = new FastString("alive");
 
     private static <T> void streamForEach(@NotNull Stream<T> stream, @NotNull Runnable before, @NotNull Consumer<T> consumer, @NotNull Runnable after) {
-        final PublicBooleanSlot notEmpty = new PublicBooleanSlot(false);
+        final PublicBitSlot notEmpty = new PublicBitSlot(false);
         stream.forEach(item -> {
-            if (!notEmpty.getBoolean()) {
-                notEmpty.setBoolean(true);
+            if (!notEmpty.getBit()) {
+                notEmpty.setBit(true);
                 before.run();
             }
             consumer.accept(item);
         });
-        if (notEmpty.getBoolean()) {
+        if (notEmpty.getBit()) {
             after.run();
         }
     }

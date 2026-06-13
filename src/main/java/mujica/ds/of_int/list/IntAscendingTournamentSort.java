@@ -12,21 +12,26 @@ import java.util.Arrays;
 @ReferencePage(title = "锦标赛排序", href = "https://oi-wiki.org/basic/tournament-sort/")
 public class IntAscendingTournamentSort extends SortingAlgorithm<int[]> {
 
-    @NotNull
-    private transient int[] auxiliary = PublicIntList.EMPTY.array;
+    private transient int[] shared;
 
-    public IntAscendingTournamentSort() {
+    public IntAscendingTournamentSort(boolean hasShared) {
         super();
+        if (hasShared) {
+            shared = PublicIntList.EMPTY.array;
+        }
     }
 
     @NotNull
-    private int[] getAuxiliary(int minLength) {
-        int[] auxiliary = this.auxiliary;
-        if (auxiliary.length < minLength) {
-            auxiliary = new int[minLength];
-            this.auxiliary = auxiliary;
+    private int[] getShared(int minLength) {
+        int[] array = this.shared;
+        if (array != null) {
+            if (array.length < minLength) {
+                array = new int[minLength];
+                this.shared = array;
+            }
+            return array;
         }
-        return auxiliary;
+        return new int[minLength];
     }
 
     @NotNull
@@ -52,7 +57,7 @@ public class IntAscendingTournamentSort extends SortingAlgorithm<int[]> {
         final int height = Integer.SIZE - Integer.numberOfLeadingZeros(length);
         final int offset = 1 << height;
         final int doubleOffset = offset << 1;
-        final int[] arena = getAuxiliary(doubleOffset);
+        final int[] arena = getShared(doubleOffset);
         Arrays.fill(arena, 0, doubleOffset, Integer.MAX_VALUE);
         System.arraycopy(target, startIndex, arena, offset, length);
         for (int leafIndex = offset + length; leafIndex >= offset; leafIndex--) {

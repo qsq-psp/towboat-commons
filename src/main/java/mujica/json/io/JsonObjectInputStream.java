@@ -1,15 +1,15 @@
 package mujica.json.io;
 
 import mujica.algebra.discrete.BigConstants;
-import mujica.ds.of_boolean.list.CopyOnResizeBooleanList;
+import mujica.ds.bit.list.CopyOnResizeBooleanList;
 import mujica.ds.of_int.list.CopyOnResizeIntList;
 import mujica.ds.of_int.list.PublicIntList;
 import mujica.io.codec.Base16Case;
 import mujica.io.codec.UTF8PushPullDecoder;
 import mujica.io.stream.OneBufferDataInputStream;
-import mujica.json.entity.FastNumber;
-import mujica.json.entity.JsonHandler;
-import mujica.json.entity.TypePreference;
+import mujica.json.container.FastNumber;
+import mujica.json.handler.JsonHandler;
+import mujica.json.handler.TypePreference;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
@@ -331,7 +331,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
                 readJsonArray(jh);
                 break;
             default:
-                throw new IOException("unrecognized " + octet);
+                throw new IOException("unrecognized octet " + octet);
         }
     }
 

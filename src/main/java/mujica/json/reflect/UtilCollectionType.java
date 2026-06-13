@@ -1,7 +1,7 @@
 package mujica.json.reflect;
 
 import mujica.ds.generic.set.CollectionConstant;
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;
 import mujica.json.modifier.JsonHint;
 import mujica.reflect.basic.TypeUtil;
@@ -21,7 +21,7 @@ class UtilCollectionType extends BuiltType {
     private static final long serialVersionUID = 0x570001dbf06183f0L;
 
     @NotNull
-    JsonType componentType = JsonType.NOP;
+    JsonType componentType = AnyType.ANY;
 
     transient Iterable<?> value;
 
@@ -63,6 +63,9 @@ class UtilCollectionType extends BuiltType {
             } else {
                 throw new NullPointerException();
             }
+        } else if (object instanceof Iterable) {
+            value = (Iterable<?>) object;
+            state = CollectionConstant.PRESENT;
         } else {
             throw new ClassCastException(object.getClass() + " to collection");
         }

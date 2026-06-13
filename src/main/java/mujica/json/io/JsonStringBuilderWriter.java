@@ -1,10 +1,11 @@
 package mujica.json.io;
 
 import io.netty.buffer.ByteBuf;
-import mujica.json.entity.FastNumber;
-import mujica.json.entity.FastString;
+import mujica.json.container.FastNumber;
+import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.ds.of_char.sanitizer.CharSequenceAppender;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -14,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "SimpleJsonStringWriter")
 @CodeHistory(date = "2026/1/6", name = "StringBuilderJsonWriter")
 @CodeHistory(date = "2026/3/22")
+@DirectSubclass({JsonIndentStringBuilderWriter.class})
 public class JsonStringBuilderWriter extends JsonStringWriter {
 
     @NotNull

@@ -1,7 +1,7 @@
 package mujica.json.provided.management;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public class GarbageCollectorTransformer implements JsonContextTransformer<Garba
     static final FastString TIME = new FastString("time");
 
     @Override
-    public void transform(GarbageCollectorMXBean in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull GarbageCollectorMXBean in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
             out.stringKey(BufferPoolTransformer.NAME);

@@ -23,7 +23,7 @@ public final class JavaP {
     private static final Logger LOGGER = LoggerFactory.getLogger(JavaP.class);
 
     private static final String[][] LINKS = {
-            {"D:\\Java\\CDP\\target\\classes", "D:\\Java\\CDP\\target\\javap"},
+            {"D:\\Java\\CRYCHIC\\target\\classes", "D:\\Java\\CRYCHIC\\target\\javap"},
             {"D:\\Java\\coo\\out\\production", "D:\\Download\\GradleHome\\javap"},
             {"D:\\Java\\Ultramarine\\Platform\\target\\classes", "D:\\Java\\Ultramarine\\Platform\\target\\javap"}
     };

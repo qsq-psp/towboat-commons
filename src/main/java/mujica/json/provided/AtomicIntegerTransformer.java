@@ -1,6 +1,6 @@
 package mujica.json.provided;
 
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;

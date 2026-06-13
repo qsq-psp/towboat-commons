@@ -1,6 +1,6 @@
 package mujica.json.provided.desktop;
 
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import org.jetbrains.annotations.NotNull;
@@ -167,7 +167,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_INTERPOLATION);
-            out.stringKey("fractionalMetrics");
+            out.stringKey("interpolation");
             if (value == RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR) {
                 out.stringValue("nearestNeighbor");
             } else if (value == RenderingHints.VALUE_INTERPOLATION_BILINEAR) {

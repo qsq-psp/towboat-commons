@@ -1,7 +1,7 @@
 package mujica.reflect.source;
 
-import mujica.ds.of_boolean.list.BooleanList;
-import mujica.ds.of_boolean.list.CopyOnResizeBooleanList;
+import mujica.ds.bit.list.BooleanList;
+import mujica.ds.bit.list.CopyOnResizeBooleanList;
 import mujica.reflect.modifier.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,9 +27,17 @@ public final class Distribute implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(Distribute.class);
 
     public static void main(String[] args) {
-        (new Distribute("D:\\Java\\CRYCHIC\\src", "D:\\Java\\MyGO\\src")).run();
-        (new Distribute("D:\\Java\\MyGO\\src", "D:\\Java\\Mujica\\src")).run();
-        (new Distribute("D:\\Java\\Mujica\\src", "D:\\Java\\AveMujica\\src")).run();
+        (new Distribute("D:\\Java\\CRYCHIC\\src", "D:\\Java\\MyGO\\src"))
+                .includeDst("main\\java\\mujica\\math")
+                .run();
+        (new Distribute("D:\\Java\\MyGO\\src", "D:\\Java\\Mujica\\src"))
+                .excludeSrc("main\\java\\mujica\\geometry")
+                .excludeSrc("test\\java\\mujica\\geometry")
+                .run();
+        (new Distribute("D:\\Java\\Mujica\\src\\main", "D:\\Java\\AveMujica\\src\\main"))
+                .excludeSrc("java\\json\\provided\\desktop")
+                .excludeSrc("java\\json\\provided\\xml")
+                .run();
     }
 
     @NotNull
@@ -51,14 +59,22 @@ public final class Distribute implements Runnable {
     }
 
     @NotNull
-    Distribute excludeSrc(@NotNull String path) {
-        excludedSrc.add(Path.of(path));
+    Distribute excludeSrc(@NotNull String pathString) {
+        Path path = Path.of(pathString);
+        if (!path.isAbsolute()) {
+            path = srcRoot.resolve(path);
+        }
+        excludedSrc.add(path);
         return this;
     }
 
     @NotNull
-    Distribute includeDst(@NotNull String path) {
-        includedDst.add(Path.of(path));
+    Distribute includeDst(@NotNull String pathString) {
+        Path path = Path.of(pathString);
+        if (!path.isAbsolute()) {
+            path = dstRoot.resolve(path);
+        }
+        includedDst.add(path);
         return this;
     }
 
@@ -92,6 +108,9 @@ public final class Distribute implements Runnable {
 
         @Override
         public FileVisitResult preVisitDirectory(Path src, BasicFileAttributes attrs) throws IOException {
+            if (excludedSrc.contains(src)) {
+                return FileVisitResult.SKIP_SUBTREE;
+            }
             final Path dst = dstRoot.resolve(srcRoot.relativize(src));
             if (Files.exists(dst)) {
                 if (!Files.isDirectory(dst)) {

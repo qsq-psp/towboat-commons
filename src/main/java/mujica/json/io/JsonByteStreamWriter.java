@@ -3,8 +3,8 @@ package mujica.json.io;
 import io.netty.buffer.ByteBuf;
 import mujica.io.codec.Base16Case;
 import mujica.io.codec.UTF8PushPullEncoder;
-import mujica.json.entity.FastNumber;
-import mujica.json.entity.FastString;
+import mujica.json.container.FastNumber;
+import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

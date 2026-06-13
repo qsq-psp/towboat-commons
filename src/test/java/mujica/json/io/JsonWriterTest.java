@@ -1,7 +1,7 @@
 package mujica.json.io;
 
-import mujica.json.entity.JsonHandler;
-import mujica.json.entity.JsonStructure;
+import mujica.json.handler.JsonHandler;
+import mujica.json.handler.JsonStructure;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
@@ -13,14 +13,12 @@ public class JsonWriterTest {
     private void caseFlags(@NotNull JsonStructure in, @NotNull String out, int flags) {
         {
             JsonStringBuilderWriter writer = new JsonStringBuilderWriter();
-            writer.setFlags(flags);
-            in.json(writer);
+            in.json(writer.setFlags(flags));
             Assert.assertEquals(out, writer.getString());
         }
         {
             JsonStringBufferWriter writer = new JsonStringBufferWriter();
-            writer.setFlags(flags);
-            in.json(writer);
+            in.json(writer.setFlags(flags));
             Assert.assertEquals(out, writer.getString());
         }
     }

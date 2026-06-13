@@ -4,10 +4,12 @@ import mujica.ds.generic.list.SortingAlgorithm;
 import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.IntSlot;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/3/16", name = "BubbleSort")
 @CodeHistory(date = "2025/10/28")
+@Name(value = "冒泡排序", language = "zh")
 public class LongAscendingBubbleSort extends SortingAlgorithm<long[]> {
 
     public static final LongAscendingBubbleSort INSTANCE = new LongAscendingBubbleSort();

@@ -1,8 +1,8 @@
 package mujica.io.codec;
 
-import mujica.ds.of_byte.view.ByteFillPolicy;
-import mujica.ds.of_byte.view.DataView;
-import mujica.ds.of_byte.view.LongDataView;
+import mujica.ds.i8.view.ByteFillPolicy;
+import mujica.ds.i8.view.DataView;
+import mujica.ds.i8.view.LongDataView;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterOutputStream;

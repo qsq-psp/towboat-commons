@@ -1,6 +1,6 @@
 package mujica.ds.generic.list;
 
-import mujica.ds.of_double.list.NotANumberSortingPolicy;
+import mujica.ds.f64.list.NotANumberSortingPolicy;
 import mujica.ds.of_int.IntSlot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;

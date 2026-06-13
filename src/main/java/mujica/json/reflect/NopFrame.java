@@ -1,10 +1,10 @@
 package mujica.json.reflect;
 
 import mujica.ds.generic.set.CollectionConstant;
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.AppenderToStringBuilder;
+import mujica.ds.of_char.format.AppenderToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ class NopFrame extends JsonHandler { // frames are short-lived small objects
 
     @CodeHistory(date = "2026/4/1", name = "StructureType")
     @CodeHistory(date = "2026/4/9")
-    public enum StructureShape {
+    enum StructureShape {
 
         ARRAY, OBJECT;
 

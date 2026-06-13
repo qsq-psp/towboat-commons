@@ -1,6 +1,6 @@
 package mujica.ds;
 
-import mujica.ds.of_boolean.PublicBooleanSlot;
+import mujica.ds.bit.PublicBitSlot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferenceCode;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ public interface HealthAware {
     }
 
     default boolean isHealthy() {
-        final PublicBooleanSlot slot = new PublicBooleanSlot();
+        final PublicBitSlot slot = new PublicBitSlot();
         checkHealth(re -> slot.value = false);
         return slot.value;
     }

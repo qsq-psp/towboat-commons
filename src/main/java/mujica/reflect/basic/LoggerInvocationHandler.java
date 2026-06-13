@@ -1,7 +1,7 @@
 package mujica.reflect.basic;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.format.AppenderToStringBuilder;
+import mujica.ds.of_char.format.AppenderToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 

@@ -4,6 +4,7 @@ import mujica.ds.generic.list.SortingAlgorithm;
 import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.IntCollection;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +21,7 @@ import java.util.function.IntPredicate;
 @CodeHistory(date = "2024/1/17", project = "Ultramarine", name = "IntArray")
 @CodeHistory(date = "2025/3/12", name = "IntArray")
 @CodeHistory(date = "2025/5/30")
+@DirectSubclass({AbstractIntList.class})
 public interface IntList extends IntCollection, IntSequence {
 
     @Override

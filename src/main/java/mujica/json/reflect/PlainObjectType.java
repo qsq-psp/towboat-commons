@@ -1,7 +1,7 @@
 package mujica.json.reflect;
 
 import mujica.ds.generic.set.CollectionConstant;
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;
 import mujica.json.modifier.JsonHint;
 import mujica.reflect.modifier.CodeHistory;
@@ -58,7 +58,11 @@ class PlainObjectType extends BuiltType {
             bottom.context.getLogger().warn("null plain object");
             return new NopFrame(bottom);
         }
-        return new PlainObjectFrame(bottom, this, self);
+        if ((flags & JsonHint.STRICT_ORDER) != 0L) {
+            return new StrictOrderObjectFrame(bottom, this, self);
+        } else {
+            return new PlainObjectFrame(bottom, this, self);
+        }
     }
 
     @NotNull
@@ -93,7 +97,7 @@ class PlainObjectType extends BuiltType {
                     out.emptyObjectValue();
                 } else {
                     out.openObject();
-                    if ((flags & JsonHint.RANDOM_ORDER) != 0L) {
+                    if ((flags & (JsonHint.STRICT_ORDER | JsonHint.RANDOM_ORDER)) == JsonHint.RANDOM_ORDER) {
                         fields = context.randomContext.copyAndShuffleList(fields);
                     }
                     for (PlainObjectField field : fields) {

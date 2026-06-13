@@ -1,7 +1,6 @@
 package mujica.json.provided.desktop;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +15,7 @@ public class DisplayModeTransformer implements JsonContextTransformer<DisplayMod
     public static final DisplayModeTransformer INSTANCE = new DisplayModeTransformer();
 
     @Override
-    public void transform(DisplayMode in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull DisplayMode in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
             out.stringKey(RectangleTransformer.WIDTH);

@@ -2,11 +2,8 @@ package mujica.algebra.random;
 
 import mujica.reflect.modifier.CodeHistory;
 
-/**
- * The base class generates free surrogate (paired or not paired)
- */
 @CodeHistory(date = "2025/3/10")
-public class FuzzyStringContext extends FuzzyContext {
+public class FuzzyStringContext extends FuzzyContext { // the base class generates free surrogate (paired or not paired)
 
     private static final long serialVersionUID = 0x635da2c808503d0eL;
 

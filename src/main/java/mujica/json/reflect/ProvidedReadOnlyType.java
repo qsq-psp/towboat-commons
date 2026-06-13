@@ -1,12 +1,13 @@
 package mujica.json.reflect;
 
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 
 @CodeHistory(date = "2026/4/6")
 class ProvidedReadOnlyType extends JsonType {
@@ -40,7 +41,7 @@ class ProvidedReadOnlyType extends JsonType {
             } catch (NoSuchFieldException e) {
                 instance = (JsonContextTransformer<?>) clazz.getConstructor().newInstance();
             }
-            transformer = context.getJsonTransform().bind(instance);
+            transformer = context.getJsonTransform().bind(Objects.requireNonNull(instance));
             this.transformer = transformer;
         }
         return transformer;
@@ -53,5 +54,10 @@ class ProvidedReadOnlyType extends JsonType {
         } catch (Throwable e) {
             context.getLogger().error("", e);
         }
+    }
+
+    @NotNull
+    public String toString() {
+        return "Provided[" + transformerName + "]";
     }
 }

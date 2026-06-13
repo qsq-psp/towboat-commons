@@ -1,9 +1,9 @@
 package mujica.json.reflect;
 
 import mujica.ds.generic.set.CollectionConstant;
-import mujica.json.entity.FastNumber;
-import mujica.json.entity.JsonHandler;
-import mujica.json.entity.TypePreference;
+import mujica.json.container.FastNumber;
+import mujica.json.handler.JsonHandler;
+import mujica.json.handler.TypePreference;
 import mujica.json.modifier.JsonHint;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;

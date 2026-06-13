@@ -1,9 +1,11 @@
 package mujica.ds.of_int.list;
 
+import mujica.algebra.discrete.Bit32CombinationList;
 import mujica.ds.generic.list.SortingAlgorithm;
 import mujica.ds.generic.list.MonotonicityDirection;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +13,12 @@ import java.util.*;
 import java.util.function.*;
 
 @CodeHistory(date = "2025/5/30")
+@DirectSubclass({
+        SimpleIntList.class, PublicIntList.class, PrivateIntList.class,
+        NaturalIntList.class, QuadraticProbingList.class, ResizePolicy.class,
+        CopyOnWriteIntList.class, CopyOnResizeIntList.class,
+        Bit32CombinationList.class
+})
 public abstract class AbstractIntList implements IntList {
 
     private static final long serialVersionUID = 0x26e6669ce2dcb8f6L;

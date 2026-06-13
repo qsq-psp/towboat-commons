@@ -41,6 +41,7 @@ public class IntSortingAlgorithmTest {
     public void checkAscending() {
         checkAscending(IntAscendingBubbleSort.INSTANCE);
         checkAscending(new IntAscendingBucketSort(IntAscendingSelectionSort.INSTANCE, 10, 20, 25));
+        checkAscending(new IntAscendingCountSort(true));
         checkAscending(IntAscendingHeapSort.INSTANCE);
         checkAscending(IntAscendingInsertionSort.INSTANCE);
         checkAscending(new IntAscendingMergeSort(true));
@@ -50,7 +51,7 @@ public class IntSortingAlgorithmTest {
         checkAscending(new IntAscendingQuickSort(new SelectRandomIntAsPivot(fc)));
         checkAscending(new IntAscendingRadixSort(10));
         checkAscending(IntAscendingSelectionSort.INSTANCE);
-        checkAscending(new IntAscendingTournamentSort());
+        checkAscending(new IntAscendingTournamentSort(true));
     }
 
     private void checkAscendingPart(@NotNull SortingAlgorithm<int[]> algorithm) {
@@ -72,7 +73,7 @@ public class IntSortingAlgorithmTest {
         checkAscendingPart(IntAscendingHeapSort.INSTANCE);
         checkAscendingPart(new IntAscendingMergeSort(true));
         checkAscendingPart(IntAscendingSelectionSort.INSTANCE);
-        checkAscendingPart(new IntAscendingTournamentSort());
+        checkAscendingPart(new IntAscendingTournamentSort(true));
     }
 
     private void checkDescending(@NotNull SortingAlgorithm<int[]> algorithm) {
@@ -90,6 +91,8 @@ public class IntSortingAlgorithmTest {
     @Test
     public void checkDescending() {
         checkDescending(IntDescendingBubbleSort.INSTANCE);
+        checkDescending(new IntDescendingBucketSort(IntDescendingSelectionSort.INSTANCE, 10, 20, 25));
+        checkDescending(new IntDescendingCountSort(true));
         checkDescending(IntDescendingHeapSort.INSTANCE);
         checkDescending(IntDescendingInsertionSort.INSTANCE);
         checkDescending(new IntDescendingMergeSort(true));
@@ -99,7 +102,7 @@ public class IntSortingAlgorithmTest {
         checkDescending(new IntDescendingQuickSort(new SelectRandomIntAsPivot(fc)));
         checkDescending(new IntDescendingRadixSort(10));
         checkDescending(IntDescendingSelectionSort.INSTANCE);
-        checkDescending(new IntDescendingTournamentSort());
+        checkDescending(new IntDescendingTournamentSort(true));
     }
 
     private void checkDescendingPart(@NotNull SortingAlgorithm<int[]> algorithm) {
@@ -121,7 +124,7 @@ public class IntSortingAlgorithmTest {
         checkDescendingPart(IntDescendingHeapSort.INSTANCE);
         checkDescendingPart(new IntDescendingMergeSort(true));
         checkDescendingPart(IntDescendingSelectionSort.INSTANCE);
-        checkDescendingPart(new IntDescendingTournamentSort());
+        checkDescendingPart(new IntDescendingTournamentSort(true));
     }
 
     private void fuzzAscending(@NotNull SortingAlgorithm<int[]> algorithm) {
@@ -141,6 +144,7 @@ public class IntSortingAlgorithmTest {
     public void fuzzAscending() {
         fuzzAscending(IntAscendingBubbleSort.INSTANCE);
         fuzzAscending(new IntAscendingBucketSort(IntAscendingSelectionSort.INSTANCE, Integer.MIN_VALUE, 0x10000000, 0x10));
+        fuzzAscending(new IntAscendingCountSort(true));
         fuzzAscending(IntAscendingHeapSort.INSTANCE);
         fuzzAscending(IntAscendingInsertionSort.INSTANCE);
         fuzzAscending(new IntAscendingMergeSort(true));
@@ -150,7 +154,7 @@ public class IntSortingAlgorithmTest {
         fuzzAscending(new IntAscendingQuickSort(new SelectRandomIntAsPivot(fc)));
         fuzzAscending(new IntAscendingRadixSort(10));
         fuzzAscending(IntAscendingSelectionSort.INSTANCE);
-        fuzzAscending(new IntAscendingTournamentSort());
+        fuzzAscending(new IntAscendingTournamentSort(true));
     }
 
     private void fuzzAscendingUnique(@NotNull SortingAlgorithm<int[]> algorithm) {
@@ -182,6 +186,7 @@ public class IntSortingAlgorithmTest {
     @Test
     public void fuzzAscendingUnique() {
         fuzzAscendingUnique(IntAscendingBubbleSort.INSTANCE);
+        fuzzAscendingUnique(new IntAscendingCountSort(true));
         fuzzAscendingUnique(IntAscendingHeapSort.INSTANCE);
         fuzzAscendingUnique(IntAscendingInsertionSort.INSTANCE);
         fuzzAscendingUnique(new IntAscendingMergeSort(true));
@@ -211,6 +216,8 @@ public class IntSortingAlgorithmTest {
     @Test
     public void fuzzDescending() {
         fuzzDescending(IntDescendingBubbleSort.INSTANCE);
+        fuzzDescending(new IntDescendingBucketSort(IntDescendingSelectionSort.INSTANCE, Integer.MIN_VALUE, 0x10000000, 0x10));
+        fuzzDescending(new IntDescendingCountSort(true));
         fuzzDescending(IntDescendingHeapSort.INSTANCE);
         fuzzDescending(IntDescendingInsertionSort.INSTANCE);
         fuzzDescending(new IntDescendingMergeSort(true));
@@ -220,7 +227,7 @@ public class IntSortingAlgorithmTest {
         fuzzDescending(new IntDescendingQuickSort(new SelectRandomIntAsPivot(fc)));
         fuzzDescending(new IntDescendingRadixSort(10));
         fuzzDescending(IntDescendingSelectionSort.INSTANCE);
-        fuzzDescending(new IntDescendingTournamentSort());
+        fuzzDescending(new IntDescendingTournamentSort(true));
     }
 
     private void fuzzDescendingUnique(@NotNull SortingAlgorithm<int[]> algorithm) {
@@ -252,6 +259,7 @@ public class IntSortingAlgorithmTest {
     @Test
     public void fuzzDescendingUnique() {
         fuzzDescendingUnique(IntDescendingBubbleSort.INSTANCE);
+        fuzzDescendingUnique(new IntDescendingCountSort(true));
         fuzzDescendingUnique(IntDescendingHeapSort.INSTANCE);
         fuzzDescendingUnique(IntDescendingInsertionSort.INSTANCE);
         fuzzDescendingUnique(new IntDescendingMergeSort(true));

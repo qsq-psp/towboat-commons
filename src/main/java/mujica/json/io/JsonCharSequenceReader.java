@@ -2,9 +2,9 @@ package mujica.json.io;
 
 import mujica.algebra.discrete.BigConstants;
 import mujica.io.codec.Base16Case;
-import mujica.json.entity.FastNumber;
-import mujica.json.entity.JsonHandler;
-import mujica.json.entity.TypePreference;
+import mujica.json.container.FastNumber;
+import mujica.json.handler.JsonHandler;
+import mujica.json.handler.TypePreference;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;

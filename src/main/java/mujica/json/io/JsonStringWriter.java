@@ -7,6 +7,11 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/3/21")
 public abstract class JsonStringWriter extends JsonWriter {
 
+    @Override
+    public boolean supportsUndoKey() {
+        return true;
+    }
+
     @NotNull
     public abstract CharSequence getCharSequence();
 

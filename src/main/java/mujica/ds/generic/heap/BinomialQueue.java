@@ -1,7 +1,7 @@
 package mujica.ds.generic.heap;
 
 import mujica.ds.generic.list.TruncateList;
-import mujica.ds.of_boolean.PublicBooleanSlot;
+import mujica.ds.bit.PublicBitSlot;
 import mujica.ds.of_int.PublicIntSlot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
@@ -291,7 +291,7 @@ public class BinomialQueue<E> extends AbstractPriorityQueue<E> {
 
     @Override
     public boolean contains(Object object) {
-        final PublicBooleanSlot result = new PublicBooleanSlot();
+        final PublicBitSlot result = new PublicBitSlot();
         unsafeForEach(element -> {
             if (Objects.equals(element, object)) {
                 result.value = true;

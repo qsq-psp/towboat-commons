@@ -1,8 +1,8 @@
 package mujica.json.reflect;
 
 import mujica.ds.generic.set.CollectionConstant;
-import mujica.json.entity.FastNumber;
-import mujica.json.entity.FastString;
+import mujica.json.container.FastNumber;
+import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

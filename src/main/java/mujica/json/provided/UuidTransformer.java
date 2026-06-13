@@ -1,7 +1,7 @@
 package mujica.json.provided;
 
-import mujica.json.entity.JsonHandler;
-import mujica.json.entity.JsonStructure;
+import mujica.json.handler.JsonHandler;
+import mujica.json.handler.JsonStructure;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import org.jetbrains.annotations.NotNull;

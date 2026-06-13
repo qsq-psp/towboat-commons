@@ -3,6 +3,7 @@ package mujica.io.fs;
 import mujica.io.function.IOConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,9 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.FileTime;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -48,32 +51,14 @@ public final class Directories {
     }
 
     public static boolean containsNonEmptyRegularFile(@NotNull Path path) throws IOException {
-        return Files.walk(path).anyMatch(containedPath -> {
+        return Files.walk(path).anyMatch(subPath -> {
             try {
-                return Files.isRegularFile(containedPath) && Files.size(containedPath) > 0L;
+                return Files.isRegularFile(subPath) && Files.size(subPath) > 0L;
             } catch (IOException e) {
-                LOGGER.error("{}", containedPath, e);
+                LOGGER.error("{}", subPath, e);
                 return false;
             }
         });
-    }
-
-    public static void clear(@NotNull Path path) throws IOException {
-        if (Files.isRegularFile(path)) {
-            clearRegularFile(path);
-        } else if (Files.isDirectory(path)) {
-            clearDirectory(path);
-        } else {
-            throw new IOException();
-        }
-    }
-
-    public static void clearRegularFile(@NotNull Path path) throws IOException {
-        FileChannel.open(path).truncate(0L).close();
-    }
-
-    public static void clearDirectory(@NotNull Path path) throws IOException {
-        // todo
     }
 
     private static long uncheckedSize(@NotNull Path path) {
@@ -93,21 +78,67 @@ public final class Directories {
     }
 
     @NotNull
-    private static FileTime uncheckedModifiedTime(@NotNull Path path) {
-        try {
-            return Files.getLastModifiedTime(path);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    @NotNull
     public static Optional<FileTime> latestModifiedTime(@NotNull Path path) throws IOException {
         try {
-            return Files.walk(path).map(Directories::uncheckedModifiedTime).max(FileTime::compareTo);
+            return Files.walk(path).map(subPath -> {
+                try {
+                    return Files.getLastModifiedTime(subPath);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            }).max(FileTime::compareTo);
         } catch (UncheckedIOException e) {
             throw e.getCause();
         }
+    }
+
+    public static void setTimes(@NotNull Path path, @Nullable FileTime lastModifiedTime, @Nullable FileTime lastAccessTime, @Nullable FileTime createTime) throws IOException {
+        try {
+            Files.walk(path).forEach(subPath -> {
+                try {
+                    Files.getFileAttributeView(subPath, BasicFileAttributeView.class).setTimes(lastModifiedTime, lastAccessTime, createTime);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            });
+        } catch (UncheckedIOException e) {
+            throw e.getCause();
+        }
+    }
+
+    public static void touchLastModifiedTime(@NotNull Path path) throws IOException {
+        setTimes(path, FileTime.from(Instant.now()), null, null);
+    }
+
+    public static void touchLastAccessTime(@NotNull Path path) throws IOException {
+        setTimes(path, null, FileTime.from(Instant.now()), null);
+    }
+
+    public static void touchCreationTime(@NotNull Path path) throws IOException {
+        setTimes(path, null, null, FileTime.from(Instant.now()));
+    }
+
+    public static void touchAllTimes(@NotNull Path path) throws IOException {
+        final FileTime now = FileTime.from(Instant.now());
+        setTimes(path, now, now, now);
+    }
+
+    public static void clear(@NotNull Path path) throws IOException {
+        if (Files.isRegularFile(path)) {
+            clearRegularFile(path);
+        } else if (Files.isDirectory(path)) {
+            clearDirectory(path);
+        } else {
+            throw new IOException();
+        }
+    }
+
+    public static void clearRegularFile(@NotNull Path path) throws IOException {
+        FileChannel.open(path).truncate(0L).close();
+    }
+
+    public static void clearDirectory(@NotNull Path path) throws IOException {
+        // todo
     }
 
     @NotNull

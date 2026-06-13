@@ -2,6 +2,7 @@ package mujica.ds.generic.heap;
 
 import mujica.ds.DataStructure;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.AbstractCollection;
@@ -14,6 +15,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 @CodeHistory(date = "2025/6/28")
+@Name(value = "中位数", language = "zh")
 public class Median<E> extends AbstractCollection<E> implements DataStructure {
 
     private static final long serialVersionUID = 0x60b4b61a91ae4471L;

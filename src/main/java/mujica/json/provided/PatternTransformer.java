@@ -1,7 +1,7 @@
 package mujica.json.provided;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
@@ -46,41 +46,41 @@ public class PatternTransformer implements JsonContextTransformer<Pattern> {
             int flags = in.flags();
             if ((flags & (Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL | Pattern.UNICODE_CASE)) != 0) {
                 if ((flags & Pattern.CASE_INSENSITIVE) != 0) {
-                    out.stringValue(CASE_INSENSITIVE);
+                    out.stringKey(CASE_INSENSITIVE);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.MULTILINE) != 0) {
-                    out.stringValue(MULTILINE);
+                    out.stringKey(MULTILINE);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.DOTALL) != 0) {
-                    out.stringValue(DOTALL);
+                    out.stringKey(DOTALL);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.UNICODE_CASE) != 0) {
-                    out.stringValue(UNICODE_CASE);
+                    out.stringKey(UNICODE_CASE);
                     out.booleanValue(true);
                 }
             }
             if ((flags & (Pattern.CANON_EQ | Pattern.UNIX_LINES | Pattern.LITERAL | Pattern.UNICODE_CHARACTER_CLASS | Pattern.COMMENTS)) != 0) {
                 if ((flags & Pattern.CANON_EQ) != 0) {
-                    out.stringValue(CANON_EQ);
+                    out.stringKey(CANON_EQ);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.UNIX_LINES) != 0) {
-                    out.stringValue(UNIX_LINES);
+                    out.stringKey(UNIX_LINES);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.LITERAL) != 0) {
-                    out.stringValue(LITERAL);
+                    out.stringKey(LITERAL);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.UNICODE_CHARACTER_CLASS) != 0) {
-                    out.stringValue(UNICODE_CHARACTER_CLASS);
+                    out.stringKey(UNICODE_CHARACTER_CLASS);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.COMMENTS) != 0) {
-                    out.stringValue(COMMENTS);
+                    out.stringKey(COMMENTS);
                     out.booleanValue(true);
                 }
             }

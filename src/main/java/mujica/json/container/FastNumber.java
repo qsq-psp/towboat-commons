@@ -1,0 +1,70 @@
+package mujica.json.container;
+
+import mujica.reflect.modifier.CodeHistory;
+import org.jetbrains.annotations.NotNull;
+
+@CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "RawDecimal")
+@CodeHistory(date = "2023/5/5", project = "Ultramarine", name = "RawNumber")
+@CodeHistory(date = "2025/10/11")
+public final class FastNumber extends Number {
+
+    private static final long serialVersionUID = 0x6e78b6e4e0a6eef9L;
+
+    @NotNull
+    public final String value;
+
+    public FastNumber(@NotNull String value) {
+        super();
+        this.value = value;
+    }
+
+    public boolean isDecimal() {
+        final int length = value.length();
+        for (int index = 0; index < length; index++) {
+            int ch = value.charAt(index);
+            if (ch == '.' || ch == 'e' || ch == 'E') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isZero() {
+        return value.equals("0"); // todo: dot
+    }
+
+    @Override
+    public int intValue() {
+        return Integer.parseInt(value);
+    }
+
+    @Override
+    public long longValue() {
+        return Long.parseLong(value);
+    }
+
+    @Override
+    public float floatValue() {
+        return Float.parseFloat(value);
+    }
+
+    @Override
+    public double doubleValue() {
+        return Double.parseDouble(value);
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (obj instanceof FastNumber && this.value.equals(((FastNumber) obj).value));
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
+}

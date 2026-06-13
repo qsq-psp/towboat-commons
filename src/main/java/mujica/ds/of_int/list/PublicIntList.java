@@ -29,6 +29,7 @@ public class PublicIntList extends AbstractIntList {
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
+    @NotNull
     public PublicIntList clone() {
         return duplicate();
     }

@@ -3,7 +3,7 @@ package mujica.json.reflect;
 import mujica.algebra.discrete.BigConstants;
 import mujica.ds.generic.set.CollectionConstant;
 import mujica.ds.of_long.LongSlot;
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;
 import mujica.json.modifier.JsonHint;
 import mujica.reflect.modifier.CodeHistory;
@@ -86,7 +86,7 @@ class LongType extends JsonType implements LongSlot {
                 state = CollectionConstant.EMPTY;
             }
         } else {
-            value = getter.getInt(self);
+            value = getter.getLong(self);
             state = CollectionConstant.PRESENT;
         }
         return this;

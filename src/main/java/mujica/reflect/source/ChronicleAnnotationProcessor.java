@@ -2,20 +2,20 @@ package mujica.reflect.source;
 
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.CodeHistoryTimeline;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Set;
 
+@CodeHistory(date = "2022/12/22", project = "nettyon", name = "NameCheckProcessor")
 @CodeHistory(date = "2026/2/1")
+@ReferencePage(title = "Understanding the JVM, Advanced Features and Best practices, Third Edition. page 380", href = "")
+@SupportedAnnotationTypes("*")
+@SupportedSourceVersion(SourceVersion.RELEASE_12)
 public class ChronicleAnnotationProcessor extends AbstractProcessor {
 
     public ChronicleAnnotationProcessor() {
@@ -25,11 +25,6 @@ public class ChronicleAnnotationProcessor extends AbstractProcessor {
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
-        try {
-            Files.createFile(Path.of("D:\\Download\\Ultramarine\\touch"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

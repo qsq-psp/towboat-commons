@@ -2,9 +2,9 @@ package mujica.json.reflect;
 
 import mujica.algebra.random.RandomContext;
 import mujica.ds.generic.set.CollectionConstant;
-import mujica.json.entity.FastNumber;
-import mujica.json.entity.JsonHandler;
-import mujica.json.entity.JsonStructure;
+import mujica.json.container.FastNumber;
+import mujica.json.handler.JsonHandler;
+import mujica.json.handler.JsonStructure;
 import mujica.json.io.JsonCharSequenceReader;
 import mujica.json.io.JsonStringBuilderWriter;
 import mujica.json.io.JsonSyncReader;
@@ -14,20 +14,24 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.Modifier;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @CodeHistory(date = "2021/1/2", project = "webbiton", name = "JsonLayerStack")
 @CodeHistory(date = "2021/12/28", project = "va", name = "JsonParser")
 @CodeHistory(date = "2022/1/3", project = "infrastructure", name = "JsonParser")
 @CodeHistory(date = "2022/6/9", project = "Ultramarine", name = "JsonSerializer")
+@CodeHistory(date = "2022/6/10", project = "Ultramarine", name = "JsonConverter")
 @CodeHistory(date = "2022/7/12", project = "Ultramarine", name = "JsonParser")
 @CodeHistory(date = "2025/10/28", name = "JsonParser")
 @CodeHistory(date = "2026/4/3")
@@ -59,18 +63,58 @@ public class JsonContext extends ReflectConfig {
     }
 
     @NotNull
-    final HashMap<Class<?>, JsonType> reflectCache = new HashMap<>(); // key should be String to cover non-public class
+    final HashMap<String, JsonType> reflectCache = new HashMap<>();
+
+    public void logReflectCache() {
+        logger.debug("reflectCache.size = " + reflectCache.size());
+        for (Map.Entry<String, JsonType> entry : reflectCache.entrySet()) {
+            logger.debug("{} = {}", entry.getKey(), entry.getValue());
+        }
+    }
+
+    @NotNull
+    public String reflectCacheToString() {
+        return reflectCache.toString();
+    }
+
+    static final Module MODULE = JsonContext.class.getModule();
 
     @NotNull
     JsonType forClass(@NotNull Class<?> clazz) {
-        // do not use computeIfAbsent; ConcurrentModificationException
-        JsonType type = reflectCache.get(clazz);
-        if (type == null) {
-            type = newForClass(clazz);
-            type = type.collectType(clazz, this);
-            reflectCache.put(clazz, type);
+        final String className = clazz.getName();
+        JsonType type = reflectCache.get(className);
+        if (type != null) {
+            return type;
         }
-        return type;
+        if ((clazz.getModifiers() & Modifier.PUBLIC) != 0 && clazz.getModule().isExported(clazz.getPackageName(), MODULE)) {
+            type = newForClass(clazz);
+            reflectCache.put(className, type);
+            type = type.collectType(clazz, this);
+            reflectCache.put(className, type);
+            return type;
+        }
+        final Class<?> superClass = clazz.getSuperclass();
+        if (superClass != null) {
+            type = forClass(superClass);
+            if (type != JsonType.NOP) {
+                return type;
+            }
+        }
+        for (Class<?> superInterface : clazz.getInterfaces()) {
+            type = forClass(superInterface);
+            if (type != JsonType.NOP) {
+                return type;
+            }
+        }
+        return JsonType.NOP;
+    }
+    
+    private void put(@NotNull Class<?> clazz, @NotNull JsonType type) {
+        reflectCache.put(clazz.getName(), type);
+    }
+
+    private void remove(@NotNull Class<?> clazz) {
+        reflectCache.remove(clazz.getName());
     }
 
     @NotNull
@@ -136,66 +180,89 @@ public class JsonContext extends ReflectConfig {
 
     @NotNull
     public JsonContext loadBasic() {
+        put(Object.class, JsonType.NOP);
         final long flags = this.flags & ~(JsonHint.UNSIGNED | JsonHint.DERIVED);
-        reflectCache.put(boolean.class, new BooleanType(flags & ~JsonHint.NULLABLE));
-        reflectCache.put(Boolean.class, new BooleanType(flags));
-        reflectCache.put(byte.class, new ByteType(flags & ~JsonHint.NULLABLE));
-        reflectCache.put(Byte.class, new ByteType(flags));
-        reflectCache.put(int.class, new IntType(flags & ~JsonHint.NULLABLE));
-        reflectCache.put(Integer.class, new IntType(flags));
-        reflectCache.put(long.class, new LongType(flags & ~JsonHint.NULLABLE));
-        reflectCache.put(Long.class, new LongType(flags));
-        reflectCache.put(BigInteger.class, new BigIntegerType(flags));
-        reflectCache.put(FastNumber.class, new FastNumberType(flags));
-        reflectCache.put(String.class, new StringType(flags));
+        put(boolean.class, new BooleanType(flags & ~JsonHint.NULLABLE));
+        put(Boolean.class, new BooleanType(flags));
+        put(byte.class, new I8Type(flags & ~JsonHint.NULLABLE));
+        put(Byte.class, new I8Type(flags));
+        put(int.class, new IntType(flags & ~JsonHint.NULLABLE));
+        put(Integer.class, new IntType(flags));
+        put(long.class, new LongType(flags & ~JsonHint.NULLABLE));
+        put(Long.class, new LongType(flags));
+        put(BigInteger.class, new BigIntegerType(flags));
+        put(FastNumber.class, new FastNumberType(flags));
+        put(String.class, new StringType(flags));
         return this;
     }
 
     @NotNull
     public JsonContext loadOptimized() {
         final long flags = this.flags & ~(JsonHint.UNSIGNED | JsonHint.DERIVED);
-        reflectCache.put(int[].class, new IntArrayType(flags, (IntType) reflectCache.get(int.class)));
+        put(int[].class, new IntArrayType(flags, (IntType) reflectCache.get(int.class.getName())));
         return this;
     }
 
     @NotNull
     public JsonContext unloadOptimized() {
-        reflectCache.remove(int[].class);
+        remove(int[].class);
         return this;
     }
 
     @NotNull
-    public JsonContext loadProvided() {
-        // java.lang
-        reflectCache.put(ProcessHandle.class, new ProvidedReadOnlyType("mujica.json.provided.ProcessHandleTransformer"));
-        reflectCache.put(ProcessHandle.Info.class, new ProvidedReadOnlyType("mujica.json.provided.ProcessHandleInfoTransformer"));
-        // java.util / java.time
-        reflectCache.put(Locale.class, new ProvidedReadOnlyType("mujica.json.provided.LocaleTransformer"));
-        reflectCache.put(Locale.LanguageRange.class, new ProvidedReadOnlyType("mujica.json.provided.LanguageRangeTransformer"));
-        // abstract reflectCache.put(ZoneId.class, new ProvidedReadOnlyType("mujica.json.provided.ZoneIdTransformer"));
-        reflectCache.put(ZoneOffset.class, new ProvidedReadOnlyType("mujica.json.provided.ZoneIdTransformer"));
-        // package reflectCache.put(ZoneRegion.class, new ProvidedReadOnlyType("mujica.json.provided.ZoneIdTransformer"));
-        reflectCache.put(TimeZone.class, new ProvidedReadOnlyType("mujica.json.provided.TimeZoneTransformer"));
-        reflectCache.put(Instant.class, new ProvidedReadOnlyType("mujica.json.provided.InstantTransformer"));
-        reflectCache.put(Duration.class, new ProvidedReadOnlyType("mujica.json.provided.DurationTransformer"));
-        reflectCache.put(Pattern.class, new ProvidedReadOnlyType("mujica.json.provided.PatternTransformer"));
-        // java.nio
-        reflectCache.put(Charset.class, new ProvidedReadOnlyType("mujica.json.provided.CharsetTransformer"));
+    JsonContext loadProvided(@NotNull String resource) {
+        final Pattern continuousWhitespace = Pattern.compile("\\s+");
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(JsonContext.class.getResourceAsStream(resource), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] segments = continuousWhitespace.split(line);
+                int count = segments.length;
+                if (count < 2) {
+                    continue;
+                }
+                ProvidedReadOnlyType provided = new ProvidedReadOnlyType(segments[0]);
+                for (int index = 1; index < count; index++) {
+                    reflectCache.put(segments[index], provided);
+                }
+            }
+        } catch (Exception e) {
+            getLogger().error("{}", resource, e);
+        }
         return this;
+    }
+
+    @NotNull
+    public JsonContext loadProvidedBase() {
+        return loadProvided("/mujica/json/provided/package.txt");
+    }
+
+    @NotNull
+    public JsonContext loadProvidedXml() {
+        return loadProvided("/mujica/json/provided/xml/package.txt");
+    }
+
+    @NotNull
+    public JsonContext loadProvidedNetty() {
+        return loadProvided("/mujica/json/provided/netty/package.txt");
     }
 
     @NotNull
     public JsonContext loadProvidedDesktop() {
-        return this;
+        return loadProvided("/mujica/json/provided/desktop/package.txt");
     }
 
     @NotNull
     public JsonContext loadProvidedManagement() {
-        return this;
+        return loadProvided("/mujica/json/provided/management/package.txt");
     }
 
     public void parse(@NotNull JsonSyncReader reader, @NotNull Object root) {
-        reader.read(new ParserStack(new ImmutableFrame(this, root)));
+        final ParserStack stack = new ParserStack(new ImmutableFrame(this, root));
+        try {
+            reader.read(stack);
+        } finally {
+            stack.close();
+        }
     }
 
     public void parse(@NotNull CharSequence string, @NotNull Object root) {

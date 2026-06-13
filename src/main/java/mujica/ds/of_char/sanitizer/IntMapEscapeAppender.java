@@ -4,7 +4,7 @@ import mujica.ds.of_int.map.CompatibleIntMap;
 import mujica.ds.of_int.map.IntMap;
 import mujica.reflect.modifier.AccessStructure;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.number.Base16Appender;
+import mujica.ds.of_char.number.Base16Appender;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2026/1/11")

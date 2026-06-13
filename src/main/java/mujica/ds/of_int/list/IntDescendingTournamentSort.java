@@ -8,28 +8,30 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-/**
- * Created on 2026/2/8.
- */
 @CodeHistory(date = "2026/2/8")
 @ReferencePage(title = "锦标赛排序", href = "https://oi-wiki.org/basic/tournament-sort/")
 public class IntDescendingTournamentSort extends SortingAlgorithm<int[]> {
 
-    @NotNull
-    private transient int[] array = PublicIntList.EMPTY.array;
+    private transient int[] shared;
 
-    public IntDescendingTournamentSort() {
+    public IntDescendingTournamentSort(boolean hasShared) {
         super();
+        if (hasShared) {
+            shared = PublicIntList.EMPTY.array;
+        }
     }
 
     @NotNull
-    private int[] getArray(int minLength) {
-        int[] array = this.array;
-        if (array.length < minLength) {
-            array = new int[minLength];
-            this.array = array;
+    private int[] getShared(int minLength) {
+        int[] array = this.shared;
+        if (array != null) {
+            if (array.length < minLength) {
+                array = new int[minLength];
+                this.shared = array;
+            }
+            return array;
         }
-        return array;
+        return new int[minLength];
     }
 
     @NotNull
@@ -55,7 +57,7 @@ public class IntDescendingTournamentSort extends SortingAlgorithm<int[]> {
         final int height = Integer.SIZE - Integer.numberOfLeadingZeros(length);
         final int offset = 1 << height;
         final int doubleOffset = offset << 1;
-        final int[] arena = getArray(doubleOffset);
+        final int[] arena = getShared(doubleOffset);
         Arrays.fill(arena, 0, doubleOffset, Integer.MIN_VALUE);
         System.arraycopy(target, startIndex, arena, offset, length);
         for (int leafIndex = offset + length; leafIndex >= offset; leafIndex--) {

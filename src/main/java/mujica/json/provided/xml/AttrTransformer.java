@@ -1,7 +1,7 @@
 package mujica.json.provided.xml;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import org.jetbrains.annotations.NotNull;
@@ -18,8 +18,6 @@ public class AttrTransformer implements JsonContextTransformer<Attr> {
 
     static final FastString SPECIFIED = new FastString("specified");
 
-    static final FastString VALUE = new FastString("value");
-
     static final FastString IS_ID = new FastString("ID");
 
     @Override
@@ -30,7 +28,7 @@ public class AttrTransformer implements JsonContextTransformer<Attr> {
             out.stringValue(in.getName());
             out.stringKey(SPECIFIED);
             out.booleanValue(in.getSpecified());
-            out.stringKey(VALUE);
+            out.stringKey(AttributesTransformer.VALUE);
             out.stringValue(in.getValue());
             out.stringKey(IS_ID);
             out.booleanValue(in.isId());

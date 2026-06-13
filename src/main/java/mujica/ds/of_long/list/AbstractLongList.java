@@ -15,6 +15,7 @@ import java.util.function.LongPredicate;
 /**
  * Created on 2026/5/11.
  */
+@CodeHistory(date = "2026/5/11")
 public abstract class AbstractLongList implements LongList {
 
     protected AbstractLongList() {
@@ -269,12 +270,36 @@ public abstract class AbstractLongList implements LongList {
 
     @Override
     public void clear() {
-
+        removeRange(0, longLength());
     }
 
     @Override
     public boolean equals(@NotNull LongList that) {
-        return false;
+        final int n = this.longLength();
+        if (that.longLength() != n) {
+            return false;
+        }
+        for (int i = 0; i < n; i++) {
+            if (this.getLong(i) != that.getLong(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return this == o || o instanceof LongList && this.equals((LongList) o);
+    }
+
+    @Override
+    public int hashCode() {
+        long hash = 1L;
+        final int n = longLength();
+        for (int i = 0; i < n; i++) {
+            hash = 31L * hash + getLong(i);
+        }
+        return Long.hashCode(hash);
     }
 
     @NotNull

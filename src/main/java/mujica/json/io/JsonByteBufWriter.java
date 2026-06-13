@@ -4,16 +4,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufHolder;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.DefaultByteBufHolder;
-import mujica.json.entity.FastString;
+import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.ds.of_char.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 
-/**
- * Created on 2026/4/5.
- */
 @CodeHistory(date = "2026/4/5")
 public class JsonByteBufWriter extends JsonWriter implements ByteBufHolder {
 
@@ -93,6 +90,11 @@ public class JsonByteBufWriter extends JsonWriter implements ByteBufHolder {
     public void reset() {
         super.reset(); // reset stack
         data.clear();
+    }
+
+    @Override
+    public boolean supportsUndoKey() {
+        return true;
     }
 
     protected void anyKey() {

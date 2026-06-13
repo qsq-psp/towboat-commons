@@ -1,6 +1,6 @@
 package mujica.json.reflect;
 
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;

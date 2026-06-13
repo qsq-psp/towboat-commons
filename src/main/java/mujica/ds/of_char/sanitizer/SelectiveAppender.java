@@ -2,6 +2,7 @@ package mujica.ds.of_char.sanitizer;
 
 import io.netty.buffer.ByteBuf;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,14 +12,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @CodeHistory(date = "2026/1/30")
-public abstract class SelectiveAppender extends CharSequenceAppender {
+@DirectSubclass({SelectiveAppender.FirstApplicable.class, SelectiveAppender.LeastCharCount.class})
+public abstract class SelectiveAppender extends ContainerAppender {
 
-    @NotNull
-    protected final CharSequenceAppender[] sequence;
-
-    protected SelectiveAppender(@NotNull CharSequenceAppender[] sequence) {
-        super();
-        this.sequence = sequence;
+    protected SelectiveAppender(@NotNull CharSequenceAppender[] appenderArray) {
+        super(appenderArray);
     }
 
     @NotNull
@@ -32,8 +30,8 @@ public abstract class SelectiveAppender extends CharSequenceAppender {
     @Override
     public boolean isApplicable(@NotNull CharSequence string) {
         // reverse iteration, because always-applicable appender is likely at last position
-        for (int index = sequence.length - 1; index >= 0; index--) {
-            if (sequence[index].isApplicable(string)) {
+        for (int index = appenderArray.length - 1; index >= 0; index--) {
+            if (appenderArray[index].isApplicable(string)) {
                 return true;
             }
         }
@@ -43,8 +41,8 @@ public abstract class SelectiveAppender extends CharSequenceAppender {
     @Override
     public boolean isApplicable(@NotNull CharSequence string, int startIndex, int endIndex) {
         // reverse iteration, because always-applicable appender is likely at last position
-        for (int index = sequence.length - 1; index >= 0; index--) {
-            if (sequence[index].isApplicable(string, startIndex, endIndex)) {
+        for (int index = appenderArray.length - 1; index >= 0; index--) {
+            if (appenderArray[index].isApplicable(string, startIndex, endIndex)) {
                 return true;
             }
         }
@@ -142,9 +140,11 @@ public abstract class SelectiveAppender extends CharSequenceAppender {
     }
 
     @CodeHistory(date = "2026/1/31")
-    public static class NotApplicableException extends RuntimeException {
+    static class NotApplicableException extends RuntimeException {
 
-        public NotApplicableException() {
+        private static final long serialVersionUID = 0xA4683DDFDF3DAF66L;
+
+        NotApplicableException() {
             super();
         }
     }
@@ -159,7 +159,7 @@ public abstract class SelectiveAppender extends CharSequenceAppender {
         @NotNull
         @Override
         protected CharSequenceAppender select(@NotNull CharSequence string) {
-            for (CharSequenceAppender appender : sequence) {
+            for (CharSequenceAppender appender : appenderArray) {
                 if (appender.isApplicable(string)) {
                     return appender;
                 }
@@ -170,7 +170,7 @@ public abstract class SelectiveAppender extends CharSequenceAppender {
         @NotNull
         @Override
         protected CharSequenceAppender select(@NotNull CharSequence string, int startIndex, int endIndex) {
-            for (CharSequenceAppender appender : sequence) {
+            for (CharSequenceAppender appender : appenderArray) {
                 if (appender.isApplicable(string, startIndex, endIndex)) {
                     return appender;
                 }
@@ -191,7 +191,7 @@ public abstract class SelectiveAppender extends CharSequenceAppender {
         protected CharSequenceAppender select(@NotNull CharSequence string) {
             CharSequenceAppender minAppender = null;
             int minValue = Integer.MAX_VALUE;
-            for (CharSequenceAppender appender : sequence) {
+            for (CharSequenceAppender appender : appenderArray) {
                 if (appender.isApplicable(string)) {
                     int value = appender.deltaCharCount(string);
                     if (value < minValue) {
@@ -211,7 +211,7 @@ public abstract class SelectiveAppender extends CharSequenceAppender {
         protected CharSequenceAppender select(@NotNull CharSequence string, int startIndex, int endIndex) {
             CharSequenceAppender minAppender = null;
             int minValue = Integer.MAX_VALUE;
-            for (CharSequenceAppender appender : sequence) {
+            for (CharSequenceAppender appender : appenderArray) {
                 if (appender.isApplicable(string, startIndex, endIndex)) {
                     int value = appender.deltaCharCount(string, startIndex, endIndex);
                     if (value < minValue) {
@@ -229,6 +229,6 @@ public abstract class SelectiveAppender extends CharSequenceAppender {
 
     @Override
     public String toString() {
-        return "SelectiveAppender" + Arrays.toString(sequence);
+        return "SelectiveAppender" + Arrays.toString(appenderArray);
     }
 }

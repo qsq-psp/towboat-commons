@@ -1,15 +1,14 @@
 package mujica.json.reflect;
 
 import mujica.ds.generic.set.CollectionConstant;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-/**
- * Created on 2026/4/10.
- */
+@CodeHistory(date = "2026/4/10")
 class JavaArrayFrame extends NopFrame {
 
     @NotNull

@@ -1,13 +1,15 @@
 package mujica.json.provided.desktop;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
-import mujica.json.entity.JsonStructure;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
+import mujica.json.handler.JsonStructure;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.plaf.UIResource;
 import java.awt.*;
 
 @CodeHistory(date = "2022/9/1", project = "Ultramarine", name = "FontValueSerializer")
@@ -31,7 +33,7 @@ public class FontTransformer implements JsonContextTransformer<Font>, JsonStruct
     static final FastString ITALIC = new FastString("italic");
 
     @Override
-    public void transform(Font in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(Font in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             String name = in.getFontName();
@@ -62,6 +64,10 @@ public class FontTransformer implements JsonContextTransformer<Font>, JsonStruct
             out.booleanValue(in.isBold());
             out.stringKey(ITALIC);
             out.booleanValue(in.isItalic());
+        }
+        if (in instanceof UIResource) {
+            out.stringKey(InsetsTransformer.UI_RESOURCE);
+            out.booleanValue(true);
         }
         out.closeObject();
     }

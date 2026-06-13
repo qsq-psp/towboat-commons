@@ -44,9 +44,7 @@ abstract class BuiltType extends JsonType {
                 if ((flags & JsonHint.USE_METHOD_HANDLE) != 0L) {
                     builder = builder.unreflect(MethodHandles.lookup());
                 }
-            } catch (Throwable e) {
-                context.getLogger().warn("", e);
-            }
+            } catch (Throwable ignore) {} // NoSuchMethodException
         }
     }
 }

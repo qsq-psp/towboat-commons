@@ -2,8 +2,7 @@ package mujica.json.reflect;
 
 import mujica.ds.generic.set.CollectionConstant;
 import mujica.ds.of_int.IntSlot;
-import mujica.ds.of_int.list.IntList;
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;
 import mujica.json.modifier.JsonHint;
 import mujica.reflect.modifier.CodeHistory;
@@ -16,7 +15,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2021/12/24", project = "va", name = "JsonIntField")
 @CodeHistory(date = "2021/12/31", project = "infrastructure", name = "JsonIntType")
 @CodeHistory(date = "2022/6/10", project = "Ultramarine", name = "JsonIntType")
-@CodeHistory(date = "2026/1/1")
+@CodeHistory(date = "2026/1/1", name = "IntType")
 class IntType extends JsonType implements IntSlot {
 
     private static final long serialVersionUID = 0x9044dfc48c3175efL;
@@ -195,19 +194,6 @@ class IntType extends JsonType implements IntSlot {
             }
         } finally {
             state = CollectionConstant.UNDEFINED;
-        }
-    }
-
-    @Deprecated
-    void to(@NotNull IntList list) {
-        final CollectionConstant oldState = state;
-        state = CollectionConstant.UNDEFINED;
-        if (oldState == CollectionConstant.PRESENT) {
-            list.offerLast(value);
-        } else if (oldState == CollectionConstant.EMPTY) {
-            throw new NullPointerException();
-        } else {
-            throw new IllegalStateException();
         }
     }
 

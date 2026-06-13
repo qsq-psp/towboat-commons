@@ -20,20 +20,16 @@ public final class AllModuleInfo {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AllModuleInfo.class);
 
-    private static final String[] TARGETS = {
-            "target\\javap-module-info"
-    };
+    private static final String TARGET = "target\\javap-module-info";
 
     public static void main(String[] args) {
         final Path currentPath = Path.of("").toAbsolutePath();
-        for (String targetName : TARGETS) {
-            Path targetPath = Path.of(targetName).toAbsolutePath();
-            if (!(Files.isDirectory(targetPath) && targetPath.startsWith(currentPath))) {
-                continue;
-            }
-            transform(ClassLoader.getPlatformClassLoader(), Path.of(targetName, "platform"));
-            transform(ClassLoader.getSystemClassLoader(), Path.of(targetName, "system"));
+        final Path targetPath = Path.of(TARGET).toAbsolutePath();
+        if (!(Files.isDirectory(targetPath) && targetPath.startsWith(currentPath))) {
+            return;
         }
+        transform(ClassLoader.getPlatformClassLoader(), Path.of(TARGET, "platform"));
+        transform(ClassLoader.getSystemClassLoader(), Path.of(TARGET, "system"));
     }
 
     private static void transform(@NotNull ClassLoader classLoader, @NotNull Path directory) {

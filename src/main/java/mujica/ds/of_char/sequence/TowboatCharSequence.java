@@ -1,6 +1,6 @@
 package mujica.ds.of_char.sequence;
 
-import mujica.json.entity.FastString;
+import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.ReferencePage;

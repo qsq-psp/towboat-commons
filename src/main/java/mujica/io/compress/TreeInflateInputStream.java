@@ -1,9 +1,9 @@
 package mujica.io.compress;
 
 import io.netty.handler.codec.CodecException;
-import mujica.ds.of_byte.run.RunBuffer;
-import mujica.json.entity.JsonHandler;
-import mujica.json.entity.JsonStructure;
+import mujica.ds.i8.run.RunBuffer;
+import mujica.json.handler.JsonHandler;
+import mujica.json.handler.JsonStructure;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,7 +1,7 @@
 package mujica.reflect.basic;
 
 import mujica.ds.HealthAware;
-import mujica.ds.of_boolean.PublicBooleanSlot;
+import mujica.ds.bit.PublicBitSlot;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ public interface NotLoadedFieldType<F extends NotLoadedFieldType<F>> extends Hea
     }
 
     default boolean isReturnTypeHealthy() {
-        final PublicBooleanSlot slot = new PublicBooleanSlot();
+        final PublicBitSlot slot = new PublicBitSlot();
         checkReturnTypeHealth(re -> slot.value = false);
         return slot.value;
     }

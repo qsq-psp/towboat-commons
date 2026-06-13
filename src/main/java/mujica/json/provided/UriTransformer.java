@@ -1,10 +1,11 @@
 package mujica.json.provided;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 
@@ -32,7 +33,7 @@ public class UriTransformer implements JsonContextTransformer<URI> {
     static final FastString FRAGMENT = new FastString("query");
 
     @Override
-    public void transform(URI in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull URI in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             String str = in.getScheme();

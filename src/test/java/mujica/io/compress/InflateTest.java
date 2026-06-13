@@ -3,7 +3,7 @@ package mujica.io.compress;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
-import mujica.ds.of_byte.run.*;
+import mujica.ds.i8.run.*;
 import mujica.ds.of_int.list.*;
 import mujica.ds.of_int.map.CompatibleIntMap;
 import mujica.ds.of_int.map.CompatibleIntSlotMap;

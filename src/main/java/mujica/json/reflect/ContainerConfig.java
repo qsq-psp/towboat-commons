@@ -1,7 +1,7 @@
 package mujica.json.reflect;
 
-import mujica.json.entity.JsonArray;
-import mujica.json.entity.JsonObject;
+import mujica.json.container.JsonArray;
+import mujica.json.container.JsonObject;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

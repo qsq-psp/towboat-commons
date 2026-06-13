@@ -1,7 +1,7 @@
 package mujica.json.provided;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
@@ -12,9 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.*;
 
-/**
- * Created on 2026/5/20.
- */
 @CodeHistory(date = "2022/7/22", project = "Ultramarine", name = "TypeValueSerializer")
 @CodeHistory(date = "2026/5/20")
 public class TypeTransformer implements JsonContextTransformer<Type> {

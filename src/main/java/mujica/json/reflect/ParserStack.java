@@ -1,7 +1,7 @@
 package mujica.json.reflect;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandlerAdapter;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandlerAdapter;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,5 +55,15 @@ class ParserStack extends JsonHandlerAdapter<NopFrame> {
     @Override
     public void stringKey(@NotNull FastString key) {
         h.setKey(key);
+    }
+
+    public void close() {
+        while (true) {
+            h.close();
+            if (h.parent == null) {
+                break;
+            }
+            h = h.parent;
+        }
     }
 }

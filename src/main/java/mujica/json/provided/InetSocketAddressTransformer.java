@@ -1,9 +1,10 @@
 package mujica.json.provided;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
@@ -11,6 +12,8 @@ import java.net.InetSocketAddress;
 /**
  * Created on 2026/5/10.
  */
+@CodeHistory(date = "2026/5/10")
+@Deprecated // inline
 public class InetSocketAddressTransformer implements JsonContextTransformer<InetSocketAddress> {
 
     public static final InetSocketAddressTransformer INSTANCE = new InetSocketAddressTransformer();
@@ -26,7 +29,7 @@ public class InetSocketAddressTransformer implements JsonContextTransformer<Inet
             out.stringKey(PORT);
             out.numberValue(in.getPort());
             out.stringKey(ADDRESS);
-            out.stringValue(in.getAddress().toString()); // todo
+            out.stringValue(in.getAddress().toString());
         }
         {
             String name = in.getHostName();

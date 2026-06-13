@@ -1,9 +1,10 @@
 package mujica.json.provided.desktop;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.MouseEvent;
@@ -11,6 +12,7 @@ import java.awt.event.MouseEvent;
 /**
  * Created on 2026/5/13.
  */
+@CodeHistory(date = "2026/5/13")
 public class MouseEventTransformer implements JsonContextTransformer<MouseEvent> {
 
     static final FastString X = new FastString("x");
@@ -22,7 +24,7 @@ public class MouseEventTransformer implements JsonContextTransformer<MouseEvent>
     static final FastString BUTTON = new FastString("button");
 
     @Override
-    public void transform(MouseEvent in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull MouseEvent in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
             InputEventTransformer.transformExposed(in, out);

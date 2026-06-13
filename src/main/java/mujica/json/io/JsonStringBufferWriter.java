@@ -1,8 +1,8 @@
 package mujica.json.io;
 
 import io.netty.buffer.ByteBuf;
-import mujica.json.entity.FastNumber;
-import mujica.json.entity.FastString;
+import mujica.json.container.FastNumber;
+import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.ds.of_char.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;

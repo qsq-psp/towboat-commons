@@ -1,20 +1,19 @@
 package mujica.json.reflect;
 
 import mujica.ds.generic.set.CollectionConstant;
-import mujica.ds.of_boolean.BooleanSlot;
-import mujica.ds.of_boolean.list.BooleanList;
-import mujica.json.entity.JsonHandler;
+import mujica.ds.bit.BitSlot;
+import mujica.ds.bit.list.BooleanList;
+import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;
 import mujica.json.modifier.JsonHint;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2026/1/2")
-class BooleanType extends JsonType implements BooleanSlot {
+class BooleanType extends JsonType implements BitSlot {
 
     protected static final CollectionConstant FALSE = CollectionConstant.REMOVED;
 
@@ -29,7 +28,7 @@ class BooleanType extends JsonType implements BooleanSlot {
     }
 
     @Override
-    public boolean getBoolean() {
+    public boolean getBit() {
         switch (state) {
             default:
             case UNDEFINED:
@@ -44,7 +43,7 @@ class BooleanType extends JsonType implements BooleanSlot {
     }
 
     @Override
-    public void setBoolean(boolean newValue) {
+    public void setBit(boolean newValue) {
         state = newValue ? TRUE : FALSE;
     }
 

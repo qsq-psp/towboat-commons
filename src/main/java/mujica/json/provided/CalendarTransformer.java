@@ -1,7 +1,8 @@
 package mujica.json.provided;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
+import mujica.json.handler.JsonStructure;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
@@ -12,7 +13,7 @@ import java.util.Calendar;
 @SuppressWarnings("MagicConstant")
 @CodeHistory(date = "2022/9/4", project = "Ultramarine", name = "CalendarValueSerializer")
 @CodeHistory(date = "2026/5/7")
-public class CalendarTransformer implements JsonContextTransformer<Calendar> {
+public class CalendarTransformer implements JsonContextTransformer<Calendar>, JsonStructure {
 
     public static final CalendarTransformer INSTANCE = new CalendarTransformer();
 
@@ -50,7 +51,12 @@ public class CalendarTransformer implements JsonContextTransformer<Calendar> {
         MONTH[Calendar.MAY] = new FastString("May");
         MONTH[Calendar.JUNE] = new FastString("June");
         MONTH[Calendar.JULY] = new FastString("July");
-        // todo
+        MONTH[Calendar.AUGUST] = new FastString("August");
+        MONTH[Calendar.SEPTEMBER] = new FastString("September");
+        MONTH[Calendar.OCTOBER] = new FastString("October");
+        MONTH[Calendar.NOVEMBER] = new FastString("November");
+        MONTH[Calendar.DECEMBER] = new FastString("December");
+        MONTH[Calendar.UNDECIMBER] = new FastString("Undecimber");
     }
 
     static final FastString[] WEEK = new FastString[Calendar.SATURDAY + 1];
@@ -100,5 +106,10 @@ public class CalendarTransformer implements JsonContextTransformer<Calendar> {
             TimeZoneTransformer.INSTANCE.transform(in.getTimeZone(), out, context);
         }
         out.closeObject();
+    }
+
+    @Override
+    public void json(@NotNull JsonHandler jh) {
+        transform(Calendar.getInstance(), jh, null);
     }
 }

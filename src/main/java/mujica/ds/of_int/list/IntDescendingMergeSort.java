@@ -14,23 +14,22 @@ import org.jetbrains.annotations.NotNull;
 @ReferencePage(title = "Comparison Sorting Visualization", href = "https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html")
 public class IntDescendingMergeSort extends SortingAlgorithm<int[]> {
 
-    private transient int[] internal;
+    private transient int[] shared;
 
-    public IntDescendingMergeSort(boolean hasInternal) {
+    public IntDescendingMergeSort(boolean hasShared) {
         super();
-        if (hasInternal) {
-            internal = PublicIntList.EMPTY.array;
+        if (hasShared) {
+            shared = PublicIntList.EMPTY.array;
         }
     }
 
-
     @NotNull
-    private int[] getInternal(int minLength) {
-        int[] array = internal;
+    private int[] getShared(int minLength) {
+        int[] array = shared;
         if (array != null) {
             if (array.length < minLength) {
                 array = new int[minLength];
-                internal = array;
+                shared = array;
             }
             return array;
         }
@@ -90,7 +89,7 @@ public class IntDescendingMergeSort extends SortingAlgorithm<int[]> {
         if (length < 2) {
             return 0L;
         }
-        return sort(target, startIndex, getInternal(length), 0, length);
+        return sort(target, startIndex, getShared(length), 0, length);
     }
 
     private long sortPart(@NotNull int[] target, @Index(of = "target") int targetOffset,
@@ -127,7 +126,7 @@ public class IntDescendingMergeSort extends SortingAlgorithm<int[]> {
         if (length < 2) {
             return 0L;
         }
-        return sortPart(target, startIndex, getInternal(length), length, midIndex);
+        return sortPart(target, startIndex, getShared(length), length, midIndex);
     }
 
     private long sortUnique(@NotNull int[] target, @Index(of = "target") int targetOffset,
@@ -179,7 +178,7 @@ public class IntDescendingMergeSort extends SortingAlgorithm<int[]> {
         if (length < 2) {
             return 0L;
         }
-        final long reverseOrderNumber = sortUnique(target, startIndex, getInternal(length), length, endSlot);
+        final long reverseOrderNumber = sortUnique(target, startIndex, getShared(length), length, endSlot);
         if (startIndex == endSlot.getInt()) {
             target[startIndex++] = Integer.MIN_VALUE;
             endSlot.setInt(startIndex);

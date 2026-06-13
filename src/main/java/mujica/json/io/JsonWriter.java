@@ -2,11 +2,10 @@ package mujica.json.io;
 
 import io.netty.buffer.ByteBuf;
 import mujica.ds.of_int.list.CopyOnResizeIntList;
-import mujica.json.entity.JsonHandler;
-import mujica.json.entity.StructureChecked;
+import mujica.json.handler.JsonHandler;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
-import mujica.text.format.AppenderToStringBuilder;
+import mujica.ds.of_char.format.AppenderToStringBuilder;
 import mujica.ds.of_char.sanitizer.CharSequenceAppender;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
@@ -15,12 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Pattern;
 
 @CodeHistory(date = "2021/12/30", project = "infrastructure", name = "JsonWriter")
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "Writer")
 @CodeHistory(date = "2026/1/6")
 @DirectSubclass({JsonStringWriter.class, JsonStreamWriter.class, JsonByteBufWriter.class})
-public abstract class JsonWriter extends JsonHandler implements StructureChecked {
+public abstract class JsonWriter extends JsonHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonWriter.class);
 
@@ -41,18 +41,27 @@ public abstract class JsonWriter extends JsonHandler implements StructureChecked
         int NO_QUOTE_PROPER_KEY     = 0x0800;
     }
 
+    protected static final Pattern PROPER_KEY = Pattern.compile("[A-Z][0-9A-Z_]*", Pattern.CASE_INSENSITIVE);
+
     @MagicConstant(flagsFromClass = ConfigFlags.class)
     protected int flags;
 
-    public void setFlags(int flags) {
+    @NotNull
+    public JsonWriter setFlags(int flags) {
         this.flags = flags;
+        return this;
     }
 
     public int getFlags() {
         return flags;
     }
 
-    // additional states to mujica.json.entity.StructureChecked
+
+    public static final int STATE_START = 0;
+    public static final int STATE_END = 1;
+    public static final int STATE_ARRAY = 2;
+    public static final int STATE_OBJECT = 3;
+    public static final int STATE_KEY = 4;
     public static final int STATE_NEW_ARRAY = 5;
     public static final int STATE_NEW_OBJECT = 6;
     public static final int STATE_JSONP = 7;
@@ -67,6 +76,11 @@ public abstract class JsonWriter extends JsonHandler implements StructureChecked
     public void reset() {
         stack.clear();
         stack.offerLast(STATE_START);
+    }
+
+    @Override
+    public boolean structureChecked() {
+        return true;
     }
 
     public void openJsonp(@NotNull CharSequence name) {

@@ -1,6 +1,6 @@
 package mujica.json.provided.desktop;
 
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
@@ -8,9 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.sound.sampled.DataLine;
 
-/**
- * Created on 2026/5/4.
- */
 @CodeHistory(date = "2026/5/4")
 public class DataLineTransformer implements JsonContextTransformer<DataLine> {
 

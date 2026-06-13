@@ -1,9 +1,10 @@
 package mujica.json.provided;
 
-import mujica.json.entity.JsonHandler;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 
@@ -13,7 +14,7 @@ import java.text.DecimalFormat;
 public class DecimalFormatTransformer implements JsonContextTransformer<DecimalFormat> {
 
     @Override
-    public void transform(DecimalFormat in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull DecimalFormat in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.stringKey("decimalFormatSymbols");

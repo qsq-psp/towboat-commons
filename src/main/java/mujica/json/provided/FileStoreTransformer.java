@@ -1,11 +1,12 @@
 package mujica.json.provided;
 
-import mujica.json.entity.FastString;
-import mujica.json.entity.JsonHandler;
+import mujica.json.container.FastString;
+import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.FileStore;
 
@@ -28,7 +29,7 @@ public class FileStoreTransformer implements JsonContextTransformer<FileStore> {
     static final FastString BLOCK_SIZE = new FastString("blockSize");
 
     @Override
-    public void transform(FileStore in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull FileStore in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.stringKey(ClassLoaderTransformer.NAME);

@@ -1,6 +1,6 @@
 package mujica.ds.of_int.list;
 
-import mujica.ds.of_byte.view.DataView;
+import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 
 /**
