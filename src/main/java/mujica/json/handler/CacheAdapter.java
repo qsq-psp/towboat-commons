@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-/**
- * Created on 2026/4/14.
- */
 @CodeHistory(date = "2026/4/14")
 public class CacheAdapter<H extends JsonHandler> extends JsonHandlerAdapter<H> {
 

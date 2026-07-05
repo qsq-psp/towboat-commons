@@ -10,8 +10,11 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.event.ActionEvent;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -21,30 +24,25 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-/**
- * Created on 2026/5/30.
- */
 @CodeHistory(date = "2026/5/30")
 public class ProvidedDesktopTest {
-
-    private static final String TARGET = "target\\json-provided";
 
     private static final JsonContext CONTEXT = new JsonContext();
 
     @BeforeClass
     public static void initContext() {
-        CONTEXT.loadBasic().loadProvidedDesktop();
+        CONTEXT.loadProvidedDesktop().loadBasic();
     }
 
     private void caseObject(@NotNull String name, @NotNull Object object) throws IOException {
         final Path currentPath = Path.of("").toAbsolutePath();
-        final Path targetPath = Path.of(TARGET).toAbsolutePath();
+        final Path targetPath = Path.of("target", "json-provided").toAbsolutePath();
         if (!(Files.isDirectory(targetPath) && targetPath.startsWith(currentPath))) {
             Assert.fail("target directory");
         }
         final JsonStringWriter jsonWriter = (new JsonIndentStringBuilderWriter()).setIndent("    ");
-        CONTEXT.transform(object, new LateKeyCheckAdapter<>(jsonWriter));
-        try (Writer writer = Files.newBufferedWriter(Path.of(TARGET, name + ".json"), StandardCharsets.UTF_8,
+        CONTEXT.transform(object, new LateKeyCheckAdapter<>(jsonWriter, string -> !string.isBlank()));
+        try (Writer writer = Files.newBufferedWriter(targetPath.resolve(name + ".json"), StandardCharsets.UTF_8,
                 StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE)) {
             writer.write(jsonWriter.getString());
             writer.flush();
@@ -53,6 +51,21 @@ public class ProvidedDesktopTest {
 
     private void caseObject(@NotNull Object object) throws IOException {
         caseObject(object.getClass().getName(), object);
+    }
+
+    @Test
+    public void caseAction() throws IOException {
+        caseObject(new AbstractAction("print") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(e);
+            }
+        });
+    }
+
+    @Test
+    public void caseAdjustable() throws IOException {
+        caseObject(new JScrollBar(JScrollBar.HORIZONTAL, 2026, 1, 1, 9999));
     }
 
     @Test
@@ -71,8 +84,18 @@ public class ProvidedDesktopTest {
     }
 
     @Test
+    public void caseBoundedRangeModel() throws IOException {
+        caseObject(new DefaultBoundedRangeModel(250, 4, 0, 1000));
+    }
+
+    @Test
     public void caseColorModel() throws IOException {
         caseObject(ColorModelTransformer.INSTANCE);
+    }
+
+    @Test
+    public void caseColorSpace() throws IOException {
+        caseObject(ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB));
     }
 
     @Test
@@ -101,6 +124,11 @@ public class ProvidedDesktopTest {
     }
 
     @Test
+    public void caseGraphicsDevice() throws IOException {
+        caseObject(GraphicsDeviceTransformer.INSTANCE);
+    }
+
+    @Test
     public void caseGraphics() throws IOException {
         final Graphics2D graphics2D = (new BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB)).createGraphics();
         try {
@@ -111,8 +139,13 @@ public class ProvidedDesktopTest {
     }
 
     @Test
-    public void caseGraphicsDevice() throws IOException {
-        caseObject(GraphicsDeviceTransformer.INSTANCE);
+    public void caseInsets() throws IOException {
+        caseObject(new Insets(3, 3, 3, 3));
+    }
+
+    @Test
+    public void caseKeyStroke() throws IOException {
+        caseObject(KeyStroke.getKeyStroke('G'));
     }
 
     @Test
@@ -126,5 +159,10 @@ public class ProvidedDesktopTest {
         caseObject(new Ellipse2D.Double(48.0, 48.0, 0.3, 0.3));
         caseObject(new RoundRectangle2D.Float(-10.0f, -10.0f, 20.0f, 20.0f, 1.0f, 1.0f));
         caseObject(new RoundRectangle2D.Double(-9.0, -9.0, 18.0, 18.0, 3.0, 3.0));
+    }
+
+    @Test
+    public void caseToolkit() throws IOException {
+        caseObject(ToolkitTransformer.INSTANCE);
     }
 }

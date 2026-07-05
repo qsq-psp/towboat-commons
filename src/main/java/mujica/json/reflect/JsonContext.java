@@ -1,7 +1,7 @@
 package mujica.json.reflect;
 
 import mujica.algebra.random.RandomContext;
-import mujica.ds.generic.set.CollectionConstant;
+import mujica.ds.any.set.CollectionConstant;
 import mujica.json.container.FastNumber;
 import mujica.json.handler.JsonHandler;
 import mujica.json.handler.JsonStructure;
@@ -186,10 +186,10 @@ public class JsonContext extends ReflectConfig {
         put(Boolean.class, new BooleanType(flags));
         put(byte.class, new I8Type(flags & ~JsonHint.NULLABLE));
         put(Byte.class, new I8Type(flags));
-        put(int.class, new IntType(flags & ~JsonHint.NULLABLE));
-        put(Integer.class, new IntType(flags));
-        put(long.class, new LongType(flags & ~JsonHint.NULLABLE));
-        put(Long.class, new LongType(flags));
+        put(int.class, new I32Type(flags & ~JsonHint.NULLABLE));
+        put(Integer.class, new I32Type(flags));
+        put(long.class, new I64Type(flags & ~JsonHint.NULLABLE));
+        put(Long.class, new I64Type(flags));
         put(BigInteger.class, new BigIntegerType(flags));
         put(FastNumber.class, new FastNumberType(flags));
         put(String.class, new StringType(flags));
@@ -199,7 +199,7 @@ public class JsonContext extends ReflectConfig {
     @NotNull
     public JsonContext loadOptimized() {
         final long flags = this.flags & ~(JsonHint.UNSIGNED | JsonHint.DERIVED);
-        put(int[].class, new IntArrayType(flags, (IntType) reflectCache.get(int.class.getName())));
+        put(int[].class, new I32ArrayType(flags, (I32Type) reflectCache.get(int.class.getName())));
         return this;
     }
 
@@ -233,7 +233,7 @@ public class JsonContext extends ReflectConfig {
 
     @NotNull
     public JsonContext loadProvidedBase() {
-        return loadProvided("/mujica/json/provided/package.txt");
+        return loadProvided("/mujica/json/provided/base/package.txt");
     }
 
     @NotNull

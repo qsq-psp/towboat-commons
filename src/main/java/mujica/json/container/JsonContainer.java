@@ -1,6 +1,6 @@
 package mujica.json.container;
 
-import mujica.ds.generic.Slot;
+import mujica.ds.any.TypeSlot;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,5 +20,5 @@ public abstract class JsonContainer<K> implements Serializable {
     public abstract Collection<K> keyCollection();
 
     @NotNull
-    public abstract Slot<Object> getSlot(@NotNull K key);
+    public abstract TypeSlot<Object> getSlot(@NotNull K key);
 }

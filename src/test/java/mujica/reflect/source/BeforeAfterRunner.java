@@ -1,6 +1,6 @@
 package mujica.reflect.source;
 
-import mujica.ds.generic.list.TruncateList;
+import mujica.ds.any.list.TruncateList;
 import mujica.reflect.basic.ClassUtil;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;

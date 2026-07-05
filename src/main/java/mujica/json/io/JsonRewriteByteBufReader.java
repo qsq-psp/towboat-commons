@@ -1,7 +1,7 @@
 package mujica.json.io;
 
 import io.netty.buffer.ByteBuf;
-import mujica.ds.of_int.PublicIntSlot;
+import mujica.ds.i32.S32;
 import mujica.io.codec.Base16Case;
 import mujica.io.codec.UTF8PushPullEncoder;
 import mujica.reflect.function.ByteConsumer;
@@ -19,9 +19,13 @@ public class JsonRewriteByteBufReader extends JsonByteBufReader {
 
     private final UTF8PushPullEncoder encoder = new UTF8PushPullEncoder();
 
-    private final PublicIntSlot slowWriterIndex = new PublicIntSlot();
+    private final S32 slowWriterIndex = new S32();
 
-    private final ByteConsumer slowWrite = value -> content().setByte(slowWriterIndex.value++, value);
+    private final ByteConsumer slowWrite = value -> {
+        int index = slowWriterIndex.getI32();
+        content().setByte(index, value);
+        slowWriterIndex.setI32(index + 1);
+    };
 
     public JsonRewriteByteBufReader(@NotNull ByteBuf data) {
         super(data);
@@ -32,7 +36,7 @@ public class JsonRewriteByteBufReader extends JsonByteBufReader {
         final ByteBuf data = content();
         final int startIndex = data.readerIndex();
         encoder.reset();
-        slowWriterIndex.setInt(startIndex);
+        slowWriterIndex.setI32(startIndex);
         LABEL:
         while (true) {
             int value = data.readByte();
@@ -87,7 +91,7 @@ public class JsonRewriteByteBufReader extends JsonByteBufReader {
             slowWrite.accept((byte) value);
         }
         encoder.finishPush(slowWrite);
-        return data.toString(startIndex, slowWriterIndex.value - startIndex, StandardCharsets.UTF_8);
+        return data.toString(startIndex, slowWriterIndex.getI32() - startIndex, StandardCharsets.UTF_8);
     }
 
     private void readHex16() {

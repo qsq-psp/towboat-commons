@@ -4,14 +4,19 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.datatransfer.DataFlavor;
 
 /**
  * Created on 2026/5/19.
  */
+@CodeHistory(date = "2026/5/19")
 public class DataFlavorTransformer implements JsonContextTransformer<DataFlavor> {
+
+    public static final DataFlavorTransformer INSTANCE = new DataFlavorTransformer();
 
     static final FastString MIME = new FastString("mime");
 
@@ -20,10 +25,10 @@ public class DataFlavorTransformer implements JsonContextTransformer<DataFlavor>
     static final FastString NAME = new FastString("name");
 
     @Override
-    public void transform(@NotNull DataFlavor in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull DataFlavor dataFlavor, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            String mime = in.getMimeType();
+            String mime = dataFlavor.getMimeType();
             if (mime != null) {
                 out.stringKey(MIME);
                 out.stringValue(mime);
@@ -31,10 +36,10 @@ public class DataFlavorTransformer implements JsonContextTransformer<DataFlavor>
         }
         {
             out.stringKey(CLASS);
-            out.stringValue(in.getDefaultRepresentationClassAsString());
+            out.stringValue(dataFlavor.getDefaultRepresentationClassAsString());
         }
         {
-            String name = in.getHumanPresentableName();
+            String name = dataFlavor.getHumanPresentableName();
             if (name != null) {
                 out.stringKey(NAME);
                 out.stringValue(name);

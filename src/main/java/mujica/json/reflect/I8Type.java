@@ -1,6 +1,6 @@
 package mujica.json.reflect;
 
-import mujica.ds.generic.set.CollectionConstant;
+import mujica.ds.any.set.CollectionConstant;
 import mujica.ds.i8.I8Slot;
 import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;
@@ -30,7 +30,7 @@ class I8Type extends JsonType implements I8Slot {
     }
 
     @Override
-    public byte getByte() {
+    public byte getI8() {
         if (state == CollectionConstant.PRESENT) {
             return value;
         }
@@ -42,7 +42,7 @@ class I8Type extends JsonType implements I8Slot {
     }
 
     @Override
-    public void setByte(byte newValue) {
+    public void setI8(byte newValue) {
         value = newValue;
         state = CollectionConstant.PRESENT;
     }

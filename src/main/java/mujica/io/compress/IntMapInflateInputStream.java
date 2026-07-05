@@ -2,7 +2,7 @@ package mujica.io.compress;
 
 import io.netty.handler.codec.CodecException;
 import mujica.ds.i8.run.RunBuffer;
-import mujica.ds.of_int.map.IntMap;
+import mujica.ds.i32.map.IntMap;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

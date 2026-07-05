@@ -1,7 +1,7 @@
 package mujica.json.reflect;
 
 import mujica.algebra.discrete.BigConstants;
-import mujica.ds.of_int.PublicIntSlot;
+import mujica.ds.i32.S32;
 import mujica.json.modifier.JsonEmpty;
 import mujica.json.modifier.JsonHint;
 import mujica.reflect.modifier.CodeHistory;
@@ -96,7 +96,7 @@ public class JsonContextTest2 {
 
     @JsonHint(JsonHint.NULLABLE)
     @JsonEmpty(toUndefined = JsonEmpty.FROM_NULL)
-    public final PublicIntSlot slot = new PublicIntSlot();
+    public final S32 slot = new S32();
 
     @Test
     public void caseParse1() {

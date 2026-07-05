@@ -1,6 +1,6 @@
 package mujica.json.handler;
 
-import mujica.ds.generic.set.CollectionConstant;
+import mujica.ds.any.set.CollectionConstant;
 import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;

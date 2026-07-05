@@ -1,6 +1,6 @@
 package mujica.algebra.discrete;
 
-import mujica.ds.of_int.list.IntList;
+import mujica.ds.i32.list.IntList;
 import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;

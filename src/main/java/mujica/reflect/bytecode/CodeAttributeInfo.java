@@ -5,7 +5,7 @@ import mujica.io.stream.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.ds.of_char.number.HexEncoder;
+import mujica.ds.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutput;

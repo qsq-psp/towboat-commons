@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-/**
- * Created on 2025/2/27.
- */
 @CodeHistory(date = "2025/2/27")
 public abstract class ModularMath extends IntegralMath {
 

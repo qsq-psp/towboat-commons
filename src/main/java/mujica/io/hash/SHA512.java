@@ -2,7 +2,7 @@ package mujica.io.hash;
 
 import mujica.ds.i8.view.DataView;
 import mujica.ds.i8.view.LongSequenceDataView;
-import mujica.ds.of_long.list.LongSequence;
+import mujica.ds.i64.list.LongSequence;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;

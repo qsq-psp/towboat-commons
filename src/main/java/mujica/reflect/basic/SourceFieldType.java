@@ -2,7 +2,7 @@ package mujica.reflect.basic;
 
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.ds.of_char.filter.JavaFullyQualifiedNameValidator;
+import mujica.ds.text.filter.JavaFullyQualifiedNameValidator;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;

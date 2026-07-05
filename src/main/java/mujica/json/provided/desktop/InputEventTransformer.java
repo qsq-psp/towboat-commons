@@ -4,6 +4,7 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.InputEvent;
@@ -11,6 +12,7 @@ import java.awt.event.InputEvent;
 /**
  * Created on 2026/4/28.
  */
+@CodeHistory(date = "2026/4/28")
 public class InputEventTransformer implements JsonContextTransformer<InputEvent> {
 
     public static final InputEventTransformer INSTANCE = new InputEventTransformer();

@@ -1,6 +1,6 @@
 package mujica.ds.i8.view;
 
-import mujica.ds.of_long.list.LongSequence;
+import mujica.ds.i64.list.LongSequence;
 import mujica.io.codec.Base16Case;
 import mujica.algebra.discrete.ClampedMath;
 import mujica.algebra.discrete.IntegralMath;

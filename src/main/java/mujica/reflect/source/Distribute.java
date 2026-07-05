@@ -1,7 +1,7 @@
 package mujica.reflect.source;
 
-import mujica.ds.bit.list.BooleanList;
-import mujica.ds.bit.list.CopyOnResizeBooleanList;
+import mujica.ds.bit.list.BitList;
+import mujica.ds.bit.list.CopyOnResizeBitList;
 import mujica.reflect.modifier.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +29,10 @@ public final class Distribute implements Runnable {
     public static void main(String[] args) {
         (new Distribute("D:\\Java\\CRYCHIC\\src", "D:\\Java\\MyGO\\src"))
                 .includeDst("main\\java\\mujica\\math")
+                .includeDst("main\\java\\mujica\\slot")
+                .includeDst("main\\java\\mujica\\desktop")
+                .includeDst("main\\java\\mujica\\swing")
+                .includeDst("main\\java\\mujica\\gui")
                 .run();
         (new Distribute("D:\\Java\\MyGO\\src", "D:\\Java\\Mujica\\src"))
                 .excludeSrc("main\\java\\mujica\\geometry")
@@ -151,7 +155,7 @@ public final class Distribute implements Runnable {
         @NotNull
         final ArrayList<Path> toDelete = new ArrayList<>();
 
-        final BooleanList isDirectoryEmptyStack = new CopyOnResizeBooleanList(null);
+        final BitList isDirectoryEmptyStack = new CopyOnResizeBitList(null);
 
         boolean isDirectoryEmpty;
 

@@ -1,6 +1,6 @@
 package mujica.json.reflect;
 
-import mujica.ds.generic.set.CollectionConstant;
+import mujica.ds.any.set.CollectionConstant;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

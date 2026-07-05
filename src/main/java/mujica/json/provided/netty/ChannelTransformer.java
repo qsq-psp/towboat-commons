@@ -1,6 +1,7 @@
 package mujica.json.provided.netty;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelMetadata;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
@@ -36,6 +37,15 @@ public class ChannelTransformer implements JsonContextTransformer<Channel> {
             jh.booleanValue(channel.isRegistered());
             jh.stringKey("active");
             jh.booleanValue(channel.isActive());
+        }
+        {
+            ChannelMetadata metadata = channel.metadata();
+            if (metadata != null) {
+                jh.stringKey("hasDisconnect");
+                jh.booleanValue(metadata.hasDisconnect());
+                jh.stringKey("defaultMaxMessagesPerRead");
+                jh.numberValue(metadata.defaultMaxMessagesPerRead());
+            }
         }
         {
             jh.stringKey("local");

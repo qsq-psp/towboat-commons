@@ -8,67 +8,67 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/6/11")
 public interface I8Slot {
 
-    byte getByte();
+    byte getI8();
 
-    void setByte(byte newValue);
+    void setI8(byte newValue);
 
-    default void setByte(@NotNull I8Slot newValue) {
-        setByte(newValue.getByte());
+    default void setI8(@NotNull I8Slot newValue) {
+        setI8(newValue.getI8());
     }
 
-    default void setByte(@NotNull Number newValue) {
-        setByte(newValue.byteValue());
+    default void setI8(@NotNull Number newValue) {
+        setI8(newValue.byteValue());
     }
 
-    default void setByte(@NotNull ByteSupplier newValue) {
-        setByte(newValue.getAsByte());
+    default void setI8(@NotNull ByteSupplier newValue) {
+        setI8(newValue.getAsByte());
     }
 
-    default byte updateByte(byte newValue) {
-        final byte oldValue = getByte();
-        setByte(newValue);
+    default byte updateI8(byte newValue) {
+        final byte oldValue = getI8();
+        setI8(newValue);
         return oldValue;
     }
 
-    default byte updateByte(@NotNull I8Slot newValue) {
-        return updateByte(newValue.getByte());
+    default byte updateI8(@NotNull I8Slot newValue) {
+        return updateI8(newValue.getI8());
     }
 
-    default byte updateByte(@NotNull Number newValue) {
-        return updateByte(newValue.byteValue());
+    default byte updateI8(@NotNull Number newValue) {
+        return updateI8(newValue.byteValue());
     }
 
-    default byte updateByte(@NotNull ByteSupplier newValue) {
-        return updateByte(newValue.getAsByte());
+    default byte updateI8(@NotNull ByteSupplier newValue) {
+        return updateI8(newValue.getAsByte());
     }
 
-    static void exchangeByte(@NotNull I8Slot a, @NotNull I8Slot b) {
-        a.setByte(b.updateByte(a.getByte()));
+    static void exchangeI8(@NotNull I8Slot a, @NotNull I8Slot b) {
+        a.setI8(b.updateI8(a.getI8()));
     }
 
     @NotNull
-    default I8Slot boxByte(long newValue) {
-        setByte(newValue);
+    default I8Slot boxI8(long newValue) {
+        setI8(newValue);
         return this;
     }
 
     @NotNull
-    default I8Slot boxByte(@NotNull I8Slot newValue) {
-        return boxByte(newValue.getByte());
+    default I8Slot boxI8(@NotNull I8Slot newValue) {
+        return boxI8(newValue.getI8());
     }
 
     @NotNull
-    default I8Slot boxByte(@NotNull Number newValue) {
-        return boxByte(newValue.longValue());
+    default I8Slot boxI8(@NotNull Number newValue) {
+        return boxI8(newValue.longValue());
     }
 
     @NotNull
-    default I8Slot boxByte(@NotNull ByteSupplier newValue) {
-        return boxByte(newValue.getAsByte());
+    default I8Slot boxI8(@NotNull ByteSupplier newValue) {
+        return boxI8(newValue.getAsByte());
     }
 
     @NotNull
-    default I8Slot swapByte(@NotNull I8Slot that) {
-        return boxByte(that.updateByte(getByte()));
+    default I8Slot swapI8(@NotNull I8Slot that) {
+        return boxI8(that.updateI8(getI8()));
     }
 }

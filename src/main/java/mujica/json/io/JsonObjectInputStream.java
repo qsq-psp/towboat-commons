@@ -1,9 +1,9 @@
 package mujica.json.io;
 
 import mujica.algebra.discrete.BigConstants;
-import mujica.ds.bit.list.CopyOnResizeBooleanList;
-import mujica.ds.of_int.list.CopyOnResizeIntList;
-import mujica.ds.of_int.list.PublicIntList;
+import mujica.ds.bit.list.CopyOnResizeBitList;
+import mujica.ds.i32.list.CopyOnResizeIntList;
+import mujica.ds.i32.list.PublicIntList;
 import mujica.io.codec.Base16Case;
 import mujica.io.codec.UTF8PushPullDecoder;
 import mujica.io.stream.OneBufferDataInputStream;
@@ -714,7 +714,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
         if (super.readUnsignedByte() != '[') {
             throw new IOException("open array");
         }
-        CopyOnResizeBooleanList booleanList = null;
+        CopyOnResizeBitList booleanList = null;
         boolean comma = false;
         while (true) {
             skipGap();
@@ -737,7 +737,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
             if (comma || booleanList == null) {
                 unread(octet);
                 if (booleanList == null) {
-                    booleanList = new CopyOnResizeBooleanList(null);
+                    booleanList = new CopyOnResizeBitList(null);
                 }
                 booleanList.offerLast(readBoolean());
                 comma = false;

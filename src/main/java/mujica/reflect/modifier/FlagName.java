@@ -1,7 +1,7 @@
 package mujica.reflect.modifier;
 
-import mujica.ds.of_char.sanitizer.CharSequenceAppender;
-import mujica.ds.of_char.number.HexEncoder;
+import mujica.ds.text.sanitizer.CharSequenceAppender;
+import mujica.ds.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

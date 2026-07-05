@@ -1,7 +1,7 @@
 package mujica.io.function;
 
 import io.netty.buffer.ByteBuf;
-import mujica.ds.of_int.IntSlot;
+import mujica.ds.i32.I32Slot;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
  */
 public interface ObjectDecoder {
 
-    Object decode(@NotNull byte[] data, @NotNull IntSlot pointer);
+    Object decode(@NotNull byte[] data, @NotNull I32Slot pointer);
 
     Object decode(@NotNull ByteBuffer in);
 

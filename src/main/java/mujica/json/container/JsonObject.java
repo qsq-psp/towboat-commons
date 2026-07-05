@@ -1,6 +1,6 @@
 package mujica.json.container;
 
-import mujica.ds.generic.Slot;
+import mujica.ds.any.TypeSlot;
 import mujica.json.reflect.ContainerConfig;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -47,12 +47,12 @@ public abstract class JsonObject extends JsonContainer<String> {
 
     @NotNull
     @Override
-    public Slot<Object> getSlot(@NotNull String key) {
+    public TypeSlot<Object> getSlot(@NotNull String key) {
         return new JsonObjectSlot(key);
     }
 
     @CodeHistory(date = "2025/10/2")
-    class JsonObjectSlot implements Slot<Object>, Serializable {
+    class JsonObjectSlot implements TypeSlot<Object>, Serializable {
 
         private static final long serialVersionUID = 0xec1ecf6f2a21b14fL;
 

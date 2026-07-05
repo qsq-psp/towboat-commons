@@ -1,6 +1,6 @@
 package mujica.json.reflect;
 
-import mujica.ds.generic.set.CollectionConstant;
+import mujica.ds.any.set.CollectionConstant;
 import mujica.ds.f64.F64Slot;
 import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;

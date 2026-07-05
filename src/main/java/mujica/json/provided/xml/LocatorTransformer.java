@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.Locator;
+import org.xml.sax.ext.Locator2;
 
 /**
  * Created on 2026/5/6.
@@ -14,30 +15,39 @@ public class LocatorTransformer implements JsonContextTransformer<Locator> {
 
     public static final LocatorTransformer INSTANCE = new LocatorTransformer();
 
+    static final FastString VERSION = new FastString("version");
+
     static final FastString LINE_NUMBER = new FastString("lineNumber");
 
     static final FastString COLUMN_NUMBER = new FastString("columnNumber");
 
     @Override
-    public void transform(@NotNull Locator in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Locator locator, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
+        if (locator instanceof Locator2) {
+            Locator2 locator2 = (Locator2) locator;
+            out.stringKey(VERSION);
+            out.stringValue(locator2.getXMLVersion());
+            out.stringKey(InputSourceTransformer.ENCODING);
+            out.stringValue(locator2.getEncoding());
+        }
         {
-            String id = in.getPublicId();
+            String id = locator.getPublicId();
             if (id != null) {
                 out.stringKey(InputSourceTransformer.PUBLIC_ID);
-                out.stringValue(in.getPublicId());
+                out.stringValue(locator.getPublicId());
             }
-            id = in.getSystemId();
+            id = locator.getSystemId();
             if (id != null) {
                 out.stringKey(InputSourceTransformer.SYSTEM_ID);
-                out.stringValue(in.getSystemId());
+                out.stringValue(locator.getSystemId());
             }
         }
         {
             out.stringKey(LINE_NUMBER);
-            out.numberValue(in.getLineNumber());
+            out.numberValue(locator.getLineNumber());
             out.stringKey(COLUMN_NUMBER);
-            out.numberValue(in.getColumnNumber());
+            out.numberValue(locator.getColumnNumber());
         }
         out.closeObject();
     }

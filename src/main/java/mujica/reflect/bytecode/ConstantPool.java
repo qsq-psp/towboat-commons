@@ -1,6 +1,6 @@
 package mujica.reflect.bytecode;
 
-import mujica.ds.generic.list.TruncateList;
+import mujica.ds.any.list.TruncateList;
 import mujica.io.stream.IndentWriter;
 import mujica.io.stream.LimitedDataInput;
 import mujica.algebra.random.RandomContext;

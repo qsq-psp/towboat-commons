@@ -35,12 +35,12 @@ public class CachedFileStoreAttribute implements CachedDataSize<FileStore> {
     }
 
     @Override
-    public long getLong() {
+    public long getI64() {
         return value;
     }
 
     @Override
-    public void setLong(long newValue) {
+    public void setI64(long newValue) {
         value = newValue;
     }
 

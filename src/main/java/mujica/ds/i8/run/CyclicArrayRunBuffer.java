@@ -1,7 +1,7 @@
 package mujica.ds.i8.run;
 
-import mujica.ds.of_int.list.ResizePolicy;
-import mujica.ds.of_int.list.TwiceResizePolicy;
+import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.TwiceResizePolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

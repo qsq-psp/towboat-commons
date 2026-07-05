@@ -34,12 +34,12 @@ public class CachedZipEntryLastModified implements CachedTime<ZipEntry> {
     }
 
     @Override
-    public long getLong() {
+    public long getI64() {
         return fileTime.toMillis();
     }
 
     @Override
-    public void setLong(long newTimeStamp) {
+    public void setI64(long newTimeStamp) {
         setFileTime(FileTime.fromMillis(newTimeStamp));
     }
 

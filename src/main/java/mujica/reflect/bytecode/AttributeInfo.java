@@ -1,6 +1,6 @@
 package mujica.reflect.bytecode;
 
-import mujica.ds.of_int.PublicIntSlot;
+import mujica.ds.i32.S32;
 import mujica.io.stream.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
@@ -296,12 +296,12 @@ public abstract class AttributeInfo implements ClassFileNode.Dependent, BiConsum
     @CodeHistory(date = "2025/10/6")
     public static class Statistics {
 
-        final HashMap<String, PublicIntSlot> map = new HashMap<>();
+        final HashMap<String, S32> map = new HashMap<>();
     }
 
     @Override
     public void accept(@NotNull Statistics statistics, @NotNull String prefix) {
-        PublicIntSlot.increase(statistics.map, prefix + attributeName());
+        S32.increase(statistics.map, prefix + attributeName());
     }
 
     @Override

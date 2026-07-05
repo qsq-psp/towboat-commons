@@ -16,6 +16,6 @@ public class HttpSchemeTransformer implements JsonContextTransformer<HttpScheme>
 
     @Override
     public void transform(@NotNull HttpScheme in, @NotNull JsonHandler out, @Nullable JsonContext context) {
-        out.stringValue(in.name()); // AsciiString is also OK
+        out.stringValue(in.name()); // name() returns AsciiString
     }
 }

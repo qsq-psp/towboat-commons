@@ -8,6 +8,7 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2022/1/9", project = "infrastructure", name = "NettyBufferValue")
+@CodeHistory(date = "2022/7/16", project = "Ultramarine", name = "NettyBufferValueSerializer")
 @CodeHistory(date = "2026/5/28")
 public class ByteBufTransformer implements JsonContextTransformer<ByteBuf> {
 

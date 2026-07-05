@@ -2,8 +2,8 @@ package mujica.ds.i8.view;
 
 import mujica.ds.bit.list.BooleanSequence;
 import mujica.ds.i8.list.ByteSequence;
-import mujica.ds.of_int.list.IntSequence;
-import mujica.ds.of_long.list.LongSequence;
+import mujica.ds.i32.list.IntSequence;
+import mujica.ds.i64.list.LongSequence;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;

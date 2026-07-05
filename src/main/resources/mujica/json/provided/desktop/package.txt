@@ -1,10 +1,13 @@
-mujica.json.provided.ThrowableTransformer java.awt.AWTError java.awt.AWTException
+mujica.json.provided.base.ThrowableTransformer java.awt.AWTError java.awt.AWTException java.awt.HeadlessException
 mujica.json.provided.desktop.ActionEventTransformer java.awt.event.ActionEvent
+mujica.json.provided.desktop.ActionTransformer javax.swing.Action javax.swing.AbstractAction
+mujica.json.provided.desktop.AdjustableTransformer java.awt.Adjustable java.awt.Scrollbar javax.swing.JScrollBar
 mujica.json.provided.desktop.AffineTransformTransformer java.awt.geom.AffineTransform
 mujica.json.provided.desktop.AlphaCompositeTransformer java.awt.AlphaComposite
 mujica.json.provided.desktop.AudioFileFormatTransformer javax.sound.sampled.AudioFileFormat
 mujica.json.provided.desktop.AudioFormatTransformer javax.sound.sampled.AudioFormat
 mujica.json.provided.desktop.BasicStrokeTransformer java.awt.BasicStroke
+mujica.json.provided.desktop.BoundedRangeModelTransformer javax.swing.BoundedRangeModel javax.swing.DefaultBoundedRangeModel
 mujica.json.provided.desktop.ColorModelTransformer java.awt.image.ColorModel
 mujica.json.provided.desktop.ColorSpaceTransformer java.awt.color.ColorSpace
 mujica.json.provided.desktop.ColorTransformer java.awt.Color
@@ -20,10 +23,22 @@ mujica.json.provided.desktop.GraphicsConfigurationTransformer java.awt.GraphicsC
 mujica.json.provided.desktop.GraphicsDeviceTransformer java.awt.GraphicsDevice
 mujica.json.provided.desktop.GraphicsTransformer java.awt.Graphics java.awt.Graphics2D
 mujica.json.provided.desktop.InputEventTransformer java.awt.event.InputEvent
+mujica.json.provided.desktop.InsetsTransformer java.awt.Insets javax.swing.plaf.InsetsUIResource
 mujica.json.provided.desktop.KernelTransformer java.awt.image.Kernel
 mujica.json.provided.desktop.KeyEventTransformer java.awt.event.KeyEvent
-mujica.json.provided.desktop.MouseEventTransformer java.awt.event.MouseEvent
+mujica.json.provided.desktop.KeyStrokeTransformer javax.swing.KeyStroke
+mujica.json.provided.desktop.MidiChannelTransformer javax.sound.midi.MidiChannel
+mujica.json.provided.desktop.MidiDeviceTransformer javax.sound.midi.MidiDevice
+mujica.json.provided.desktop.MouseEventTransformer java.awt.event.MouseEvent java.awt.event.MouseWheelEvent
 mujica.json.provided.desktop.PaintEventTransformer java.awt.event.PaintEvent
 mujica.json.provided.desktop.PathIteratorTransformer java.awt.geom.PathIterator
 mujica.json.provided.desktop.RectangleTransformer java.awt.geom.Rectangle2D java.awt.geom.Rectangle2D$Float java.awt.geom.Rectangle2D$Double java.awt.Rectangle
+mujica.json.provided.desktop.SampleModelTransformer java.awt.image.SampleModel java.awt.image.ComponentSampleModel java.awt.image.BandedSampleModel java.awt.image.PixelInterleavedSampleModel java.awt.image.SinglePixelPackedSampleModel java.awt.image.MultiPixelPackedSampleModel
+mujica.json.provided.desktop.SequencerTransformer javax.sound.midi.Sequencer
 mujica.json.provided.desktop.ShapeTransformer java.awt.Shape java.awt.geom.Line2D$Float java.awt.geom.Line2D$Double java.awt.geom.Ellipse2D$Float java.awt.geom.Ellipse2D$Double java.awt.geom.RoundRectangle2D$Float java.awt.geom.RoundRectangle2D$Double
+mujica.json.provided.desktop.SoundbankTransformer javax.sound.midi.Soundbank
+mujica.json.provided.desktop.SpringTransformer javax.swing.Spring
+mujica.json.provided.desktop.SynthesizerTransformer javax.sound.midi.Synthesizer com.sun.media.sound.AudioSynthesizer com.sun.media.sound.SoftSynthesizer
+mujica.json.provided.desktop.ToolkitTransformer java.awt.Toolkit sun.awt.SunToolkit sun.awt.HeadlessToolkit sun.awt.windows.WToolkit
+mujica.json.provided.desktop.UIDefaultsTransformer javax.swing.UIDefaults
+mujica.json.provided.desktop.VoiceStatusTransformer javax.sound.midi.VoiceStatus com.sun.media.sound.SoftVoice

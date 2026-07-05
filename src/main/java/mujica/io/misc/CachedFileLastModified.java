@@ -46,12 +46,12 @@ public class CachedFileLastModified implements CachedTime<File> {
     }
 
     @Override
-    public long getLong() {
+    public long getI64() {
         return timeStamp;
     }
 
     @Override
-    public void setLong(long newTimeStamp) {
+    public void setI64(long newTimeStamp) {
         if (file.setLastModified(newTimeStamp)) {
             timeStamp = newTimeStamp;
         } else {
@@ -67,7 +67,7 @@ public class CachedFileLastModified implements CachedTime<File> {
 
     @Override
     public void setFileTime(@NotNull FileTime newTime) {
-        setLong(newTime.toMillis());
+        setI64(newTime.toMillis());
     }
 
     @Override

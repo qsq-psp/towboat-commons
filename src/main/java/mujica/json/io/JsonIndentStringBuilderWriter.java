@@ -2,7 +2,7 @@ package mujica.json.io;
 
 import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.of_char.sanitizer.CharSequenceAppender;
+import mujica.ds.text.sanitizer.CharSequenceAppender;
 import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

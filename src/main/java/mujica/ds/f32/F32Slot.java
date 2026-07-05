@@ -4,6 +4,7 @@ import mujica.reflect.function.FloatSupplier;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
+@CodeHistory(date = "2024/1/20", project = "Ultramarine", name = "FloatSlot")
 @CodeHistory(date = "2026/4/14", name = "FloatSlot")
 @CodeHistory(date = "2026/6/10")
 public interface F32Slot {

@@ -8,6 +8,7 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 
 /**
  * Created on 2026/5/13.
@@ -17,25 +18,49 @@ public class MouseEventTransformer implements JsonContextTransformer<MouseEvent>
 
     static final FastString X = new FastString("x");
 
-    static final FastString Y = new FastString("x");
+    static final FastString Y = new FastString("y");
 
     static final FastString CLICK_COUNT = new FastString("clickCount");
 
     static final FastString BUTTON = new FastString("button");
 
     @Override
-    public void transform(@NotNull MouseEvent in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull MouseEvent event, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            InputEventTransformer.transformExposed(in, out);
+            InputEventTransformer.transformExposed(event, out);
             out.stringKey(X);
-            out.numberValue(in.getX());
+            out.numberValue(event.getX());
             out.stringKey(Y);
-            out.numberValue(in.getY());
+            out.numberValue(event.getY());
             out.stringKey(CLICK_COUNT);
-            out.numberValue(in.getClickCount());
+            out.numberValue(event.getClickCount());
             out.stringKey(BUTTON);
-            out.numberValue(in.getButton());
+            out.numberValue(event.getButton());
+        }
+        if (event instanceof MouseWheelEvent) {
+            MouseWheelEvent wheelEvent = (MouseWheelEvent) event;
+            {
+                int scrollType = wheelEvent.getScrollType();
+                out.stringKey("scrollType");
+                switch (scrollType) {
+                    case MouseWheelEvent.WHEEL_UNIT_SCROLL:
+                        out.stringValue("unit");
+                        break;
+                    case MouseWheelEvent.WHEEL_BLOCK_SCROLL:
+                        out.stringValue("block");
+                        break;
+                    default:
+                        out.numberValue(scrollType);
+                        break;
+                }
+            }
+            out.stringKey("scrollAmount");
+            out.numberValue(wheelEvent.getScrollAmount());
+            out.stringKey("wheelRotation");
+            out.numberValue(wheelEvent.getWheelRotation());
+            out.stringKey("preciseWheelRotation");
+            out.numberValue(wheelEvent.getPreciseWheelRotation());
         }
         out.closeObject();
     }

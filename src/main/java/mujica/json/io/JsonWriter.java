@@ -1,12 +1,12 @@
 package mujica.json.io;
 
 import io.netty.buffer.ByteBuf;
-import mujica.ds.of_int.list.CopyOnResizeIntList;
+import mujica.ds.i32.list.CopyOnResizeIntList;
 import mujica.json.handler.JsonHandler;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
-import mujica.ds.of_char.format.AppenderToStringBuilder;
-import mujica.ds.of_char.sanitizer.CharSequenceAppender;
+import mujica.ds.text.format.AppenderToStringBuilder;
+import mujica.ds.text.sanitizer.CharSequenceAppender;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

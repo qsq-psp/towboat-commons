@@ -2,7 +2,9 @@ mujica.json.provided.management.BufferPoolTransformer java.lang.management.Buffe
 mujica.json.provided.management.ClassLoadingTransformer java.lang.management.ClassLoadingMXBean
 mujica.json.provided.management.CompilationTransformer java.lang.management.CompilationMXBean
 mujica.json.provided.management.GarbageCollectorTransformer java.lang.management.GarbageCollectorMXBean sun.management.GarbageCollectorImpl com.sun.management.internal.GarbageCollectorExtImpl
+mujica.json.provided.management.MemoryManagerTransformer java.lang.management.MemoryManagerMXBean sun.management.GarbageCollectorImpl
 mujica.json.provided.management.MemoryPoolTransformer java.lang.management.MemoryPoolMXBean
+mujica.json.provided.management.MemoryTransformer java.lang.management.MemoryMXBean sun.management.MemoryImpl
 mujica.json.provided.management.MemoryUsageTransformer java.lang.management.MemoryUsage
 mujica.json.provided.management.OperatingSystemTransformer java.lang.management.OperatingSystemMXBean sun.management.BaseOperatingSystemImpl
 mujica.json.provided.management.ThreadSystemTransformer java.lang.management.ThreadMXBean

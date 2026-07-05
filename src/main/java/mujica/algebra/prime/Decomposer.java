@@ -1,6 +1,6 @@
 package mujica.algebra.prime;
 
-import mujica.ds.of_int.PublicIntSlot;
+import mujica.ds.i32.S32;
 import mujica.algebra.discrete.IntegralMath;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -61,14 +61,14 @@ public class Decomposer {
                 return math.triangle(n - 1);
         }
         if (n > 16) {
-            HashMap<Integer, PublicIntSlot> wm = new HashMap<>();
+            HashMap<Integer, S32> wm = new HashMap<>();
             for (int i = 0; i < m; i++) {
-                factorize(n - i, ((factor, times) -> PublicIntSlot.add(wm, factor, times))); // multiply
-                factorize(i + 1, ((factor, times) -> PublicIntSlot.add(wm, factor, -times))); // divide
+                factorize(n - i, ((factor, times) -> S32.add(wm, factor, times))); // multiply
+                factorize(i + 1, ((factor, times) -> S32.add(wm, factor, -times))); // divide
             }
             int w = 1;
-            for (Map.Entry<Integer, PublicIntSlot> entry : wm.entrySet()) {
-                w = math.multiply(w, math.power(entry.getKey(), entry.getValue().value)); // negative exponents detected and throw; no assert
+            for (Map.Entry<Integer, S32> entry : wm.entrySet()) {
+                w = math.multiply(w, math.power(entry.getKey(), entry.getValue().getI32())); // negative exponents detected and throw; no assert
             }
             return w;
         } else {
@@ -105,14 +105,14 @@ public class Decomposer {
             }
             int in = (int) n;
             int im = (int) m;
-            HashMap<Integer, PublicIntSlot> wm = new HashMap<>();
+            HashMap<Integer, S32> wm = new HashMap<>();
             for (int i = 0; i < im; i++) {
-                factorize(in - i, ((factor, times) -> PublicIntSlot.add(wm, factor, times))); // multiply
-                factorize(i + 1, ((factor, times) -> PublicIntSlot.add(wm, factor, -times))); // divide
+                factorize(in - i, ((factor, times) -> S32.add(wm, factor, times))); // multiply
+                factorize(i + 1, ((factor, times) -> S32.add(wm, factor, -times))); // divide
             }
             long w = 1L;
-            for (Map.Entry<Integer, PublicIntSlot> entry : wm.entrySet()) {
-                w = math.multiply(w, math.power(entry.getKey(), entry.getValue().value)); // negative exponents detected and throw; no assert
+            for (Map.Entry<Integer, S32> entry : wm.entrySet()) {
+                w = math.multiply(w, math.power(entry.getKey(), entry.getValue().getI32())); // negative exponents detected and throw; no assert
             }
             return w;
         } else {

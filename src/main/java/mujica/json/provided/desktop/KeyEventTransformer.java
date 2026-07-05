@@ -4,6 +4,7 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
@@ -11,6 +12,7 @@ import java.awt.event.KeyEvent;
 /**
  * Created on 2026/4/29.
  */
+@CodeHistory(date = "2026/4/29")
 public class KeyEventTransformer implements JsonContextTransformer<KeyEvent> {
 
     public static final KeyEventTransformer INSTANCE = new KeyEventTransformer();

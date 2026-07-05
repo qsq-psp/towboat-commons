@@ -1,6 +1,6 @@
 package mujica.json.handler;
 
-import mujica.ds.of_int.list.CopyOnResizeIntList;
+import mujica.ds.i32.list.CopyOnResizeIntList;
 import mujica.json.container.FastString;
 import mujica.json.io.JsonWriter;
 import mujica.reflect.modifier.CodeHistory;

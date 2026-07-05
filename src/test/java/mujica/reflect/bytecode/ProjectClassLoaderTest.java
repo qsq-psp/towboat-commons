@@ -1,11 +1,11 @@
 package mujica.reflect.bytecode;
 
-import mujica.ds.generic.list.TruncateList;
+import mujica.ds.any.list.TruncateList;
 import mujica.algebra.random.RandomContext;
 import mujica.geometry.GeometryOperationResult;
 import mujica.geometry.g2d.Point;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.of_char.filter.FormatValidatorTest;
+import mujica.ds.text.filter.FormatValidatorTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;

@@ -18,7 +18,6 @@ import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -72,9 +71,9 @@ public final class AbsorbDictionary extends DefaultHandler implements IORunnable
         LOGGER.info("word count {}", wordSet.size());
         try {
             StreamResult result;
-            Path currentProjectDictionary = Path.of("./.idea/dictionaries/" + getUserName() + ".xml");
+            Path currentProjectDictionary = Path.of(".idea", "dictionaries" + getUserName() + ".xml");
             if (Files.exists(currentProjectDictionary)) {
-                result = new StreamResult(Files.newBufferedWriter(currentProjectDictionary, StandardCharsets.UTF_8, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING));
+                result = new StreamResult(Files.newOutputStream(currentProjectDictionary, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING));
             } else {
                 result = new StreamResult(System.out);
             }

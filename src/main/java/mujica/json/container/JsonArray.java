@@ -1,9 +1,9 @@
 package mujica.json.container;
 
-import mujica.ds.generic.Slot;
-import mujica.ds.generic.list.TruncateList;
-import mujica.ds.of_int.list.CompatibleIntegerList;
-import mujica.ds.of_int.list.NaturalIntList;
+import mujica.ds.any.TypeSlot;
+import mujica.ds.any.list.TruncateList;
+import mujica.ds.i32.list.CompatibleIntegerList;
+import mujica.ds.i32.list.NaturalIntList;
 import mujica.json.reflect.ContainerConfig;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -55,12 +55,12 @@ public abstract class JsonArray extends JsonContainer<Integer> {
 
     @NotNull
     @Override
-    public Slot<Object> getSlot(@NotNull Integer key) {
+    public TypeSlot<Object> getSlot(@NotNull Integer key) {
         return new SlotImpl(key);
     }
 
     @CodeHistory(date = "2025/9/26")
-    class SlotImpl implements Slot<Object>, Serializable {
+    class SlotImpl implements TypeSlot<Object>, Serializable {
 
         private static final long serialVersionUID = 0xb83ccb1367e96deeL;
 

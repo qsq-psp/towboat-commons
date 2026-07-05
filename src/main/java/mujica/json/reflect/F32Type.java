@@ -1,6 +1,6 @@
 package mujica.json.reflect;
 
-import mujica.ds.generic.set.CollectionConstant;
+import mujica.ds.any.set.CollectionConstant;
 import mujica.ds.f32.F32Slot;
 import mujica.reflect.modifier.CodeHistory;
 

@@ -29,7 +29,7 @@ public class ProvidedManagementTest {
 
     @BeforeClass
     public static void initContext() {
-        CONTEXT.loadBasic().loadProvidedManagement();
+        CONTEXT.loadProvidedManagement().loadBasic();
     }
 
     private void caseObject(@NotNull String name, @NotNull Object object) throws IOException {
@@ -55,23 +55,13 @@ public class ProvidedManagementTest {
     }
 
     @Test
-    public void caseCompilation() throws IOException {
-        caseObject(ManagementFactory.getCompilationMXBean());
+    public void caseMemory() throws IOException {
+        caseObject(ManagementFactory.getMemoryMXBean());
     }
 
     @Test
-    public void caseGarbageCollector() throws IOException {
-        caseObject(ManagementFactory.getGarbageCollectorMXBeans()); // ArrayList
-    }
-
-    @Test
-    public void caseMemoryPool() throws IOException {
-        caseObject(ManagementFactory.getMemoryPoolMXBeans());
-    }
-
-    @Test
-    public void caseOperatingSystem() throws IOException {
-        caseObject(ManagementFactory.getOperatingSystemMXBean());
+    public void caseThread() throws IOException {
+        caseObject(ManagementFactory.getThreadMXBean());
     }
 
     @Test
@@ -80,7 +70,27 @@ public class ProvidedManagementTest {
     }
 
     @Test
-    public void caseThread() throws IOException {
-        caseObject(ManagementFactory.getThreadMXBean());
+    public void caseCompilation() throws IOException {
+        caseObject(ManagementFactory.getCompilationMXBean());
+    }
+
+    @Test
+    public void caseOperatingSystem() throws IOException {
+        caseObject(ManagementFactory.getOperatingSystemMXBean());
+    }
+
+    @Test
+    public void caseMemoryPool() throws IOException {
+        caseObject(ManagementFactory.getMemoryPoolMXBeans()); // ArrayList
+    }
+
+    @Test
+    public void caseMemoryManager() throws IOException {
+        caseObject(ManagementFactory.getMemoryManagerMXBeans()); // ArrayList
+    }
+
+    @Test
+    public void caseGarbageCollector() throws IOException {
+        caseObject(ManagementFactory.getGarbageCollectorMXBeans()); // ArrayList
     }
 }

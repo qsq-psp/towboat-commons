@@ -17,7 +17,7 @@ public class DataLineTransformer implements JsonContextTransformer<DataLine> {
     public void transform(@NotNull DataLine in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("class");
+            out.stringKey(DataFlavorTransformer.CLASS);
             out.stringValue(in.getClass().getName());
             out.stringKey("running");
             out.booleanValue(in.isRunning());

@@ -2,7 +2,7 @@ package mujica.ds.i8.view;
 
 import mujica.algebra.discrete.ClampedMath;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.of_char.number.HexEncoder;
+import mujica.ds.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntSupplier;

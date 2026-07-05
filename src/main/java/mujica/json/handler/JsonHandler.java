@@ -1,11 +1,11 @@
 package mujica.json.handler;
 
 import io.netty.buffer.ByteBuf;
-import mujica.ds.generic.set.CollectionConstant;
+import mujica.ds.any.set.CollectionConstant;
 import mujica.json.container.FastNumber;
 import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.of_char.sanitizer.CharSequenceAppender;
+import mujica.ds.text.sanitizer.CharSequenceAppender;
 import mujica.reflect.modifier.DirectSubclass;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;

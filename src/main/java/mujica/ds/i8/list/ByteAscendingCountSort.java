@@ -1,7 +1,7 @@
 package mujica.ds.i8.list;
 
-import mujica.ds.generic.list.MonotonicityDirection;
-import mujica.ds.generic.list.SortingAlgorithm;
+import mujica.ds.any.list.MonotonicityDirection;
+import mujica.ds.any.list.SortingAlgorithm;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

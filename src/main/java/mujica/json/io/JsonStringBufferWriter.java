@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import mujica.json.container.FastNumber;
 import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.of_char.sanitizer.CharSequenceAppender;
+import mujica.ds.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;

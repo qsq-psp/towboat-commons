@@ -1,12 +1,12 @@
 package mujica.reflect.bytecode;
 
-import mujica.ds.generic.heap.HeapTest;
+import mujica.ds.any.heap.HeapTest;
 import mujica.io.codec.Base16Charset;
 import mujica.geometry.g2d.Bound;
 import mujica.reflect.basic.TypeUtilTest;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.of_char.filter.FormatValidatorTest;
-import mujica.ds.of_char.number.RomanTest;
+import mujica.ds.text.filter.FormatValidatorTest;
+import mujica.ds.text.number.RomanTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;

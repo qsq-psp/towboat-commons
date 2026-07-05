@@ -7,6 +7,7 @@ import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.Attributes;
+import org.xml.sax.ext.Attributes2;
 
 @CodeHistory(date = "2022/11/29", project = "Ultramarine", name = "SaxAttributesValueSerializer")
 @CodeHistory(date = "2026/5/31")
@@ -22,9 +23,13 @@ public class AttributesTransformer implements JsonContextTransformer<Attributes>
 
     static final FastString VALUE = new FastString("value");
 
+    static final FastString DECLARED = new FastString("declared");
+
+    static final FastString SPECIFIED = new FastString("specified");
+
     @Override
-    public void transform(@NotNull Attributes in, @NotNull JsonHandler out, JsonContext context) {
-        final int length = in.getLength();
+    public void transform(@NotNull Attributes attributes, @NotNull JsonHandler out, JsonContext context) {
+        final int length = attributes.getLength();
         if (length == 0) {
             out.emptyArrayValue();
             return;
@@ -33,39 +38,46 @@ public class AttributesTransformer implements JsonContextTransformer<Attributes>
         for (int index = 0; index < length; index++) {
             out.openObject();
             {
-                String uri = in.getURI(index);
+                String uri = attributes.getURI(index);
                 if (!uri.isEmpty()) {
                     out.stringKey(URI);
                     out.stringValue(uri);
                 }
             }
             {
-                String localName = in.getLocalName(index);
+                String localName = attributes.getLocalName(index);
                 if (!localName.isEmpty()) {
                     out.stringKey(LOCAL_NAME);
                     out.stringValue(localName);
                 }
             }
             {
-                String qualifiedName = in.getQName(index);
+                String qualifiedName = attributes.getQName(index);
                 if (!qualifiedName.isEmpty()) {
                     out.stringKey(QUALIFIED_NAME);
                     out.stringValue(qualifiedName);
                 }
             }
             {
-                String type = in.getType(index);
+                String type = attributes.getType(index);
                 if (!type.isEmpty()) {
                     out.stringKey(TYPE);
                     out.stringValue(type);
                 }
             }
             {
-                String value = in.getValue(index);
+                String value = attributes.getValue(index);
                 if (!value.isEmpty()) {
                     out.stringKey(VALUE);
                     out.stringValue(value);
                 }
+            }
+            if (attributes instanceof Attributes2) {
+                Attributes2 attributes2 = (Attributes2) attributes;
+                out.stringKey(DECLARED);
+                out.booleanValue(attributes2.isDeclared(index));
+                out.stringKey(SPECIFIED);
+                out.booleanValue(attributes2.isSpecified(index));
             }
             out.closeObject();
         }

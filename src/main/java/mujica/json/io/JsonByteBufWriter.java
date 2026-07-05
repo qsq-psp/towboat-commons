@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.DefaultByteBufHolder;
 import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.of_char.sanitizer.CharSequenceAppender;
+import mujica.ds.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;

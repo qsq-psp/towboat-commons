@@ -1,8 +1,8 @@
 package mujica.json.reflect;
 
-import mujica.ds.generic.set.CollectionConstant;
+import mujica.ds.any.set.CollectionConstant;
 import mujica.ds.bit.BitSlot;
-import mujica.ds.bit.list.BooleanList;
+import mujica.ds.bit.list.BitList;
 import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;
 import mujica.json.modifier.JsonHint;
@@ -208,7 +208,7 @@ class BooleanType extends JsonType implements BitSlot {
         state = CollectionConstant.UNDEFINED;
     }
 
-    void to(@NotNull BooleanList list) {
+    void to(@NotNull BitList list) {
         final CollectionConstant oldState = state;
         state = CollectionConstant.UNDEFINED;
         switch (oldState) {

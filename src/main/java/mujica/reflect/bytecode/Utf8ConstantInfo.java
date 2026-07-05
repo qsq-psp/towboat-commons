@@ -3,7 +3,7 @@ package mujica.reflect.bytecode;
 import mujica.io.stream.LimitedDataInput;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.ds.of_char.sanitizer.CharSequenceAppender;
+import mujica.ds.text.sanitizer.CharSequenceAppender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

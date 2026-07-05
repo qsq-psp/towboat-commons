@@ -6,9 +6,6 @@ import mujica.reflect.modifier.CodeHistory;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-/**
- * Created on 2026/3/26.
- */
 @CodeHistory(date = "2026/3/26")
 public interface SpliteratorOfBoolean extends Spliterator.OfPrimitive<Boolean, BooleanConsumer, SpliteratorOfBoolean> {
 
