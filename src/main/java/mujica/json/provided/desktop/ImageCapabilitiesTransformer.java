@@ -19,9 +19,9 @@ public class ImageCapabilitiesTransformer implements JsonContextTransformer<Imag
     public void transform(@NotNull ImageCapabilities in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("accelerated");
+            out.key("accelerated");
             out.booleanValue(in.isAccelerated());
-            out.stringKey("trueVolatile");
+            out.key("trueVolatile");
             out.booleanValue(in.isTrueVolatile());
         }
         out.closeObject();

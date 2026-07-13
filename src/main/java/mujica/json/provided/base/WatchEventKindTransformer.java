@@ -16,9 +16,9 @@ public class WatchEventKindTransformer implements JsonContextTransformer<WatchEv
     public void transform(@NotNull WatchEvent.Kind<?> in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.NAME);
+            out.key(ClassLoaderTransformer.NAME);
             out.stringValue(in.name());
-            out.stringKey(TypeTransformer.TYPE);
+            out.key(TypeTransformer.TYPE);
             out.stringValue(in.type().getName());
         }
         out.closeObject();

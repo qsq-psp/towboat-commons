@@ -19,30 +19,30 @@ public class BidiTransformer implements JsonContextTransformer<Bidi> {
     public void transform(@NotNull Bidi bidi, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("mixed");
+            out.key("mixed");
             out.booleanValue(bidi.isMixed());
-            out.stringKey("leftToRight");
+            out.key("leftToRight");
             out.booleanValue(bidi.isLeftToRight());
-            out.stringKey("rightToLeft");
+            out.key("rightToLeft");
             out.booleanValue(bidi.isRightToLeft());
-            out.stringKey("length");
+            out.key("length");
             out.numberValue(bidi.getLength());
-            out.stringKey("baseLevel");
+            out.key("baseLevel");
             out.numberValue(bidi.getBaseLevel());
         }
         {
             int runCount = bidi.getRunCount();
             if (runCount > 0) {
-                out.stringKey("runs");
+                out.key("runs");
                 out.openArray();
                 for (int runIndex = 0; runIndex < runCount; runIndex++) {
                     out.openObject();
                     {
-                        out.stringKey("level");
+                        out.key("level");
                         out.numberValue(bidi.getRunLevel(runIndex));
-                        out.stringKey("start");
+                        out.key("start");
                         out.numberValue(bidi.getRunStart(runIndex));
-                        out.stringKey("limit");
+                        out.key("limit");
                         out.numberValue(bidi.getRunLimit(runIndex));
                     }
                     out.closeObject();

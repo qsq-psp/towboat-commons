@@ -4,13 +4,12 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.management.ClassLoadingMXBean;
 
-/**
- * Created on 2026/5/1.
- */
+@CodeHistory(date = "2026/5/1")
 public class ClassLoadingTransformer implements JsonContextTransformer<ClassLoadingMXBean> {
 
     public static final ClassLoadingTransformer INSTANCE = new ClassLoadingTransformer();
@@ -24,17 +23,17 @@ public class ClassLoadingTransformer implements JsonContextTransformer<ClassLoad
     static final FastString VERBOSE = new FastString("verbose");
 
     @Override
-    public void transform(ClassLoadingMXBean in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ClassLoadingMXBean bean, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(TOTAL_LOADED);
-            out.numberValue(in.getTotalLoadedClassCount());
-            out.stringKey(LOADED);
-            out.numberValue(in.getLoadedClassCount());
-            out.stringKey(UNLOADED);
-            out.numberValue(in.getUnloadedClassCount());
-            out.stringKey(VERBOSE);
-            out.booleanValue(in.isVerbose());
+            out.key(TOTAL_LOADED);
+            out.numberValue(bean.getTotalLoadedClassCount());
+            out.key(LOADED);
+            out.numberValue(bean.getLoadedClassCount());
+            out.key(UNLOADED);
+            out.numberValue(bean.getUnloadedClassCount());
+            out.key(VERBOSE);
+            out.booleanValue(bean.isVerbose());
         }
         out.closeObject();
     }

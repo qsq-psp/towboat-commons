@@ -2,7 +2,7 @@ package mujica.io.hash;
 
 import mujica.ds.i8.view.DataView;
 import mujica.ds.i8.view.LongSequenceDataView;
-import mujica.ds.i64.list.LongSequence;
+import mujica.ds.i64.ReadOnlyI64Array;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 @CodeHistory(date = "2025/5/17")
-public class MurmurHash128 extends ByteBlockByteHashCore implements LongSequence {
+public class MurmurHash128 extends ByteBlockByteHashCore implements ReadOnlyI64Array {
 
     private static final long serialVersionUID = 0xe5c9c053858bf205L;
 

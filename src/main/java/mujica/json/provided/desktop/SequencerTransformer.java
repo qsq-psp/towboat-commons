@@ -22,60 +22,60 @@ public class SequencerTransformer implements JsonContextTransformer<Sequencer> {
         out.openObject();
         {
             MidiDeviceTransformer.transformExposed(sequencer, out);
-            out.stringKey("running");
+            out.key("running");
             out.booleanValue(sequencer.isRunning());
-            out.stringKey("recording");
+            out.key("recording");
             out.booleanValue(sequencer.isRecording());
-            out.stringKey("tempoBPM");
+            out.key("tempoBPM");
             out.numberValue(sequencer.getTempoInBPM());
-            out.stringKey("tempoMPQ");
+            out.key("tempoMPQ");
             out.numberValue(sequencer.getTempoInMPQ());
-            out.stringKey("tempoFactor");
+            out.key("tempoFactor");
             out.numberValue(sequencer.getTempoFactor());
-            out.stringKey("tickLength");
+            out.key("tickLength");
             out.numberValue(sequencer.getTickLength());
-            out.stringKey("tickPosition");
+            out.key("tickPosition");
             out.numberValue(sequencer.getTickPosition());
         }
         {
             long length = sequencer.getMicrosecondLength();
             if (length != 0L) {
-                out.stringKey("microsecondLength");
+                out.key("microsecondLength");
                 out.numberValue(length);
             }
         }
         {
             Sequencer.SyncMode mode = sequencer.getMasterSyncMode();
             if (mode != null) {
-                out.stringKey("masterSyncMode");
+                out.key("masterSyncMode");
                 out.stringValue(mode.toString());
             }
         }
         {
             Sequencer.SyncMode mode = sequencer.getSlaveSyncMode();
             if (mode != null) {
-                out.stringKey("slaveSyncMode");
+                out.key("slaveSyncMode");
                 out.stringValue(mode.toString());
             }
         }
         {
             long loopStart = sequencer.getLoopStartPoint();
             if (loopStart != 0L) {
-                out.stringKey("loopStart");
+                out.key("loopStart");
                 out.numberValue(loopStart);
             }
         }
         {
             long loopEnd = sequencer.getLoopEndPoint();
             if (loopEnd != 0L) {
-                out.stringKey("loopEnd");
+                out.key("loopEnd");
                 out.numberValue(loopEnd);
             }
         }
         {
             int loopCount = sequencer.getLoopCount();
             if (loopCount != 0) {
-                out.stringKey("loopCount");
+                out.key("loopCount");
                 out.numberValue(loopCount);
             }
         }

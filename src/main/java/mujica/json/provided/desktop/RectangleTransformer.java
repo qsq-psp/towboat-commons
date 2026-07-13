@@ -29,32 +29,32 @@ public class RectangleTransformer implements JsonContextTransformer<Rectangle2D>
         out.openObject();
         if (in instanceof Rectangle) {
             Rectangle r = (Rectangle) in;
-            out.stringKey(X);
+            out.key(X);
             out.numberValue(r.x);
-            out.stringKey(Y);
+            out.key(Y);
             out.numberValue(r.y);
-            out.stringKey(WIDTH);
+            out.key(WIDTH);
             out.numberValue(r.width);
-            out.stringKey(HEIGHT);
+            out.key(HEIGHT);
             out.numberValue(r.height);
         } else if (in instanceof Rectangle2D.Float) {
             Rectangle2D.Float rf = (Rectangle2D.Float) in;
-            out.stringKey(X);
+            out.key(X);
             out.numberValue(rf.x);
-            out.stringKey(Y);
+            out.key(Y);
             out.numberValue(rf.y);
-            out.stringKey(WIDTH);
+            out.key(WIDTH);
             out.numberValue(rf.width);
-            out.stringKey(HEIGHT);
+            out.key(HEIGHT);
             out.numberValue(rf.height);
         } else {
-            out.stringKey(X);
+            out.key(X);
             out.numberValue(in.getX());
-            out.stringKey(Y);
+            out.key(Y);
             out.numberValue(in.getY());
-            out.stringKey(WIDTH);
+            out.key(WIDTH);
             out.numberValue(in.getWidth());
-            out.stringKey(HEIGHT);
+            out.key(HEIGHT);
             out.numberValue(in.getHeight());
         }
         out.closeObject();

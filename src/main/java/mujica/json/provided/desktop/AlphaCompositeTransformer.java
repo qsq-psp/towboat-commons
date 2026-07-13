@@ -18,12 +18,12 @@ public class AlphaCompositeTransformer implements JsonContextTransformer<AlphaCo
     public void transform(@NotNull AlphaComposite in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("alpha");
+            out.key("alpha");
             out.numberValue(in.getAlpha());
         }
         {
             int rule = in.getRule();
-            out.stringKey("rule");
+            out.key("rule");
             switch (rule) {
                 case AlphaComposite.CLEAR:
                     out.stringValue("clear");

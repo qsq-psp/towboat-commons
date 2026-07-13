@@ -6,7 +6,7 @@ import mujica.ds.any.list.MonotonicityDirection;
 import mujica.ds.any.set.CollectionConstant;
 import mujica.ds.i32.list.CopyOnResizeIntList;
 import mujica.ds.i32.list.QuadraticProbingList;
-import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,13 +33,13 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
     @NotNull
     transient QuadraticProbingList probingList;
 
-    public QuadraticClosedHashIntSet(@Nullable ResizePolicy policy) {
-        super(ResizePolicy.checkQuadraticFull(policy));
+    public QuadraticClosedHashIntSet(@Nullable CapacityPolicy policy) {
+        super(CapacityPolicy.checkQuadraticFull(policy));
         array = new int[this.policy.initialCapacity()];
         probingList = new QuadraticProbingList(array.length);
     }
 
-    QuadraticClosedHashIntSet(@NotNull ResizePolicy policy, @NotNull int[] array) {
+    QuadraticClosedHashIntSet(@NotNull CapacityPolicy policy, @NotNull int[] array) {
         super(policy);
         this.array = array;
         this.probingList = new QuadraticProbingList(array.length);

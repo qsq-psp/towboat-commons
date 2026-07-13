@@ -36,21 +36,21 @@ public class CharsetTransformer implements JsonContextTransformer<Charset>, Json
     public void transform(@NotNull Charset charset, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.NAME);
+            out.key(ClassLoaderTransformer.NAME);
             out.stringValue(charset.name());
-            out.stringKey(ALIASES);
+            out.key(ALIASES);
             out.arrayValue(charset.aliases());
-            out.stringKey(REGISTERED);
+            out.key(REGISTERED);
             out.booleanValue(charset.isRegistered());
             boolean canEncode = charset.canEncode();
-            out.stringKey(CAN_ENCODE);
+            out.key(CAN_ENCODE);
             out.booleanValue(canEncode);
             if (canEncode) {
                 try {
                     CharsetEncoder encoder = charset.newEncoder();
-                    out.stringKey(AVERAGE_BYTES_PER_CHAR);
+                    out.key(AVERAGE_BYTES_PER_CHAR);
                     out.numberValue(encoder.averageBytesPerChar());
-                    out.stringKey(MAX_BYTES_PER_CHAR);
+                    out.key(MAX_BYTES_PER_CHAR);
                     out.numberValue(encoder.maxBytesPerChar());
                 } catch (Exception e) {
                     if (context != null) {
@@ -60,9 +60,9 @@ public class CharsetTransformer implements JsonContextTransformer<Charset>, Json
             }
             try {
                 CharsetDecoder decoder = charset.newDecoder();
-                out.stringKey(AVERAGE_CHARS_PER_BYTE);
+                out.key(AVERAGE_CHARS_PER_BYTE);
                 out.numberValue(decoder.averageCharsPerByte());
-                out.stringKey(MAX_CHARS_PER_BYTE);
+                out.key(MAX_CHARS_PER_BYTE);
                 out.numberValue(decoder.maxCharsPerByte());
             } catch (Exception e) {
                 if (context != null) {

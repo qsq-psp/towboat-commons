@@ -17,23 +17,23 @@ public class DataLineTransformer implements JsonContextTransformer<DataLine> {
     public void transform(@NotNull DataLine in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(DataFlavorTransformer.CLASS);
+            out.key(DataFlavorTransformer.CLASS);
             out.stringValue(in.getClass().getName());
-            out.stringKey("running");
+            out.key("running");
             out.booleanValue(in.isRunning());
-            out.stringKey("active");
+            out.key("active");
             out.booleanValue(in.isActive());
-            out.stringKey("format");
+            out.key("format");
             AudioFormatTransformer.INSTANCE.transform(in.getFormat(), out, context);
-            out.stringKey("bufferSize");
+            out.key("bufferSize");
             out.numberValue(in.getBufferSize());
-            out.stringKey("available");
+            out.key("available");
             out.numberValue(in.available());
-            out.stringKey("framePosition");
+            out.key("framePosition");
             out.numberValue(in.getLongFramePosition());
-            out.stringKey("microsecondPosition");
+            out.key("microsecondPosition");
             out.numberValue(in.getMicrosecondPosition());
-            out.stringKey("level");
+            out.key("level");
             out.numberValue(in.getLevel());
         }
         out.closeObject();

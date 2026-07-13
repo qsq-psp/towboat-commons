@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class HttpMethodTransformer implements JsonContextTransformer<HttpMethod> {
 
     @Override
-    public void transform(@NotNull HttpMethod in, @NotNull JsonHandler out, @Nullable JsonContext context) {
-        out.stringValue(in.name());
+    public void transform(@NotNull HttpMethod method, @NotNull JsonHandler out, @Nullable JsonContext context) {
+        out.stringValue(method.name());
     }
 }

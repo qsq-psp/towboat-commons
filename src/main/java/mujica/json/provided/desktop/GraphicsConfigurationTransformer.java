@@ -18,11 +18,11 @@ public class GraphicsConfigurationTransformer implements JsonContextTransformer<
     public void transform(GraphicsConfiguration in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("colorModel");
+            out.key("colorModel");
             ColorModelTransformer.INSTANCE.transform(in.getColorModel(), out, context);
-            out.stringKey("bounds");
+            out.key("bounds");
             RectangleTransformer.INSTANCE.transform(in.getBounds(), out, context);
-            out.stringKey("translucency");
+            out.key("translucency");
             out.booleanValue(in.isTranslucencyCapable());
         }
         out.closeObject();

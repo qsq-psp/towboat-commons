@@ -12,13 +12,13 @@ import org.jetbrains.annotations.NotNull;
 public class HttpResponseStatusTransformer implements JsonContextTransformer<HttpResponseStatus> {
 
     @Override
-    public void transform(@NotNull HttpResponseStatus in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull HttpResponseStatus status, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("code");
-            out.numberValue(in.code());
-            out.stringKey("reason");
-            out.stringValue(in.reasonPhrase());
+            out.key("code");
+            out.numberValue(status.code());
+            out.key("reason");
+            out.stringValue(status.reasonPhrase());
         }
         out.closeObject();
     }

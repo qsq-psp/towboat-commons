@@ -60,13 +60,13 @@ public abstract class JsonHandler implements TypePreference {
         LOGGER.warn("closeObject()");
     }
 
-    public void stringKey(@NotNull String key) {
+    public void key(@NotNull String key) {
         if (LOGGER.isWarnEnabled()) {
             LOGGER.warn("stringKey({})", CharSequenceAppender.Json.ESSENTIAL.stringify(key, (StringBuilder) null));
         }
     }
 
-    public void stringKey(@NotNull FastString key) {
+    public void key(@NotNull FastString key) {
         if (LOGGER.isWarnEnabled()) {
             LOGGER.warn("stringKey(fast\"{}\")", key.toString());
         }

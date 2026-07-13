@@ -23,16 +23,16 @@ public class ColorModelTransformer implements JsonContextTransformer<ColorModel>
         out.openObject();
         {
             boolean alpha = in.hasAlpha();
-            out.stringKey("alpha");
+            out.key("alpha");
             out.booleanValue(alpha);
             if (alpha) {
-                out.stringKey("alphaPremultiplied");
+                out.key("alphaPremultiplied");
                 out.booleanValue(in.isAlphaPremultiplied());
             }
         }
         {
             int transferType = in.getTransferType();
-            out.stringKey("transferType");
+            out.key("transferType");
             switch (transferType) {
                 case DataBuffer.TYPE_BYTE:
                     out.stringValue("byte");
@@ -61,18 +61,18 @@ public class ColorModelTransformer implements JsonContextTransformer<ColorModel>
             }
         }
         {
-            out.stringKey("pixelSize");
+            out.key("pixelSize");
             out.numberValue(in.getPixelSize());
-            out.stringKey("componentCount");
+            out.key("componentCount");
             out.numberValue(in.getNumComponents());
-            out.stringKey("colorComponentCount");
+            out.key("colorComponentCount");
             out.numberValue(in.getNumColorComponents());
-            out.stringKey("componentSizes");
+            out.key("componentSizes");
             out.arrayValue(in.getComponentSize());
         }
         {
             int transparency = in.getTransparency();
-            out.stringKey("transparency");
+            out.key("transparency");
             switch (transparency) {
                 case Transparency.OPAQUE:
                     out.stringValue("opaque");
@@ -89,18 +89,18 @@ public class ColorModelTransformer implements JsonContextTransformer<ColorModel>
             }
         }
         {
-            out.stringKey("colorSpace");
+            out.key("colorSpace");
             ColorSpaceTransformer.INSTANCE.transform(in.getColorSpace(), out, context);
         }
         if (in instanceof DirectColorModel) {
             DirectColorModel direct = (DirectColorModel) in;
-            out.stringKey("redMask");
+            out.key("redMask");
             out.numberValue(direct.getRedMask());
-            out.stringKey("greenMask");
+            out.key("greenMask");
             out.numberValue(direct.getGreenMask());
-            out.stringKey("blueMask");
+            out.key("blueMask");
             out.numberValue(direct.getBlueMask());
-            out.stringKey("alphaMask");
+            out.key("alphaMask");
             out.numberValue(direct.getAlphaMask());
         }
         out.closeObject();

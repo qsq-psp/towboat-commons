@@ -23,36 +23,36 @@ public class KeyStrokeTransformer implements JsonContextTransformer<KeyStroke> {
     public void transform(@NotNull KeyStroke in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(KeyEventTransformer.KEY_CHAR);
+            out.key(KeyEventTransformer.KEY_CHAR);
             out.stringValue(String.valueOf(in.getKeyChar()));
-            out.stringKey(KeyEventTransformer.KEY_CODE);
+            out.key(KeyEventTransformer.KEY_CODE);
             out.numberValue(in.getKeyCode());
         }
         {
             int modifiers = in.getModifiers();
             if ((modifiers & InputEvent.SHIFT_DOWN_MASK) != 0) {
-                out.stringKey(InputEventTransformer.SHIFT);
+                out.key(InputEventTransformer.SHIFT);
                 out.booleanValue(true);
             }
             if ((modifiers & InputEvent.CTRL_DOWN_MASK) != 0) {
-                out.stringKey(InputEventTransformer.CONTROL);
+                out.key(InputEventTransformer.CONTROL);
                 out.booleanValue(true);
             }
             if ((modifiers & InputEvent.META_DOWN_MASK) != 0) {
-                out.stringKey(InputEventTransformer.META);
+                out.key(InputEventTransformer.META);
                 out.booleanValue(true);
             }
             if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0) {
-                out.stringKey(InputEventTransformer.ALT);
+                out.key(InputEventTransformer.ALT);
                 out.booleanValue(true);
             }
             if ((modifiers & InputEvent.ALT_GRAPH_DOWN_MASK) != 0) {
-                out.stringKey(InputEventTransformer.ALT_GRAPH);
+                out.key(InputEventTransformer.ALT_GRAPH);
                 out.booleanValue(true);
             }
         }
         {
-            out.stringKey(ON_KEY_RELEASE);
+            out.key(ON_KEY_RELEASE);
             out.booleanValue(in.isOnKeyRelease());
         }
         out.closeObject();

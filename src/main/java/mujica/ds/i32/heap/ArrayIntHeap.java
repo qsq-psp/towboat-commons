@@ -1,7 +1,7 @@
 package mujica.ds.i32.heap;
 
-import mujica.ds.i32.list.ResizePolicy;
-import mujica.ds.i32.list.TwiceResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
+import mujica.ds.i32.list.TwiceCapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,22 +17,22 @@ public abstract class ArrayIntHeap extends AbstractOrderedIntQueue {
     private static final long serialVersionUID = 0x1e017ba1849e7e12L;
 
     @NotNull
-    final ResizePolicy policy;
+    final CapacityPolicy policy;
 
     @NotNull
     int[] array;
 
-    public ArrayIntHeap(@Nullable ResizePolicy policy) {
+    public ArrayIntHeap(@Nullable CapacityPolicy policy) {
         super();
         if (policy == null) {
-            policy = TwiceResizePolicy.INSTANCE;
+            policy = TwiceCapacityPolicy.INSTANCE;
         }
         this.policy = policy;
         this.array = new int[policy.initialCapacity()];
         this.endIndex = startIndex();
     }
 
-    ArrayIntHeap(@NotNull ResizePolicy policy, @NotNull int[] array) {
+    ArrayIntHeap(@NotNull CapacityPolicy policy, @NotNull int[] array) {
         super();
         this.policy = policy;
         this.array = array;

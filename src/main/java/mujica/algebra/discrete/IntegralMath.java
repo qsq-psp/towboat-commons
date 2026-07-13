@@ -10,12 +10,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Hiro in mmc on 2018/11/29, named Factor.
- * Recreated in LeetInAction on 2021/7/17, named DiscreteMath.
- * Moved into Ultramarine on 2023/4/1.
- * Recreated on 2025/2/26.
- */
 @CodeHistory(date = "2018/11/29", project = "mmc", name = "Factor")
 @CodeHistory(date = "2021/7/17", project = "LeetInAction", name = "DiscreteMath")
 @CodeHistory(date = "2023/4/1", project = "Ultramarine")

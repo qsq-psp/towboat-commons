@@ -26,13 +26,13 @@ public class BufferPoolTransformer implements JsonContextTransformer<BufferPoolM
     public void transform(@NotNull BufferPoolMXBean in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(NAME);
+            out.key(NAME);
             out.stringValue(in.getName());
-            out.stringKey(COUNT);
+            out.key(COUNT);
             out.numberValue(in.getCount());
-            out.stringKey(TOTAL_CAPACITY);
+            out.key(TOTAL_CAPACITY);
             out.numberValue(in.getTotalCapacity());
-            out.stringKey(MEMORY_USED);
+            out.key(MEMORY_USED);
             out.numberValue(in.getMemoryUsed());
         }
         out.closeObject();

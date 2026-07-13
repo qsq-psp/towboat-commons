@@ -18,19 +18,19 @@ public class MidiChannelTransformer implements JsonContextTransformer<MidiChanne
     public void transform(@NotNull MidiChannel in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("pressure");
+            out.key("pressure");
             out.numberValue(in.getChannelPressure());
-            out.stringKey("program");
+            out.key("program");
             out.numberValue(in.getProgram());
-            out.stringKey("pitchBend");
+            out.key("pitchBend");
             out.numberValue(in.getPitchBend());
-            out.stringKey("mono");
+            out.key("mono");
             out.booleanValue(in.getMono());
-            out.stringKey("omni");
+            out.key("omni");
             out.booleanValue(in.getOmni());
-            out.stringKey("mute");
+            out.key("mute");
             out.booleanValue(in.getMute());
-            out.stringKey("solo");
+            out.key("solo");
             out.booleanValue(in.getSolo());
         }
         out.closeObject();

@@ -17,13 +17,13 @@ public class SpringTransformer implements JsonContextTransformer<Spring> {
     public void transform(@NotNull Spring in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("minimum");
+            out.key("minimum");
             out.numberValue(in.getMinimumValue());
-            out.stringKey("preferred");
+            out.key("preferred");
             out.numberValue(in.getPreferredValue());
-            out.stringKey("maximum");
+            out.key("maximum");
             out.numberValue(in.getMaximumValue());
-            out.stringKey("value");
+            out.key("value");
             out.numberValue(in.getValue());
         }
         out.closeObject();

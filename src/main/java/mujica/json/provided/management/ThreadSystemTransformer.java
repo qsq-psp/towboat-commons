@@ -31,19 +31,19 @@ public class ThreadSystemTransformer implements JsonContextTransformer<ThreadMXB
     public void transform(@NotNull ThreadMXBean in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(BufferPoolTransformer.COUNT);
+            out.key(BufferPoolTransformer.COUNT);
             out.numberValue(in.getThreadCount());
-            out.stringKey(PEAK_COUNT);
+            out.key(PEAK_COUNT);
             out.numberValue(in.getPeakThreadCount());
-            out.stringKey(TOTAL_COUNT);
+            out.key(TOTAL_COUNT);
             out.numberValue(in.getTotalStartedThreadCount());
-            out.stringKey(DAEMON_COUNT);
+            out.key(DAEMON_COUNT);
             out.numberValue(in.getDaemonThreadCount());
-            out.stringKey(TID);
+            out.key(TID);
             out.arrayValue(in.getAllThreadIds());
             try {
                 long time = in.getCurrentThreadCpuTime(); // ns
-                out.stringKey(CPU_TIME);
+                out.key(CPU_TIME);
                 out.numberValue(time);
             } catch (UnsupportedOperationException e) {
                 if (context != null) {
@@ -52,7 +52,7 @@ public class ThreadSystemTransformer implements JsonContextTransformer<ThreadMXB
             }
             try {
                 long time = in.getCurrentThreadUserTime(); // ns
-                out.stringKey(USER_TIME);
+                out.key(USER_TIME);
                 out.numberValue(time);
             } catch (UnsupportedOperationException e) {
                 if (context != null) {

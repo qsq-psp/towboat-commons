@@ -5,6 +5,10 @@ import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.RoundingMode;
+
+@CodeHistory(date = "2025/6/11", name = "NumberStorage")
+@CodeHistory(date = "2025/6/14", name = "NumericContext")
 @CodeHistory(date = "2026/6/5")
 public interface Arithmetic<S> {
 
@@ -16,6 +20,8 @@ public interface Arithmetic<S> {
 
     @Name(value = "幺元", language = "zh")
     void one(@NotNull S result);
+
+    void two(@NotNull S result);
 
     int compareSlot(@NotNull S a, @NotNull S b);
 
@@ -58,9 +64,12 @@ public interface Arithmetic<S> {
     @Name(value = "三角数列", language = "zh")
     void triangle(@NotNull S variable, @NotNull S result);
 
-    void divide(@NotNull S left, @NotNull S right, @NotNull S result);
+    void divide(@NotNull S left, @NotNull S right, @NotNull S result, @NotNull RoundingMode mode);
 
     void divide(@NotNull S left, @NotNull S right, @Nullable S quotient, @Nullable S remainder);
+
+    @Name(value = "算术平均", language = "zh")
+    void mean(@NotNull S left, @NotNull S right, @NotNull S result, @NotNull RoundingMode mode);
 
     @Name(value = "greatest common divisor", language = "en")
     @Name(value = "最大公约数", language = "zh")
@@ -85,4 +94,9 @@ public interface Arithmetic<S> {
 
     @Name(value = "组合", language = "zh")
     void combination(@NotNull S nSlot, @NotNull S mSlot, @NotNull S result);
+
+    @Name(value = "平方根", language = "zh")
+    void squareRoot(@NotNull S variable, @NotNull S result, @NotNull RoundingMode mode);
+
+    void log2(@NotNull S variable, @NotNull S result, @NotNull RoundingMode mode);
 }

@@ -20,39 +20,39 @@ public class InstrumentTransformer implements JsonContextTransformer<Instrument>
     public void transform(@NotNull Instrument in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(DataFlavorTransformer.CLASS);
+            out.key(DataFlavorTransformer.CLASS);
             out.stringValue(in.getClass().getName());
         }
         {
             String name = in.getName();
             if (name != null) {
-                out.stringKey(DataFlavorTransformer.NAME);
+                out.key(DataFlavorTransformer.NAME);
                 out.stringValue(name);
             }
         }
         {
             Soundbank soundbank = in.getSoundbank();
             if (soundbank != null) {
-                out.stringKey("soundbank");
+                out.key("soundbank");
                 out.stringValue(soundbank.getName());
             }
         }
         {
             Class<?> dataClass = in.getDataClass();
             if (dataClass != null) {
-                out.stringKey("dataClass");
+                out.key("dataClass");
                 out.stringValue(dataClass.getName());
             }
         }
         {
             Patch patch = in.getPatch();
             if (patch != null) {
-                out.stringKey("patch");
+                out.key("patch");
                 out.openObject();
                 {
-                    out.stringKey("bank");
+                    out.key("bank");
                     out.numberValue(patch.getBank());
-                    out.stringKey("program");
+                    out.key("program");
                     out.numberValue(patch.getProgram());
                 }
                 out.closeObject();

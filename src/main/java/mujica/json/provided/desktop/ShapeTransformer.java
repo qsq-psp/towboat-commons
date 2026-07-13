@@ -19,15 +19,15 @@ public class ShapeTransformer implements JsonContextTransformer<Shape> {
     static final FastString BOUND = new FastString("bound");
 
     @Override
-    public void transform(@NotNull Shape in, @NotNull JsonHandler out, JsonContext context) {
-        if (in instanceof Rectangle2D) {
-            RectangleTransformer.INSTANCE.transform((Rectangle2D) in, out, context);
+    public void transform(@NotNull Shape shape, @NotNull JsonHandler out, JsonContext context) {
+        if (shape instanceof Rectangle2D) {
+            RectangleTransformer.INSTANCE.transform((Rectangle2D) shape, out, context);
         } else {
             out.openObject();
             {
-                out.stringKey(BOUND);
-                RectangleTransformer.INSTANCE.transform(in.getBounds2D(), out, context);
-                PathIteratorTransformer.transformExposed(in.getPathIterator(null), out);
+                out.key(BOUND);
+                RectangleTransformer.INSTANCE.transform(shape.getBounds2D(), out, context);
+                PathIteratorTransformer.transformExposed(shape.getPathIterator(null), out);
             }
             out.closeObject();
         }

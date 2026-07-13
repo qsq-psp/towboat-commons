@@ -13,10 +13,10 @@ import java.util.Map;
 public class HttpHeadersTransformer implements JsonContextTransformer<HttpHeaders> {
 
     @Override
-    public void transform(@NotNull HttpHeaders in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull HttpHeaders map, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
-        for (Map.Entry<String, String> entry : in) {
-            out.stringKey(entry.getKey());
+        for (Map.Entry<String, String> entry : map) {
+            out.key(entry.getKey());
             out.stringValue(entry.getValue());
         }
         out.closeObject();

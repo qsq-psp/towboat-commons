@@ -1,11 +1,11 @@
 package mujica.io.compress;
 
 import io.netty.handler.codec.CodecException;
-import mujica.ds.bit.list.BooleanSequence;
+import mujica.ds.bit.ReadOnlyBitArray;
+import mujica.ds.i32.map.I32Map;
 import mujica.ds.i8.run.CyclicArrayRunBuffer;
 import mujica.ds.i8.run.RunBuffer;
-import mujica.ds.i32.map.CompatibleIntMap;
-import mujica.ds.i32.map.IntMap;
+import mujica.ds.i32.map.JdkI32Map;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 
 @CodeHistory(date = "2025/11/14")
-public class Inflate64InputStream extends FilterInputStream implements BooleanSequence {
+public class Inflate64InputStream extends FilterInputStream implements ReadOnlyBitArray {
 
     private int bitSize, buffer;
 
@@ -112,7 +112,7 @@ public class Inflate64InputStream extends FilterInputStream implements BooleanSe
         return length;
     }
 
-    protected int readSymbol(@NotNull IntMap decodeMap) throws IOException {
+    protected int readSymbol(@NotNull I32Map decodeMap) throws IOException {
         int code = 1;
         while (true) {
             if (code < 0) {
@@ -122,7 +122,7 @@ public class Inflate64InputStream extends FilterInputStream implements BooleanSe
             if (readBit()) {
                 code |= 1;
             }
-            int symbol = decodeMap.getInt(code);
+            int symbol = decodeMap.getI32(code);
             if (symbol != 0) {
                 if (symbol < 0) { // symbol 0 mapped to -1
                     symbol++;
@@ -145,7 +145,7 @@ public class Inflate64InputStream extends FilterInputStream implements BooleanSe
 
     private final int[] commonNextCode = new int[MAX_CODE_LENGTH + 1];
 
-    private void buildDecodeMap(int alphabetSize, @NotNull IntMap decodeMap) {
+    private void buildDecodeMap(int alphabetSize, @NotNull I32Map decodeMap) {
         int maxLength = 0;
         for (int index = 0; index < alphabetSize; index++) {
             int codeLength = commonAlphabet[index];
@@ -172,7 +172,7 @@ public class Inflate64InputStream extends FilterInputStream implements BooleanSe
             if (codeLength == 0) {
                 continue;
             }
-            decodeMap.putInt(commonNextCode[codeLength]++ | (1 << codeLength), symbol == 0 ? -1 : symbol);
+            decodeMap.putI32(commonNextCode[codeLength]++ | (1 << codeLength), symbol == 0 ? -1 : symbol);
         }
     }
 
@@ -221,9 +221,9 @@ public class Inflate64InputStream extends FilterInputStream implements BooleanSe
     public static final int MAX_RUN_BUFFER_DISTANCE = 1 << 16;
 
     @NotNull
-    private final IntMap codeLengthDecodeMap, literalLengthDecodeMap, distanceDecodeMap;
+    private final I32Map codeLengthDecodeMap, literalLengthDecodeMap, distanceDecodeMap;
 
-    public Inflate64InputStream(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+    public Inflate64InputStream(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<I32Map> decodeMapSupplier) {
         super(in);
         this.runBuffer = runBuffer;
         this.codeLengthDecodeMap = decodeMapSupplier.get();
@@ -232,7 +232,7 @@ public class Inflate64InputStream extends FilterInputStream implements BooleanSe
     }
 
     public Inflate64InputStream(@NotNull InputStream in) {
-        this(in, new CyclicArrayRunBuffer(MAX_RUN_BUFFER_DISTANCE), CompatibleIntMap::new);
+        this(in, new CyclicArrayRunBuffer(MAX_RUN_BUFFER_DISTANCE), JdkI32Map::new);
     }
 
     private static final byte[] REORDER = {
@@ -259,20 +259,20 @@ public class Inflate64InputStream extends FilterInputStream implements BooleanSe
     private void buildFixedDecodeMaps() {
         literalLengthDecodeMap.clear();
         for (int index = 0; index < 144; index++) {
-            literalLengthDecodeMap.putInt((0b00110000 + index) | (1 << 8), index == 0 ? -1 : index);
+            literalLengthDecodeMap.putI32((0b00110000 + index) | (1 << 8), index == 0 ? -1 : index);
         }
         for (int index = 144; index < 256; index++) {
-            literalLengthDecodeMap.putInt((0b110010000 - 144 + index) | (1 << 9), index);
+            literalLengthDecodeMap.putI32((0b110010000 - 144 + index) | (1 << 9), index);
         }
         for (int index = 256; index < 280; index++) {
-            literalLengthDecodeMap.putInt((index - 256) | (1 << 7), index);
+            literalLengthDecodeMap.putI32((index - 256) | (1 << 7), index);
         }
         for (int index = 280; index < 286; index++) {
-            literalLengthDecodeMap.putInt((0b11000000 - 280 + index) | (1 << 8), index);
+            literalLengthDecodeMap.putI32((0b11000000 - 280 + index) | (1 << 8), index);
         }
         distanceDecodeMap.clear();
         for (int index = 0; index < 32; index++) {
-            distanceDecodeMap.putInt((index << Byte.SIZE) | 5, index == 0 ? -1 : index);
+            distanceDecodeMap.putI32((index << Byte.SIZE) | 5, index == 0 ? -1 : index);
         }
     }
 

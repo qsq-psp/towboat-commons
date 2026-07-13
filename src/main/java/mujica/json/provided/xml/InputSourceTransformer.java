@@ -35,31 +35,31 @@ public class InputSourceTransformer implements JsonContextTransformer<InputSourc
         {
             String str = source.getPublicId();
             if (str != null) {
-                out.stringKey(PUBLIC_ID);
+                out.key(PUBLIC_ID);
                 out.stringValue(source.getPublicId());
             }
             str = source.getSystemId();
             if (str != null) {
-                out.stringKey(SYSTEM_ID);
+                out.key(SYSTEM_ID);
                 out.stringValue(source.getSystemId());
             }
             str = source.getEncoding();
             if (str != null) {
-                out.stringKey(ENCODING);
+                out.key(ENCODING);
                 out.stringValue(source.getEncoding());
             }
         }
         {
             InputStream byteStream = source.getByteStream();
             if (byteStream != null) {
-                out.stringKey(BYTE_STREAM);
+                out.key(BYTE_STREAM);
                 out.stringValue(byteStream.getClass().getName());
             }
         }
         {
             Reader characterStream = source.getCharacterStream();
             if (characterStream != null) {
-                out.stringKey(CHARACTER_STREAM);
+                out.key(CHARACTER_STREAM);
                 out.stringValue(characterStream.getClass().getName());
             }
         }

@@ -5,6 +5,8 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.RoundingMode;
+
 @CodeHistory(date = "2026/6/28")
 public class ModularArithmeticS64 extends AbstractArithmetic<S64> {
 
@@ -69,7 +71,7 @@ public class ModularArithmeticS64 extends AbstractArithmetic<S64> {
     }
 
     @Override
-    public void divide(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
+    public void divide(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result, @NotNull RoundingMode mode) {
         // todo
     }
 

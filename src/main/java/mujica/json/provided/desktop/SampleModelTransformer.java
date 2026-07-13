@@ -18,17 +18,17 @@ public class SampleModelTransformer implements JsonContextTransformer<SampleMode
     public void transform(@NotNull SampleModel in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(RectangleTransformer.WIDTH);
+            out.key(RectangleTransformer.WIDTH);
             out.numberValue(in.getWidth());
-            out.stringKey(RectangleTransformer.HEIGHT);
+            out.key(RectangleTransformer.HEIGHT);
             out.numberValue(in.getHeight());
-            out.stringKey("bandCount");
+            out.key("bandCount");
             out.numberValue(in.getNumBands());
-            out.stringKey("dataElementCount");
+            out.key("dataElementCount");
             out.numberValue(in.getNumDataElements());
-            out.stringKey("dataType");
+            out.key("dataType");
             out.numberValue(in.getDataType());
-            out.stringKey("transferType");
+            out.key("transferType");
             out.numberValue(in.getTransferType());
         }
         out.closeObject();

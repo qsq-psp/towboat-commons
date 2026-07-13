@@ -31,38 +31,60 @@ public class SocketTransformer implements JsonContextTransformer<Socket> {
 
     static final FastString LOCAL = new FastString("local");
 
-    @Override
-    public void transform(@NotNull Socket in, @NotNull JsonHandler out, JsonContext context) {
+    static final FastString PORT = new FastString("port");
+
+    static final FastString ADDRESS = new FastString("address");
+
+    static void transformInetSocketAddress(@NotNull InetSocketAddress address, @NotNull JsonHandler out) {
         out.openObject();
         {
-            out.stringKey(CONNECTED);
-            out.booleanValue(in.isConnected());
-            out.stringKey(BOUND);
-            out.booleanValue(in.isBound());
-            out.stringKey(CLOSED);
-            out.booleanValue(in.isClosed());
-            out.stringKey(INPUT_SHUTDOWN);
-            out.booleanValue(in.isInputShutdown());
-            out.stringKey(OUTPUT_SHUTDOWN);
-            out.booleanValue(in.isOutputShutdown());
+            out.key(PORT);
+            out.numberValue(address.getPort());
+            out.key(ADDRESS);
+            out.stringValue(address.getAddress().toString());
         }
         {
-            SocketAddress remote = in.getRemoteSocketAddress();
+            String name = address.getHostName();
+            if (name != null) {
+                out.key(ClassLoaderTransformer.NAME);
+                out.stringValue(name);
+            }
+        }
+        out.closeObject();
+    }
+
+    @Override
+    public void transform(@NotNull Socket socket, @NotNull JsonHandler out, JsonContext context) {
+        out.openObject();
+        {
+            out.key(CONNECTED);
+            out.booleanValue(socket.isConnected());
+            out.key(BOUND);
+            out.booleanValue(socket.isBound());
+            out.key(CLOSED);
+            out.booleanValue(socket.isClosed());
+            out.key(INPUT_SHUTDOWN);
+            out.booleanValue(socket.isInputShutdown());
+            out.key(OUTPUT_SHUTDOWN);
+            out.booleanValue(socket.isOutputShutdown());
+        }
+        {
+            SocketAddress remote = socket.getRemoteSocketAddress();
             if (remote != null) {
-                out.stringKey(REMOTE);
+                out.key(REMOTE);
                 if (remote instanceof InetSocketAddress) {
-                    InetSocketAddressTransformer.INSTANCE.transform((InetSocketAddress) remote, out, context);
+                    transformInetSocketAddress((InetSocketAddress) remote, out);
                 } else {
                     out.stringValue(remote.getClass().getName());
                 }
             }
         }
         {
-            SocketAddress local = in.getLocalSocketAddress();
+            SocketAddress local = socket.getLocalSocketAddress();
             if (local != null) {
-                out.stringKey(LOCAL);
+                out.key(LOCAL);
                 if (local instanceof InetSocketAddress) {
-                    InetSocketAddressTransformer.INSTANCE.transform((InetSocketAddress) local, out, context);
+                    transformInetSocketAddress((InetSocketAddress) local, out);
                 } else {
                     out.stringValue(local.getClass().getName());
                 }

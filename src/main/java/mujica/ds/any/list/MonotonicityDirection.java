@@ -3,6 +3,7 @@ package mujica.ds.any.list;
 import mujica.reflect.modifier.CodeHistory;
 
 @CodeHistory(date = "2026/1/25")
+@Deprecated
 public enum MonotonicityDirection {
 
     ASCENDING, DESCENDING;

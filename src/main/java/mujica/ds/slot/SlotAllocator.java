@@ -10,10 +10,14 @@ public interface SlotAllocator<S> {
     @NotNull
     S newSlot();
 
+    default void releaseSlot(@NotNull S slot) {
+        // pass
+    }
+
     void move(@NotNull S src, @NotNull S dst);
 
     @NotNull
-    default S clone(@NotNull S original) {
+    default S cloneSlot(@NotNull S original) {
         final S copy = newSlot();
         move(original, copy);
         return copy;

@@ -27,16 +27,16 @@ public class ResourceBundleTransformer implements JsonContextTransformer<Resourc
             try {
                 out.openObject();
                 {
-                    out.stringKey(ClassLoaderTransformer.CLASS);
+                    out.key(ClassLoaderTransformer.CLASS);
                     out.stringValue(bundle.getClass().getName());
-                    out.stringKey(ClassLoaderTransformer.NAME);
+                    out.key(ClassLoaderTransformer.NAME);
                     out.stringValue(bundle.getBaseBundleName());
-                    out.stringKey(LOCALE);
+                    out.key(LOCALE);
                     LocaleTransformer.INSTANCE.transform(bundle.getLocale(), out, context);
                     for (Enumeration<String> keyEnumeration = bundle.getKeys(); keyEnumeration.hasMoreElements(); ) {
                         String key = keyEnumeration.nextElement();
                         Object value = bundle.getObject(key);
-                        out.stringKey(key);
+                        out.key(key);
                         context.transform(value, out);
                     }
                 }

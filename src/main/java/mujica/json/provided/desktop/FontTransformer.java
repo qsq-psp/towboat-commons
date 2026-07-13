@@ -33,40 +33,40 @@ public class FontTransformer implements JsonContextTransformer<Font>, JsonStruct
     static final FastString ITALIC = new FastString("italic");
 
     @Override
-    public void transform(Font in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull Font font, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            String name = in.getFontName();
+            String name = font.getFontName();
             if (name != null) {
-                out.stringKey(DataFlavorTransformer.NAME);
+                out.key(DataFlavorTransformer.NAME);
                 out.stringValue(name);
             }
-            name = in.getPSName();
+            name = font.getPSName();
             if (name != null) {
-                out.stringKey(POSTSCRIPT_NAME);
+                out.key(POSTSCRIPT_NAME);
                 out.stringValue(name);
             }
-            name = in.getFontName();
+            name = font.getFontName();
             if (name != null) {
-                out.stringKey(FONT_FACE_NAME);
+                out.key(FONT_FACE_NAME);
                 out.stringValue(name);
             }
-            name = in.getFamily();
+            name = font.getFamily();
             if (name != null) {
-                out.stringKey(FAMILY);
+                out.key(FAMILY);
                 out.stringValue(name);
             }
-            out.stringKey(SIZE);
-            out.numberValue(in.getSize());
-            out.stringKey(SIZE_2D);
-            out.numberValue(in.getSize2D());
-            out.stringKey(BOLD);
-            out.booleanValue(in.isBold());
-            out.stringKey(ITALIC);
-            out.booleanValue(in.isItalic());
+            out.key(SIZE);
+            out.numberValue(font.getSize());
+            out.key(SIZE_2D);
+            out.numberValue(font.getSize2D());
+            out.key(BOLD);
+            out.booleanValue(font.isBold());
+            out.key(ITALIC);
+            out.booleanValue(font.isItalic());
         }
-        if (in instanceof UIResource) {
-            out.stringKey(InsetsTransformer.UI_RESOURCE);
+        if (font instanceof UIResource) {
+            out.key(InsetsTransformer.UI_RESOURCE);
             out.booleanValue(true);
         }
         out.closeObject();

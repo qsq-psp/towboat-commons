@@ -23,9 +23,9 @@ public class SecurityManagerTransformer implements JsonContextTransformer<Securi
     public void transform(@NotNull SecurityManager manager, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.CLASS);
+            out.key(ClassLoaderTransformer.CLASS);
             out.stringValue(manager.getClass().getName());
-            out.stringKey(THREAD_GROUP);
+            out.key(THREAD_GROUP);
             ThreadGroupTransformer.INSTANCE.transform(manager.getThreadGroup(), out, context);
         }
         out.closeObject();

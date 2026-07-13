@@ -20,19 +20,19 @@ public class AudioFormatTransformer implements JsonContextTransformer<AudioForma
     public void transform(AudioFormat in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("encoding");
+            out.key("encoding");
             out.stringValue(in.getEncoding().toString());
-            out.stringKey("sampleRate");
+            out.key("sampleRate");
             out.numberValue(in.getSampleRate());
-            out.stringKey("sampleSizeInBits");
+            out.key("sampleSizeInBits");
             out.numberValue(in.getSampleSizeInBits());
-            out.stringKey("channels");
+            out.key("channels");
             out.numberValue(in.getChannels());
-            out.stringKey("frameSize");
+            out.key("frameSize");
             out.numberValue(in.getFrameSize());
-            out.stringKey("frameRate");
+            out.key("frameRate");
             out.numberValue(in.getFrameRate());
-            out.stringKey("bigEndian");
+            out.key("bigEndian");
             out.booleanValue(in.isBigEndian());
         }
         out.closeObject();

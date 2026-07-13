@@ -83,10 +83,10 @@ public class CalendarTransformer implements JsonContextTransformer<Calendar>, Js
     public void transform(@NotNull Calendar calendar, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(TIME);
+            out.key(TIME);
             out.numberValue(calendar.getTimeInMillis());
             for (int fieldIndex = 0; fieldIndex < Calendar.FIELD_COUNT; fieldIndex++) {
-                out.stringKey(FIELDS[fieldIndex]);
+                out.key(FIELDS[fieldIndex]);
                 long fieldValue = calendar.get(fieldIndex);
                 switch (fieldIndex) {
                     case Calendar.MONTH:
@@ -103,7 +103,7 @@ public class CalendarTransformer implements JsonContextTransformer<Calendar>, Js
                         break;
                 }
             }
-            out.stringKey(SimpleDateFormatTransformer.TIME_ZONE);
+            out.key(SimpleDateFormatTransformer.TIME_ZONE);
             TimeZoneTransformer.INSTANCE.transform(calendar.getTimeZone(), out, context);
         }
         out.closeObject();

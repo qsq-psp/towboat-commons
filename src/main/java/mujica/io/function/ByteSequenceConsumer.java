@@ -1,7 +1,7 @@
 package mujica.io.function;
 
 import io.netty.buffer.ByteBuf;
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.reflect.function.ByteConsumer;
 import mujica.reflect.function.ByteSupplier;
 import mujica.reflect.modifier.CodeHistory;
@@ -18,7 +18,7 @@ public interface ByteSequenceConsumer extends ByteConsumer {
     @Override
     void accept(byte value);
 
-    default void accept(@NotNull ByteSequence sequence) {
+    default void accept(@NotNull ReadOnlyI8Array sequence) {
         final int length = sequence.byteLength();
         for (int index = 0; index < length; index++) {
             accept(sequence.getByte(index));

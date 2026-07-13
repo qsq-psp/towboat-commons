@@ -24,13 +24,13 @@ public class AttrTransformer implements JsonContextTransformer<Attr> {
     public void transform(Attr in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(NAME);
+            out.key(NAME);
             out.stringValue(in.getName());
-            out.stringKey(SPECIFIED);
+            out.key(SPECIFIED);
             out.booleanValue(in.getSpecified());
-            out.stringKey(AttributesTransformer.VALUE);
+            out.key(AttributesTransformer.VALUE);
             out.stringValue(in.getValue());
-            out.stringKey(IS_ID);
+            out.key(IS_ID);
             out.booleanValue(in.isId());
         }
         out.closeObject();

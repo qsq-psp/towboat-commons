@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
 
 @CodeHistory(date = "2021/12/30", project = "infrastructure", name = "Mapping")
 @CodeHistory(date = "2022/6/3", project = "Ultramarine", name = "Mapping")
-@CodeHistory(date = "2026/4/3")
+@CodeHistory(date = "2026/4/3") // plain object, record object, ordinary object, bean object...
 abstract class PlainObjectField implements Serializable {
 
     private static final long serialVersionUID = 0xf952640a6a05d352L;
@@ -97,7 +97,7 @@ abstract class PlainObjectField implements Serializable {
 
         @Override
         protected void nameAsKey(@NotNull JsonHandler jh) {
-            jh.stringKey(stringName);
+            jh.key(stringName);
         }
     }
 
@@ -122,7 +122,7 @@ abstract class PlainObjectField implements Serializable {
 
         @Override
         protected void nameAsKey(@NotNull JsonHandler jh) {
-            jh.stringKey(fastName);
+            jh.key(fastName);
         }
     }
 

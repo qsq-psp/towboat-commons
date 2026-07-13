@@ -20,7 +20,7 @@ public class SlotArrayAllocatorB implements SlotArrayAllocator<BitSlot, boolean[
 
     @NotNull
     @Override
-    public BitSlot clone(@NotNull BitSlot original) {
+    public BitSlot cloneSlot(@NotNull BitSlot original) {
         return new PublicBitSlot(original.getBit());
     }
 

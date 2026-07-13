@@ -1,8 +1,8 @@
 package mujica.io.compress;
 
-import mujica.ds.bit.list.BooleanSequence;
+import mujica.ds.bit.ReadOnlyBitArray;
+import mujica.ds.i32.map.I32Map;
 import mujica.ds.i8.run.RunBuffer;
-import mujica.ds.i32.map.IntMap;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +13,7 @@ import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 
 @CodeHistory(date = "2025/10/20")
-public class TowboatInflateOutputStream extends FilterOutputStream implements BooleanSequence {
+public class TowboatInflateOutputStream extends FilterOutputStream implements ReadOnlyBitArray {
 
     private int bitSize, bitPosition, buffer;
 
@@ -54,7 +54,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bo
         }
     }
 
-    private int tryGetSymbol(@NotNull IntMap decodeMap) throws IOException {
+    private int tryGetSymbol(@NotNull I32Map decodeMap) throws IOException {
         int code = 0;
         int length = 0;
         final int limit = Math.min(bitSize, Integer.SIZE - Byte.SIZE);
@@ -64,7 +64,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bo
                 code |= 1 << Byte.SIZE;
             }
             length++;
-            int symbol = decodeMap.getInt(code | length);
+            int symbol = decodeMap.getI32(code | length);
             if (symbol != 0) {
                 return symbol;
             }
@@ -93,9 +93,9 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bo
     protected final RunBuffer runBuffer;
 
     @NotNull
-    private final IntMap codeLengthDecodeMap, literalLengthDecodeMap, distanceDecodeMap;
+    private final I32Map codeLengthDecodeMap, literalLengthDecodeMap, distanceDecodeMap;
 
-    public TowboatInflateOutputStream(@NotNull OutputStream out, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+    public TowboatInflateOutputStream(@NotNull OutputStream out, @NotNull RunBuffer runBuffer, @NotNull Supplier<I32Map> decodeMapSupplier) {
         super(out);
         this.runBuffer = runBuffer;
         this.codeLengthDecodeMap = decodeMapSupplier.get();
@@ -241,7 +241,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bo
                 }
                 case STATE_LITERAL_LENGTH_CODE_COUNT:
                     if (bitSize >= 5) {
-                        literalLengthDecodeMap.putInt(0, readBits(5) + 257);
+                        literalLengthDecodeMap.putI32(0, readBits(5) + 257);
                         state = STATE_DISTANCE_CODE_COUNT;
                         break;
                     } else {
@@ -249,7 +249,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bo
                     }
                 case STATE_DISTANCE_CODE_COUNT:
                     if (bitSize >= 5) {
-                        distanceDecodeMap.putInt(0, readBits(5) + 1);
+                        distanceDecodeMap.putI32(0, readBits(5) + 1);
                         state = STATE_CODE_LENGTH_CODE_COUNT;
                         break;
                     } else {
@@ -257,7 +257,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bo
                     }
                 case STATE_CODE_LENGTH_CODE_COUNT:
                     if (bitSize >= 4) {
-                        codeLengthDecodeMap.putInt(0, readBits(4) + 4);
+                        codeLengthDecodeMap.putI32(0, readBits(4) + 4);
                         state = STATE_CODE_LENGTH_CODE;
                         break;
                     } else {
@@ -289,7 +289,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bo
                 if (bitSize < 3) {
                     return false;
                 }
-                int codeLengthCodeCount = codeLengthDecodeMap.getInt(0);
+                int codeLengthCodeCount = codeLengthDecodeMap.getI32(0);
                 int index = state - STATE_CODE_LENGTH_CODE;
                 assert index < codeLengthCodeCount;
                 commonAlphabet[ResidueInflateInputStream.REORDER[index++]] = (byte) readBits(3);
@@ -309,7 +309,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bo
                 if (symbol == 0) {
                     return false;
                 }
-                int literalLengthCodeCount = literalLengthDecodeMap.getInt(0);
+                int literalLengthCodeCount = literalLengthDecodeMap.getI32(0);
                 int index = state - STATE_LITERAL_LENGTH_CODE;
                 assert index < literalLengthCodeCount;
                 index = fillCodeLength(index, ~symbol);
@@ -324,7 +324,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bo
                 if (symbol == 0) {
                     return false;
                 }
-                int distanceCodeCount = distanceDecodeMap.getInt(0);
+                int distanceCodeCount = distanceDecodeMap.getI32(0);
                 int index = state - STATE_DISTANCE_CODE;
                 assert index < distanceCodeCount;
                 index = fillCodeLength(index, ~symbol);
@@ -363,7 +363,7 @@ public class TowboatInflateOutputStream extends FilterOutputStream implements Bo
         return index;
     }
 
-    private void buildDecodeMap(int alphabetSize, @NotNull IntMap decodeMap) {
+    private void buildDecodeMap(int alphabetSize, @NotNull I32Map decodeMap) {
         //
     }
 }

@@ -17,13 +17,13 @@ public class RuntimeTransformer implements JsonContextTransformer<Runtime>, Json
     public void transform(@NotNull Runtime in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("availableProcessors");
+            out.key("availableProcessors");
             out.numberValue(in.availableProcessors());
-            out.stringKey("freeMemory");
+            out.key("freeMemory");
             out.numberValue(in.freeMemory());
-            out.stringKey("totalMemory");
+            out.key("totalMemory");
             out.numberValue(in.totalMemory());
-            out.stringKey("maxMemory");
+            out.key("maxMemory");
             out.numberValue(in.maxMemory());
         }
         out.closeObject();

@@ -35,7 +35,6 @@ module CRYCHIC {
     exports mujica.ds.bit;
     exports mujica.ds.bit.list;
     exports mujica.ds.i8;
-    exports mujica.ds.i8.list;
     exports mujica.ds.i8.view;
     exports mujica.ds.i8.run;
     exports mujica.ds.text.sequence;
@@ -46,6 +45,7 @@ module CRYCHIC {
     exports mujica.ds.text.format;
     exports mujica.ds.text.bnf;
     exports mujica.ds.text.regex;
+    exports mujica.ds.base;
     exports mujica.ds.i32;
     exports mujica.ds.i32.list;
     exports mujica.ds.i32.set;
@@ -56,6 +56,7 @@ module CRYCHIC {
     exports mujica.ds.f32;
     exports mujica.ds.f64;
     exports mujica.ds.slot;
+    exports mujica.ds.sort;
     exports mujica.algebra.discrete;
     exports mujica.algebra.prime;
     exports mujica.algebra.random;

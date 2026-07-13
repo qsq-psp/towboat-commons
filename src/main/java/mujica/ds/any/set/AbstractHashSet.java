@@ -1,7 +1,7 @@
 package mujica.ds.any.set;
 
-import mujica.ds.i32.list.ResizePolicy;
-import mujica.ds.i32.list.TwiceResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
+import mujica.ds.i32.list.TwiceCapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,16 +12,16 @@ public abstract class AbstractHashSet<E> extends AbstractAxiomSet<E> {
     private static final long serialVersionUID = 0x42e7f0ff6fed0940L;
 
     @NotNull
-    final ResizePolicy policy;
+    final CapacityPolicy policy;
 
     int size;
 
     transient int modCount;
 
-    protected AbstractHashSet(@Nullable ResizePolicy policy) {
+    protected AbstractHashSet(@Nullable CapacityPolicy policy) {
         super();
         if (policy == null) {
-            policy = TwiceResizePolicy.INSTANCE;
+            policy = TwiceCapacityPolicy.INSTANCE;
         }
         this.policy = policy;
     }

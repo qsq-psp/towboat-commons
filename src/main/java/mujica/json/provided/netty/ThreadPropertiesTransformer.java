@@ -17,19 +17,19 @@ public class ThreadPropertiesTransformer implements JsonContextTransformer<Threa
     public void transform(ThreadProperties in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("state");
+            out.key("state");
             out.stringValue(in.state().name()); // toString() is the same
-            out.stringKey("priority");
+            out.key("priority");
             out.numberValue(in.priority());
-            out.stringKey("interrupted");
+            out.key("interrupted");
             out.booleanValue(in.isInterrupted());
-            out.stringKey("daemon");
+            out.key("daemon");
             out.booleanValue(in.isDaemon());
-            out.stringKey("name");
+            out.key("name");
             out.stringValue(in.name());
-            out.stringKey("id");
+            out.key("id");
             out.numberValue(in.id());
-            out.stringKey("alive");
+            out.key("alive");
             out.booleanValue(in.isAlive());
         }
         out.closeObject();

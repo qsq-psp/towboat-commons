@@ -3,7 +3,7 @@ package mujica.ds.i32.set;
 import mujica.ds.ConsistencyException;
 import mujica.ds.InvariantException;
 import mujica.ds.any.set.CollectionConstant;
-import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,12 +27,12 @@ public class LinearClosedHashIntSet extends AbstractHashIntSet {
 
     boolean containsRemovedMark;
 
-    public LinearClosedHashIntSet(@Nullable ResizePolicy policy) {
+    public LinearClosedHashIntSet(@Nullable CapacityPolicy policy) {
         super(policy);
         array = new int[this.policy.initialCapacity()];
     }
 
-    LinearClosedHashIntSet(@NotNull ResizePolicy policy, @NotNull int[] array) {
+    LinearClosedHashIntSet(@NotNull CapacityPolicy policy, @NotNull int[] array) {
         super(policy);
         this.array = array;
     }

@@ -10,9 +10,6 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 
-/**
- * Created on 2026/2/26.
- */
 @CodeHistory(date = "2026/2/26")
 @SuppressWarnings("SpellCheckingInspection")
 public class UTF8PushPullDecoderTest {

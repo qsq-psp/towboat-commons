@@ -2,7 +2,7 @@ package mujica.io.hash;
 
 import mujica.ds.i8.view.DataView;
 import mujica.ds.i8.view.LongSequenceDataView;
-import mujica.ds.i64.list.LongSequence;
+import mujica.ds.i64.ReadOnlyI64Array;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2024/12/21", project = "OSHI", name = "SHA512Core")
 @CodeHistory(date = "2025/5/16")
 @ReferencePage(title = "FIPS PUB 180-4", href = "https://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf")
-public class SHA512 extends ByteBlockBitHashCore implements LongSequence {
+public class SHA512 extends ByteBlockBitHashCore implements ReadOnlyI64Array {
 
     private static final long serialVersionUID = 0xc7731d765418b0d7L;
 

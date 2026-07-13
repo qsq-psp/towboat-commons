@@ -40,63 +40,63 @@ public class MemoryPoolTransformer implements JsonContextTransformer<MemoryPoolM
     static final FastString COLLECTION_THRESHOLD_COUNT = new FastString("collectionThresholdCount");
 
     @Override
-    public void transform(@NotNull MemoryPoolMXBean in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull MemoryPoolMXBean bean, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(BufferPoolTransformer.NAME);
-            out.stringValue(in.getName());
-            out.stringKey(TYPE);
-            out.stringValue(in.getType().name());
+            out.key(BufferPoolTransformer.NAME);
+            out.stringValue(bean.getName());
+            out.key(TYPE);
+            out.stringValue(bean.getType().name());
         }
         {
-            MemoryUsage usage = in.getUsage();
+            MemoryUsage usage = bean.getUsage();
             if (usage != null) {
-                out.stringKey(CURRENT);
+                out.key(CURRENT);
                 MemoryUsageTransformer.INSTANCE.transform(usage, out, context);
             }
         }
         {
-            MemoryUsage usage = in.getPeakUsage();
+            MemoryUsage usage = bean.getPeakUsage();
             if (usage != null) {
-                out.stringKey(PEAK);
+                out.key(PEAK);
                 MemoryUsageTransformer.INSTANCE.transform(usage, out, context);
             }
         }
         {
-            MemoryUsage usage = in.getCollectionUsage();
+            MemoryUsage usage = bean.getCollectionUsage();
             if (usage != null) {
-                out.stringKey(COLLECTION);
+                out.key(COLLECTION);
                 MemoryUsageTransformer.INSTANCE.transform(usage, out, context);
             }
         }
         {
-            out.stringKey(GarbageCollectorTransformer.VALID);
-            out.booleanValue(in.isValid());
+            out.key(GarbageCollectorTransformer.VALID);
+            out.booleanValue(bean.isValid());
         }
         {
-            String[] managerNames = in.getMemoryManagerNames();
-            out.stringKey(MANAGER);
+            String[] managerNames = bean.getMemoryManagerNames();
+            out.key(MANAGER);
             out.openArray();
             for (String managerName : managerNames) {
                 out.stringValue(managerName);
             }
             out.closeArray();
         }
-        if (in.isUsageThresholdSupported()) {
-            out.stringKey(THRESHOLD);
-            out.numberValue(in.getUsageThreshold());
-            out.stringKey(THRESHOLD_EXCEEDED);
-            out.booleanValue(in.isUsageThresholdExceeded());
-            out.stringKey(THRESHOLD_COUNT);
-            out.numberValue(in.getUsageThresholdCount());
+        if (bean.isUsageThresholdSupported()) {
+            out.key(THRESHOLD);
+            out.numberValue(bean.getUsageThreshold());
+            out.key(THRESHOLD_EXCEEDED);
+            out.booleanValue(bean.isUsageThresholdExceeded());
+            out.key(THRESHOLD_COUNT);
+            out.numberValue(bean.getUsageThresholdCount());
         }
-        if (in.isCollectionUsageThresholdSupported()) {
-            out.stringKey(COLLECTION_THRESHOLD);
-            out.numberValue(in.getCollectionUsageThreshold());
-            out.stringKey(COLLECTION_THRESHOLD_EXCEEDED);
-            out.booleanValue(in.isCollectionUsageThresholdExceeded());
-            out.stringKey(COLLECTION_THRESHOLD_COUNT);
-            out.numberValue(in.getCollectionUsageThresholdCount());
+        if (bean.isCollectionUsageThresholdSupported()) {
+            out.key(COLLECTION_THRESHOLD);
+            out.numberValue(bean.getCollectionUsageThreshold());
+            out.key(COLLECTION_THRESHOLD_EXCEEDED);
+            out.booleanValue(bean.isCollectionUsageThresholdExceeded());
+            out.key(COLLECTION_THRESHOLD_COUNT);
+            out.numberValue(bean.getCollectionUsageThresholdCount());
         }
         out.closeObject();
     }

@@ -25,7 +25,6 @@ public class SourceMethodType implements NotLoadedMethodType<SourceFieldType, So
         this.parameterTypes = parameterTypes;
     }
 
-    // @NotNull
     public static SourceMethodType parse(@NotNull String expression) {
         return null;
     }

@@ -33,21 +33,21 @@ public class ThrowableTransformer implements JsonContextTransformer<Throwable> {
             try {
                 out.openObject();
                 {
-                    out.stringKey(ClassLoaderTransformer.CLASS);
+                    out.key(ClassLoaderTransformer.CLASS);
                     out.stringValue(in.getClass().getName());
                     String message = in.getMessage();
                     if (message != null) {
-                        out.stringKey(MESSAGE);
+                        out.key(MESSAGE);
                         out.stringValue(message);
                     }
                     Throwable cause = in.getCause();
                     if (cause != null) {
-                        out.stringKey(CAUSE);
+                        out.key(CAUSE);
                         transform(cause, out, context);
                     }
                     Throwable[] suppressedArray = in.getSuppressed();
                     if (suppressedArray != null && suppressedArray.length != 0) {
-                        out.stringKey(SUPPRESSED);
+                        out.key(SUPPRESSED);
                         out.openArray();
                         for (Throwable suppressed : suppressedArray) {
                             transform(suppressed, out, context);

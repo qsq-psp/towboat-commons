@@ -23,9 +23,9 @@ public class LanguageRangeTransformer implements JsonContextTransformer<Locale.L
     public void transform(@NotNull Locale.LanguageRange range, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(RANGE);
+            out.key(RANGE);
             out.stringValue(range.getRange());
-            out.stringKey(WEIGHT);
+            out.key(WEIGHT);
             out.numberValue(range.getWeight());
         }
         out.closeObject();

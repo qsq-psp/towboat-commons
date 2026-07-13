@@ -32,24 +32,24 @@ public class FileStoreTransformer implements JsonContextTransformer<FileStore> {
     public void transform(@NotNull FileStore in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.NAME);
+            out.key(ClassLoaderTransformer.NAME);
             out.stringValue(in.name());
-            out.stringKey(TYPE);
+            out.key(TYPE);
             out.stringValue(in.type());
-            out.stringKey(READ_ONLY);
+            out.key(READ_ONLY);
             out.booleanValue(in.isReadOnly());
             try {
                 long space = in.getTotalSpace(); // throws IOException
-                out.stringKey(TOTAL);
+                out.key(TOTAL);
                 out.numberValue(space);
                 space = in.getUsableSpace(); // throws IOException
-                out.stringKey(USABLE);
+                out.key(USABLE);
                 out.numberValue(space);
                 space = in.getUnallocatedSpace(); // throws IOException
-                out.stringKey(UNALLOCATED);
+                out.key(UNALLOCATED);
                 out.numberValue(space);
                 space = in.getBlockSize(); // throws IOException
-                out.stringKey(BLOCK_SIZE);
+                out.key(BLOCK_SIZE);
                 out.numberValue(space);
             } catch (Exception e) {
                 if (context != null) {
@@ -58,13 +58,13 @@ public class FileStoreTransformer implements JsonContextTransformer<FileStore> {
             }
             try { // found in WindowsFileStore
                 int vsn = (Integer) in.getAttribute("volume:vsn"); // throws IOException, UnsupportedOperationException
-                out.stringKey("VSN");
+                out.key("VSN");
                 out.numberValue(vsn);
                 boolean bool = (Boolean) in.getAttribute("volume:isRemovable"); // throws IOException, UnsupportedOperationException
-                out.stringKey("removable");
+                out.key("removable");
                 out.booleanValue(bool);
                 bool = (Boolean) in.getAttribute("volume:isCdrom"); // throws IOException, UnsupportedOperationException
-                out.stringKey("CDROM");
+                out.key("CDROM");
                 out.booleanValue(bool);
             } catch (Exception e) {
                 if (context != null) {

@@ -30,18 +30,18 @@ public class DataFlavorTransformer implements JsonContextTransformer<DataFlavor>
         {
             String mime = dataFlavor.getMimeType();
             if (mime != null) {
-                out.stringKey(MIME);
+                out.key(MIME);
                 out.stringValue(mime);
             }
         }
         {
-            out.stringKey(CLASS);
+            out.key(CLASS);
             out.stringValue(dataFlavor.getDefaultRepresentationClassAsString());
         }
         {
             String name = dataFlavor.getHumanPresentableName();
             if (name != null) {
-                out.stringKey(NAME);
+                out.key(NAME);
                 out.stringValue(name);
             }
         }

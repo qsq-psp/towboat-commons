@@ -19,9 +19,9 @@ public class PermissionTransformer implements JsonContextTransformer<Permission>
     public void transform(Permission in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.NAME);
+            out.key(ClassLoaderTransformer.NAME);
             out.stringValue(in.getName());
-            out.stringKey(ACTIONS);
+            out.key(ACTIONS);
             out.stringValue(in.getActions());
         }
         out.closeObject();

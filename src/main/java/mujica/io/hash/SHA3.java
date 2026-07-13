@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i8.view.ByteSequenceDataView;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2025/1/17", project = "Ultramarine", name = "SHA3CoreYXZ")
 @CodeHistory(date = "2025/5/17")
 @ReferencePage(title = "FIPS PUB 202", href = "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf")
-public class SHA3 extends ByteBlockBitHashCore implements ByteSequence {
+public class SHA3 extends ByteBlockBitHashCore implements ReadOnlyI8Array {
 
     private static final long serialVersionUID = 0x3c72f8005f09e481L;
 

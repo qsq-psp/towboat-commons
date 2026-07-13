@@ -21,21 +21,21 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         {
             Color color = in.getColor();
             if (color != null) {
-                out.stringKey("color");
+                out.key("color");
                 ColorTransformer.INSTANCE.transform(color, out, context);
             }
         }
         {
             Font font = in.getFont();
             if (font != null) {
-                out.stringKey(GlyphVectorTransformer.FONT);
+                out.key(GlyphVectorTransformer.FONT);
                 FontTransformer.INSTANCE.transform(font, out, context);
             }
         }
         {
             Rectangle clipBounds = in.getClipBounds();
             if (clipBounds != null) {
-                out.stringKey("clipBounds");
+                out.key("clipBounds");
                 RectangleTransformer.INSTANCE.transform(clipBounds, out, context);
             }
         }
@@ -46,20 +46,20 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
     }
 
     private void transformExposed2D(@NotNull Graphics2D in, @NotNull JsonHandler out, JsonContext context) {
-        out.stringKey("configuration");
+        out.key("configuration");
         GraphicsConfigurationTransformer.INSTANCE.transform(in.getDeviceConfiguration(), out, context);
         transformExposedRenderingHints(in, out, context);
         {
             AffineTransform transform = in.getTransform();
             if (transform != null && !transform.isIdentity()) {
-                out.stringKey("transform");
+                out.key("transform");
                 AffineTransformTransformer.INSTANCE.transform(transform, out, context);
             }
         }
         {
             Composite composite = in.getComposite();
             if (composite != null) {
-                out.stringKey("composite");
+                out.key("composite");
                 if (composite instanceof AlphaComposite) {
                     AlphaCompositeTransformer.INSTANCE.transform((AlphaComposite) composite, out, context);
                 } else {
@@ -70,14 +70,14 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         {
             Color background = in.getBackground();
             if (background != null) {
-                out.stringKey("background");
+                out.key("background");
                 ColorTransformer.INSTANCE.transform(background, out, context);
             }
         }
         {
             Stroke stroke = in.getStroke();
             if (stroke != null) {
-                out.stringKey("stroke");
+                out.key("stroke");
                 if (stroke instanceof BasicStroke) {
                     BasicStrokeTransformer.INSTANCE.transform((BasicStroke) stroke, out, context);
                 } else {
@@ -90,7 +90,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
     private void transformExposedRenderingHints(@NotNull Graphics2D in, @NotNull JsonHandler out, JsonContext context) {
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
-            out.stringKey("antialiasing");
+            out.key("antialiasing");
             if (value == RenderingHints.VALUE_ANTIALIAS_ON) {
                 out.stringValue("on");
             } else if (value == RenderingHints.VALUE_ANTIALIAS_OFF) {
@@ -103,7 +103,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_RENDERING);
-            out.stringKey("rendering");
+            out.key("rendering");
             if (value == RenderingHints.VALUE_RENDER_SPEED) {
                 out.stringValue("speed");
             } else if (value == RenderingHints.VALUE_RENDER_QUALITY) {
@@ -116,7 +116,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_DITHERING);
-            out.stringKey("dithering");
+            out.key("dithering");
             if (value == RenderingHints.VALUE_DITHER_DISABLE) {
                 out.stringValue("disable");
             } else if (value == RenderingHints.VALUE_DITHER_ENABLE) {
@@ -129,7 +129,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING);
-            out.stringKey("textAntialiasing");
+            out.key("textAntialiasing");
             if (value == RenderingHints.VALUE_TEXT_ANTIALIAS_ON) {
                 out.stringValue("on");
             } else if (value == RenderingHints.VALUE_TEXT_ANTIALIAS_OFF) {
@@ -154,7 +154,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS);
-            out.stringKey("fractionalMetrics");
+            out.key("fractionalMetrics");
             if (value == RenderingHints.VALUE_FRACTIONALMETRICS_OFF) {
                 out.stringValue("off");
             } else if (value == RenderingHints.VALUE_FRACTIONALMETRICS_ON) {
@@ -167,7 +167,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_INTERPOLATION);
-            out.stringKey("interpolation");
+            out.key("interpolation");
             if (value == RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR) {
                 out.stringValue("nearestNeighbor");
             } else if (value == RenderingHints.VALUE_INTERPOLATION_BILINEAR) {
@@ -180,7 +180,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION);
-            out.stringKey("alphaInterpolation");
+            out.key("alphaInterpolation");
             if (value == RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED) {
                 out.stringValue("speed");
             } else if (value == RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY) {
@@ -193,7 +193,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_COLOR_RENDERING);
-            out.stringKey("colorRendering");
+            out.key("colorRendering");
             if (value == RenderingHints.VALUE_COLOR_RENDER_SPEED) {
                 out.stringValue("speed");
             } else if (value == RenderingHints.VALUE_COLOR_RENDER_QUALITY) {
@@ -206,7 +206,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);
-            out.stringKey("strokeControl");
+            out.key("strokeControl");
             if (value == RenderingHints.VALUE_STROKE_DEFAULT) {
                 out.stringValue("default");
             } else if (value == RenderingHints.VALUE_STROKE_NORMALIZE) {
@@ -219,7 +219,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_RESOLUTION_VARIANT);
-            out.stringKey("resolutionVariant");
+            out.key("resolutionVariant");
             if (value == RenderingHints.VALUE_RESOLUTION_VARIANT_DEFAULT) {
                 out.stringValue("default");
             } else if (value == RenderingHints.VALUE_RESOLUTION_VARIANT_SIZE_FIT) {

@@ -177,56 +177,6 @@ public class BinomialQueue<E> extends AbstractPriorityQueue<E> {
         return list.get(index).element;
     }
 
-    private class IteratorImpl implements Iterator<E> {
-
-        private int index;
-
-        @Nullable
-        private SisterNode<E>.Frame frame;
-
-        final int expectedModCount = modCount;
-
-        IteratorImpl() {
-            super();
-            final int listSize = list.size();
-            while (index < listSize) {
-                SisterNode<E> tree = list.get(index++);
-                if (tree != null) {
-                    frame = tree.new Frame(null);
-                    break;
-                }
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            return frame != null;
-        }
-
-        @Override
-        public E next() {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
-            if (frame == null) {
-                throw new NoSuchElementException();
-            }
-            final E element = frame.node().element;
-            frame = frame.next();
-            if (frame == null) {
-                int listSize = list.size();
-                while (index < listSize) {
-                    SisterNode<E> tree = list.get(index++);
-                    if (tree != null) {
-                        frame = tree.new Frame(null);
-                        break;
-                    }
-                }
-            }
-            return element;
-        }
-    }
-
     @NotNull
     @Override
     public Iterator<E> iterator() {

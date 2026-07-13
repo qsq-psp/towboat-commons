@@ -1,6 +1,6 @@
 package mujica.ds.i32.set;
 
-import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,12 +43,12 @@ public class LinkOpenHashIntSet extends AbstractHashIntSet {
     @NotNull
     Node[] array;
 
-    public LinkOpenHashIntSet(@Nullable ResizePolicy policy) {
+    public LinkOpenHashIntSet(@Nullable CapacityPolicy policy) {
         super(policy);
         array = new Node[this.policy.initialCapacity()];
     }
 
-    LinkOpenHashIntSet(@NotNull ResizePolicy policy, @NotNull Node[] array) {
+    LinkOpenHashIntSet(@NotNull CapacityPolicy policy, @NotNull Node[] array) {
         super(policy);
         this.array = array;
     }

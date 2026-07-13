@@ -30,59 +30,59 @@ public class AxiomSetTest {
     private final RandomContext rc = new RandomContext();
 
     @NotNull
-    private ResizePolicy nextResizePolicy() {
+    private CapacityPolicy nextResizePolicy() {
         switch (rc.nextInt(16)) {
             default:
                 // never
             case 0:
-                return LookUpResizePolicy.PAPER;
+                return LookUpCapacityPolicy.PAPER;
             case 1:
-                return LookUpResizePolicy.NATURAL;
+                return LookUpCapacityPolicy.NATURAL;
             case 2:
-                return LookUpResizePolicy.GOLDEN;
+                return LookUpCapacityPolicy.GOLDEN;
             case 3:
             case 4:
             case 5:
-                return ShiftResizePolicy.INSTANCE;
+                return ShiftCapacityPolicy.INSTANCE;
             case 6:
             case 7:
             case 8:
             case 9:
-                return new TwiceResizePolicy(rc);
+                return new TwiceCapacityPolicy(rc);
             case 10:
             case 11:
             case 12:
-                return new HalfResizePolicy(rc);
+                return new HalfCapacityPolicy(rc);
             case 13:
-                return new Order1ResizePolicy(rc);
+                return new Order1CapacityPolicy(rc);
             case 14:
-                return ModuloLookUpResizePolicy.INSTANCE_59;
+                return ModuloLookUpCapacityPolicy.INSTANCE_59;
             case 15:
-                return ModuloLookUpResizePolicy.INSTANCE_67;
+                return ModuloLookUpCapacityPolicy.INSTANCE_67;
         }
     }
 
     @NotNull
-    private ResizePolicy nextPrimeResizePolicy() {
+    private CapacityPolicy nextPrimeResizePolicy() {
         switch (rc.nextInt(3)) {
             default:
             case 0:
-                return LookUpResizePolicy.PRIME_PAPER;
+                return LookUpCapacityPolicy.PRIME_PAPER;
             case 1:
-                return LookUpResizePolicy.PRIME_GOLDEN;
+                return LookUpCapacityPolicy.PRIME_GOLDEN;
             case 2:
-                return LookUpResizePolicy.PRIME_FIBONACCI;
+                return LookUpCapacityPolicy.PRIME_FIBONACCI;
         }
     }
 
     @NotNull
-    private ResizePolicy nextQuadraticResizePolicy() {
+    private CapacityPolicy nextQuadraticResizePolicy() {
         switch (rc.nextInt(2)) {
             default:
             case 0:
-                return ModuloLookUpResizePolicy.INSTANCE_59;
+                return ModuloLookUpCapacityPolicy.INSTANCE_59;
             case 1:
-                return ModuloLookUpResizePolicy.INSTANCE_67;
+                return ModuloLookUpCapacityPolicy.INSTANCE_67;
         }
     }
 

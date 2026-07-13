@@ -3,7 +3,7 @@ package mujica.ds.any.set;
 import mujica.ds.ConsistencyException;
 import mujica.ds.InvariantException;
 import mujica.ds.any.list.TruncateList;
-import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,13 +45,13 @@ public class WeakLinkOpenHashSet<E> extends AbstractHashSet<E> {
 
     final TruncateList<Node<E>> list;
 
-    public WeakLinkOpenHashSet(@Nullable ResizePolicy policy) {
+    public WeakLinkOpenHashSet(@Nullable CapacityPolicy policy) {
         super(policy);
         list = new TruncateList<>();
         list.padTail(this.policy.initialCapacity(), null);
     }
 
-    WeakLinkOpenHashSet(@NotNull ResizePolicy policy, @NotNull TruncateList<Node<E>> list) {
+    WeakLinkOpenHashSet(@NotNull CapacityPolicy policy, @NotNull TruncateList<Node<E>> list) {
         super(policy);
         this.list = list;
     }

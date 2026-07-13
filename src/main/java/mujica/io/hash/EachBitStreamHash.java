@@ -1,7 +1,7 @@
 package mujica.io.hash;
 
-import mujica.ds.bit.list.BooleanSequence;
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.bit.ReadOnlyBitArray;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +33,7 @@ public abstract class EachBitStreamHash implements BitStreamHash {
     public abstract DataView finish();
 
     @Override
-    public void update(@NotNull BooleanSequence input) {
+    public void update(@NotNull ReadOnlyBitArray input) {
         final int bitLength = input.booleanLength();
         for (int index = 0; index < bitLength; index++) {
             update(input.getBoolean(index));
@@ -54,7 +54,7 @@ public abstract class EachBitStreamHash implements BitStreamHash {
     }
 
     @Override
-    public void update(@NotNull ByteSequence input) {
+    public void update(@NotNull ReadOnlyI8Array input) {
         final int byteLength = input.byteLength();
         for (int index = 0; index < byteLength; index++) {
             update(input.getByte(index));
@@ -63,12 +63,12 @@ public abstract class EachBitStreamHash implements BitStreamHash {
 
     @Override
     public void update(@NotNull byte[] array, int offset, int length) {
-        update(ByteSequence.of(array, offset, length));
+        update(ReadOnlyI8Array.of(array, offset, length));
     }
 
     @Override
     public void update(@NotNull byte[] array) {
-        update(ByteSequence.of(array));
+        update(ReadOnlyI8Array.of(array));
     }
 
     @Override
@@ -80,12 +80,12 @@ public abstract class EachBitStreamHash implements BitStreamHash {
 
     @Override
     public void update(@NotNull DataView input) {
-        update((BooleanSequence) input);
+        update((ReadOnlyBitArray) input);
     }
 
     @NotNull
     @Override
-    public DataView apply(@NotNull BooleanSequence input) {
+    public DataView apply(@NotNull ReadOnlyBitArray input) {
         start();
         update(input);
         return finish();
@@ -93,7 +93,7 @@ public abstract class EachBitStreamHash implements BitStreamHash {
 
     @NotNull
     @Override
-    public DataView apply(@NotNull ByteSequence input) {
+    public DataView apply(@NotNull ReadOnlyI8Array input) {
         start();
         update(input);
         return finish();

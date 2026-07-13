@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
@@ -22,7 +22,7 @@ public interface ByteStreamHash extends StreamHash, BytesHash {
 
     void update(byte input);
 
-    void update(@NotNull ByteSequence input);
+    void update(@NotNull ReadOnlyI8Array input);
 
     void update(@NotNull byte[] array, @Index(of = "array") int offset, int length);
 
@@ -38,7 +38,7 @@ public interface ByteStreamHash extends StreamHash, BytesHash {
 
     @Override
     @NotNull
-    DataView apply(@NotNull ByteSequence input);
+    DataView apply(@NotNull ReadOnlyI8Array input);
 
     @Override
     DataView apply(@NotNull byte[] array, @Index(of = "array") int offset, int length);

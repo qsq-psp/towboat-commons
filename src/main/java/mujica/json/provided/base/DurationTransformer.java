@@ -23,9 +23,9 @@ public class DurationTransformer implements JsonContextTransformer<Duration> {
     public void transform(Duration in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(SECONDS);
+            out.key(SECONDS);
             out.numberValue(in.getSeconds());
-            out.stringKey(NANO);
+            out.key(NANO);
             out.numberValue(in.getNano());
         }
         out.closeObject();

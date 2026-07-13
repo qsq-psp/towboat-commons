@@ -1,10 +1,9 @@
 package mujica.ds.slot;
 
 import mujica.ds.bit.BitSlot;
+import mujica.reflect.modifier.CodeHistory;
 
-/**
- * Created on 2026/6/30.
- */
+@CodeHistory(date = "2026/6/30")
 public interface Base2Iterator extends ReadOnlyBase2Iterator, BitSlot {
 
     @Override

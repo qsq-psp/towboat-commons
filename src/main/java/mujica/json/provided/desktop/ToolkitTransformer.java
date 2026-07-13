@@ -18,54 +18,54 @@ public class ToolkitTransformer implements JsonContextTransformer<Toolkit>, Json
     public static final ToolkitTransformer INSTANCE = new ToolkitTransformer();
 
     @Override
-    public void transform(@NotNull Toolkit in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Toolkit toolkit, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         try {
-            Dimension screenSize = in.getScreenSize();
-            out.stringKey("screenWidth");
+            Dimension screenSize = toolkit.getScreenSize();
+            out.key("screenWidth");
             out.numberValue(screenSize.width);
-            out.stringKey("screenHeight");
+            out.key("screenHeight");
             out.numberValue(screenSize.height);
         } catch (HeadlessException ignore) {}
         try {
-            int screenResolution = in.getScreenResolution();
-            out.stringKey("screenResolution");
+            int screenResolution = toolkit.getScreenResolution();
+            out.key("screenResolution");
             out.numberValue(screenResolution);
         } catch (HeadlessException ignore) {}
         try {
-            ColorModel colorModel = in.getColorModel();
-            out.stringKey("colorModel");
+            ColorModel colorModel = toolkit.getColorModel();
+            out.key("colorModel");
             ColorModelTransformer.INSTANCE.transform(colorModel, out, context);
         } catch (HeadlessException ignore) {}
         try {
-            boolean lockState = in.getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
-            out.stringKey("capsLock");
+            boolean lockState = toolkit.getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
+            out.key("capsLock");
             out.booleanValue(lockState);
         } catch (UnsupportedOperationException ignore) {}
         try {
-            boolean lockState = in.getLockingKeyState(KeyEvent.VK_NUM_LOCK);
-            out.stringKey("numLock");
+            boolean lockState = toolkit.getLockingKeyState(KeyEvent.VK_NUM_LOCK);
+            out.key("numLock");
             out.booleanValue(lockState);
         } catch (UnsupportedOperationException ignore) {}
         try {
-            boolean lockState = in.getLockingKeyState(KeyEvent.VK_SCROLL_LOCK);
-            out.stringKey("scrollLock");
+            boolean lockState = toolkit.getLockingKeyState(KeyEvent.VK_SCROLL_LOCK);
+            out.key("scrollLock");
             out.booleanValue(lockState);
         } catch (UnsupportedOperationException ignore) {}
         try {
-            boolean lockState = in.getLockingKeyState(KeyEvent.VK_KANA_LOCK);
-            out.stringKey("kanaLock");
+            boolean lockState = toolkit.getLockingKeyState(KeyEvent.VK_KANA_LOCK);
+            out.key("kanaLock");
             out.booleanValue(lockState);
         } catch (UnsupportedOperationException ignore) {}
         {
-            out.stringKey("alwaysOnTopSupported");
-            out.booleanValue(in.isAlwaysOnTopSupported());
-            out.stringKey("modalNoExcludeSupported");
-            out.booleanValue(in.isModalExclusionTypeSupported(Dialog.ModalExclusionType.NO_EXCLUDE));
-            out.stringKey("modalApplicationExcludeSupported");
-            out.booleanValue(in.isModalExclusionTypeSupported(Dialog.ModalExclusionType.APPLICATION_EXCLUDE));
-            out.stringKey("modalToolkitExcludeSupported");
-            out.booleanValue(in.isModalExclusionTypeSupported(Dialog.ModalExclusionType.TOOLKIT_EXCLUDE));
+            out.key("alwaysOnTopSupported");
+            out.booleanValue(toolkit.isAlwaysOnTopSupported());
+            out.key("modalNoExcludeSupported");
+            out.booleanValue(toolkit.isModalExclusionTypeSupported(Dialog.ModalExclusionType.NO_EXCLUDE));
+            out.key("modalApplicationExcludeSupported");
+            out.booleanValue(toolkit.isModalExclusionTypeSupported(Dialog.ModalExclusionType.APPLICATION_EXCLUDE));
+            out.key("modalToolkitExcludeSupported");
+            out.booleanValue(toolkit.isModalExclusionTypeSupported(Dialog.ModalExclusionType.TOOLKIT_EXCLUDE));
         }
         out.closeObject();
     }

@@ -4,6 +4,7 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +13,7 @@ import java.lang.management.OperatingSystemMXBean;
 /**
  * Created on 2026/4/24.
  */
+@CodeHistory(date = "2026/4/24")
 public class OperatingSystemTransformer implements JsonContextTransformer<OperatingSystemMXBean> {
 
     public static final OperatingSystemTransformer INSTANCE = new OperatingSystemTransformer();
@@ -27,18 +29,18 @@ public class OperatingSystemTransformer implements JsonContextTransformer<Operat
     static final FastString SYSTEM_LOAD_AVERAGE = new FastString("systemLoadAverage");
 
     @Override
-    public void transform(OperatingSystemMXBean in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull OperatingSystemMXBean in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(BufferPoolTransformer.NAME);
+            out.key(BufferPoolTransformer.NAME);
             out.stringValue(in.getName());
-            out.stringKey(ARCH);
+            out.key(ARCH);
             out.stringValue(in.getArch());
-            out.stringKey(VERSION);
+            out.key(VERSION);
             out.stringValue(in.getVersion());
-            out.stringKey(AVAILABLE_PROCESSORS);
+            out.key(AVAILABLE_PROCESSORS);
             out.numberValue(in.getAvailableProcessors());
-            out.stringKey(SYSTEM_LOAD_AVERAGE);
+            out.key(SYSTEM_LOAD_AVERAGE);
             out.numberValue(in.getSystemLoadAverage());
         }
         out.closeObject();

@@ -188,7 +188,7 @@ public class JsonStringBufferWriter extends JsonStringWriter {
     }
 
     @Override
-    public void stringKey(@NotNull String key) {
+    public void key(@NotNull String key) {
         anyKey();
         CharSequenceAppender appender;
         if ((flags & ConfigFlags.ESCAPE_EXTRA) == 0) {
@@ -205,7 +205,7 @@ public class JsonStringBufferWriter extends JsonStringWriter {
     }
 
     @Override
-    public void stringKey(@NotNull FastString key) {
+    public void key(@NotNull FastString key) {
         anyKey();
         sb.append('"').append(key.toString()).append('"').append(':');
     }

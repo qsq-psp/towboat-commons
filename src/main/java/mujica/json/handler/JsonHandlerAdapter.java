@@ -75,13 +75,13 @@ public class JsonHandlerAdapter<H extends JsonHandler> extends JsonHandler {
     }
 
     @Override
-    public void stringKey(@NotNull String key) {
-        h.stringKey(key);
+    public void key(@NotNull String key) {
+        h.key(key);
     }
 
     @Override
-    public void stringKey(@NotNull FastString key) {
-        h.stringKey(key);
+    public void key(@NotNull FastString key) {
+        h.key(key);
     }
 
     @Override

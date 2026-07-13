@@ -1,12 +1,13 @@
 package mujica.ds.i32;
 
 import mujica.ds.slot.AbstractArithmetic;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Created on 2026/6/29.
- */
+import java.math.RoundingMode;
+
+@CodeHistory(date = "2026/6/29")
 public class ArithmeticU32 extends AbstractArithmetic<I32Slot> {
 
     public ArithmeticU32() {
@@ -27,6 +28,11 @@ public class ArithmeticU32 extends AbstractArithmetic<I32Slot> {
     @Override
     public void one(@NotNull I32Slot result) {
         result.setI32(1);
+    }
+
+    @Override
+    public void two(@NotNull I32Slot result) {
+        result.setI32(2);
     }
 
     @Override
@@ -107,7 +113,7 @@ public class ArithmeticU32 extends AbstractArithmetic<I32Slot> {
     }
 
     @Override
-    public void divide(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void divide(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result, @NotNull RoundingMode mode) {
         // todo
     }
 

@@ -32,27 +32,27 @@ public class ProcessHandleInfoTransformer implements JsonContextTransformer<Proc
         out.openObject();
         {
             info.command().ifPresent(command -> {
-                out.stringKey(COMMAND);
+                out.key(COMMAND);
                 out.stringValue(command);
             });
             info.commandLine().ifPresent(commandLine -> {
-                out.stringKey(COMMAND_LINE);
+                out.key(COMMAND_LINE);
                 out.stringValue(commandLine);
             });
             info.arguments().ifPresent(arguments -> {
-                out.stringKey(ARGUMENTS);
+                out.key(ARGUMENTS);
                 out.arrayValue(arguments);
             });
             info.startInstant().ifPresent(start -> {
-                out.stringKey(START);
+                out.key(START);
                 InstantTransformer.INSTANCE.transform(start, out, context);
             });
             info.totalCpuDuration().ifPresent(duration -> {
-                out.stringKey(DURATION);
+                out.key(DURATION);
                 DurationTransformer.INSTANCE.transform(duration, out, context);
             });
             info.user().ifPresent(user -> {
-                out.stringKey(USER);
+                out.key(USER);
                 out.stringValue(user);
             });
         }

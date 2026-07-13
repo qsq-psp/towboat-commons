@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 public interface BytesHash extends Hash {
 
     @NotNull
-    DataView apply(@NotNull ByteSequence input);
+    DataView apply(@NotNull ReadOnlyI8Array input);
 
     DataView apply(@NotNull byte[] array, @Index(of = "array") int offset, int length);
 

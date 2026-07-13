@@ -18,29 +18,29 @@ public class ByteBufTransformer implements JsonContextTransformer<ByteBuf> {
     public void transform(@NotNull ByteBuf in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("class");
+            out.key("class");
             out.stringValue(in.getClass().getName());
-            out.stringKey("capacity");
+            out.key("capacity");
             out.numberValue(in.capacity());
-            out.stringKey("maxCapacity");
+            out.key("maxCapacity");
             out.numberValue(in.maxCapacity());
-            out.stringKey("direct");
+            out.key("direct");
             out.booleanValue(in.isDirect());
-            out.stringKey("readOnly");
+            out.key("readOnly");
             out.booleanValue(in.isReadOnly());
-            out.stringKey("readerIndex");
+            out.key("readerIndex");
             out.numberValue(in.readerIndex());
-            out.stringKey("writerIndex");
+            out.key("writerIndex");
             out.numberValue(in.writerIndex());
-            out.stringKey("nioBufferCount");
+            out.key("nioBufferCount");
             out.numberValue(in.nioBufferCount());
-            out.stringKey("hasArray");
+            out.key("hasArray");
             out.booleanValue(in.hasArray());
-            out.stringKey("hasMemoryAddress");
+            out.key("hasMemoryAddress");
             out.booleanValue(in.hasMemoryAddress());
-            out.stringKey("isContiguous");
+            out.key("isContiguous");
             out.booleanValue(in.isContiguous());
-            out.stringKey("referenceCount");
+            out.key("referenceCount");
             out.numberValue(in.refCnt());
         }
         out.closeObject();

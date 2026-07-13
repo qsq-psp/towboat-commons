@@ -1,6 +1,6 @@
 package mujica.io.fs;
 
-import mujica.ds.HealthAware;
+import mujica.ds.base.HealthAware;
 import mujica.ds.InvariantException;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.ds.text.sequence.TowboatCharSequence;

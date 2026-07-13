@@ -22,23 +22,23 @@ public class GarbageCollectorTransformer implements JsonContextTransformer<Garba
     static final FastString TIME = new FastString("time");
 
     @Override
-    public void transform(@NotNull GarbageCollectorMXBean in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull GarbageCollectorMXBean bean, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(BufferPoolTransformer.NAME);
-            out.stringValue(in.getName());
-            out.stringKey(VALID);
-            out.booleanValue(in.isValid());
-            out.stringKey(POOLS);
+            out.key(BufferPoolTransformer.NAME);
+            out.stringValue(bean.getName());
+            out.key(VALID);
+            out.booleanValue(bean.isValid());
+            out.key(POOLS);
             out.openArray();
-            for (String poolName : in.getMemoryPoolNames()) {
+            for (String poolName : bean.getMemoryPoolNames()) {
                 out.stringValue(poolName);
             }
             out.closeArray();
-            out.stringKey(BufferPoolTransformer.COUNT);
-            out.numberValue(in.getCollectionCount());
-            out.stringKey(TIME);
-            out.numberValue(in.getCollectionTime());
+            out.key(BufferPoolTransformer.COUNT);
+            out.numberValue(bean.getCollectionCount());
+            out.key(TIME);
+            out.numberValue(bean.getCollectionTime());
         }
         out.closeObject();
     }

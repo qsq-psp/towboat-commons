@@ -27,13 +27,13 @@ public class MemoryUsageTransformer implements JsonContextTransformer<MemoryUsag
     public void transform(@NotNull MemoryUsage in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(INIT);
+            out.key(INIT);
             out.numberValue(in.getInit());
-            out.stringKey(USED);
+            out.key(USED);
             out.numberValue(in.getUsed());
-            out.stringKey(COMMITTED);
+            out.key(COMMITTED);
             out.numberValue(in.getCommitted());
-            out.stringKey(MAX);
+            out.key(MAX);
             out.numberValue(in.getMax());
         }
         out.closeObject();

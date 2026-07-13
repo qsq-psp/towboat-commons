@@ -1,7 +1,7 @@
 package mujica.io.hash;
 
-import mujica.ds.bit.list.BooleanSequence;
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.bit.ReadOnlyBitArray;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -11,11 +11,11 @@ import org.jetbrains.annotations.NotNull;
 public interface BitsHash extends BytesHash {
 
     @NotNull
-    DataView apply(@NotNull BooleanSequence input);
+    DataView apply(@NotNull ReadOnlyBitArray input);
 
     @NotNull
     @Override
-    DataView apply(@NotNull ByteSequence input);
+    DataView apply(@NotNull ReadOnlyI8Array input);
 
     @NotNull
     @Override

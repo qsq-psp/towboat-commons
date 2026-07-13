@@ -19,7 +19,7 @@ public class PooledByteBufAllocatorMetricTransformer implements JsonContextTrans
         if (list.isEmpty()) {
             return;
         }
-        out.stringKey(key);
+        out.key(key);
         out.openArray();
         for (PoolArenaMetric item : list) {
             PoolArenaMetricTransformer.INSTANCE.transform(item, out, context);
@@ -35,17 +35,17 @@ public class PooledByteBufAllocatorMetricTransformer implements JsonContextTrans
             transformExposedList("direct", in.heapArenas(), out, context);
         }
         {
-            out.stringKey("threadLocalCacheCount");
+            out.key("threadLocalCacheCount");
             out.numberValue(in.numThreadLocalCaches());
-            out.stringKey("smallCacheSize");
+            out.key("smallCacheSize");
             out.numberValue(in.smallCacheSize());
-            out.stringKey("normalCacheSize");
+            out.key("normalCacheSize");
             out.numberValue(in.normalCacheSize());
-            out.stringKey("chunkSize");
+            out.key("chunkSize");
             out.numberValue(in.chunkSize());
-            out.stringKey("usedHeapMemory");
+            out.key("usedHeapMemory");
             out.numberValue(in.usedHeapMemory());
-            out.stringKey("usedDirectMemory");
+            out.key("usedDirectMemory");
             out.numberValue(in.usedDirectMemory());
         }
         out.closeObject();

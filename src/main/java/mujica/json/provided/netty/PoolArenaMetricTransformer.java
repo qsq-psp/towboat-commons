@@ -20,33 +20,33 @@ public class PoolArenaMetricTransformer implements JsonContextTransformer<PoolAr
     public void transform(@NotNull PoolArenaMetric in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("threadCache");
+            out.key("threadCache");
             out.numberValue(in.numThreadCaches());
-            out.stringKey("allocation");
+            out.key("allocation");
             out.numberValue(in.numAllocations());
-            out.stringKey("smallAllocation");
+            out.key("smallAllocation");
             out.numberValue(in.numSmallAllocations());
-            out.stringKey("normalAllocation");
+            out.key("normalAllocation");
             out.numberValue(in.numNormalAllocations());
-            out.stringKey("hugeAllocation");
+            out.key("hugeAllocation");
             out.numberValue(in.numHugeAllocations());
-            out.stringKey("deallocation");
+            out.key("deallocation");
             out.numberValue(in.numDeallocations());
-            out.stringKey("smallDeallocation");
+            out.key("smallDeallocation");
             out.numberValue(in.numSmallDeallocations());
-            out.stringKey("normalDeallocation");
+            out.key("normalDeallocation");
             out.numberValue(in.numNormalDeallocations());
-            out.stringKey("hugeDeallocation");
+            out.key("hugeDeallocation");
             out.numberValue(in.numHugeDeallocations());
-            out.stringKey("activeAllocation");
+            out.key("activeAllocation");
             out.numberValue(in.numActiveAllocations());
-            out.stringKey("activeSmallAllocation");
+            out.key("activeSmallAllocation");
             out.numberValue(in.numActiveSmallAllocations());
-            out.stringKey("activeNormalAllocation");
+            out.key("activeNormalAllocation");
             out.numberValue(in.numActiveNormalAllocations());
-            out.stringKey("activeHugeAllocation");
+            out.key("activeHugeAllocation");
             out.numberValue(in.numActiveHugeAllocations());
-            out.stringKey("activeByte");
+            out.key("activeByte");
             out.numberValue(in.numActiveBytes());
         }
         out.closeObject();

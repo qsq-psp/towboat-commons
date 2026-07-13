@@ -22,10 +22,10 @@ public class ModuleTransformer implements JsonContextTransformer<Module>, JsonSt
         {
             String name = in.getName();
             if (name != null) {
-                out.stringKey(ClassLoaderTransformer.NAME);
+                out.key(ClassLoaderTransformer.NAME);
                 out.stringValue(in.getName());
             }
-            out.stringKey(PACKAGES);
+            out.key(PACKAGES);
             out.openArray();
             for (String packageName : in.getPackages()) {
                 out.stringValue(packageName);

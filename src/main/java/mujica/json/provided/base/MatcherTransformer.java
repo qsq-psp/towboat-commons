@@ -9,43 +9,40 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Matcher;
 
-/**
- * Created on 2026/6/9.
- */
 @CodeHistory(date = "2026/6/9")
 public class MatcherTransformer implements JsonContextTransformer<Matcher> {
 
     public static final MatcherTransformer INSTANCE = new MatcherTransformer();
 
     @Override
-    public void transform(@NotNull Matcher in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull Matcher matcher, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(PatternTransformer.PATTERN);
-            PatternTransformer.INSTANCE.transform(in.pattern(), out, context);
-            int groupCount = in.groupCount();
-            out.stringKey("groupCount");
+            out.key(PatternTransformer.PATTERN);
+            PatternTransformer.INSTANCE.transform(matcher.pattern(), out, context);
+            int groupCount = matcher.groupCount();
+            out.key("groupCount");
             out.numberValue(groupCount);
-            out.stringKey("regionStart");
-            out.numberValue(in.regionStart());
-            out.stringKey("regionEnd");
-            out.numberValue(in.regionEnd());
-            out.stringKey("transparentBounds");
-            out.booleanValue(in.hasTransparentBounds());
-            out.stringKey("anchoringBounds");
-            out.booleanValue(in.hasAnchoringBounds());
-            out.stringKey("hitEnd");
-            out.booleanValue(in.hitEnd());
-            out.stringKey("requireEnd");
-            out.booleanValue(in.requireEnd());
+            out.key("regionStart");
+            out.numberValue(matcher.regionStart());
+            out.key("regionEnd");
+            out.numberValue(matcher.regionEnd());
+            out.key("transparentBounds");
+            out.booleanValue(matcher.hasTransparentBounds());
+            out.key("anchoringBounds");
+            out.booleanValue(matcher.hasAnchoringBounds());
+            out.key("hitEnd");
+            out.booleanValue(matcher.hitEnd());
+            out.key("requireEnd");
+            out.booleanValue(matcher.requireEnd());
             try {
                 int[] startIndexes = null;
                 int[] endIndexes = null;
                 for (int groupIndex = 0; groupIndex <= groupCount; groupIndex++) {
-                    int startIndex = in.start(groupIndex);
-                    int endIndex = in.end(groupIndex);
+                    int startIndex = matcher.start(groupIndex);
+                    int endIndex = matcher.end(groupIndex);
                     if (groupCount == 0) {
-                        out.stringKey("groups");
+                        out.key("groups");
                         out.openArray();
                         {
                             out.openArray();
@@ -65,7 +62,7 @@ public class MatcherTransformer implements JsonContextTransformer<Matcher> {
                     startIndexes[groupIndex] = startIndex;
                     endIndexes[groupIndex] = endIndex;
                 }
-                out.stringKey("groups");
+                out.key("groups");
                 out.openArray();
                 for (int groupIndex = 0; groupIndex <= groupCount; groupIndex++) {
                     out.openArray();

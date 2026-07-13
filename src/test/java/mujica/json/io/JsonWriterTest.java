@@ -41,9 +41,9 @@ public class JsonWriterTest {
         caseFlags(jh -> {
             jh.openObject();
             {
-                jh.stringKey("x");
+                jh.key("x");
                 jh.numberValue(-2);
-                jh.stringKey("y");
+                jh.key("y");
                 jh.numberValue(Double.NEGATIVE_INFINITY);
             }
             jh.closeObject();
@@ -66,9 +66,9 @@ public class JsonWriterTest {
         caseFlags(jh -> {
             jh.openObject();
             {
-                jh.stringKey("weight");
+                jh.key("weight");
                 jh.numberValue(Double.NaN);
-                jh.stringKey("serial");
+                jh.key("serial");
                 jh.numberValue(9907L);
             }
             jh.closeObject();
@@ -159,7 +159,7 @@ public class JsonWriterTest {
         caseSkippedValue(jh -> {
             jh.openObject();
             {
-                jh.stringKey("dummy");
+                jh.key("dummy");
                 jh.skippedValue();
             }
             jh.closeObject();
@@ -167,9 +167,9 @@ public class JsonWriterTest {
         caseSkippedValue(jh -> {
             jh.openObject();
             {
-                jh.stringKey("error");
+                jh.key("error");
                 jh.skippedValue();
-                jh.stringKey("wrong");
+                jh.key("wrong");
                 jh.skippedValue();
             }
             jh.closeObject();
@@ -177,9 +177,9 @@ public class JsonWriterTest {
         caseSkippedValue(jh -> {
             jh.openObject();
             {
-                jh.stringKey("valid");
+                jh.key("valid");
                 jh.stringValue("queue");
-                jh.stringKey("fake");
+                jh.key("fake");
                 jh.skippedValue();
             }
             jh.closeObject();
@@ -187,9 +187,9 @@ public class JsonWriterTest {
         caseSkippedValue(jh -> {
             jh.openObject();
             {
-                jh.stringKey("transparent");
+                jh.key("transparent");
                 jh.skippedValue();
-                jh.stringKey("solid");
+                jh.key("solid");
                 jh.emptyArrayValue();
             }
             jh.closeObject();
@@ -201,7 +201,7 @@ public class JsonWriterTest {
         caseSkippedValue(jh -> {
             jh.openObject();
             {
-                jh.stringKey("\\");
+                jh.key("\\");
                 jh.skippedValue();
             }
             jh.closeObject();
@@ -209,9 +209,9 @@ public class JsonWriterTest {
         caseSkippedValue(jh -> {
             jh.openObject();
             {
-                jh.stringKey("..\"");
+                jh.key("..\"");
                 jh.skippedValue();
-                jh.stringKey("\"!");
+                jh.key("\"!");
                 jh.skippedValue();
             }
             jh.closeObject();
@@ -219,9 +219,9 @@ public class JsonWriterTest {
         caseSkippedValue(jh -> {
             jh.openObject();
             {
-                jh.stringKey("valid");
+                jh.key("valid");
                 jh.stringValue("queue");
-                jh.stringKey("\"fake\"");
+                jh.key("\"fake\"");
                 jh.skippedValue();
             }
             jh.closeObject();
@@ -229,9 +229,9 @@ public class JsonWriterTest {
         caseSkippedValue(jh -> {
             jh.openObject();
             {
-                jh.stringKey("\\\"transparent\\\"");
+                jh.key("\\\"transparent\\\"");
                 jh.skippedValue();
-                jh.stringKey("solid");
+                jh.key("solid");
                 jh.emptyArrayValue();
             }
             jh.closeObject();

@@ -1,6 +1,6 @@
 package mujica.ds.i64;
 
-import mujica.ds.DataStructure;
+import mujica.ds.base.DataStructure;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

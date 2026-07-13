@@ -28,7 +28,7 @@ public class GraphicsDeviceTransformer implements JsonContextTransformer<Graphic
         out.openObject();
         {
             int type = in.getType();
-            out.stringKey("type");
+            out.key("type");
             switch (type) {
                 case GraphicsDevice.TYPE_RASTER_SCREEN:
                     out.stringValue("rasterScreen");
@@ -45,23 +45,23 @@ public class GraphicsDeviceTransformer implements JsonContextTransformer<Graphic
             }
         }
         {
-            out.stringKey("id");
+            out.key("id");
             out.stringValue(in.getIDstring());
-            out.stringKey("configuration");
+            out.key("configuration");
             GraphicsConfigurationTransformer.INSTANCE.transform(in.getDefaultConfiguration(), out, context);
-            out.stringKey("fullScreenSupported");
+            out.key("fullScreenSupported");
             out.booleanValue(in.isFullScreenSupported());
-            out.stringKey("displayChangeSupported");
+            out.key("displayChangeSupported");
             out.booleanValue(in.isDisplayChangeSupported());
-            out.stringKey("displayMode");
+            out.key("displayMode");
             DisplayModeTransformer.INSTANCE.transform(in.getDisplayMode(), out, context);
-            out.stringKey("memory");
+            out.key("memory");
             out.numberValue(in.getAvailableAcceleratedMemory());
-            out.stringKey("windowShapingSupported");
+            out.key("windowShapingSupported");
             out.booleanValue(in.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.PERPIXEL_TRANSPARENT));
-            out.stringKey("windowOpacitySupported");
+            out.key("windowOpacitySupported");
             out.booleanValue(in.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.TRANSLUCENT));
-            out.stringKey("windowPerpixelTranslucencySupported");
+            out.key("windowPerpixelTranslucencySupported");
             out.booleanValue(in.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.PERPIXEL_TRANSLUCENT));
         }
         out.closeObject();

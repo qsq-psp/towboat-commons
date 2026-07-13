@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i8.view.ByteSequenceDataView;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2025/1/17", project = "OSHI", name = "MD2Core")
 @CodeHistory(date = "2025/5/16")
 @ReferencePage(title = "The MD2 Message-Digest Algorithm", href = "https://datatracker.ietf.org/doc/html/rfc1319")
-public class MD2 extends ByteBlockByteHashCore implements ByteSequence {
+public class MD2 extends ByteBlockByteHashCore implements ReadOnlyI8Array {
 
     private static final long serialVersionUID = 0x2e2ac6b13b29d6bfL;
 

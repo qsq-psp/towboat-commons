@@ -1,7 +1,7 @@
 package mujica.ds.text.sanitizer;
 
-import mujica.ds.i32.map.CompatibleIntMap;
-import mujica.ds.i32.map.IntMap;
+import mujica.ds.i32.map.JdkI32Map;
+import mujica.ds.i32.map.I32Map;
 import mujica.reflect.modifier.AccessStructure;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.ds.text.number.Base16Appender;
@@ -16,12 +16,12 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
 
     @AccessStructure(online = false, local = true)
     @NotNull
-    protected final IntMap map;
+    protected final I32Map map;
 
     @NotNull
     protected final Base16Appender hex;
 
-    IntMapEscapeAppender(@NotNull IntMap map, @NotNull Base16Appender hex) {
+    IntMapEscapeAppender(@NotNull I32Map map, @NotNull Base16Appender hex) {
         super();
         this.map = map;
         this.hex = hex;
@@ -32,7 +32,7 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
     }
 
     public IntMapEscapeAppender(boolean upperCase) {
-        this(new CompatibleIntMap(), new Base16Appender(upperCase, true));
+        this(new JdkI32Map(), new Base16Appender(upperCase, true));
     }
 
     public IntMapEscapeAppender() {
@@ -42,10 +42,10 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
     @NotNull
     private IntMapEscapeAppender escapeControl(int value) {
         for (int ch = 0x0000; ch <= 0x001f; ch++) {
-            map.putInt(ch, value); // C0 controls
+            map.putI32(ch, value); // C0 controls
         }
         for (int ch = 0x007f; ch <= 0x009f; ch++) {
-            map.putInt(ch, value); // delete and C1 controls
+            map.putI32(ch, value); // delete and C1 controls
         }
         return this;
     }
@@ -62,32 +62,32 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
 
     @NotNull
     private IntMapEscapeAppender escapeFormat(int value) {
-        map.putInt(0x00ad, value); // soft hyphen
+        map.putI32(0x00ad, value); // soft hyphen
         for (int ch = 0x0600; ch <= 0x0605; ch++) {
-            map.putInt(ch, HEX4); // arabic subtending / supertending marks
+            map.putI32(ch, HEX4); // arabic subtending / supertending marks
         }
-        map.putInt(0x061c, HEX4); // arabic format character
-        map.putInt(0x06dd, HEX4); // arabic quranic annotation sign
-        map.putInt(0x070f, HEX4); // syriac format control character
-        map.putInt(0x0890, HEX4); // arabic extended B supertending currency symbols
-        map.putInt(0x0891, HEX4); // arabic extended B supertending currency symbols
-        map.putInt(0x08e2, HEX4); // arabic extended A quranic annotation sign
-        map.putInt(0x180e, HEX4); // mongolian vowel separator
+        map.putI32(0x061c, HEX4); // arabic format character
+        map.putI32(0x06dd, HEX4); // arabic quranic annotation sign
+        map.putI32(0x070f, HEX4); // syriac format control character
+        map.putI32(0x0890, HEX4); // arabic extended B supertending currency symbols
+        map.putI32(0x0891, HEX4); // arabic extended B supertending currency symbols
+        map.putI32(0x08e2, HEX4); // arabic extended A quranic annotation sign
+        map.putI32(0x180e, HEX4); // mongolian vowel separator
         for (int ch = 0x200b; ch <= 0x200f; ch++) {
-            map.putInt(ch, HEX4); // general punctuation format characters
+            map.putI32(ch, HEX4); // general punctuation format characters
         }
         for (int ch = 0x202a; ch <= 0x202e; ch++) {
-            map.putInt(ch, HEX4); // general punctuation format characters
+            map.putI32(ch, HEX4); // general punctuation format characters
         }
         for (int ch = 0x2060; ch <= 0x2064; ch++) {
-            map.putInt(ch, HEX4); // general punctuation format characters
+            map.putI32(ch, HEX4); // general punctuation format characters
         }
         for (int ch = 0x2066; ch <= 0x206f; ch++) {
-            map.putInt(ch, HEX4); // general punctuation format characters
+            map.putI32(ch, HEX4); // general punctuation format characters
         }
-        map.putInt(0xfeff, HEX4); // zero width no-break space; byte order mark
+        map.putI32(0xfeff, HEX4); // zero width no-break space; byte order mark
         for (int ch = 0xfff9; ch <= 0xfffb; ch++) {
-            map.putInt(ch, HEX4); // interlinear annotation
+            map.putI32(ch, HEX4); // interlinear annotation
         }
         return this;
     }
@@ -104,181 +104,181 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
 
     @NotNull
     public IntMapEscapeAppender escapeReplacementU() {
-        map.putInt(0xfffc, HEX4);
-        map.putInt(0xfffd, HEX4);
+        map.putI32(0xfffc, HEX4);
+        map.putI32(0xfffd, HEX4);
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeHorizontalWhitespaceH() {
-        map.putInt(0x0009, 'h'); // horizontal tabulation
-        map.putInt(0x0020, 'h'); // space
-        map.putInt(0x00a0, 'h'); // no-break space
-        map.putInt(0x1680, 'h');
-        map.putInt(0x180e, 'h');
+        map.putI32(0x0009, 'h'); // horizontal tabulation
+        map.putI32(0x0020, 'h'); // space
+        map.putI32(0x00a0, 'h'); // no-break space
+        map.putI32(0x1680, 'h');
+        map.putI32(0x180e, 'h');
         for (int ch = 0x2000; ch < 0x200a; ch++) {
-            map.putInt(ch, 'h');
+            map.putI32(ch, 'h');
         }
-        map.putInt(0x202f, 'h');
-        map.putInt(0x205f, 'h');
-        map.putInt(0x3000, 'h');
+        map.putI32(0x202f, 'h');
+        map.putI32(0x205f, 'h');
+        map.putI32(0x3000, 'h');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeVerticalWhitespaceR() {
-        map.putInt(0x000a, 'R'); // line feed
-        map.putInt(0x000b, 'R'); // vertical tabulation
-        map.putInt(0x000c, 'R'); // form feed
-        map.putInt(0x000d, 'R'); // carriage return
-        map.putInt(0x0085, 'R');
-        map.putInt(0x2028, 'R');
-        map.putInt(0x2029, 'R');
+        map.putI32(0x000a, 'R'); // line feed
+        map.putI32(0x000b, 'R'); // vertical tabulation
+        map.putI32(0x000c, 'R'); // form feed
+        map.putI32(0x000d, 'R'); // carriage return
+        map.putI32(0x0085, 'R');
+        map.putI32(0x2028, 'R');
+        map.putI32(0x2029, 'R');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeWhitespaceU() {
-        map.putInt(0x0009, HEX4); // horizontal tabulation
-        map.putInt(0x000a, HEX4); // line feed
-        map.putInt(0x000b, HEX4); // vertical tabulation
-        map.putInt(0x000c, HEX4); // form feed
-        map.putInt(0x000d, HEX4); // carriage return
-        map.putInt(0x0020, HEX4); // space
-        map.putInt(0x0085, HEX4);
-        map.putInt(0x00a0, HEX4); // no-break space
-        map.putInt(0x1680, HEX4);
-        map.putInt(0x180e, HEX4);
+        map.putI32(0x0009, HEX4); // horizontal tabulation
+        map.putI32(0x000a, HEX4); // line feed
+        map.putI32(0x000b, HEX4); // vertical tabulation
+        map.putI32(0x000c, HEX4); // form feed
+        map.putI32(0x000d, HEX4); // carriage return
+        map.putI32(0x0020, HEX4); // space
+        map.putI32(0x0085, HEX4);
+        map.putI32(0x00a0, HEX4); // no-break space
+        map.putI32(0x1680, HEX4);
+        map.putI32(0x180e, HEX4);
         for (int ch = 0x2000; ch < 0x200a; ch++) {
-            map.putInt(ch, HEX4);
+            map.putI32(ch, HEX4);
         }
-        map.putInt(0x2028, HEX4);
-        map.putInt(0x2029, HEX4);
-        map.putInt(0x202f, HEX4);
-        map.putInt(0x205f, HEX4);
-        map.putInt(0x3000, HEX4);
+        map.putI32(0x2028, HEX4);
+        map.putI32(0x2029, HEX4);
+        map.putI32(0x202f, HEX4);
+        map.putI32(0x205f, HEX4);
+        map.putI32(0x3000, HEX4);
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeDigitD() {
         for (int ch = '0'; ch <= '9'; ch++) {
-            map.putInt(ch, 'd');
+            map.putI32(ch, 'd');
         }
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeRegex() {
-        map.putInt('$', '$');
-        map.putInt('(', '(');
-        map.putInt(')', ')');
-        map.putInt('*', '*');
-        map.putInt('+', '+');
-        map.putInt('.', '.');
-        map.putInt('?', '?');
-        map.putInt('[', '[');
-        map.putInt('\\', '\\');
-        map.putInt(']', ']');
-        map.putInt('|', '|');
+        map.putI32('$', '$');
+        map.putI32('(', '(');
+        map.putI32(')', ')');
+        map.putI32('*', '*');
+        map.putI32('+', '+');
+        map.putI32('.', '.');
+        map.putI32('?', '?');
+        map.putI32('[', '[');
+        map.putI32('\\', '\\');
+        map.putI32(']', ']');
+        map.putI32('|', '|');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeNTR() {
-        map.putInt('\n', 'n');
-        map.putInt('\t', 't');
-        map.putInt('\r', 'r');
+        map.putI32('\n', 'n');
+        map.putI32('\t', 't');
+        map.putI32('\r', 'r');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeZero() {
-        map.putInt(0x00, '0');
+        map.putI32(0x00, '0');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeBell() {
-        map.putInt(0x07, 'a');
+        map.putI32(0x07, 'a');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeBackspace() {
-        map.putInt('\b', 'b');
+        map.putI32('\b', 'b');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeVerticalTabulation() {
-        map.putInt(0x0b, 'v');
+        map.putI32(0x0b, 'v');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeFormFeed() {
-        map.putInt('\f', 'f');
+        map.putI32('\f', 'f');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeEndOfFile() {
-        map.putInt(0x1a, 'Z');
+        map.putI32(0x1a, 'Z');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeQuotationMark() {
-        map.putInt('"', '"');
+        map.putI32('"', '"');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeApostrophe() {
-        map.putInt('\'', '\'');
+        map.putI32('\'', '\'');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeGraveAccent() { // also named backtick
-        map.putInt('`', '`');
+        map.putI32('`', '`');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeSlash() {
-        map.putInt('/', '/');
+        map.putI32('/', '/');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeBackSlash() {
-        map.putInt('\\', '\\');
+        map.putI32('\\', '\\');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeBackSlashX() {
-        map.putInt('\\', HEX2);
+        map.putI32('\\', HEX2);
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeBackSlashU() {
-        map.putInt('\\', HEX4);
+        map.putI32('\\', HEX4);
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapePercent() {
-        map.putInt('%', '%');
+        map.putI32('%', '%');
         return this;
     }
 
     @NotNull
     public IntMapEscapeAppender escapeUnderscore() {
-        map.putInt('_', '_');
+        map.putI32('_', '_');
         return this;
     }
 
@@ -290,7 +290,7 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
     @Override
     public boolean isIdentity(@NotNull CharSequence string, int startIndex, int endIndex) {
         for (int index = startIndex; index < endIndex; index++) {
-            int value = map.getInt(string.charAt(index));
+            int value = map.getI32(string.charAt(index));
             if (value > 0) {
                 return false;
             }
@@ -307,7 +307,7 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
     public int deltaCharCount(@NotNull CharSequence string, int startIndex, int endIndex) {
         int count = 0;
         for (int index = startIndex; index < endIndex; index++) {
-            int value = map.getInt(string.charAt(index));
+            int value = map.getI32(string.charAt(index));
             if (value > 0) {
                 count++;
                 if (value == HEX2) {
@@ -330,7 +330,7 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
         int distance = 0;
         for (int index = startIndex; index < endIndex; index++) {
             int key = string.charAt(index);
-            int value = map.getInt(key);
+            int value = map.getI32(key);
             if (value > 0) {
                 if (key == value) {
                     distance++;
@@ -356,7 +356,7 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
     public void append(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull StringBuilder out) {
         for (int index = startIndex; index < endIndex; index++) {
             char key = string.charAt(index);
-            int value = map.getInt(key);
+            int value = map.getI32(key);
             if (value > 0) {
                 if (value == HEX2) {
                     int position = out.length();
@@ -385,7 +385,7 @@ public class IntMapEscapeAppender extends CharSequenceAppender {
     public void append(@NotNull CharSequence string, int startIndex, int endIndex, @NotNull StringBuffer out) {
         for (int index = startIndex; index < endIndex; index++) {
             char key = string.charAt(index);
-            int value = map.getInt(key);
+            int value = map.getI32(key);
             if (value > 0) {
                 if (value == HEX2) {
                     int position = out.length();

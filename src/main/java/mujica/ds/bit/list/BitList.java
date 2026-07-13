@@ -1,6 +1,7 @@
 package mujica.ds.bit.list;
 
-import mujica.ds.DataStructure;
+import mujica.ds.base.DataStructure;
+import mujica.ds.bit.ReadOnlyBitArray;
 import mujica.reflect.function.BooleanConsumer;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
 
 @CodeHistory(date = "2026/2/7", name = "BooleanList")
 @CodeHistory(date = "2026/6/24")
-public interface BitList extends DataStructure, BooleanSequence, Iterable<Boolean> {
+public interface BitList extends DataStructure, ReadOnlyBitArray, Iterable<Boolean> {
 
     @Override
     @NotNull

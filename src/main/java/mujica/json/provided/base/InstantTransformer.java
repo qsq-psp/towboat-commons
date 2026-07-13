@@ -7,12 +7,10 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 
-/**
- * Created on 2026/4/24.
- */
 @CodeHistory(date = "2026/4/24")
 public class InstantTransformer implements JsonContextTransformer<Instant>, JsonStructure {
 
@@ -27,17 +25,17 @@ public class InstantTransformer implements JsonContextTransformer<Instant>, Json
     static final FastString ISO = new FastString("iso");
 
     @Override
-    public void transform(Instant in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Instant instant, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(EPOCH_SECOND);
-            out.numberValue(in.getEpochSecond());
-            out.stringKey(NANO);
-            out.numberValue(in.getNano());
-            out.stringKey(EPOCH_MILLI);
-            out.numberValue(in.toEpochMilli());
-            out.stringKey(ISO);
-            out.stringValue(in.toString());
+            out.key(EPOCH_SECOND);
+            out.numberValue(instant.getEpochSecond());
+            out.key(NANO);
+            out.numberValue(instant.getNano());
+            out.key(EPOCH_MILLI);
+            out.numberValue(instant.toEpochMilli());
+            out.key(ISO);
+            out.stringValue(instant.toString());
         }
         out.closeObject();
     }

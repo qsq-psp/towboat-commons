@@ -138,14 +138,14 @@ public class StructureCheckAdapter<H extends JsonHandler> extends JsonHandlerAda
     }
 
     @Override
-    public void stringKey(@NotNull String key) {
+    public void key(@NotNull String key) {
         beforeKey();
-        h.stringKey(key);
+        h.key(key);
     }
 
     @Override
-    public void stringKey(@NotNull FastString key) {
+    public void key(@NotNull FastString key) {
         beforeKey();
-        h.stringKey(key);
+        h.key(key);
     }
 }

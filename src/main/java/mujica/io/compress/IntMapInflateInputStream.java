@@ -1,8 +1,8 @@
 package mujica.io.compress;
 
 import io.netty.handler.codec.CodecException;
+import mujica.ds.i32.map.I32Map;
 import mujica.ds.i8.run.RunBuffer;
-import mujica.ds.i32.map.IntMap;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,9 +16,9 @@ import java.util.function.Supplier;
 public abstract class IntMapInflateInputStream extends ResidueInflateInputStream {
 
     @NotNull
-    private final IntMap codeLengthDecodeMap, literalLengthDecodeMap, distanceDecodeMap;
+    private final I32Map codeLengthDecodeMap, literalLengthDecodeMap, distanceDecodeMap;
 
-    protected IntMapInflateInputStream(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+    protected IntMapInflateInputStream(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<I32Map> decodeMapSupplier) {
         super(in, runBuffer);
         codeLengthDecodeMap = decodeMapSupplier.get();
         literalLengthDecodeMap = decodeMapSupplier.get();
@@ -232,7 +232,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
         buildDecodeMap(distanceCodeCount, distanceDecodeMap);
     }
 
-    private void buildDecodeMap(int alphabetSize, @NotNull IntMap decodeMap) throws IOException {
+    private void buildDecodeMap(int alphabetSize, @NotNull I32Map decodeMap) throws IOException {
         int maxLength = 0;
         for (int index = 1; index <= alphabetSize; index++) {
             int codeLength = commonAlphabet[index];
@@ -306,25 +306,25 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
         }
     }
 
-    protected abstract void putSymbol(@NotNull IntMap decodeMap, int code, int codeLength, int symbol) throws IOException;
+    protected abstract void putSymbol(@NotNull I32Map decodeMap, int code, int codeLength, int symbol) throws IOException;
 
-    protected abstract int readSymbol(@NotNull IntMap decodeMap) throws IOException;
+    protected abstract int readSymbol(@NotNull I32Map decodeMap) throws IOException;
 
     @CodeHistory(date = "2025/11/8")
     public static class Prefix extends IntMapInflateInputStream {
 
-        public Prefix(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+        public Prefix(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<I32Map> decodeMapSupplier) {
             super(in, runBuffer, decodeMapSupplier);
         }
 
         @Override
-        protected void putSymbol(@NotNull IntMap decodeMap, int code, int codeLength, int symbol) throws IOException {
-            if (decodeMap.putInt(code | (1 << codeLength), symbol) != 0) {
+        protected void putSymbol(@NotNull I32Map decodeMap, int code, int codeLength, int symbol) throws IOException {
+            if (decodeMap.putI32(code | (1 << codeLength), symbol) != 0) {
                 throw new CompressAlgorithmException();
             }
         }
 
-        protected int readSymbol(@NotNull IntMap decodeMap) throws IOException {
+        protected int readSymbol(@NotNull I32Map decodeMap) throws IOException {
             int code = 1;
             while (true) {
                 if (code < 0) {
@@ -334,7 +334,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                 if (readBit()) {
                     code |= 1;
                 }
-                int symbol = decodeMap.getInt(code);
+                int symbol = decodeMap.getI32(code);
                 if (symbol != 0) {
                     return symbol;
                 }
@@ -345,19 +345,19 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
     @CodeHistory(date = "2025/11/6")
     public static class LengthValue extends IntMapInflateInputStream {
 
-        public LengthValue(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+        public LengthValue(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<I32Map> decodeMapSupplier) {
             super(in, runBuffer, decodeMapSupplier);
         }
 
         @Override
-        protected void putSymbol(@NotNull IntMap decodeMap, int code, int codeLength, int symbol) throws IOException {
+        protected void putSymbol(@NotNull I32Map decodeMap, int code, int codeLength, int symbol) throws IOException {
             // from LSB to MSB, first 8 bits codeLength, then 24 bits code
-            if (decodeMap.putInt((code << Byte.SIZE) | codeLength, symbol) != 0) {
+            if (decodeMap.putI32((code << Byte.SIZE) | codeLength, symbol) != 0) {
                 throw new CompressAlgorithmException();
             }
         }
 
-        protected int readSymbol(@NotNull IntMap decodeMap) throws IOException {
+        protected int readSymbol(@NotNull I32Map decodeMap) throws IOException {
             int length = 0;
             int code = 0;
             while (true) {
@@ -369,7 +369,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                 if (readBit()) {
                     code |= 1 << Byte.SIZE;
                 }
-                int symbol = decodeMap.getInt(code | length);
+                int symbol = decodeMap.getI32(code | length);
                 if (symbol != 0) {
                     return symbol;
                 }
@@ -380,20 +380,20 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
     @CodeHistory(date = "2025/11/14")
     public static class ValueLength extends IntMapInflateInputStream {
 
-        public ValueLength(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<IntMap> decodeMapSupplier) {
+        public ValueLength(@NotNull InputStream in, @NotNull RunBuffer runBuffer, @NotNull Supplier<I32Map> decodeMapSupplier) {
             super(in, runBuffer, decodeMapSupplier);
         }
 
         @Override
-        protected void putSymbol(@NotNull IntMap decodeMap, int code, int codeLength, int symbol) throws IOException {
+        protected void putSymbol(@NotNull I32Map decodeMap, int code, int codeLength, int symbol) throws IOException {
             // from LSB to MSB, first 24 bits code, then 8 bits codeLength
-            if (decodeMap.putInt((codeLength << (Integer.SIZE - Byte.SIZE)) | code, symbol) != 0) {
+            if (decodeMap.putI32((codeLength << (Integer.SIZE - Byte.SIZE)) | code, symbol) != 0) {
                 throw new CompressAlgorithmException();
             }
         }
 
         @Override
-        protected int readSymbol(@NotNull IntMap decodeMap) throws IOException {
+        protected int readSymbol(@NotNull I32Map decodeMap) throws IOException {
             int length = 0;
             int code = 0;
             while (true) {
@@ -405,7 +405,7 @@ public abstract class IntMapInflateInputStream extends ResidueInflateInputStream
                 if (readBit()) {
                     code |= 1;
                 }
-                int symbol = decodeMap.getInt((length << (Integer.SIZE - Byte.SIZE)) | code);
+                int symbol = decodeMap.getI32((length << (Integer.SIZE - Byte.SIZE)) | code);
                 if (symbol != 0) {
                     return symbol;
                 }

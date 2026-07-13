@@ -31,17 +31,17 @@ public class InsetsTransformer implements JsonContextTransformer<Insets> {
     public void transform(@NotNull Insets in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(TOP);
+            out.key(TOP);
             out.numberValue(in.top);
-            out.stringKey(LEFT);
+            out.key(LEFT);
             out.numberValue(in.left);
-            out.stringKey(BOTTOM);
+            out.key(BOTTOM);
             out.numberValue(in.bottom);
-            out.stringKey(RIGHT);
+            out.key(RIGHT);
             out.numberValue(in.right);
         }
         if (in instanceof UIResource) {
-            out.stringKey(UI_RESOURCE);
+            out.key(UI_RESOURCE);
             out.booleanValue(true);
         }
         out.closeObject();

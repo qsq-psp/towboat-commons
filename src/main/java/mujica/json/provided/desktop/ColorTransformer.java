@@ -9,9 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-/**
- * Created on 2026/5/15.
- */
 @CodeHistory(date = "2026/5/15")
 public class ColorTransformer implements JsonContextTransformer<Color>, Base16Case {
 

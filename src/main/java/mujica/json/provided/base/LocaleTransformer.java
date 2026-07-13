@@ -42,7 +42,7 @@ public class LocaleTransformer implements JsonContextTransformer<Locale>, JsonSt
         if (value.isEmpty()) {
             return;
         }
-        out.stringKey(key);
+        out.key(key);
         out.stringValue(value);
     }
 
@@ -50,7 +50,7 @@ public class LocaleTransformer implements JsonContextTransformer<Locale>, JsonSt
         if (value == null || value.isEmpty()) {
             return;
         }
-        out.stringKey(String.valueOf(key));
+        out.key(String.valueOf(key));
         out.stringValue(value);
     }
 
@@ -59,7 +59,7 @@ public class LocaleTransformer implements JsonContextTransformer<Locale>, JsonSt
         if (extensionKeys.isEmpty()) {
             return;
         }
-        out.stringKey(EXTENSIONS);
+        out.key(EXTENSIONS);
         out.openObject();
         for (Character extensionKey : extensionKeys) {
             if (extensionKey == null) {
@@ -71,7 +71,7 @@ public class LocaleTransformer implements JsonContextTransformer<Locale>, JsonSt
     }
 
     @Override
-    public void transform(Locale locale, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull Locale locale, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             emptyToUndefined(LANGUAGE, locale.getLanguage(), out);
@@ -82,7 +82,7 @@ public class LocaleTransformer implements JsonContextTransformer<Locale>, JsonSt
             emptyToUndefined(DISPLAY_SCRIPT, locale.getDisplayScript(), out);
             emptyToUndefined(DISPLAY_COUNTRY, locale.getDisplayCountry(), out);
             emptyToUndefined(DISPLAY_VARIANT, locale.getDisplayVariant(), out);
-            out.stringKey(DISPLAY_NAME);
+            out.key(DISPLAY_NAME);
             out.stringValue(locale.getDisplayName());
             emptyToUndefined(locale, out); // extensions
         }

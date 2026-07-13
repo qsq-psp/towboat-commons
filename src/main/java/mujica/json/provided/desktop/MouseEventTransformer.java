@@ -29,20 +29,20 @@ public class MouseEventTransformer implements JsonContextTransformer<MouseEvent>
         out.openObject();
         {
             InputEventTransformer.transformExposed(event, out);
-            out.stringKey(X);
+            out.key(X);
             out.numberValue(event.getX());
-            out.stringKey(Y);
+            out.key(Y);
             out.numberValue(event.getY());
-            out.stringKey(CLICK_COUNT);
+            out.key(CLICK_COUNT);
             out.numberValue(event.getClickCount());
-            out.stringKey(BUTTON);
+            out.key(BUTTON);
             out.numberValue(event.getButton());
         }
         if (event instanceof MouseWheelEvent) {
             MouseWheelEvent wheelEvent = (MouseWheelEvent) event;
             {
                 int scrollType = wheelEvent.getScrollType();
-                out.stringKey("scrollType");
+                out.key("scrollType");
                 switch (scrollType) {
                     case MouseWheelEvent.WHEEL_UNIT_SCROLL:
                         out.stringValue("unit");
@@ -55,11 +55,11 @@ public class MouseEventTransformer implements JsonContextTransformer<MouseEvent>
                         break;
                 }
             }
-            out.stringKey("scrollAmount");
+            out.key("scrollAmount");
             out.numberValue(wheelEvent.getScrollAmount());
-            out.stringKey("wheelRotation");
+            out.key("wheelRotation");
             out.numberValue(wheelEvent.getWheelRotation());
-            out.stringKey("preciseWheelRotation");
+            out.key("preciseWheelRotation");
             out.numberValue(wheelEvent.getPreciseWheelRotation());
         }
         out.closeObject();

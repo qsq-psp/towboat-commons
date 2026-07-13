@@ -18,7 +18,7 @@ public class DropTargetTransformer implements JsonContextTransformer<DropTarget>
         out.openObject();
         {
             int actions = in.getDefaultActions();
-            out.stringKey("actions");
+            out.key("actions");
             switch (actions) {
                 case DnDConstants.ACTION_NONE:
                     out.stringValue("none");
@@ -41,7 +41,7 @@ public class DropTargetTransformer implements JsonContextTransformer<DropTarget>
             }
         }
         {
-            out.stringKey("active");
+            out.key("active");
             out.booleanValue(in.isActive());
         }
         out.closeObject();

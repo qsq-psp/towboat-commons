@@ -3,7 +3,7 @@ package mujica.ds.any.set;
 import mujica.ds.ConsistencyException;
 import mujica.ds.InvariantException;
 import mujica.ds.i32.list.QuadraticProbingList;
-import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,12 +23,12 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
     @NotNull
     transient QuadraticProbingList probingList;
 
-    public QuadraticClosedHashSet(@Nullable ResizePolicy policy) {
-        super(ResizePolicy.checkQuadraticFull(policy));
+    public QuadraticClosedHashSet(@Nullable CapacityPolicy policy) {
+        super(CapacityPolicy.checkQuadraticFull(policy));
         probingList = new QuadraticProbingList(array.length);
     }
 
-    QuadraticClosedHashSet(@NotNull ResizePolicy policy, @NotNull Object[] array) {
+    QuadraticClosedHashSet(@NotNull CapacityPolicy policy, @NotNull Object[] array) {
         super(policy, array);
         probingList = new QuadraticProbingList(array.length);
     }

@@ -18,15 +18,15 @@ public class IntSummaryStatisticsTransformer implements JsonContextTransformer<I
     public void transform(@NotNull IntSummaryStatistics in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("count");
+            out.key("count");
             out.numberValue(in.getCount());
-            out.stringKey("sum");
+            out.key("sum");
             out.numberValue(in.getSum());
-            out.stringKey("min");
+            out.key("min");
             out.numberValue(in.getMin());
-            out.stringKey("max");
+            out.key("max");
             out.numberValue(in.getMax());
-            out.stringKey("average");
+            out.key("average");
             out.numberValue(in.getAverage());
         }
         out.closeObject();

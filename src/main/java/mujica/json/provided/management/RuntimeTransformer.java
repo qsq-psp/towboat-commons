@@ -20,33 +20,33 @@ public class RuntimeTransformer implements JsonContextTransformer<RuntimeMXBean>
     public void transform(@NotNull RuntimeMXBean in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(BufferPoolTransformer.NAME);
+            out.key(BufferPoolTransformer.NAME);
             out.stringValue(in.getName());
-            out.stringKey("vmName");
+            out.key("vmName");
             out.stringValue(in.getVmName());
-            out.stringKey("vmVendor");
+            out.key("vmVendor");
             out.stringValue(in.getVmVendor());
-            out.stringKey("vmVersion");
+            out.key("vmVersion");
             out.stringValue(in.getVmVersion());
-            out.stringKey("specName");
+            out.key("specName");
             out.stringValue(in.getSpecName());
-            out.stringKey("specVendor");
+            out.key("specVendor");
             out.stringValue(in.getSpecVendor());
-            out.stringKey("specVersion");
+            out.key("specVersion");
             out.stringValue(in.getSpecVersion());
-            out.stringKey("managementSpecVersion");
+            out.key("managementSpecVersion");
             out.stringValue(in.getManagementSpecVersion());
-            out.stringKey("classPath");
+            out.key("classPath");
             out.stringValue(in.getClassPath());
-            out.stringKey("libraryPath");
+            out.key("libraryPath");
             out.stringValue(in.getLibraryPath());
         }
         if (in.isBootClassPathSupported()) {
-            out.stringKey("bootClassPath");
+            out.key("bootClassPath");
             out.stringValue(in.getBootClassPath());
         }
         {
-            out.stringKey("inputArguments");
+            out.key("inputArguments");
             out.openArray();
             for (String argument : in.getInputArguments()) {
                 out.stringValue(argument);
@@ -54,16 +54,16 @@ public class RuntimeTransformer implements JsonContextTransformer<RuntimeMXBean>
             out.closeArray();
         }
         {
-            out.stringKey("upTime");
+            out.key("upTime");
             out.numberValue(in.getUptime());
-            out.stringKey("startTime");
+            out.key("startTime");
             out.numberValue(in.getStartTime());
         }
         {
-            out.stringKey("systemProperty");
+            out.key("systemProperty");
             out.openObject();
             for (Map.Entry<String, String> entry : in.getSystemProperties().entrySet()) {
-                out.stringKey(entry.getKey());
+                out.key(entry.getKey());
                 out.stringValue(entry.getValue());
             }
             out.closeObject();

@@ -2,6 +2,7 @@ package mujica.json.reflect;
 
 import mujica.algebra.discrete.BigConstants;
 import mujica.ds.any.set.CollectionConstant;
+import mujica.ds.i64.I64Slot;
 import mujica.json.handler.JsonHandler;
 import mujica.json.modifier.JsonEmpty;
 import mujica.json.modifier.JsonHint;
@@ -13,7 +14,7 @@ import java.math.BigInteger;
 
 @CodeHistory(date = "2026/4/12", name = "LongType")
 @CodeHistory(date = "2026/6/16")
-class I64Type extends JsonType {
+class I64Type extends JsonType implements I64Slot {
 
     private static final long serialVersionUID = 0x203531829aa1ba76L;
 
@@ -23,7 +24,7 @@ class I64Type extends JsonType {
         super(flags);
     }
 
-    // @Override
+    @Override
     public long getI64() {
         if (state == CollectionConstant.PRESENT) {
             return value;
@@ -35,7 +36,7 @@ class I64Type extends JsonType {
         }
     }
 
-    // @Override
+    @Override
     public void setI64(long newValue) {
         value = newValue;
         state = CollectionConstant.PRESENT;

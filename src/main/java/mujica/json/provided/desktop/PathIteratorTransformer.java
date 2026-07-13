@@ -52,7 +52,7 @@ public class PathIteratorTransformer implements JsonContextTransformer<PathItera
     static void transformExposed(@NotNull PathIterator in, @NotNull JsonHandler out) {
         {
             int windingRule = in.getWindingRule();
-            out.stringKey(WINDING_RULE);
+            out.key(WINDING_RULE);
             switch (windingRule) {
                 case PathIterator.WIND_EVEN_ODD:
                     out.stringValue(EVEN_ODD);
@@ -67,51 +67,51 @@ public class PathIteratorTransformer implements JsonContextTransformer<PathItera
         }
         {
             float[] coords = new float[6];
-            out.stringKey(SEGMENTS);
+            out.key(SEGMENTS);
             out.openArray();
             while (!in.isDone()) {
                 int segmentType = in.currentSegment(coords);
                 out.openObject();
-                out.stringKey(TYPE);
+                out.key(TYPE);
                 switch (segmentType) {
                     case PathIterator.SEG_MOVETO:
                         out.stringValue(MOVE_TO);
-                        out.stringKey(RectangleTransformer.X);
+                        out.key(RectangleTransformer.X);
                         out.numberValue(coords[0]);
-                        out.stringKey(RectangleTransformer.Y);
+                        out.key(RectangleTransformer.Y);
                         out.numberValue(coords[1]);
                         break;
                     case PathIterator.SEG_LINETO:
                         out.stringValue(LINE_TO);
-                        out.stringKey(RectangleTransformer.X);
+                        out.key(RectangleTransformer.X);
                         out.numberValue(coords[0]);
-                        out.stringKey(RectangleTransformer.Y);
+                        out.key(RectangleTransformer.Y);
                         out.numberValue(coords[1]);
                         break;
                     case PathIterator.SEG_QUADTO:
                         out.stringValue(QUAD_TO);
-                        out.stringKey(X1);
+                        out.key(X1);
                         out.numberValue(coords[0]);
-                        out.stringKey(Y1);
+                        out.key(Y1);
                         out.numberValue(coords[1]);
-                        out.stringKey(X2);
+                        out.key(X2);
                         out.numberValue(coords[2]);
-                        out.stringKey(Y2);
+                        out.key(Y2);
                         out.numberValue(coords[3]);
                         break;
                     case PathIterator.SEG_CUBICTO:
                         out.stringValue(CUBIC_TO);
-                        out.stringKey(X1);
+                        out.key(X1);
                         out.numberValue(coords[0]);
-                        out.stringKey(Y1);
+                        out.key(Y1);
                         out.numberValue(coords[1]);
-                        out.stringKey(X2);
+                        out.key(X2);
                         out.numberValue(coords[2]);
-                        out.stringKey(Y2);
+                        out.key(Y2);
                         out.numberValue(coords[3]);
-                        out.stringKey(X3);
+                        out.key(X3);
                         out.numberValue(coords[4]);
-                        out.stringKey(Y3);
+                        out.key(Y3);
                         out.numberValue(coords[5]);
                         break;
                     case PathIterator.SEG_CLOSE:

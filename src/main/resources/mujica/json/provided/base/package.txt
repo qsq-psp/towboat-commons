@@ -17,11 +17,10 @@ mujica.json.provided.base.FileStoreTransformer java.nio.file.FileStore jdk.inter
 mujica.json.provided.base.FileSystemTransformer java.nio.file.FileSystem jdk.nio.zipfs.JarFileSystem jdk.internal.jrtfs.JrtFileSystem sun.nio.fs.WindowsFileSystem jdk.nio.zipfs.ZipFileSystem
 mujica.json.provided.base.FileTransformer java.io.File
 mujica.json.provided.base.FilterInfoTransformer java.io.ObjectInputFilter.FilterInfo
-mujica.json.provided.base.InetSocketAddressTransformer java.net.InetSocketAddress
 mujica.json.provided.base.InstantTransformer java.time.Instant
 mujica.json.provided.base.InterfaceAddressTransformer java.net.InterfaceAddress
 mujica.json.provided.base.IntSummaryStatisticsTransformer java.util.IntSummaryStatistics
-mujica.json.provided.base.IterableTransformer java.lang.Iterable mujica.ds.bit.list.BitList mujica.ds.bit.list.CopyOnResizeBitList java.nio.file.DirectoryStream mujica.ds.i32.IntCollection mujica.ds.bit.list.IntSetAsBitList mujica.ds.i32.map.IterableIntMap mujica.ds.i64.LongCollection mujica.ds.bit.list.MaskedI32ListAsBitList mujica.ds.i32.list.PrivateIntList mujica.ds.i32.list.PublicIntList
+mujica.json.provided.base.IterableTransformer java.lang.Iterable mujica.ds.bit.list.BitList mujica.ds.bit.list.CopyOnResizeBitList java.nio.file.DirectoryStream mujica.ds.i32.IntCollection mujica.ds.bit.list.IntSetAsBitList mujica.ds.i32.map.IterableI32Map mujica.ds.i64.LongCollection mujica.ds.bit.list.MaskedI32ListAsBitList mujica.ds.i32.list.PrivateIntList mujica.ds.i32.list.PublicIntList
 mujica.json.provided.base.LanguageRangeTransformer java.util.Locale.LanguageRange
 mujica.json.provided.base.LocaleTransformer java.util.Locale
 mujica.json.provided.base.MatcherTransformer java.util.regex.Matcher

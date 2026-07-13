@@ -642,7 +642,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
             if (octet != ':') {
                 throw new IOException("expect colon actual " + octet);
             }
-            jh.stringKey(key);
+            jh.key(key);
             skipGap();
             readJson(jh);
             first = false;

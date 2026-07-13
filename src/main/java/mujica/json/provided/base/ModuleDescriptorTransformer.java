@@ -49,7 +49,7 @@ public class ModuleDescriptorTransformer implements JsonContextTransformer<Modul
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private void optionalStringValue(@NotNull FastString key, @NotNull Optional<String> value, @NotNull JsonHandler out) {
         if (value.isPresent()) {
-            out.stringKey(key);
+            out.key(key);
             out.stringValue(value.get());
         }
     }
@@ -58,26 +58,26 @@ public class ModuleDescriptorTransformer implements JsonContextTransformer<Modul
     public void transform(ModuleDescriptor in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.NAME);
+            out.key(ClassLoaderTransformer.NAME);
             out.stringValue(in.name());
-            out.stringKey(OPEN);
+            out.key(OPEN);
             out.booleanValue(in.isOpen());
-            out.stringKey(AUTOMATIC);
+            out.key(AUTOMATIC);
             out.booleanValue(in.isAutomatic());
-            out.stringKey(REQUIRES);
+            out.key(REQUIRES);
             out.openArray();
             for (ModuleDescriptor.Requires requires : in.requires()) {
-                out.stringKey(ClassLoaderTransformer.NAME);
+                out.key(ClassLoaderTransformer.NAME);
                 out.stringValue(requires.name());
                 optionalStringValue(VERSION, requires.rawCompiledVersion(), out);
             }
             out.closeArray();
-            out.stringKey(EXPORTS);
+            out.key(EXPORTS);
             out.openArray();
             for (ModuleDescriptor.Exports exports : in.exports()) {
-                out.stringKey(SOURCE);
+                out.key(SOURCE);
                 out.stringValue(exports.source());
-                out.stringKey(TARGET);
+                out.key(TARGET);
                 out.openArray();
                 for (String target : exports.targets()) {
                     out.stringValue(target);
@@ -85,12 +85,12 @@ public class ModuleDescriptorTransformer implements JsonContextTransformer<Modul
                 out.closeArray();
             }
             out.closeArray();
-            out.stringKey(OPENS);
+            out.key(OPENS);
             out.openArray();
             for (ModuleDescriptor.Opens opens : in.opens()) {
-                out.stringKey(SOURCE);
+                out.key(SOURCE);
                 out.stringValue(opens.source());
-                out.stringKey(TARGET);
+                out.key(TARGET);
                 out.openArray();
                 for (String target : opens.targets()) {
                     out.stringValue(target);
@@ -98,18 +98,18 @@ public class ModuleDescriptorTransformer implements JsonContextTransformer<Modul
                 out.closeArray();
             }
             out.closeArray();
-            out.stringKey(USES);
+            out.key(USES);
             out.openArray();
             for (String uses : in.uses()) {
                 out.stringValue(uses);
             }
             out.closeArray();
-            out.stringKey(PROVIDES);
+            out.key(PROVIDES);
             out.openArray();
             for (ModuleDescriptor.Provides provides : in.provides()) {
-                out.stringKey(SERVICE);
+                out.key(SERVICE);
                 out.stringValue(provides.service());
-                out.stringKey(PROVIDER);
+                out.key(PROVIDER);
                 out.openArray();
                 for (String provider : provides.providers()) {
                     out.stringValue(provider);
@@ -119,7 +119,7 @@ public class ModuleDescriptorTransformer implements JsonContextTransformer<Modul
             out.closeArray();
             optionalStringValue(VERSION, in.rawVersion(), out);
             optionalStringValue(MAIN_CLASS, in.mainClass(), out);
-            out.stringKey(PACKAGES);
+            out.key(PACKAGES);
             out.openArray();
             for (String packageName : in.packages()) {
                 out.stringValue(packageName);

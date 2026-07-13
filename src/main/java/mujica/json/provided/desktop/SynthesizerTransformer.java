@@ -24,25 +24,25 @@ public class SynthesizerTransformer implements JsonContextTransformer<Synthesize
         out.openObject();
         {
             MidiDeviceTransformer.transformExposed(synthesizer, out);
-            out.stringKey("maxPolyphony");
+            out.key("maxPolyphony");
             out.numberValue(synthesizer.getMaxPolyphony());
-            out.stringKey("latency");
+            out.key("latency");
             out.numberValue(synthesizer.getLatency());
-            out.stringKey("channels");
+            out.key("channels");
             out.openArray();
             for (MidiChannel channel : synthesizer.getChannels()) {
                 MidiChannelTransformer.INSTANCE.transform(channel, out, context);
             }
             out.closeArray();
-            out.stringKey("voiceStatus");
+            out.key("voiceStatus");
             out.openArray();
             for (VoiceStatus voiceStatus : synthesizer.getVoiceStatus()) {
                 VoiceStatusTransformer.INSTANCE.transform(voiceStatus, out, context);
             }
             out.closeArray();
-            out.stringKey("defaultSoundBank");
+            out.key("defaultSoundBank");
             SoundbankTransformer.INSTANCE.transform(synthesizer.getDefaultSoundbank(), out, context);
-            out.stringKey("loadedInstruments");
+            out.key("loadedInstruments");
             for (Instrument instrument : synthesizer.getLoadedInstruments()) {
                 InstrumentTransformer.INSTANCE.transform(instrument, out, context);
             }

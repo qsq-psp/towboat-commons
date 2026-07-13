@@ -384,13 +384,13 @@ public class JsonCharSequenceReader implements JsonSyncReader {
             if (isValue) {
                 jh.stringValue(sb);
             } else {
-                jh.stringKey(sb.toString());
+                jh.key(sb.toString());
             }
         } else {
             if (isValue) {
                 jh.stringValue(in.subSequence(startIndex, endIndex));
             } else {
-                jh.stringKey(in.subSequence(startIndex, endIndex).toString());
+                jh.key(in.subSequence(startIndex, endIndex).toString());
             }
         }
         return endIndex + 1;

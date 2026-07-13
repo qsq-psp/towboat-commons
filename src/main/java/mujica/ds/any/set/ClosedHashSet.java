@@ -1,6 +1,6 @@
 package mujica.ds.any.set;
 
-import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
@@ -19,13 +19,13 @@ public abstract class ClosedHashSet<E> extends AbstractHashSet<E> {
     @NotNull
     protected Object[] array;
 
-    protected ClosedHashSet(@Nullable ResizePolicy policy) {
+    protected ClosedHashSet(@Nullable CapacityPolicy policy) {
         super(policy);
         array = new Object[this.policy.initialCapacity()];
         Arrays.fill(array, CollectionConstant.EMPTY);
     }
 
-    protected ClosedHashSet(@NotNull ResizePolicy policy, @NotNull Object[] array) {
+    protected ClosedHashSet(@NotNull CapacityPolicy policy, @NotNull Object[] array) {
         super(policy);
         this.array = array;
     }

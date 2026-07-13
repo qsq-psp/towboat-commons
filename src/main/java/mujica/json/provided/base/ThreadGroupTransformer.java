@@ -27,24 +27,24 @@ public class ThreadGroupTransformer implements JsonContextTransformer<ThreadGrou
     public void transform(@NotNull ThreadGroup in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.NAME);
+            out.key(ClassLoaderTransformer.NAME);
             out.stringValue(in.getName());
         }
         {
             ThreadGroup parent = in.getParent();
             if (parent != null) {
-                out.stringKey(PARENT);
+                out.key(PARENT);
                 out.stringValue(parent.getName());
             }
         }
         {
-            out.stringKey(MAX_PRIORITY);
+            out.key(MAX_PRIORITY);
             out.numberValue(in.getMaxPriority());
-            out.stringKey(ThreadTransformer.DAEMON);
+            out.key(ThreadTransformer.DAEMON);
             out.booleanValue(in.isDaemon());
-            out.stringKey(DESTROYED);
+            out.key(DESTROYED);
             out.booleanValue(in.isDestroyed());
-            out.stringKey(ACTIVE_COUNT);
+            out.key(ACTIVE_COUNT);
             out.numberValue(in.activeCount());
         }
         out.closeObject();

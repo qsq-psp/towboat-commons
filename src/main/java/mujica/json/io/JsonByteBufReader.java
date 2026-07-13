@@ -595,7 +595,7 @@ public class JsonByteBufReader extends DefaultByteBufHolder implements JsonSyncS
             if (x != ':') {
                 throw new RuntimeException("expect colon actual " + x);
             }
-            jh.stringKey(key);
+            jh.key(key);
             skipGap();
             readJson(jh);
             first = false;

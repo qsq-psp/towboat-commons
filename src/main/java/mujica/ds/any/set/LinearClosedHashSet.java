@@ -2,7 +2,7 @@ package mujica.ds.any.set;
 
 import mujica.ds.ConsistencyException;
 import mujica.ds.InvariantException;
-import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,11 +17,11 @@ public class LinearClosedHashSet<E> extends ClosedHashSet<E> {
 
     private static final long serialVersionUID = 0xfafaaa10a53c8fdaL;
 
-    public LinearClosedHashSet(@Nullable ResizePolicy policy) {
+    public LinearClosedHashSet(@Nullable CapacityPolicy policy) {
         super(policy);
     }
 
-    LinearClosedHashSet(@NotNull ResizePolicy policy, @NotNull Object[] array) {
+    LinearClosedHashSet(@NotNull CapacityPolicy policy, @NotNull Object[] array) {
         super(policy, array);
     }
 

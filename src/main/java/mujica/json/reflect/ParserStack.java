@@ -48,12 +48,12 @@ class ParserStack extends JsonHandlerAdapter<NopFrame> {
     }
 
     @Override
-    public void stringKey(@NotNull String key) {
+    public void key(@NotNull String key) {
         h.setKey(key);
     }
 
     @Override
-    public void stringKey(@NotNull FastString key) {
+    public void key(@NotNull FastString key) {
         h.setKey(key);
     }
 

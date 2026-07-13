@@ -17,7 +17,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2022/6/10", project = "Ultramarine", name = "JsonIntType")
 @CodeHistory(date = "2026/1/1", name = "IntType")
 @CodeHistory(date = "2026/7/1")
-class I32Type extends JsonType {
+class I32Type extends JsonType implements I32Slot {
 
     private static final long serialVersionUID = 0x9044dfc48c3175efL;
 
@@ -31,7 +31,7 @@ class I32Type extends JsonType {
         super(flags);
     }
 
-    // @Override
+    @Override
     public int getI32() {
         if (state == CollectionConstant.PRESENT) {
             return value;
@@ -43,7 +43,7 @@ class I32Type extends JsonType {
         }
     }
 
-    // @Override
+    @Override
     public void setI32(int newValue) {
         value = newValue;
         state = CollectionConstant.PRESENT;

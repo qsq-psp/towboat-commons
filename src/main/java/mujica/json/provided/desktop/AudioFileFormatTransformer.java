@@ -20,15 +20,15 @@ public class AudioFileFormatTransformer implements JsonContextTransformer<AudioF
     public void transform(@NotNull AudioFileFormat in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("type");
+            out.key("type");
             out.stringValue(in.getType().toString());
-            out.stringKey("extension");
+            out.key("extension");
             out.stringValue(in.getType().getExtension());
-            out.stringKey("byteLength");
+            out.key("byteLength");
             out.numberValue(in.getByteLength());
-            out.stringKey("format");
+            out.key("format");
             AudioFormatTransformer.INSTANCE.transform(in.getFormat(), out, context);
-            out.stringKey("frameLength");
+            out.key("frameLength");
             out.numberValue(in.getFrameLength());
         }
         out.closeObject();

@@ -5,6 +5,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.MathContext;
 
@@ -17,13 +18,13 @@ public class MathContextTransformer implements JsonContextTransformer<MathContex
     public static final MathContextTransformer INSTANCE = new MathContextTransformer();
 
     @Override
-    public void transform(@NotNull MathContext in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull MathContext mc, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("precision");
-            out.numberValue(in.getPrecision());
-            out.stringKey("roundingMode");
-            out.stringValue(in.getRoundingMode().toString()); // name() is also OK
+            out.key("precision");
+            out.numberValue(mc.getPrecision());
+            out.key("roundingMode");
+            out.stringValue(mc.getRoundingMode().toString()); // mathContext.getRoundingMode().name() is the same
         }
         out.closeObject();
     }

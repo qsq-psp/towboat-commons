@@ -19,28 +19,28 @@ public class CoderResultTransformer implements JsonContextTransformer<CoderResul
     public void transform(@NotNull CoderResult in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("underflow");
+            out.key("underflow");
             out.booleanValue(in.isUnderflow());
         }
         {
-            out.stringKey("overflow");
+            out.key("overflow");
             out.booleanValue(in.isOverflow());
         }
         {
             boolean malformed = in.isMalformed();
-            out.stringKey("malformed");
+            out.key("malformed");
             out.booleanValue(malformed);
             if (malformed) {
-                out.stringKey("length");
+                out.key("length");
                 out.numberValue(in.length());
             }
         }
         {
             boolean unmappable = in.isUnmappable();
-            out.stringKey("unmappable");
+            out.key("unmappable");
             out.booleanValue(unmappable);
             if (unmappable) {
-                out.stringKey("length");
+                out.key("length");
                 out.numberValue(in.length());
             }
         }

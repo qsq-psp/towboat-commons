@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-/**
- * Created on 2026/3/31.
- */
 @CodeHistory(date = "2026/3/31")
 public interface IOIterable<E> {
 

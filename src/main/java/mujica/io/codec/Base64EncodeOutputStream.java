@@ -10,12 +10,6 @@ import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * Created in webbiton on 2021/6/1, named Base64OutputStream.
- * Recreated in omnidirectional on 2025/4/14, named Base64OutputStream.
- * Recreated in UltraIO on 2025/4/16.
- * Moved here on 2025/4/26.
- */
 @CodeHistory(date = "2021/6/1", project = "webbiton", name = "Base64OutputStream")
 @CodeHistory(date = "2025/4/14", project = "omnidirectional", name = "Base64OutputStream")
 @CodeHistory(date = "2025/4/16", project = "UltraIO")

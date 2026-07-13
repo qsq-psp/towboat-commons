@@ -1,7 +1,7 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.i32.list.ResizePolicy;
-import mujica.ds.i32.list.TwiceResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
+import mujica.ds.i32.list.TwiceCapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class ArrayPriorityQueue<E> extends AbstractPriorityQueue<E> {
     private static final long serialVersionUID = 0x18b9f59103109b81L;
 
     @NotNull
-    final ResizePolicy policy;
+    final CapacityPolicy policy;
 
     @NotNull
     transient Object[] elements;
@@ -31,10 +31,10 @@ public class ArrayPriorityQueue<E> extends AbstractPriorityQueue<E> {
     @Index(of = "elements", inclusive = false)
     transient int tail;
 
-    public ArrayPriorityQueue(@Nullable Comparator<E> comparator, @Nullable ResizePolicy policy) {
+    public ArrayPriorityQueue(@Nullable Comparator<E> comparator, @Nullable CapacityPolicy policy) {
         super(comparator);
         if (policy == null) {
-            policy = TwiceResizePolicy.INSTANCE;
+            policy = TwiceCapacityPolicy.INSTANCE;
         }
         this.policy = policy;
         final int capacity = policy.initialCapacity();
@@ -44,10 +44,10 @@ public class ArrayPriorityQueue<E> extends AbstractPriorityQueue<E> {
         tail = half;
     }
 
-    public ArrayPriorityQueue(@Nullable Comparator<E> comparator, @Nullable ResizePolicy policy, @NotNull List<E> list) {
+    public ArrayPriorityQueue(@Nullable Comparator<E> comparator, @Nullable CapacityPolicy policy, @NotNull List<E> list) {
         super(comparator);
         if (policy == null) {
-            policy = TwiceResizePolicy.INSTANCE;
+            policy = TwiceCapacityPolicy.INSTANCE;
         }
         list.sort(this.comparator);
         this.policy = policy;

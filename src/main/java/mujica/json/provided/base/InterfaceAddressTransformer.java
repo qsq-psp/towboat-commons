@@ -28,15 +28,15 @@ public class InterfaceAddressTransformer implements JsonContextTransformer<Inter
         {
             InetAddress inetAddress = in.getAddress();
             if (inetAddress != null) {
-                out.stringKey(ADDRESS);
+                out.key(ADDRESS);
                 out.stringValue(inetAddress.toString());
             }
             inetAddress = in.getBroadcast();
             if (inetAddress != null) {
-                out.stringKey(BROADCAST);
+                out.key(BROADCAST);
                 out.stringValue(inetAddress.toString());
             }
-            out.stringKey(PREFIX_LENGTH);
+            out.key(PREFIX_LENGTH);
             out.numberValue(in.getNetworkPrefixLength());
         }
         out.closeObject();

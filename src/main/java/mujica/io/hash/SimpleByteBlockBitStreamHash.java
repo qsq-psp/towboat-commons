@@ -1,7 +1,7 @@
 package mujica.io.hash;
 
-import mujica.ds.bit.list.BooleanSequence;
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.bit.ReadOnlyBitArray;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
@@ -152,7 +152,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
         }
     }
 
-    private void updateNotAlignedBits(@NotNull ByteSequence input) {
+    private void updateNotAlignedBits(@NotNull ReadOnlyI8Array input) {
         final int padBitCount = this.padBitCount;
         final int blockBytes = core.blockBytes();
         assert 0 < padBitCount && padBitCount < Byte.SIZE;
@@ -231,7 +231,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
     }
 
     @Override
-    public void update(@NotNull BooleanSequence input) {
+    public void update(@NotNull ReadOnlyBitArray input) {
         if (state != HashState.STARTED) {
             throw new IllegalHashStateException();
         }
@@ -318,7 +318,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
     }
 
     @Override
-    public void update(@NotNull ByteSequence input) {
+    public void update(@NotNull ReadOnlyI8Array input) {
         if (state != HashState.STARTED) {
             throw new IllegalHashStateException();
         }
@@ -354,7 +354,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
             return;
         }
         if (padBitCount != 0) {
-            updateNotAlignedBits(ByteSequence.of(array, offset, length));
+            updateNotAlignedBits(ReadOnlyI8Array.of(array, offset, length));
             return;
         }
         if (length >= 2 * core.blockBytes()) {
@@ -374,7 +374,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
             return;
         }
         if (padBitCount != 0) {
-            updateNotAlignedBits(ByteSequence.of(array, 0, length));
+            updateNotAlignedBits(ReadOnlyI8Array.of(array, 0, length));
             return;
         }
         if (length >= 2 * core.blockBytes()) {
@@ -390,7 +390,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
             throw new IllegalHashStateException();
         }
         if (padBitCount != 0) {
-            updateNotAlignedBits(ByteSequence.relative(input));
+            updateNotAlignedBits(ReadOnlyI8Array.relative(input));
             input.position(input.limit());
         } else {
             updateAlignedBits(input);
@@ -399,7 +399,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
 
     @Override
     public void update(@NotNull DataView input) {
-        update((BooleanSequence) input);
+        update((ReadOnlyBitArray) input);
     }
 
     @NotNull
@@ -424,7 +424,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
 
     @NotNull
     @Override
-    public DataView apply(@NotNull BooleanSequence input) {
+    public DataView apply(@NotNull ReadOnlyBitArray input) {
         start();
         update(input);
         return finish();
@@ -432,7 +432,7 @@ public class SimpleByteBlockBitStreamHash implements BitStreamHash {
 
     @NotNull
     @Override
-    public DataView apply(@NotNull ByteSequence input) {
+    public DataView apply(@NotNull ReadOnlyI8Array input) {
         start();
         update(input);
         return finish();

@@ -104,7 +104,7 @@ public class JsonIndentStringBuilderWriter extends JsonStringBuilderWriter { // 
     }
 
     @Override
-    public void stringKey(@NotNull String key) {
+    public void key(@NotNull String key) {
         anyKey();
         if ((flags & ConfigFlags.NO_QUOTE_PROPER_KEY) != 0 && PROPER_KEY.matcher(key).matches()) {
             sb.append(key);
@@ -129,7 +129,7 @@ public class JsonIndentStringBuilderWriter extends JsonStringBuilderWriter { // 
     }
 
     @Override
-    public void stringKey(@NotNull FastString key) {
+    public void key(@NotNull FastString key) {
         anyKey();
         if ((flags & ConfigFlags.NO_QUOTE_FAST_KEY) != 0 || (flags & ConfigFlags.NO_QUOTE_PROPER_KEY) != 0 && PROPER_KEY.matcher(key.toString()).matches()) {
             sb.append(key.toString());

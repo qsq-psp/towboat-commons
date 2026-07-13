@@ -22,7 +22,7 @@ public class ColorSpaceTransformer implements JsonContextTransformer<ColorSpace>
         out.openObject();
         {
             int type = in.getType();
-            out.stringKey("type");
+            out.key("type");
             switch (type) {
                 case ColorSpace.TYPE_XYZ:
                     out.stringValue("XYZ");
@@ -103,7 +103,7 @@ public class ColorSpaceTransformer implements JsonContextTransformer<ColorSpace>
                     out.numberValue(type);
                     break;
             }
-            out.stringKey("componentCount");
+            out.key("componentCount");
             out.numberValue(in.getNumComponents());
         }
         out.closeObject();

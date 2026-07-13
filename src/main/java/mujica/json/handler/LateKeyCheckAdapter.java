@@ -53,9 +53,9 @@ public class LateKeyCheckAdapter<H extends JsonHandler> extends UndoKeyJsonHandl
             throw new IllegalArgumentException("duplicate key " + AppenderToStringBuilder.Json.get().apply(keyString));
         }
         if (key instanceof FastString) {
-            h.stringKey((FastString) key);
+            h.key((FastString) key);
         } else {
-            h.stringKey(key.toString());
+            h.key(key.toString());
         }
         key = null;
     }

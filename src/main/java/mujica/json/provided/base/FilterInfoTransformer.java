@@ -1,7 +1,6 @@
 package mujica.json.provided.base;
 
 import mujica.json.handler.JsonHandler;
-import mujica.json.provided.management.ClassLoadingTransformer;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
@@ -10,9 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.ObjectInputFilter;
 
-/**
- * Created on 2026/6/3.
- */
 @CodeHistory(date = "2026/6/3")
 public class FilterInfoTransformer implements JsonContextTransformer<ObjectInputFilter.FilterInfo> {
 
@@ -24,7 +20,7 @@ public class FilterInfoTransformer implements JsonContextTransformer<ObjectInput
         {
             Class<?> serialClass = in.serialClass();
             if (serialClass != null) {
-                out.stringKey(ClassLoaderTransformer.CLASS);
+                out.key(ClassLoaderTransformer.CLASS);
                 out.stringValue(serialClass.getName());
             }
         }

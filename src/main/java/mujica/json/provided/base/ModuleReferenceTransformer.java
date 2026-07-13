@@ -25,10 +25,10 @@ public class ModuleReferenceTransformer implements JsonContextTransformer<Module
     public void transform(ModuleReference in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(DESCRIPTOR);
+            out.key(DESCRIPTOR);
             ModuleDescriptorTransformer.INSTANCE.transform(in.descriptor(), out, context);
             in.location().ifPresent(uri -> {
-                out.stringKey(LOCATION);
+                out.key(LOCATION);
                 out.stringValue(uri.toString());
             });
         }

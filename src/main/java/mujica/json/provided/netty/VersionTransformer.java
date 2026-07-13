@@ -20,19 +20,19 @@ public class VersionTransformer implements JsonContextTransformer<Version>, Json
     public void transform(@NotNull Version in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("artifactId");
+            out.key("artifactId");
             out.stringValue(in.artifactId());
-            out.stringKey("artifactVersion");
+            out.key("artifactVersion");
             out.stringValue(in.artifactVersion());
-            out.stringKey("buildTime");
+            out.key("buildTime");
             out.numberValue(in.buildTimeMillis());
-            out.stringKey("commitTime");
+            out.key("commitTime");
             out.numberValue(in.commitTimeMillis());
-            out.stringKey("shortCommitHash");
+            out.key("shortCommitHash");
             out.stringValue(in.shortCommitHash());
-            out.stringKey("longCommitHash");
+            out.key("longCommitHash");
             out.stringValue(in.longCommitHash());
-            out.stringKey("repositoryStatus");
+            out.key("repositoryStatus");
             out.stringValue(in.repositoryStatus());
         }
         out.closeObject();
@@ -42,7 +42,7 @@ public class VersionTransformer implements JsonContextTransformer<Version>, Json
     public void json(@NotNull JsonHandler jh) {
         jh.openObject();
         for (Map.Entry<String, Version> entry : Version.identify().entrySet()) {
-            jh.stringKey(entry.getKey());
+            jh.key(entry.getKey());
             transform(entry.getValue(), jh, null);
         }
         jh.closeObject();

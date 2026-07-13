@@ -15,7 +15,7 @@ import java.util.function.*;
 @CodeHistory(date = "2025/5/30")
 @DirectSubclass({
         SimpleIntList.class, PublicIntList.class, PrivateIntList.class,
-        NaturalIntList.class, QuadraticProbingList.class, ResizePolicy.class,
+        NaturalIntList.class, QuadraticProbingList.class, CapacityPolicy.class,
         CopyOnWriteIntList.class, CopyOnResizeIntList.class,
         Bit32CombinationList.class
 })

@@ -51,21 +51,21 @@ public class ProcessHandleTransformer implements JsonContextTransformer<ProcessH
     public void transform(ProcessHandle in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(PID);
+            out.key(PID);
             out.numberValue(in.pid());
             in.parent().ifPresent(parent -> {
-                out.stringKey(PARENT);
+                out.key(PARENT);
                 out.numberValue(parent.pid());
             });
             streamForEach(in.children(), () -> {
-                out.stringKey(CHILDREN);
+                out.key(CHILDREN);
                 out.openArray();
             }, child -> out.numberValue(child.pid()), out::closeArray);
-            out.stringKey(INFO);
+            out.key(INFO);
             ProcessHandleInfoTransformer.INSTANCE.transform(in.info(), out, context);
-            out.stringKey(SUPPORTS_NORMAL_TERMINATION);
+            out.key(SUPPORTS_NORMAL_TERMINATION);
             out.booleanValue(in.supportsNormalTermination());
-            out.stringKey(ALIVE);
+            out.key(ALIVE);
             out.booleanValue(in.isAlive());
         }
         out.closeObject();

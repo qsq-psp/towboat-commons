@@ -276,7 +276,7 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
     }
 
     @Override
-    public void stringKey(@NotNull String key) {
+    public void key(@NotNull String key) {
         try {
             anyKey();
             out.write('"');
@@ -293,7 +293,7 @@ public class JsonCharStreamWriter extends JsonStreamWriter {
     }
 
     @Override
-    public void stringKey(@NotNull FastString key) {
+    public void key(@NotNull FastString key) {
         try {
             anyKey();
             out.write('"');

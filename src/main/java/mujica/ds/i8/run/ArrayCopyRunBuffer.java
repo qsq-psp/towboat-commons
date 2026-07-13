@@ -1,7 +1,7 @@
 package mujica.ds.i8.run;
 
-import mujica.ds.i32.list.HalfResizePolicy;
-import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.HalfCapacityPolicy;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,9 +12,9 @@ import java.util.Arrays;
 public class ArrayCopyRunBuffer extends ArrayRunBuffer {
 
     @NotNull
-    private static ResizePolicy createPolicy(int maxDistance) {
+    private static CapacityPolicy createPolicy(int maxDistance) {
         maxDistance += Math.max(40, maxDistance / 3);
-        return new HalfResizePolicy(maxDistance);
+        return new HalfCapacityPolicy(maxDistance);
     }
 
     private int position;

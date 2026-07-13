@@ -3,16 +3,15 @@ package mujica.io.codec;
 import mujica.ds.i8.view.ByteFillPolicy;
 import mujica.ds.i8.view.DataView;
 import mujica.ds.i8.view.LongDataView;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * Created in UltraIO on 2025/4/29.
- * Moved here on 2025/4/30.
- */
+@CodeHistory(date = "2025/4/29", project = "UltraIO")
+@CodeHistory(date = "2025/4/30")
 public class Base32DecodeOutputStream extends FilterOutputStream implements Base32StreamingCodec {
 
     private long buffer;

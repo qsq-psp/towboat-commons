@@ -4,6 +4,8 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.RoundingMode;
+
 /**
  * Created on 2026/6/17.
  */
@@ -99,8 +101,8 @@ public class FractionArithmetic<S extends Base2Integer> extends AbstractArithmet
         arithmetic.add(slot3, slot4, slot5);
         arithmetic.multiply(left.q, right.q, slot4);
         arithmetic.gcd(slot4, slot5, slot3);
-        arithmetic.divide(slot4, slot3, result.q);
-        arithmetic.divide(slot5, slot3, result.p);
+        arithmetic.divide(slot4, slot3, result.q, RoundingMode.UNNECESSARY);
+        arithmetic.divide(slot5, slot3, result.p, RoundingMode.UNNECESSARY);
     }
 
     @Override
@@ -110,8 +112,8 @@ public class FractionArithmetic<S extends Base2Integer> extends AbstractArithmet
         arithmetic.subtract(slot3, slot4, slot5);
         arithmetic.multiply(left.q, right.q, slot4);
         arithmetic.gcd(slot4, slot5, slot3);
-        arithmetic.divide(slot4, slot3, result.q);
-        arithmetic.divide(slot5, slot3, result.p);
+        arithmetic.divide(slot4, slot3, result.q, RoundingMode.UNNECESSARY);
+        arithmetic.divide(slot5, slot3, result.p, RoundingMode.UNNECESSARY);
     }
 
     @Override
@@ -119,8 +121,8 @@ public class FractionArithmetic<S extends Base2Integer> extends AbstractArithmet
         arithmetic.multiply(left.p, right.p, slot3);
         arithmetic.multiply(left.q, right.q, slot4);
         arithmetic.gcd(slot3, slot4, slot5);
-        arithmetic.divide(slot3, slot5, result.p);
-        arithmetic.divide(slot4, slot5, result.q);
+        arithmetic.divide(slot3, slot5, result.p, RoundingMode.UNNECESSARY);
+        arithmetic.divide(slot4, slot5, result.q, RoundingMode.UNNECESSARY);
     }
 
     @Override
@@ -130,12 +132,12 @@ public class FractionArithmetic<S extends Base2Integer> extends AbstractArithmet
     }
 
     @Override
-    public void divide(@NotNull Fraction<S> left, @NotNull Fraction<S> right, @NotNull Fraction<S> result) {
+    public void divide(@NotNull Fraction<S> left, @NotNull Fraction<S> right, @NotNull Fraction<S> result, @NotNull RoundingMode mode) {
         arithmetic.multiply(left.p, right.q, slot3);
         arithmetic.multiply(left.q, right.p, slot4);
         arithmetic.gcd(slot3, slot4, slot5);
-        arithmetic.divide(slot3, slot5, result.p);
-        arithmetic.divide(slot4, slot5, result.q);
+        arithmetic.divide(slot3, slot5, result.p, RoundingMode.UNNECESSARY);
+        arithmetic.divide(slot4, slot5, result.q, RoundingMode.UNNECESSARY);
     }
 
     @Override

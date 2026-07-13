@@ -15,14 +15,14 @@ public class DnsRecordTransformer implements JsonContextTransformer<DnsRecord> {
     public void transform(@NotNull DnsRecord dnsRecord, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("name");
+            out.key("name");
             out.stringValue(dnsRecord.name());
-            out.stringKey("type");
+            out.key("type");
             out.stringValue(dnsRecord.type().name());
         }
         {
             int dnsClass = dnsRecord.dnsClass();
-            out.stringKey("dnsClass");
+            out.key("dnsClass");
             switch (dnsClass) {
                 case DnsRecord.CLASS_IN:
                     out.stringValue("IN");

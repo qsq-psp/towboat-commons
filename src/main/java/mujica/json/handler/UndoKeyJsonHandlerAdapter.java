@@ -28,15 +28,15 @@ public class UndoKeyJsonHandlerAdapter<H extends JsonHandler> extends JsonHandle
             return;
         }
         if (key instanceof FastString) {
-            h.stringKey((FastString) key);
+            h.key((FastString) key);
         } else {
-            h.stringKey(key.toString());
+            h.key(key.toString());
         }
         key = null;
     }
 
     @Override
-    public void stringKey(@NotNull String key) {
+    public void key(@NotNull String key) {
         if (this.key != null) {
             throw new IllegalStateException();
         }
@@ -44,7 +44,7 @@ public class UndoKeyJsonHandlerAdapter<H extends JsonHandler> extends JsonHandle
     }
 
     @Override
-    public void stringKey(@NotNull FastString key) {
+    public void key(@NotNull FastString key) {
         if (this.key != null) {
             throw new IllegalStateException();
         }

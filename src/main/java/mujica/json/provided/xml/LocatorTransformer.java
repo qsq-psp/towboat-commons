@@ -26,27 +26,27 @@ public class LocatorTransformer implements JsonContextTransformer<Locator> {
         out.openObject();
         if (locator instanceof Locator2) {
             Locator2 locator2 = (Locator2) locator;
-            out.stringKey(VERSION);
+            out.key(VERSION);
             out.stringValue(locator2.getXMLVersion());
-            out.stringKey(InputSourceTransformer.ENCODING);
+            out.key(InputSourceTransformer.ENCODING);
             out.stringValue(locator2.getEncoding());
         }
         {
             String id = locator.getPublicId();
             if (id != null) {
-                out.stringKey(InputSourceTransformer.PUBLIC_ID);
+                out.key(InputSourceTransformer.PUBLIC_ID);
                 out.stringValue(locator.getPublicId());
             }
             id = locator.getSystemId();
             if (id != null) {
-                out.stringKey(InputSourceTransformer.SYSTEM_ID);
+                out.key(InputSourceTransformer.SYSTEM_ID);
                 out.stringValue(locator.getSystemId());
             }
         }
         {
-            out.stringKey(LINE_NUMBER);
+            out.key(LINE_NUMBER);
             out.numberValue(locator.getLineNumber());
-            out.stringKey(COLUMN_NUMBER);
+            out.key(COLUMN_NUMBER);
             out.numberValue(locator.getColumnNumber());
         }
         out.closeObject();

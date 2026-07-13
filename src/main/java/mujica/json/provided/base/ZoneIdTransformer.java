@@ -25,10 +25,10 @@ public class ZoneIdTransformer implements JsonContextTransformer<ZoneId>, JsonSt
     public void transform(ZoneId in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ID);
+            out.key(ID);
             out.stringValue(in.getId());
             final ZoneRules zoneRules = in.getRules();
-            out.stringKey(FIXED_OFFSET);
+            out.key(FIXED_OFFSET);
             out.booleanValue(zoneRules.isFixedOffset());
         }
         out.closeObject();

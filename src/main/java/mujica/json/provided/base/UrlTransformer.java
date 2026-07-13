@@ -28,41 +28,41 @@ public class UrlTransformer implements JsonContextTransformer<URL> {
         {
             String str = in.getQuery();
             if (str != null) {
-                out.stringKey(UriTransformer.QUERY);
+                out.key(UriTransformer.QUERY);
                 out.stringValue(str);
             }
             str = in.getPath();
             if (str != null) {
-                out.stringKey(UriTransformer.PATH);
+                out.key(UriTransformer.PATH);
                 out.stringValue(str);
             }
             str = in.getUserInfo();
             if (str != null) {
-                out.stringKey(UriTransformer.USER_INFO);
+                out.key(UriTransformer.USER_INFO);
                 out.stringValue(str);
             }
             str = in.getAuthority();
             if (str != null) {
-                out.stringKey(UriTransformer.AUTHORITY);
+                out.key(UriTransformer.AUTHORITY);
                 out.stringValue(str);
             }
-            out.stringKey(UriTransformer.PORT);
+            out.key(UriTransformer.PORT);
             out.numberValue(in.getPort());
-            out.stringKey(PROTOCOL);
+            out.key(PROTOCOL);
             out.stringValue(in.getProtocol());
             str = in.getHost();
             if (str != null) {
-                out.stringKey(UriTransformer.HOST);
+                out.key(UriTransformer.HOST);
                 out.stringValue(str);
             }
             str = in.getFile();
             if (str != null) {
-                out.stringKey(FILE);
+                out.key(FILE);
                 out.stringValue(str);
             }
             str = in.getRef();
             if (str != null) {
-                out.stringKey(REFERENCE);
+                out.key(REFERENCE);
                 out.stringValue(str);
             }
         }

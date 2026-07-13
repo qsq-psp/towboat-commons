@@ -12,7 +12,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 
 @CodeHistory(date = "2026/2/25")
-public class PushPullDecoder {
+class PushPullDecoder {
 
     protected static final char REPLACEMENT = '\ufffd';
 

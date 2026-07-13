@@ -1,6 +1,6 @@
 package mujica.ds.i8.run;
 
-import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 
 import java.io.Serializable;
@@ -11,11 +11,11 @@ public abstract class ArrayRunBuffer extends RunBuffer implements Serializable {
 
     private static final long serialVersionUID = 0xb0b0048acda9f050L;
 
-    final ResizePolicy policy;
+    final CapacityPolicy policy;
 
     byte[] array;
 
-    public ArrayRunBuffer(int maxDistance, ResizePolicy policy) {
+    public ArrayRunBuffer(int maxDistance, CapacityPolicy policy) {
         super(maxDistance);
         this.policy = policy;
     }

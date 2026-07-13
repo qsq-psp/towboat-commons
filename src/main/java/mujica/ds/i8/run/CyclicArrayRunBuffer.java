@@ -1,7 +1,7 @@
 package mujica.ds.i8.run;
 
-import mujica.ds.i32.list.ResizePolicy;
-import mujica.ds.i32.list.TwiceResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
+import mujica.ds.i32.list.TwiceCapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,12 +17,12 @@ public class CyclicArrayRunBuffer extends ArrayRunBuffer {
 
     private int head, tail; // when array == null, the buffer is empty; when head == tail, the buffer is full
 
-    public CyclicArrayRunBuffer(int maxDistance, @Nullable ResizePolicy policy) {
+    public CyclicArrayRunBuffer(int maxDistance, @Nullable CapacityPolicy policy) {
         super(maxDistance, policy);
     }
 
     public CyclicArrayRunBuffer(int maxDistance) {
-        super(maxDistance, TwiceResizePolicy.INSTANCE);
+        super(maxDistance, TwiceCapacityPolicy.INSTANCE);
     }
 
     @Override

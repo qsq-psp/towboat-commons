@@ -17,17 +17,17 @@ public class UndoableEditTransformer implements JsonContextTransformer<UndoableE
     public void transform(UndoableEdit edit, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("canUndo");
+            out.key("canUndo");
             out.booleanValue(edit.canUndo());
-            out.stringKey("canRedo");
+            out.key("canRedo");
             out.booleanValue(edit.canRedo());
-            out.stringKey("significant");
+            out.key("significant");
             out.booleanValue(edit.isSignificant());
-            out.stringKey("name");
+            out.key("name");
             out.stringValue(edit.getPresentationName());
-            out.stringKey("undoName");
+            out.key("undoName");
             out.stringValue(edit.getUndoPresentationName());
-            out.stringKey("redoName");
+            out.key("redoName");
             out.stringValue(edit.getRedoPresentationName());
         }
         out.closeObject();

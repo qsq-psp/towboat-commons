@@ -20,7 +20,7 @@ public class SlotArrayAllocatorI32B implements SlotArrayAllocator<BitSlot, int[]
 
     @NotNull
     @Override
-    public BitSlot clone(@NotNull BitSlot original) {
+    public BitSlot cloneSlot(@NotNull BitSlot original) {
         return new PublicBitSlot(original.getBit());
     }
 

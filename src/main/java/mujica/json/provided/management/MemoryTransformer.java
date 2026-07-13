@@ -26,13 +26,13 @@ public class MemoryTransformer implements JsonContextTransformer<MemoryMXBean> {
     public void transform(@NotNull MemoryMXBean in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(PENDING);
+            out.key(PENDING);
             out.numberValue(in.getObjectPendingFinalizationCount());
-            out.stringKey(HEAP);
+            out.key(HEAP);
             MemoryUsageTransformer.INSTANCE.transform(in.getHeapMemoryUsage(), out, context);
-            out.stringKey(NON_HEAP);
+            out.key(NON_HEAP);
             MemoryUsageTransformer.INSTANCE.transform(in.getNonHeapMemoryUsage(), out, context);
-            out.stringKey(ClassLoadingTransformer.VERBOSE);
+            out.key(ClassLoadingTransformer.VERBOSE);
             out.booleanValue(in.isVerbose());
         }
         out.closeObject();

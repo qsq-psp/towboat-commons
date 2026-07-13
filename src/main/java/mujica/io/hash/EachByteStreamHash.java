@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public abstract class EachByteStreamHash implements ByteStreamHash {
     public abstract DataView finish();
 
     @Override
-    public void update(@NotNull ByteSequence input) {
+    public void update(@NotNull ReadOnlyI8Array input) {
         final int byteLength = input.byteLength();
         for (int index = 0; index < byteLength; index++) {
             update(input.getByte(index));
@@ -37,12 +37,12 @@ public abstract class EachByteStreamHash implements ByteStreamHash {
 
     @Override
     public void update(@NotNull byte[] array, int offset, int length) {
-        update(ByteSequence.of(array, offset, length));
+        update(ReadOnlyI8Array.of(array, offset, length));
     }
 
     @Override
     public void update(@NotNull byte[] array) {
-        update(ByteSequence.of(array));
+        update(ReadOnlyI8Array.of(array));
     }
 
     @Override
@@ -54,12 +54,12 @@ public abstract class EachByteStreamHash implements ByteStreamHash {
 
     @Override
     public void update(@NotNull DataView input) {
-        update((ByteSequence) input);
+        update((ReadOnlyI8Array) input);
     }
 
     @NotNull
     @Override
-    public DataView apply(@NotNull ByteSequence input) {
+    public DataView apply(@NotNull ReadOnlyI8Array input) {
         start();
         update(input);
         return finish();

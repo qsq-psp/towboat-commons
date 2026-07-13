@@ -22,11 +22,11 @@ public class NetworkInterfaceTransformer implements JsonContextTransformer<Netwo
     public void transform(@NotNull NetworkInterface in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.NAME);
+            out.key(ClassLoaderTransformer.NAME);
             out.stringValue(in.getName());
         }
         {
-            out.stringKey("inetAddress");
+            out.key("inetAddress");
             out.openArray();
             Enumeration<InetAddress> enumeration = in.getInetAddresses();
             while (enumeration.hasMoreElements()) {
@@ -35,7 +35,7 @@ public class NetworkInterfaceTransformer implements JsonContextTransformer<Netwo
             out.closeArray();
         }
         {
-            out.stringKey("interfaceAddress");
+            out.key("interfaceAddress");
             out.openArray();
             for (InterfaceAddress interfaceAddress : in.getInterfaceAddresses()) {
                 InterfaceAddressTransformer.INSTANCE.transform(interfaceAddress, out, context);
@@ -45,23 +45,23 @@ public class NetworkInterfaceTransformer implements JsonContextTransformer<Netwo
         {
             NetworkInterface parent = in.getParent();
             if (parent != null) {
-                out.stringKey("parent");
+                out.key("parent");
                 out.stringValue(parent.getName());
             }
         }
         {
-            out.stringKey("index");
+            out.key("index");
             out.numberValue(in.getIndex());
         }
         {
             String displayName = in.getDisplayName();
             if (displayName != null) {
-                out.stringKey("displayName");
+                out.key("displayName");
                 out.stringValue(displayName);
             }
         }
         {
-            out.stringKey("virtual");
+            out.key("virtual");
             out.booleanValue(in.isVirtual());
         }
         out.closeObject();

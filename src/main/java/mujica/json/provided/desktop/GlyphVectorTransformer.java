@@ -23,11 +23,11 @@ public class GlyphVectorTransformer implements JsonContextTransformer<GlyphVecto
     public void transform(@NotNull GlyphVector in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(FONT);
+            out.key(FONT);
             FontTransformer.INSTANCE.transform(in.getFont(), out, context);
-            out.stringKey(GLYPH_COUNT);
+            out.key(GLYPH_COUNT);
             out.numberValue(in.getNumGlyphs());
-            out.stringKey(LAYOUT_FLAGS);
+            out.key(LAYOUT_FLAGS);
             out.numberValue(in.getLayoutFlags());
         }
         out.closeObject();

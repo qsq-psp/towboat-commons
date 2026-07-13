@@ -20,38 +20,38 @@ public class MidiDeviceTransformer implements JsonContextTransformer<MidiDevice>
     public static final MidiDeviceTransformer INSTANCE = new MidiDeviceTransformer();
 
     static void transformExposed(@NotNull MidiDevice.Info info, @NotNull JsonHandler out) {
-        out.stringKey(DataFlavorTransformer.NAME);
+        out.key(DataFlavorTransformer.NAME);
         out.stringValue(info.getName());
-        out.stringKey("vendor");
+        out.key("vendor");
         out.stringValue(info.getVendor());
-        out.stringKey("description");
+        out.key("description");
         out.stringValue(info.getDescription());
-        out.stringKey("version");
+        out.key("version");
         out.stringValue(info.getVersion());
     }
 
     static void transformExposed(@NotNull MidiDevice device, @NotNull JsonHandler out) {
         transformExposed(device.getDeviceInfo(), out);
-        out.stringKey("open");
+        out.key("open");
         out.booleanValue(device.isOpen());
         {
             long position = device.getMicrosecondPosition();
             if (position != -1L) {
-                out.stringKey("microsecondPosition");
+                out.key("microsecondPosition");
                 out.numberValue(position);
             }
         }
         {
             int maxReceivers = device.getMaxReceivers();
             if (maxReceivers != -1) {
-                out.stringKey("maxReceiverCount");
+                out.key("maxReceiverCount");
                 out.numberValue(maxReceivers);
             }
         }
         {
             int maxTransmitters = device.getMaxTransmitters();
             if (maxTransmitters != -1) {
-                out.stringKey("maxTransmitterCount");
+                out.key("maxTransmitterCount");
                 out.numberValue(maxTransmitters);
             }
         }

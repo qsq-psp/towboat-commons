@@ -31,34 +31,34 @@ public class CacheAdapter<H extends JsonHandler> extends JsonHandlerAdapter<H> {
     }
 
     @Override
-    public void stringKey(@NotNull String key) {
+    public void key(@NotNull String key) {
         if (testTypePreference(FLAG_DO_NOT_CACHE_STRING_KEY)) {
-            h.stringKey(key);
+            h.key(key);
             return;
         }
         final Object object = map.get(key);
         if (object instanceof String) {
-            h.stringKey((String) object);
+            h.key((String) object);
         } else if (object instanceof FastString) {
-            h.stringKey((FastString) object);
+            h.key((FastString) object);
         } else {
             map.put(key, key);
-            h.stringKey(key);
+            h.key(key);
         }
     }
 
     @Override
-    public void stringKey(@NotNull FastString key) {
+    public void key(@NotNull FastString key) {
         if (testTypePreference(FLAG_DO_NOT_CACHE_FAST_STRING_KEY)) {
-            h.stringKey(key);
+            h.key(key);
             return;
         }
         final Object object = map.get(key.toString());
         if (object instanceof FastString) {
-            h.stringKey((FastString) object);
+            h.key((FastString) object);
         } else {
             map.put(key.toString(), key);
-            h.stringKey(key);
+            h.key(key);
         }
     }
 

@@ -1,7 +1,7 @@
 package mujica.ds.bit.list;
 
-import mujica.ds.i32.list.ResizePolicy;
-import mujica.ds.i32.list.TwiceResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
+import mujica.ds.i32.list.TwiceCapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ public class CopyOnResizeBitList extends AbstractBitList {
     private static final long serialVersionUID = 0xE04C062731DD528CL;
 
     @NotNull
-    final ResizePolicy policy;
+    final CapacityPolicy policy;
 
     @NotNull
     boolean[] array;
@@ -28,16 +28,16 @@ public class CopyOnResizeBitList extends AbstractBitList {
 
     int modCount;
 
-    public CopyOnResizeBitList(@Nullable ResizePolicy policy) {
+    public CopyOnResizeBitList(@Nullable CapacityPolicy policy) {
         super();
         if (policy == null) {
-            policy = TwiceResizePolicy.INSTANCE;
+            policy = TwiceCapacityPolicy.INSTANCE;
         }
         this.policy = policy;
         this.array = new boolean[policy.initialCapacity()];
     }
 
-    CopyOnResizeBitList(@NotNull ResizePolicy policy, @NotNull boolean[] array) {
+    CopyOnResizeBitList(@NotNull CapacityPolicy policy, @NotNull boolean[] array) {
         super();
         this.policy = policy;
         this.array = array;

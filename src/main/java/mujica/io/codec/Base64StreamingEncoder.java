@@ -5,9 +5,6 @@ import mujica.reflect.modifier.ConstantInterface;
 
 import java.io.IOException;
 
-/**
- * Created on 2025/4/17.
- */
 @CodeHistory(date = "2025/4/17")
 @ConstantInterface
 public interface Base64StreamingEncoder extends Base64StreamingCodec {

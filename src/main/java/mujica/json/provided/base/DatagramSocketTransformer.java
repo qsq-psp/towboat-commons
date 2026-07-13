@@ -17,33 +17,33 @@ public class DatagramSocketTransformer implements JsonContextTransformer<Datagra
     public static final DatagramSocketTransformer INSTANCE = new DatagramSocketTransformer();
 
     @Override
-    public void transform(@NotNull DatagramSocket in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull DatagramSocket socket, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(SocketTransformer.CONNECTED);
-            out.booleanValue(in.isConnected());
-            out.stringKey(SocketTransformer.BOUND);
-            out.booleanValue(in.isBound());
-            out.stringKey(SocketTransformer.CLOSED);
-            out.booleanValue(in.isClosed());
+            out.key(SocketTransformer.CONNECTED);
+            out.booleanValue(socket.isConnected());
+            out.key(SocketTransformer.BOUND);
+            out.booleanValue(socket.isBound());
+            out.key(SocketTransformer.CLOSED);
+            out.booleanValue(socket.isClosed());
         }
         {
-            SocketAddress remote = in.getRemoteSocketAddress();
+            SocketAddress remote = socket.getRemoteSocketAddress();
             if (remote != null) {
-                out.stringKey(SocketTransformer.REMOTE);
+                out.key(SocketTransformer.REMOTE);
                 if (remote instanceof InetSocketAddress) {
-                    InetSocketAddressTransformer.INSTANCE.transform((InetSocketAddress) remote, out, context);
+                    SocketTransformer.transformInetSocketAddress((InetSocketAddress) remote, out);
                 } else {
                     out.stringValue(remote.getClass().getName());
                 }
             }
         }
         {
-            SocketAddress local = in.getLocalSocketAddress();
+            SocketAddress local = socket.getLocalSocketAddress();
             if (local != null) {
-                out.stringKey(SocketTransformer.LOCAL);
+                out.key(SocketTransformer.LOCAL);
                 if (local instanceof InetSocketAddress) {
-                    InetSocketAddressTransformer.INSTANCE.transform((InetSocketAddress) local, out, context);
+                    SocketTransformer.transformInetSocketAddress((InetSocketAddress) local, out);
                 } else {
                     out.stringValue(local.getClass().getName());
                 }

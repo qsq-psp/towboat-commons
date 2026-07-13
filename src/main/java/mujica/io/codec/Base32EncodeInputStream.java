@@ -3,6 +3,7 @@ package mujica.io.codec;
 import mujica.ds.i8.view.ByteFillPolicy;
 import mujica.ds.i8.view.DataView;
 import mujica.ds.i8.view.LongDataView;
+import mujica.reflect.modifier.CodeHistory;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,10 +11,8 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created in UltraIO on 2025/4/28.
- * Moved here on 2025/4/30.
- */
+@CodeHistory(date = "2025/4/28", project = "UltraIO")
+@CodeHistory(date = "2025/4/30")
 public class Base32EncodeInputStream extends FilterInputStream implements Base32StreamingEncoder {
 
     private long buffer;

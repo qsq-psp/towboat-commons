@@ -1,16 +1,16 @@
 package mujica.ds.i8.view;
 
-import mujica.ds.bit.list.BooleanSequence;
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.bit.ReadOnlyBitArray;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i32.list.IntSequence;
-import mujica.ds.i64.list.LongSequence;
+import mujica.ds.i64.ReadOnlyI64Array;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2025/5/9")
 @ReferencePage(title = "DataView", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView")
-public interface DataView extends BooleanSequence, ByteSequence, IntSequence, LongSequence { // multiple data type; endian fixed; sign variable; read only
+public interface DataView extends ReadOnlyBitArray, ReadOnlyI8Array, IntSequence, ReadOnlyI64Array { // multiple data type; endian fixed; sign variable; read only
 
     Runnable NOP_GUARD = () -> {};
 

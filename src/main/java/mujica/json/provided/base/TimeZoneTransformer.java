@@ -31,17 +31,17 @@ public class TimeZoneTransformer implements JsonContextTransformer<TimeZone>, Js
     public void transform(TimeZone in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(RAW_OFFSET);
+            out.key(RAW_OFFSET);
             out.numberValue(in.getRawOffset());
-            out.stringKey(ZoneIdTransformer.ID);
+            out.key(ZoneIdTransformer.ID);
             out.stringValue(in.getID());
-            out.stringKey(ZONE_ID);
+            out.key(ZONE_ID);
             ZoneIdTransformer.INSTANCE.transform(in.toZoneId(), out, context);
-            out.stringKey(DISPLAY_NAME);
+            out.key(DISPLAY_NAME);
             out.stringValue(in.getDisplayName());
-            out.stringKey(DST_SAVINGS);
+            out.key(DST_SAVINGS);
             out.numberValue(in.getDSTSavings());
-            out.stringKey(USE_DAYLIGHT);
+            out.key(USE_DAYLIGHT);
             out.booleanValue(in.useDaylightTime());
         }
         out.closeObject();

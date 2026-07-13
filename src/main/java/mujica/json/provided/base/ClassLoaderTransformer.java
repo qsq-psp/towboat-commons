@@ -28,18 +28,18 @@ public class ClassLoaderTransformer implements JsonContextTransformer<ClassLoade
     public void transform(@NotNull ClassLoader classLoader, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(CLASS);
+            out.key(CLASS);
             out.stringValue(classLoader.getClass().getName());
-            out.stringKey(PARALLEL);
+            out.key(PARALLEL);
             out.booleanValue(classLoader.isRegisteredAsParallelCapable());
             String name = classLoader.getName();
             if (name != null) {
-                out.stringKey(NAME);
+                out.key(NAME);
                 out.stringValue(name);
             }
             ClassLoader parent = classLoader.getParent();
             if (parent != null) {
-                out.stringKey(PARENT);
+                out.key(PARENT);
                 transform(parent, out, context);
             }
         }

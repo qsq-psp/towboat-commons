@@ -41,46 +41,46 @@ public class PatternTransformer implements JsonContextTransformer<Pattern> {
     public void transform(Pattern in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(PATTERN);
+            out.key(PATTERN);
             out.stringValue(in.pattern());
             int flags = in.flags();
             if ((flags & (Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL | Pattern.UNICODE_CASE)) != 0) {
                 if ((flags & Pattern.CASE_INSENSITIVE) != 0) {
-                    out.stringKey(CASE_INSENSITIVE);
+                    out.key(CASE_INSENSITIVE);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.MULTILINE) != 0) {
-                    out.stringKey(MULTILINE);
+                    out.key(MULTILINE);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.DOTALL) != 0) {
-                    out.stringKey(DOTALL);
+                    out.key(DOTALL);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.UNICODE_CASE) != 0) {
-                    out.stringKey(UNICODE_CASE);
+                    out.key(UNICODE_CASE);
                     out.booleanValue(true);
                 }
             }
             if ((flags & (Pattern.CANON_EQ | Pattern.UNIX_LINES | Pattern.LITERAL | Pattern.UNICODE_CHARACTER_CLASS | Pattern.COMMENTS)) != 0) {
                 if ((flags & Pattern.CANON_EQ) != 0) {
-                    out.stringKey(CANON_EQ);
+                    out.key(CANON_EQ);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.UNIX_LINES) != 0) {
-                    out.stringKey(UNIX_LINES);
+                    out.key(UNIX_LINES);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.LITERAL) != 0) {
-                    out.stringKey(LITERAL);
+                    out.key(LITERAL);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.UNICODE_CHARACTER_CLASS) != 0) {
-                    out.stringKey(UNICODE_CHARACTER_CLASS);
+                    out.key(UNICODE_CHARACTER_CLASS);
                     out.booleanValue(true);
                 }
                 if ((flags & Pattern.COMMENTS) != 0) {
-                    out.stringKey(COMMENTS);
+                    out.key(COMMENTS);
                     out.booleanValue(true);
                 }
             }

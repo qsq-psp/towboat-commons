@@ -20,7 +20,7 @@ public class SlotArrayAllocatorI8 implements SlotArrayAllocator<I8Slot, byte[]> 
 
     @NotNull
     @Override
-    public I8Slot clone(@NotNull I8Slot original) {
+    public I8Slot cloneSlot(@NotNull I8Slot original) {
         return new I8(original.getI8());
     }
 

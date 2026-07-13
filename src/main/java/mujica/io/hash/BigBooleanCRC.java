@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.bit.list.BooleanSequence;
+import mujica.ds.bit.ReadOnlyBitArray;
 import mujica.ds.i8.view.BooleanSequenceDataView;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 @CodeHistory(date = "2025/4/8", project = "Ultramarine", name = "BigCRC")
 @CodeHistory(date = "2025/4/11")
-public class BigBooleanCRC extends EachBitStreamHash implements BooleanSequence, Serializable {
+public class BigBooleanCRC extends EachBitStreamHash implements ReadOnlyBitArray, Serializable {
 
     private static final long serialVersionUID = 0x6f93d78e9e6d95a5L;
 

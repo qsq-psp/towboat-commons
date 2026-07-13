@@ -37,27 +37,27 @@ public class FileSystemTransformer implements JsonContextTransformer<FileSystem>
     public void transform(FileSystem in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(SCHEME);
+            out.key(SCHEME);
             out.stringValue(in.provider().getScheme());
-            out.stringKey(OPEN);
+            out.key(OPEN);
             out.booleanValue(in.isOpen());
-            out.stringKey(READ_ONLY);
+            out.key(READ_ONLY);
             out.booleanValue(in.isReadOnly());
-            out.stringKey(SEPARATOR);
+            out.key(SEPARATOR);
             out.stringValue(in.getSeparator());
-            out.stringKey(ROOTS);
+            out.key(ROOTS);
             out.openArray();
             for (Path path : in.getRootDirectories()) {
                 PathTransformer.INSTANCE.transform(path, out, context);
             }
             out.closeArray();
-            out.stringKey(STORES);
+            out.key(STORES);
             out.openArray();
             for (FileStore store : in.getFileStores()) {
                 FileStoreTransformer.INSTANCE.transform(store, out, context);
             }
             out.closeArray();
-            out.stringKey(VIEWS);
+            out.key(VIEWS);
             out.openArray();
             for (String view : in.supportedFileAttributeViews()) {
                 out.stringValue(view);

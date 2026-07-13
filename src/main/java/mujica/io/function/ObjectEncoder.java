@@ -11,6 +11,7 @@ import java.io.OutputStream;
  * Recreated on 2025/4/5.
  * Both output accept bytes and do not have capacity limit.
  */
+@Deprecated
 public interface ObjectEncoder {
 
     void encode(Object value, @NotNull ByteBuf out);

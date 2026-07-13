@@ -22,9 +22,9 @@ public class TypeTransformer implements JsonContextTransformer<Type> {
     public void transform(@NotNull Type in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.CLASS);
+            out.key(ClassLoaderTransformer.CLASS);
             out.stringValue(in.getClass().getName());
-            out.stringKey(ClassLoaderTransformer.NAME);
+            out.key(ClassLoaderTransformer.NAME);
             out.stringValue(in.getTypeName());
         }
         if (in instanceof Class) {
@@ -61,9 +61,9 @@ public class TypeTransformer implements JsonContextTransformer<Type> {
             try {
                 out.openObject();
                 {
-                    out.stringKey(ClassLoaderTransformer.CLASS);
+                    out.key(ClassLoaderTransformer.CLASS);
                     out.stringValue(in.getClass().getName());
-                    out.stringKey(ClassLoaderTransformer.NAME);
+                    out.key(ClassLoaderTransformer.NAME);
                     out.stringValue(in.getTypeName());
                 }
                 if (in instanceof ParameterizedType) {
@@ -93,7 +93,7 @@ public class TypeTransformer implements JsonContextTransformer<Type> {
     static void transformExposedParameterized(@NotNull ParameterizedType in, @NotNull JsonHandler out, @NotNull JsonContext context) {
         {
             Type[] arguments = in.getActualTypeArguments();
-            out.stringKey("arguments");
+            out.key("arguments");
             out.openArray();
             for (Type argument : arguments) {
                 transformNullable(argument, out, context);
@@ -102,12 +102,12 @@ public class TypeTransformer implements JsonContextTransformer<Type> {
         }
         {
             Type raw = in.getRawType();
-            out.stringKey("raw");
+            out.key("raw");
             transformNullable(raw, out, context);
         }
         {
             Type owner = in.getOwnerType();
-            out.stringKey("owner");
+            out.key("owner");
             transformNullable(owner, out, context);
         }
     }
@@ -115,7 +115,7 @@ public class TypeTransformer implements JsonContextTransformer<Type> {
     static void transformExposedTypeVariable(@NotNull TypeVariable<?> in, @NotNull JsonHandler out, @NotNull JsonContext context) {
         {
             Type[] bounds = in.getBounds();
-            out.stringKey("bounds");
+            out.key("bounds");
             out.openArray();
             for (Type bound : bounds) {
                 transformNullable(bound, out, context);
@@ -123,7 +123,7 @@ public class TypeTransformer implements JsonContextTransformer<Type> {
             out.closeArray();
         }
         {
-            out.stringKey("typeVariableName");
+            out.key("typeVariableName");
             out.stringValue(in.getName());
         }
     }
@@ -131,7 +131,7 @@ public class TypeTransformer implements JsonContextTransformer<Type> {
     static void transformExposedWildcard(@NotNull WildcardType in, @NotNull JsonHandler out, @NotNull JsonContext context) {
         {
             Type[] upperBounds = in.getUpperBounds();
-            out.stringKey("upperBounds");
+            out.key("upperBounds");
             out.openArray();
             for (Type bound : upperBounds) {
                 transformNullable(bound, out, context);
@@ -140,7 +140,7 @@ public class TypeTransformer implements JsonContextTransformer<Type> {
         }
         {
             Type[] lowerBounds = in.getLowerBounds();
-            out.stringKey("lowerBounds");
+            out.key("lowerBounds");
             out.openArray();
             for (Type bound : lowerBounds) {
                 transformNullable(bound, out, context);
@@ -151,7 +151,7 @@ public class TypeTransformer implements JsonContextTransformer<Type> {
 
     static void transformExposedGenericArray(@NotNull GenericArrayType in, @NotNull JsonHandler out, @NotNull JsonContext context) {
         final Type component = in.getGenericComponentType();
-        out.stringKey("component");
+        out.key("component");
         transformNullable(component, out, context);
     }
 }

@@ -18,18 +18,18 @@ public class KernelTransformer implements JsonContextTransformer<Kernel> {
     public void transform(@NotNull Kernel in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(RectangleTransformer.WIDTH);
+            out.key(RectangleTransformer.WIDTH);
             out.numberValue(in.getWidth());
-            out.stringKey(RectangleTransformer.HEIGHT);
+            out.key(RectangleTransformer.HEIGHT);
             out.numberValue(in.getHeight());
-            out.stringKey(RectangleTransformer.X);
+            out.key(RectangleTransformer.X);
             out.numberValue(in.getXOrigin());
-            out.stringKey(RectangleTransformer.Y);
+            out.key(RectangleTransformer.Y);
             out.numberValue(in.getYOrigin());
         }
         {
             float[] data = in.getKernelData(null);
-            out.stringKey("data");
+            out.key("data");
             out.openArray();
             for (float value : data) {
                 out.numberValue(value);

@@ -1,7 +1,7 @@
 package mujica.io.hash;
 
-import mujica.ds.bit.list.BooleanSequence;
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.bit.ReadOnlyBitArray;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
@@ -20,13 +20,13 @@ public interface BitStreamHash extends ByteStreamHash, BitsHash {
 
     void update(boolean input);
 
-    void update(@NotNull BooleanSequence input);
+    void update(@NotNull ReadOnlyBitArray input);
 
     @Override
     void update(byte input);
 
     @Override
-    void update(@NotNull ByteSequence input);
+    void update(@NotNull ReadOnlyI8Array input);
 
     @Override
     void update(@NotNull byte[] array, @Index(of = "array") int offset, int length);
@@ -46,11 +46,11 @@ public interface BitStreamHash extends ByteStreamHash, BitsHash {
 
     @NotNull
     @Override
-    DataView apply(@NotNull BooleanSequence input);
+    DataView apply(@NotNull ReadOnlyBitArray input);
 
     @NotNull
     @Override
-    DataView apply(@NotNull ByteSequence input);
+    DataView apply(@NotNull ReadOnlyI8Array input);
 
     @NotNull
     @Override

@@ -1,7 +1,7 @@
 package mujica.io.compress;
 
 import io.netty.handler.codec.CodecException;
-import mujica.ds.bit.list.BooleanSequence;
+import mujica.ds.bit.ReadOnlyBitArray;
 import mujica.ds.i8.run.RunBuffer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @CodeHistory(date = "2025/11/6")
-public abstract class ResidueInflateInputStream extends AbstractInflateInputStream implements BooleanSequence {
+public abstract class ResidueInflateInputStream extends AbstractInflateInputStream implements ReadOnlyBitArray {
 
     protected static final int MAX_SYMBOL = 287;
 

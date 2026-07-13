@@ -1,6 +1,6 @@
 package mujica.ds.i8.view;
 
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.io.codec.Base16Case;
 import mujica.algebra.discrete.ClampedMath;
 import mujica.algebra.discrete.IntegralMath;
@@ -14,7 +14,7 @@ import java.nio.ByteOrder;
 public class ByteSequenceDataView implements DataView {
 
     @NotNull
-    private final ByteSequence byteSequence;
+    private final ReadOnlyI8Array byteSequence;
 
     @NotNull
     private final ByteOrder byteOrder;
@@ -22,14 +22,14 @@ public class ByteSequenceDataView implements DataView {
     @NotNull
     private final Runnable guard;
 
-    public ByteSequenceDataView(@NotNull ByteSequence byteSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
+    public ByteSequenceDataView(@NotNull ReadOnlyI8Array byteSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
         super();
         this.byteSequence = byteSequence;
         this.byteOrder = byteOrder;
         this.guard = guard;
     }
 
-    public ByteSequenceDataView(@NotNull ByteSequence byteSequence, @NotNull ByteOrder byteOrder) {
+    public ByteSequenceDataView(@NotNull ReadOnlyI8Array byteSequence, @NotNull ByteOrder byteOrder) {
         this(byteSequence, byteOrder, NOP_GUARD);
     }
 

@@ -21,15 +21,15 @@ public class BoundedRangeModelTransformer implements JsonContextTransformer<Boun
     public void transform(@NotNull BoundedRangeModel in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("min");
+            out.key("min");
             out.numberValue(in.getMinimum());
-            out.stringKey("max");
+            out.key("max");
             out.numberValue(in.getMaximum());
-            out.stringKey("value");
+            out.key("value");
             out.numberValue(in.getValue());
-            out.stringKey("adjusting");
+            out.key("adjusting");
             out.booleanValue(in.getValueIsAdjusting());
-            out.stringKey("extent");
+            out.key("extent");
             out.numberValue(in.getExtent());
         }
         out.closeObject();

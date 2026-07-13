@@ -1,12 +1,16 @@
 package mujica.ds.i32;
 
 import mujica.ds.slot.AbstractArithmetic;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.math.RoundingMode;
 
 /**
  * Created on 2026/6/29.
  */
+@CodeHistory(date = "2026/6/29")
 public class ArithmeticS32 extends AbstractArithmetic<I32Slot> {
 
     public ArithmeticS32() {
@@ -27,6 +31,11 @@ public class ArithmeticS32 extends AbstractArithmetic<I32Slot> {
     @Override
     public void one(@NotNull I32Slot result) {
         result.setI32(1);
+    }
+
+    @Override
+    public void two(@NotNull I32Slot result) {
+        result.setI32(2);
     }
 
     @Override
@@ -121,14 +130,14 @@ public class ArithmeticS32 extends AbstractArithmetic<I32Slot> {
     }
 
     @Override
-    public void divide(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void divide(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result, @NotNull RoundingMode mode) {
         final int leftValue = left.getI32();
         final int rightValue = right.getI32();
         final int resultValue = leftValue / rightValue;
         if (leftValue == rightValue * resultValue) {
             result.setI32(resultValue);
         } else {
-            throw new ArithmeticException();
+            throw new ArithmeticException("can not divide exact");
         }
     }
 

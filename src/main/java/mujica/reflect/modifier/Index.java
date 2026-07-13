@@ -15,5 +15,5 @@ public @interface Index {
 
     boolean inclusive() default true;
 
-    boolean supportsNegative() default false;
+    boolean canBeNegative() default false;
 }

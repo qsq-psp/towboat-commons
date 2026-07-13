@@ -26,59 +26,59 @@ public class ChannelConfigTransformer implements JsonContextTransformer<ChannelC
     public void transform(@NotNull ChannelConfig channelConfig, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("timeout");
+            out.key("timeout");
             out.numberValue(channelConfig.getConnectTimeoutMillis());
-            out.stringKey("writeSpinCount");
+            out.key("writeSpinCount");
             out.numberValue(channelConfig.getWriteSpinCount());
-            out.stringKey("autoRead");
+            out.key("autoRead");
             out.booleanValue(channelConfig.isAutoRead());
-            out.stringKey("autoClose");
+            out.key("autoClose");
             out.booleanValue(channelConfig.isAutoRead());
-            out.stringKey("writeBufferLow");
+            out.key("writeBufferLow");
             out.numberValue(channelConfig.getWriteBufferLowWaterMark());
-            out.stringKey("writeBufferHigh");
+            out.key("writeBufferHigh");
             out.numberValue(channelConfig.getWriteBufferHighWaterMark());
         }
         if (channelConfig instanceof DuplexChannelConfig) {
-            out.stringKey("allowHalfClosure");
+            out.key("allowHalfClosure");
             out.booleanValue(((DuplexChannelConfig) channelConfig).isAllowHalfClosure());
         }
         if (channelConfig instanceof ServerSocketChannelConfig) {
             ServerSocketChannelConfig serverSocketChannelConfig = (ServerSocketChannelConfig) channelConfig;
-            out.stringKey("backlog");
+            out.key("backlog");
             out.numberValue(serverSocketChannelConfig.getBacklog());
-            out.stringKey("reuseAddress");
+            out.key("reuseAddress");
             out.booleanValue(serverSocketChannelConfig.isReuseAddress());
-            out.stringKey("receiveBufferSize");
+            out.key("receiveBufferSize");
             out.numberValue(serverSocketChannelConfig.getReceiveBufferSize());
         }
         if (channelConfig instanceof DatagramChannelConfig) {
             DatagramChannelConfig datagramChannelConfig = (DatagramChannelConfig) channelConfig;
-            out.stringKey("sendBufferSize");
+            out.key("sendBufferSize");
             out.numberValue(datagramChannelConfig.getSendBufferSize());
-            out.stringKey("receiveBufferSize");
+            out.key("receiveBufferSize");
             out.numberValue(datagramChannelConfig.getReceiveBufferSize());
-            out.stringKey("trafficClass");
+            out.key("trafficClass");
             out.numberValue(datagramChannelConfig.getTrafficClass());
-            out.stringKey("reuseAddress");
+            out.key("reuseAddress");
             out.booleanValue(datagramChannelConfig.isReuseAddress());
-            out.stringKey("broadcast");
+            out.key("broadcast");
             out.booleanValue(datagramChannelConfig.isBroadcast());
-            out.stringKey("loopbackDisabled");
+            out.key("loopbackDisabled");
             out.booleanValue(datagramChannelConfig.isLoopbackModeDisabled());
-            out.stringKey("timeToLive");
+            out.key("timeToLive");
             out.numberValue(datagramChannelConfig.getTimeToLive());
             {
                 InetAddress inetAddress = datagramChannelConfig.getInterface();
                 if (inetAddress != null) {
-                    out.stringKey("interface");
+                    out.key("interface");
                     out.stringValue(inetAddress.toString());
                 }
             }
             {
                 NetworkInterface networkInterface = datagramChannelConfig.getNetworkInterface();
                 if (networkInterface != null) {
-                    out.stringKey("networkInterface");
+                    out.key("networkInterface");
                     out.stringValue(networkInterface.getName());
                 }
             }

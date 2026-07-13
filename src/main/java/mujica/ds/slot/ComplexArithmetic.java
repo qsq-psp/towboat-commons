@@ -3,6 +3,8 @@ package mujica.ds.slot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.RoundingMode;
+
 /**
  * Created on 2026/6/17.
  */
@@ -89,9 +91,9 @@ public class ComplexArithmetic<S extends Real> extends AbstractArithmetic<Comple
         arithmetic.square(variable.a, slot3);
         arithmetic.square(variable.b, slot4);
         arithmetic.add(slot3, slot4, slot5);
-        arithmetic.divide(variable.a, slot5, result.a);
+        arithmetic.divide(variable.a, slot5, result.a, RoundingMode.UNNECESSARY);
         arithmetic.negate(variable.b, slot4);
-        arithmetic.divide(slot4, slot5, result.b);
+        arithmetic.divide(slot4, slot5, result.b, RoundingMode.UNNECESSARY);
     }
 
     @Override
@@ -142,18 +144,18 @@ public class ComplexArithmetic<S extends Real> extends AbstractArithmetic<Comple
     }
 
     @Override
-    public void divide(@NotNull Complex<S> left, @NotNull Complex<S> right, @NotNull Complex<S> result) {
+    public void divide(@NotNull Complex<S> left, @NotNull Complex<S> right, @NotNull Complex<S> result, @NotNull RoundingMode mode) {
         arithmetic.square(right.a, slot3);
         arithmetic.square(right.b, slot4);
         arithmetic.add(slot3, slot4, slot6);
         arithmetic.multiply(left.a, right.a, slot3);
         arithmetic.multiply(left.b, right.b, slot4);
         arithmetic.add(slot3, slot4, slot5);
-        arithmetic.divide(slot5, slot6, result.a);
+        arithmetic.divide(slot5, slot6, result.a, mode);
         arithmetic.multiply(left.a, right.b, slot3);
         arithmetic.multiply(left.b, right.a, slot4);
         arithmetic.subtract(slot4, slot3, slot5);
-        arithmetic.divide(slot5, slot6, result.b);
+        arithmetic.divide(slot5, slot6, result.b, mode);
     }
 
     @Override

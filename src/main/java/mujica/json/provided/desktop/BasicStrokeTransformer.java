@@ -4,6 +4,7 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -11,6 +12,7 @@ import java.awt.*;
 /**
  * Created on 2026/4/28.
  */
+@CodeHistory(date = "2026/4/28")
 public class BasicStrokeTransformer implements JsonContextTransformer<BasicStroke> {
 
     public static final BasicStrokeTransformer INSTANCE = new BasicStrokeTransformer();
@@ -41,12 +43,12 @@ public class BasicStrokeTransformer implements JsonContextTransformer<BasicStrok
     public void transform(BasicStroke in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(WIDTH);
+            out.key(WIDTH);
             out.numberValue(in.getLineWidth());
         }
         {
             int cap = in.getEndCap();
-            out.stringKey(CAP);
+            out.key(CAP);
             switch (cap) {
                 case BasicStroke.CAP_BUTT:
                     out.stringValue(BUTT);
@@ -65,11 +67,11 @@ public class BasicStrokeTransformer implements JsonContextTransformer<BasicStrok
         }
         {
             int join = in.getLineJoin();
-            out.stringKey(JOIN);
+            out.key(JOIN);
             switch (join) {
                 case BasicStroke.JOIN_MITER:
                     out.stringValue(MITER);
-                    out.stringKey(MITER_LIMIT);
+                    out.key(MITER_LIMIT);
                     out.numberValue(in.getMiterLimit());
                     break;
                 case BasicStroke.JOIN_ROUND:
@@ -87,9 +89,9 @@ public class BasicStrokeTransformer implements JsonContextTransformer<BasicStrok
         {
             float[] dash = in.getDashArray();
             if (dash != null) {
-                out.stringKey(DASH);
+                out.key(DASH);
                 out.arrayValue(dash);
-                out.stringKey(DASH_PHASE);
+                out.key(DASH_PHASE);
                 out.numberValue(in.getDashPhase());
             }
         }

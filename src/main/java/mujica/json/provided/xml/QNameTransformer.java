@@ -25,11 +25,11 @@ public class QNameTransformer implements JsonContextTransformer<QName> {
     public void transform(QName in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(NAMESPACE_URI);
+            out.key(NAMESPACE_URI);
             out.stringValue(in.getNamespaceURI());
-            out.stringKey(LOCAL_PART);
+            out.key(LOCAL_PART);
             out.stringValue(in.getLocalPart());
-            out.stringKey(PREFIX);
+            out.key(PREFIX);
             out.stringValue(in.getPrefix());
         }
         out.closeObject();

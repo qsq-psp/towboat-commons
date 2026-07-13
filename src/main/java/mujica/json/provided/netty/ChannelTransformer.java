@@ -18,50 +18,50 @@ public class ChannelTransformer implements JsonContextTransformer<Channel> {
     public void transform(@NotNull Channel channel, @NotNull JsonHandler jh, JsonContext context) {
         jh.openObject();
         {
-            jh.stringKey("id");
+            jh.key("id");
             jh.stringValue(channel.id().asLongText());
         }
         {
             Channel parent = channel.parent();
             if (parent != null) {
-                jh.stringKey("parent");
+                jh.key("parent");
                 jh.stringValue(parent.id().asLongText());
             }
         }
         {
-            jh.stringKey("config");
+            jh.key("config");
             ChannelConfigTransformer.INSTANCE.transform(channel.config(), jh, context);
-            jh.stringKey("open");
+            jh.key("open");
             jh.booleanValue(channel.isOpen());
-            jh.stringKey("registered");
+            jh.key("registered");
             jh.booleanValue(channel.isRegistered());
-            jh.stringKey("active");
+            jh.key("active");
             jh.booleanValue(channel.isActive());
         }
         {
             ChannelMetadata metadata = channel.metadata();
             if (metadata != null) {
-                jh.stringKey("hasDisconnect");
+                jh.key("hasDisconnect");
                 jh.booleanValue(metadata.hasDisconnect());
-                jh.stringKey("defaultMaxMessagesPerRead");
+                jh.key("defaultMaxMessagesPerRead");
                 jh.numberValue(metadata.defaultMaxMessagesPerRead());
             }
         }
         {
-            jh.stringKey("local");
+            jh.key("local");
             SocketAddressTransformer.INSTANCE.transform(channel.localAddress(), jh, context);
-            jh.stringKey("remote");
+            jh.key("remote");
             SocketAddressTransformer.INSTANCE.transform(channel.remoteAddress(), jh, context);
         }
         {
             boolean writeable = channel.isWritable();
-            jh.stringKey("writeable");
+            jh.key("writeable");
             jh.booleanValue(channel.isWritable());
             if (writeable) {
-                jh.stringKey("bytesToWrite");
+                jh.key("bytesToWrite");
                 jh.numberValue(channel.bytesBeforeUnwritable());
             } else {
-                jh.stringKey("bytesToDrain");
+                jh.key("bytesToDrain");
                 jh.numberValue(channel.bytesBeforeWritable());
             }
         }

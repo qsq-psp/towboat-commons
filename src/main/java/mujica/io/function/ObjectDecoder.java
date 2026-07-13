@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
  * Created on 2025/4/5.
  * Number of bytes consumed is determined by decoder itself, if there is not enough byte provided once, an Exception is thrown
  */
+@Deprecated
 public interface ObjectDecoder {
 
     Object decode(@NotNull byte[] data, @NotNull I32Slot pointer);

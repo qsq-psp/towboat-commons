@@ -1,7 +1,7 @@
 package mujica.ds.i64.list;
 
-import mujica.ds.i32.list.ResizePolicy;
-import mujica.ds.i32.list.TwiceResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
+import mujica.ds.i32.list.TwiceCapacityPolicy;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class CopyOnResizeLongList extends AbstractLongList {
 
     @NotNull
-    final ResizePolicy policy;
+    final CapacityPolicy policy;
 
     @NotNull
     long[] array;
@@ -22,10 +22,10 @@ public class CopyOnResizeLongList extends AbstractLongList {
 
     int modCount;
 
-    public CopyOnResizeLongList(@Nullable ResizePolicy policy) {
+    public CopyOnResizeLongList(@Nullable CapacityPolicy policy) {
         super();
         if (policy == null) {
-            policy = TwiceResizePolicy.INSTANCE;
+            policy = TwiceCapacityPolicy.INSTANCE;
         }
         this.policy = policy;
         this.array = new long[policy.initialCapacity()];

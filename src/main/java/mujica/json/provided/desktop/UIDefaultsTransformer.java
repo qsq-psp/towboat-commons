@@ -33,7 +33,7 @@ public class UIDefaultsTransformer implements JsonContextTransformer<UIDefaults>
                         context.getLogger().info("ui defaults key {}", entry);
                         continue;
                     }
-                    out.stringKey(entry.getKey().toString());
+                    out.key(entry.getKey().toString());
                     context.transform(entry.getValue(), out);
                 }
                 out.closeObject();

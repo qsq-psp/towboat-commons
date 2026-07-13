@@ -19,17 +19,17 @@ public class VoiceStatusTransformer implements JsonContextTransformer<VoiceStatu
     public void transform(@NotNull VoiceStatus in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("active");
+            out.key("active");
             out.booleanValue(in.active);
-            out.stringKey("channel");
+            out.key("channel");
             out.numberValue(in.channel);
-            out.stringKey("bank");
+            out.key("bank");
             out.numberValue(in.bank);
-            out.stringKey("program");
+            out.key("program");
             out.numberValue(in.program);
-            out.stringKey("note");
+            out.key("note");
             out.numberValue(in.note);
-            out.stringKey("volume");
+            out.key("volume");
             out.numberValue(in.volume);
         }
         out.closeObject();

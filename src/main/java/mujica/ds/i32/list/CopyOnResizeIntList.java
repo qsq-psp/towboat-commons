@@ -19,7 +19,7 @@ import java.util.function.IntUnaryOperator;
 public class CopyOnResizeIntList extends AbstractIntList {
 
     @NotNull
-    final ResizePolicy policy;
+    final CapacityPolicy policy;
 
     @NotNull
     int[] array;
@@ -29,16 +29,16 @@ public class CopyOnResizeIntList extends AbstractIntList {
 
     int modCount;
 
-    public CopyOnResizeIntList(@Nullable ResizePolicy policy) {
+    public CopyOnResizeIntList(@Nullable CapacityPolicy policy) {
         super();
         if (policy == null) {
-            policy = TwiceResizePolicy.INSTANCE;
+            policy = TwiceCapacityPolicy.INSTANCE;
         }
         this.policy = policy;
         this.array = new int[policy.initialCapacity()];
     }
 
-    CopyOnResizeIntList(@NotNull ResizePolicy policy, @NotNull int[] array) {
+    CopyOnResizeIntList(@NotNull CapacityPolicy policy, @NotNull int[] array) {
         super();
         this.policy = policy;
         this.array = array;

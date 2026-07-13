@@ -40,43 +40,43 @@ public class AttributesTransformer implements JsonContextTransformer<Attributes>
             {
                 String uri = attributes.getURI(index);
                 if (!uri.isEmpty()) {
-                    out.stringKey(URI);
+                    out.key(URI);
                     out.stringValue(uri);
                 }
             }
             {
                 String localName = attributes.getLocalName(index);
                 if (!localName.isEmpty()) {
-                    out.stringKey(LOCAL_NAME);
+                    out.key(LOCAL_NAME);
                     out.stringValue(localName);
                 }
             }
             {
                 String qualifiedName = attributes.getQName(index);
                 if (!qualifiedName.isEmpty()) {
-                    out.stringKey(QUALIFIED_NAME);
+                    out.key(QUALIFIED_NAME);
                     out.stringValue(qualifiedName);
                 }
             }
             {
                 String type = attributes.getType(index);
                 if (!type.isEmpty()) {
-                    out.stringKey(TYPE);
+                    out.key(TYPE);
                     out.stringValue(type);
                 }
             }
             {
                 String value = attributes.getValue(index);
                 if (!value.isEmpty()) {
-                    out.stringKey(VALUE);
+                    out.key(VALUE);
                     out.stringValue(value);
                 }
             }
             if (attributes instanceof Attributes2) {
                 Attributes2 attributes2 = (Attributes2) attributes;
-                out.stringKey(DECLARED);
+                out.key(DECLARED);
                 out.booleanValue(attributes2.isDeclared(index));
-                out.stringKey(SPECIFIED);
+                out.key(SPECIFIED);
                 out.booleanValue(attributes2.isSpecified(index));
             }
             out.closeObject();

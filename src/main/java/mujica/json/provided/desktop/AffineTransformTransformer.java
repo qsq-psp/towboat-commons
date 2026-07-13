@@ -18,17 +18,17 @@ public class AffineTransformTransformer implements JsonContextTransformer<Affine
     public void transform(@NotNull AffineTransform in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("scaleX");
+            out.key("scaleX");
             out.numberValue(in.getScaleX()); // m00
-            out.stringKey("scaleY");
+            out.key("scaleY");
             out.numberValue(in.getScaleY()); // m11
-            out.stringKey("shearX");
+            out.key("shearX");
             out.numberValue(in.getShearX()); // m01
-            out.stringKey("shearY");
+            out.key("shearY");
             out.numberValue(in.getShearY()); // m10
-            out.stringKey("translateX");
+            out.key("translateX");
             out.numberValue(in.getTranslateX()); // m02
-            out.stringKey("translateY");
+            out.key("translateY");
             out.numberValue(in.getTranslateY()); // m12
         }
         out.closeObject();

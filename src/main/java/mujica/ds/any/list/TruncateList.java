@@ -1,6 +1,6 @@
 package mujica.ds.any.list;
 
-import mujica.ds.DataStructure;
+import mujica.ds.base.DataStructure;
 import mujica.ds.i32.S32;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;

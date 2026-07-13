@@ -21,13 +21,13 @@ public class PaintEventTransformer implements JsonContextTransformer<PaintEvent>
     public void transform(@NotNull PaintEvent in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(InputEventTransformer.ID);
+            out.key(InputEventTransformer.ID);
             out.numberValue(in.getID());
         }
         {
             Rectangle rectangle = in.getUpdateRect();
             if (rectangle != null) {
-                out.stringKey("rectangle");
+                out.key("rectangle");
                 RectangleTransformer.INSTANCE.transform(rectangle, out, context);
             }
         }

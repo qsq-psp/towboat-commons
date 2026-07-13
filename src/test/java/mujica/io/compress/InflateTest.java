@@ -3,11 +3,11 @@ package mujica.io.compress;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
+import mujica.ds.i32.map.JdkI32Map;
 import mujica.ds.i8.run.*;
 import mujica.ds.i32.list.*;
-import mujica.ds.i32.map.CompatibleIntMap;
-import mujica.ds.i32.map.CompatibleIntSlotMap;
-import mujica.ds.i32.map.IntMap;
+import mujica.ds.i32.map.JdkI32SlotMap;
+import mujica.ds.i32.map.I32Map;
 import mujica.algebra.random.FuzzyContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -44,27 +44,27 @@ public class InflateTest {
     }
 
     @NotNull
-    private ResizePolicy nextRunBufferResizePolicy() {
+    private CapacityPolicy nextRunBufferResizePolicy() {
         switch (fc.nextInt(10)) {
             case 0:
             case 1:
-                return new Order1ResizePolicy(fc);
+                return new Order1CapacityPolicy(fc);
             case 2:
-                return new TwiceResizePolicy(fc.nextInt(2, 20));
+                return new TwiceCapacityPolicy(fc.nextInt(2, 20));
             case 3:
-                return ShiftResizePolicy.INSTANCE;
+                return ShiftCapacityPolicy.INSTANCE;
             case 4:
-                return LookUpResizePolicy.PAPER;
+                return LookUpCapacityPolicy.PAPER;
             case 5:
-                return LookUpResizePolicy.GOLDEN;
+                return LookUpCapacityPolicy.GOLDEN;
             case 6:
-                return LookUpResizePolicy.NATURAL;
+                return LookUpCapacityPolicy.NATURAL;
             case 7:
-                return LookUpResizePolicy.PRIME_PAPER;
+                return LookUpCapacityPolicy.PRIME_PAPER;
             case 8:
-                return LookUpResizePolicy.PRIME_GOLDEN;
+                return LookUpCapacityPolicy.PRIME_GOLDEN;
             case 9:
-                return LookUpResizePolicy.PRIME_FIBONACCI;
+                return LookUpCapacityPolicy.PRIME_FIBONACCI;
             default:
                 throw new IllegalStateException();
         }
@@ -96,12 +96,12 @@ public class InflateTest {
     }
 
     @NotNull
-    private Supplier<IntMap> nextDecodeMapSupplier() {
+    private Supplier<I32Map> nextDecodeMapSupplier() {
         switch (fc.nextInt(2)) {
             case 0:
-                return CompatibleIntMap::new;
+                return JdkI32Map::new;
             case 1:
-                return CompatibleIntSlotMap::new;
+                return JdkI32SlotMap::new;
             default:
                 throw new IllegalStateException();
         }

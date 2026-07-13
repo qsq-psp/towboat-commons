@@ -1,6 +1,6 @@
 package mujica.ds.any.set;
 
-import mujica.ds.DataStructure;
+import mujica.ds.base.DataStructure;
 import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;

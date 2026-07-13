@@ -31,19 +31,19 @@ public class TreeInflateInputStream extends ResidueInflateInputStream implements
             jh.openObject();
             {
                 if (symbol != -1) {
-                    jh.stringKey("symbol");
+                    jh.key("symbol");
                     jh.numberValue(symbol);
                 }
                 if (useCount != 0L) {
-                    jh.stringKey("use");
+                    jh.key("use");
                     jh.numberValue(useCount);
                 }
                 if (left != null) {
-                    jh.stringKey("left");
+                    jh.key("left");
                     left.json(jh);
                 }
                 if (right != null) {
-                    jh.stringKey("right");
+                    jh.key("right");
                     right.json(jh);
                 }
             }
@@ -315,27 +315,27 @@ public class TreeInflateInputStream extends ResidueInflateInputStream implements
     public void json(@NotNull JsonHandler jh) {
         jh.openObject();
         {
-            jh.stringKey("fixedHuffmanBlockCount");
+            jh.key("fixedHuffmanBlockCount");
             jh.numberValue(blockStatistics[BS_FIXED_HUFFMAN_BLOCK_COUNT]);
-            jh.stringKey("fixedHuffmanCopyBytes");
+            jh.key("fixedHuffmanCopyBytes");
             jh.numberValue(blockStatistics[BS_FIXED_HUFFMAN_COPY_BYTES]);
-            jh.stringKey("fixedHuffmanDecodeBytes");
+            jh.key("fixedHuffmanDecodeBytes");
             jh.numberValue(blockStatistics[BS_FIXED_HUFFMAN_DECODE_BYTES]);
-            jh.stringKey("dynamicHuffmanBlockCount");
+            jh.key("dynamicHuffmanBlockCount");
             jh.numberValue(blockStatistics[BS_DYNAMIC_HUFFMAN_BLOCK_COUNT]);
-            jh.stringKey("dynamicHuffmanCopyBytes");
+            jh.key("dynamicHuffmanCopyBytes");
             jh.numberValue(blockStatistics[BS_DYNAMIC_HUFFMAN_COPY_BYTES]);
-            jh.stringKey("dynamicHuffmanDecodeBytes");
+            jh.key("dynamicHuffmanDecodeBytes");
             jh.numberValue(blockStatistics[BS_DYNAMIC_HUFFMAN_DECODE_BYTES]);
-            jh.stringKey("noCompressionBlockCount");
+            jh.key("noCompressionBlockCount");
             jh.numberValue(blockStatistics[BS_NO_COMPRESSION_BLOCK_COUNT]);
-            jh.stringKey("noCompressionCopyBytes");
+            jh.key("noCompressionCopyBytes");
             jh.numberValue(blockStatistics[BS_NO_COMPRESSION_COPY_BYTES]);
-            jh.stringKey("codeLengthTree");
+            jh.key("codeLengthTree");
             codeLengthDecodeRoot.json(jh);
-            jh.stringKey("literalLengthTree");
+            jh.key("literalLengthTree");
             literalLengthDecodeRoot.json(jh);
-            jh.stringKey("distanceTree");
+            jh.key("distanceTree");
             distanceDecodeRoot.json(jh);
         }
         jh.closeObject();

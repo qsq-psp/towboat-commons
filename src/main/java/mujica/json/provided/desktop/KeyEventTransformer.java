@@ -28,12 +28,12 @@ public class KeyEventTransformer implements JsonContextTransformer<KeyEvent> {
         out.openObject();
         {
             InputEventTransformer.transformExposed(in, out);
-            out.stringKey(KEY_CODE);
+            out.key(KEY_CODE);
             out.numberValue(in.getKeyCode());
-            out.stringKey(KEY_CHAR);
+            out.key(KEY_CHAR);
             out.stringValue(String.valueOf(in.getKeyChar()));
             int keyLocation = in.getKeyLocation();
-            out.stringKey(KEY_LOCATION);
+            out.key(KEY_LOCATION);
             switch (keyLocation) {
                 case KeyEvent.KEY_LOCATION_UNKNOWN:
                     out.stringValue("unknown");

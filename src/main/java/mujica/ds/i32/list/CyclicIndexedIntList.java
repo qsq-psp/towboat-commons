@@ -5,13 +5,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2026/1/5")
+@Deprecated
 public class CyclicIndexedIntList extends CenterAlignedIntList {
 
-    public CyclicIndexedIntList(@Nullable ResizePolicy policy) {
+    public CyclicIndexedIntList(@Nullable CapacityPolicy policy) {
         super(policy);
     }
 
-    CyclicIndexedIntList(@NotNull ResizePolicy policy, @NotNull int[] array) {
+    CyclicIndexedIntList(@NotNull CapacityPolicy policy, @NotNull int[] array) {
         super(policy, array);
     }
 }

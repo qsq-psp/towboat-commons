@@ -1,16 +1,27 @@
 package mujica.ds.slot;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+
+import java.math.RoundingMode;
 
 /**
  * Created on 2026/6/28.
  */
+@CodeHistory(date = "2026/6/28")
 public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
 
     protected S slot0, slot1, slot2;
 
     protected AbstractArithmetic() {
         super();
+    }
+
+    @Override
+    public void two(@NotNull S result) {
+        final S slot1 = newSlot();
+        one(slot1);
+        add(slot1, slot1, result);
     }
 
     @Override
@@ -77,7 +88,15 @@ public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
         multiply(variable, slot1, slot0);
         one(slot1);
         add(slot1, slot1, slot2);
-        divide(slot0, slot2, result);
+        divide(slot0, slot2, result, RoundingMode.UNNECESSARY);
+    }
+
+    @Override
+    public void mean(@NotNull S left, @NotNull S right, @NotNull S result, @NotNull RoundingMode mode) {
+        add(left, right, slot0);
+        one(slot1);
+        add(slot1, slot1, slot2);
+        divide(slot0, slot2, result, mode);
     }
 
     @Override
@@ -104,7 +123,7 @@ public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
     public void lcm(@NotNull S left, @NotNull S right, @NotNull S result) {
         gcd(left, right, slot2);
         multiply(left, right, slot1);
-        divide(slot1, slot2, result);
+        divide(slot1, slot2, result, RoundingMode.UNNECESSARY);
     }
 
     @Override
@@ -129,6 +148,16 @@ public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
 
     @Override
     public void combination(@NotNull S nSlot, @NotNull S mSlot, @NotNull S result) {
+        //
+    }
+
+    @Override
+    public void squareRoot(@NotNull S variable, @NotNull S result, @NotNull RoundingMode mode) {
+        //
+    }
+
+    @Override
+    public void log2(@NotNull S variable, @NotNull S result, @NotNull RoundingMode mode) {
         //
     }
 }

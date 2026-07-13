@@ -18,13 +18,13 @@ public class DisplayModeTransformer implements JsonContextTransformer<DisplayMod
     public void transform(@NotNull DisplayMode in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(RectangleTransformer.WIDTH);
+            out.key(RectangleTransformer.WIDTH);
             out.numberValue(in.getWidth());
-            out.stringKey(RectangleTransformer.HEIGHT);
+            out.key(RectangleTransformer.HEIGHT);
             out.numberValue(in.getHeight());
-            out.stringKey("bitDepth");
+            out.key("bitDepth");
             out.numberValue(in.getBitDepth());
-            out.stringKey("refreshRate");
+            out.key("refreshRate");
             out.numberValue(in.getRefreshRate());
         }
         out.closeObject();

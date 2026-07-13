@@ -25,7 +25,7 @@ public class SocketAddressTransformer implements JsonContextTransformer<SocketAd
         if (socketAddress instanceof InetSocketAddress) {
             InetSocketAddress inetSocketAddress = (InetSocketAddress) socketAddress;
             InetAddress inetAddress = inetSocketAddress.getAddress();
-            jh.stringKey("type");
+            jh.key("type");
             if (inetAddress instanceof Inet4Address) {
                 jh.stringValue("inet4");
             } else if (inetAddress instanceof Inet6Address) {
@@ -33,27 +33,27 @@ public class SocketAddressTransformer implements JsonContextTransformer<SocketAd
             } else {
                 jh.stringValue("inet");
             }
-            jh.stringKey("port");
+            jh.key("port");
             jh.numberValue(inetSocketAddress.getPort());
-            jh.stringKey("address");
+            jh.key("address");
             jh.stringValue(inetAddress.toString());
             String name = inetSocketAddress.getHostName();
             if (name != null) {
-                jh.stringKey("name");
+                jh.key("name");
                 jh.stringValue(name);
             }
         } else if (socketAddress instanceof DomainSocketAddress) {
-            jh.stringKey("type");
+            jh.key("type");
             jh.stringValue("domain");
-            jh.stringKey("path");
+            jh.key("path");
             jh.stringValue(((DomainSocketAddress) socketAddress).path());
         } else if (socketAddress instanceof LocalAddress) {
-            jh.stringKey("type");
+            jh.key("type");
             jh.stringValue("local");
-            jh.stringKey("id");
+            jh.key("id");
             jh.stringValue(((LocalAddress) socketAddress).id());
         } else {
-            jh.stringKey("type");
+            jh.key("type");
             jh.stringValue(socketAddress.getClass().getName());
         }
         jh.closeObject();

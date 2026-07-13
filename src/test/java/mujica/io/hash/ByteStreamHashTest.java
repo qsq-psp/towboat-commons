@@ -1,8 +1,8 @@
 package mujica.io.hash;
 
 import io.netty.buffer.ByteBufUtil;
-import mujica.ds.i8.list.ByteSequence;
 import mujica.algebra.random.FuzzyContext;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
@@ -354,7 +354,7 @@ public class ByteStreamHashTest {
             expectedAlgorithm.update(input);
             Assert.assertEquals(
                     expectedAlgorithm.getValue(),
-                    actualAlgorithm.apply(ByteSequence.of(input)).getLongAll()
+                    actualAlgorithm.apply(ReadOnlyI8Array.of(input)).getLongAll()
             );
         }
     }
@@ -404,13 +404,13 @@ public class ByteStreamHashTest {
                 flipIndex1++;
             }
             byte[] input = fc.nextByteArray(length);
-            long result0 = algorithm.apply(ByteSequence.of(input)).getLongAll();
+            long result0 = algorithm.apply(ReadOnlyI8Array.of(input)).getLongAll();
             input[flipIndex0] ^= -1;
-            long result1 = algorithm.apply(ByteSequence.of(input)).getLongAll();
+            long result1 = algorithm.apply(ReadOnlyI8Array.of(input)).getLongAll();
             input[flipIndex1] ^= -1;
-            long result2 = algorithm.apply(ByteSequence.of(input)).getLongAll();
+            long result2 = algorithm.apply(ReadOnlyI8Array.of(input)).getLongAll();
             input[flipIndex0] ^= -1;
-            long result3 = algorithm.apply(ByteSequence.of(input)).getLongAll();
+            long result3 = algorithm.apply(ReadOnlyI8Array.of(input)).getLongAll();
             Assert.assertEquals(0, result0 ^ result1 ^ result2 ^ result3);
         }
         // repeats for bit linearity
@@ -422,13 +422,13 @@ public class ByteStreamHashTest {
                 flipIndex1++;
             }
             byte[] input = fc.nextByteArray(length);
-            long result0 = algorithm.apply(ByteSequence.of(input)).getLongAll();
+            long result0 = algorithm.apply(ReadOnlyI8Array.of(input)).getLongAll();
             input[flipIndex0 >>> 3] ^= 1 << (0x7 & flipIndex0);
-            long result1 = algorithm.apply(ByteSequence.of(input)).getLongAll();
+            long result1 = algorithm.apply(ReadOnlyI8Array.of(input)).getLongAll();
             input[flipIndex1 >>> 3] ^= 1 << (0x7 & flipIndex1);
-            long result2 = algorithm.apply(ByteSequence.of(input)).getLongAll();
+            long result2 = algorithm.apply(ReadOnlyI8Array.of(input)).getLongAll();
             input[flipIndex0 >>> 3] ^= 1 << (0x7 & flipIndex0);
-            long result3 = algorithm.apply(ByteSequence.of(input)).getLongAll();
+            long result3 = algorithm.apply(ReadOnlyI8Array.of(input)).getLongAll();
             Assert.assertEquals(0, result0 ^ result1 ^ result2 ^ result3);
         }
     }

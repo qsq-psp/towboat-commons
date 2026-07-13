@@ -8,9 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.FocusEvent;
 
-/**
- * Created on 2026/5/23.
- */
 @CodeHistory(date = "2026/5/23")
 public class FocusEventTransformer implements JsonContextTransformer<FocusEvent> {
 
@@ -18,11 +15,11 @@ public class FocusEventTransformer implements JsonContextTransformer<FocusEvent>
     public void transform(@NotNull FocusEvent in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(InputEventTransformer.ID);
+            out.key(InputEventTransformer.ID);
             out.numberValue(in.getID());
-            out.stringKey("temporary");
+            out.key("temporary");
             out.booleanValue(in.isTemporary());
-            out.stringKey("cause");
+            out.key("cause");
             out.stringValue(in.getCause().toString());
         }
         out.closeObject();

@@ -1,6 +1,6 @@
 package mujica.io.hash;
 
-import mujica.ds.i8.list.ByteSequence;
+import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.ds.i8.view.DataView;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -90,7 +90,7 @@ public class SimpleByteBlockByteStreamHash implements ByteStreamHash {
     }
 
     @Override
-    public void update(@NotNull ByteSequence input) {
+    public void update(@NotNull ReadOnlyI8Array input) {
         if (state != HashState.STARTED) {
             throw new IllegalHashStateException();
         }
@@ -177,7 +177,7 @@ public class SimpleByteBlockByteStreamHash implements ByteStreamHash {
 
     @Override
     public void update(@NotNull DataView input) {
-        update((ByteSequence) input);
+        update((ReadOnlyI8Array) input);
     }
 
     @NotNull
@@ -202,7 +202,7 @@ public class SimpleByteBlockByteStreamHash implements ByteStreamHash {
 
     @NotNull
     @Override
-    public DataView apply(@NotNull ByteSequence input) {
+    public DataView apply(@NotNull ReadOnlyI8Array input) {
         start();
         update(input);
         return finish();

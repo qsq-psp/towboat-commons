@@ -24,7 +24,7 @@ public class NbtObjectInputStream extends ZeroBufferDataInputStream implements N
             jh.openObject();
             {
                 int id = readUnsignedByte();
-                jh.stringKey(readUTF());
+                jh.key(readUTF());
                 readObject(id, jh);
             }
             jh.closeObject();
@@ -132,7 +132,7 @@ public class NbtObjectInputStream extends ZeroBufferDataInputStream implements N
             if (id == ID_END) {
                 break;
             }
-            jh.stringKey(readUTF());
+            jh.key(readUTF());
             readObject(id, jh);
         }
         jh.closeObject();

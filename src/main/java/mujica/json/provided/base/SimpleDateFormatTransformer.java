@@ -21,11 +21,11 @@ public class SimpleDateFormatTransformer implements JsonContextTransformer<Simpl
     public void transform(@NotNull SimpleDateFormat in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.CLASS);
+            out.key(ClassLoaderTransformer.CLASS);
             out.stringValue(in.getClass().getName());
-            out.stringKey(TIME_ZONE);
+            out.key(TIME_ZONE);
             TimeZoneTransformer.INSTANCE.transform(in.getTimeZone(), out, context);
-            out.stringKey("pattern");
+            out.key("pattern");
             out.stringValue(in.toPattern());
         }
         out.closeObject();

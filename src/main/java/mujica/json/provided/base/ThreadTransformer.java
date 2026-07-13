@@ -29,19 +29,19 @@ public class ThreadTransformer implements JsonContextTransformer<Thread>, JsonSt
     public void transform(Thread in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey(ClassLoaderTransformer.CLASS);
+            out.key(ClassLoaderTransformer.CLASS);
             out.stringValue(in.getClass().getName());
-            out.stringKey(ClassLoaderTransformer.NAME);
+            out.key(ClassLoaderTransformer.NAME);
             out.stringValue(in.getName());
-            out.stringKey(ID);
+            out.key(ID);
             out.numberValue(in.getId());
-            out.stringKey(STATE);
+            out.key(STATE);
             out.stringValue(in.getState().toString());
-            out.stringKey(DAEMON);
+            out.key(DAEMON);
             out.booleanValue(in.isDaemon());
-            out.stringKey(PRIORITY);
+            out.key(PRIORITY);
             out.numberValue(in.getPriority());
-            out.stringKey(CLASS_LOADER);
+            out.key(CLASS_LOADER);
             ClassLoaderTransformer.INSTANCE.transform(in.getContextClassLoader(), out, context);
         }
         out.closeObject();

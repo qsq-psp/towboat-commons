@@ -15,11 +15,11 @@ public class DnsMessageTransformer implements JsonContextTransformer<DnsMessage>
     public void transform(DnsMessage dnsMessage, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
-            out.stringKey("id");
+            out.key("id");
             out.numberValue(dnsMessage.id());
-            out.stringKey("operation");
+            out.key("operation");
             out.stringValue(dnsMessage.opCode().toString());
-            out.stringKey("recursionDesired");
+            out.key("recursionDesired");
             out.booleanValue(dnsMessage.isRecursionDesired());
             // todo
         }

@@ -4,6 +4,8 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.RoundingMode;
+
 @CodeHistory(date = "2026/6/14")
 public class Base2IntegerArithmetic<S extends Base2Integer> extends AbstractArithmetic<S> {
 
@@ -65,7 +67,7 @@ public class Base2IntegerArithmetic<S extends Base2Integer> extends AbstractArit
     }
 
     @Override
-    public void divide(@NotNull S left, @NotNull S right, @NotNull S result) {
+    public void divide(@NotNull S left, @NotNull S right, @NotNull S result, @NotNull RoundingMode mode) {
 
     }
 

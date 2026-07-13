@@ -22,20 +22,20 @@ public class GradientPaintTransformer implements JsonContextTransformer<Gradient
         out.openObject();
         {
             Point2D.Float p = (Point2D.Float) in.getPoint1();
-            out.stringKey("x1");
+            out.key("x1");
             out.numberValue(p.x);
-            out.stringKey("y1");
+            out.key("y1");
             out.numberValue(p.y);
-            out.stringKey("color1");
+            out.key("color1");
             ColorTransformer.INSTANCE.transform(in.getColor1(), out, context);
             p = (Point2D.Float) in.getPoint2();
-            out.stringKey("x2");
+            out.key("x2");
             out.numberValue(p.x);
-            out.stringKey("y2");
+            out.key("y2");
             out.numberValue(p.y);
-            out.stringKey("color2");
+            out.key("color2");
             ColorTransformer.INSTANCE.transform(in.getColor2(), out, context);
-            out.stringKey("cyclic");
+            out.key("cyclic");
             out.booleanValue(in.isCyclic());
         }
         out.closeObject();

@@ -13,16 +13,17 @@ import java.util.function.IntUnaryOperator;
 /**
  * Created on 2026/1/5.
  */
+@Deprecated
 public class CenterAlignedIntList extends CopyOnResizeIntList {
 
     @Index(of = "array")
     int startIndex;
 
-    public CenterAlignedIntList(@Nullable ResizePolicy policy) {
+    public CenterAlignedIntList(@Nullable CapacityPolicy policy) {
         super(policy);
     }
 
-    CenterAlignedIntList(@NotNull ResizePolicy policy, @NotNull int[] array) {
+    CenterAlignedIntList(@NotNull CapacityPolicy policy, @NotNull int[] array) {
         super(policy, array);
     }
 

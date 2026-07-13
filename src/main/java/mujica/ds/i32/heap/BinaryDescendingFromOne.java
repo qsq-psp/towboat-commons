@@ -1,7 +1,7 @@
 package mujica.ds.i32.heap;
 
 import mujica.ds.InvariantException;
-import mujica.ds.i32.list.ResizePolicy;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -138,11 +138,11 @@ public class BinaryDescendingFromOne extends ArrayIntHeap {
         return value;
     }
 
-    public BinaryDescendingFromOne(@Nullable ResizePolicy policy) {
+    public BinaryDescendingFromOne(@Nullable CapacityPolicy policy) {
         super(policy);
     }
 
-    BinaryDescendingFromOne(@NotNull ResizePolicy policy, @NotNull int[] array) {
+    BinaryDescendingFromOne(@NotNull CapacityPolicy policy, @NotNull int[] array) {
         super(policy, array);
     }
 

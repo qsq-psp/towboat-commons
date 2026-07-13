@@ -20,13 +20,13 @@ public class TransferableTransformer implements JsonContextTransformer<Transfera
     public void transform(@NotNull Transferable transferable, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey(DataFlavorTransformer.CLASS);
+            out.key(DataFlavorTransformer.CLASS);
             out.stringValue(transferable.getClass().getName());
         }
         {
             DataFlavor[] dataFlavors = transferable.getTransferDataFlavors();
             if (dataFlavors != null && dataFlavors.length != 0) {
-                out.stringKey("dataFlavors");
+                out.key("dataFlavors");
                 out.openArray();
                 for (DataFlavor dataFlavor : dataFlavors) {
                     DataFlavorTransformer.INSTANCE.transform(dataFlavor, out, context);

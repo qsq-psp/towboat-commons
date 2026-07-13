@@ -372,7 +372,7 @@ public class JsonByteBufferReader implements JsonSyncReader {
             if (x != ':') {
                 throw new RuntimeException("expect colon actual " + x);
             }
-            jh.stringKey(key);
+            jh.key(key);
             skipGap();
             readJson(jh);
             first = false;

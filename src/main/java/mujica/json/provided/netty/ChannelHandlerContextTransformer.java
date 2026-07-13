@@ -20,11 +20,11 @@ public class ChannelHandlerContextTransformer implements JsonContextTransformer<
     public void transform(@NotNull ChannelHandlerContext in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("channel");
+            out.key("channel");
             ChannelTransformer.INSTANCE.transform(in.channel(), out, context);
-            out.stringKey("name");
+            out.key("name");
             out.stringValue(in.name());
-            out.stringKey("removed");
+            out.key("removed");
             out.booleanValue(in.isRemoved());
         }
         out.closeObject();

@@ -20,7 +20,7 @@ public class SlotArrayAllocatorI32 implements SlotArrayAllocator<I32Slot, int[]>
 
     @NotNull
     @Override
-    public I32Slot clone(@NotNull I32Slot original) {
+    public I32Slot cloneSlot(@NotNull I32Slot original) {
         return new S32(original.getI32());
     }
 

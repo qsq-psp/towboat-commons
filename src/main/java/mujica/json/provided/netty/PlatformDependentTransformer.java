@@ -7,40 +7,41 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2022/3/25", project = "infrastructure", name = "PlatformDependentValue")
 @CodeHistory(date = "2026/6/13")
-public class PlatformDependentTransformer implements JsonContextTransformer<Class<PlatformDependent>>, JsonStructure {
+public final class PlatformDependentTransformer implements JsonContextTransformer<Class<PlatformDependent>>, JsonStructure {
 
     public static final PlatformDependentTransformer INSTANCE = new PlatformDependentTransformer();
 
     @Override
-    public void transform(Class<PlatformDependent> ignore, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@Nullable Class<PlatformDependent> ignore, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("isAndroid");
+            out.key("isAndroid");
             out.booleanValue(PlatformDependent.isAndroid());
-            out.stringKey("isWindows");
+            out.key("isWindows");
             out.booleanValue(PlatformDependent.isWindows());
-            out.stringKey("isOsx");
+            out.key("isOsx");
             out.booleanValue(PlatformDependent.isOsx());
-            out.stringKey("maybeSuperUser");
+            out.key("maybeSuperUser");
             out.booleanValue(PlatformDependent.maybeSuperUser());
-            out.stringKey("javaVersion");
+            out.key("javaVersion");
             out.numberValue(PlatformDependent.javaVersion());
-            out.stringKey("canEnableTcpNoDelayByDefault");
+            out.key("canEnableTcpNoDelayByDefault");
             out.booleanValue(PlatformDependent.canEnableTcpNoDelayByDefault());
-            out.stringKey("hasUnsafe");
+            out.key("hasUnsafe");
             out.booleanValue(PlatformDependent.hasUnsafe());
-            out.stringKey("isUnaligned");
+            out.key("isUnaligned");
             out.booleanValue(PlatformDependent.isUnaligned());
-            out.stringKey("directBufferPreferred");
+            out.key("directBufferPreferred");
             out.booleanValue(PlatformDependent.directBufferPreferred());
-            out.stringKey("maxDirectMemory");
+            out.key("maxDirectMemory");
             out.numberValue(PlatformDependent.maxDirectMemory());
-            out.stringKey("bitMode");
+            out.key("bitMode");
             out.numberValue(PlatformDependent.bitMode());
-            out.stringKey("addressSize");
+            out.key("addressSize");
             out.numberValue(PlatformDependent.addressSize());
         }
         out.closeObject();

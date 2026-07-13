@@ -7,9 +7,6 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-/**
- * Created on 2025/5/2.
- */
 @CodeHistory(date = "2025/5/2")
 public class BaseAnyCodecSpec implements Serializable {
 

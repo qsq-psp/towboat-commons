@@ -38,42 +38,42 @@ public class UriTransformer implements JsonContextTransformer<URI> {
         {
             String str = in.getScheme();
             if (str != null) {
-                out.stringKey(SCHEME);
+                out.key(SCHEME);
                 out.stringValue(str);
             }
             str = in.getRawAuthority();
             if (str != null) {
-                out.stringKey(AUTHORITY);
+                out.key(AUTHORITY);
                 out.stringValue(str);
             }
             str = in.getRawUserInfo();
             if (str != null) {
-                out.stringKey(USER_INFO);
+                out.key(USER_INFO);
                 out.stringValue(str);
             }
             str = in.getHost();
             if (str != null) {
-                out.stringKey(HOST);
+                out.key(HOST);
                 out.stringValue(str);
             }
             int port = in.getPort();
             if (port != -1) {
-                out.stringKey(PORT);
+                out.key(PORT);
                 out.numberValue(port);
             }
             str = in.getRawPath();
             if (str != null) {
-                out.stringKey(PATH);
+                out.key(PATH);
                 out.stringValue(str);
             }
             str = in.getRawQuery();
             if (str != null) {
-                out.stringKey(QUERY);
+                out.key(QUERY);
                 out.stringValue(str);
             }
             str = in.getRawFragment();
             if (str != null) {
-                out.stringKey(FRAGMENT);
+                out.key(FRAGMENT);
                 out.stringValue(str);
             }
         }

@@ -17,11 +17,11 @@ public class DecimalFormatTransformer implements JsonContextTransformer<DecimalF
     public void transform(@NotNull DecimalFormat in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            out.stringKey("decimalFormatSymbols");
+            out.key("decimalFormatSymbols");
             DecimalFormatSymbolsTransformer.INSTANCE.transform(in.getDecimalFormatSymbols(), out, context);
-            out.stringKey("pattern");
+            out.key("pattern");
             out.stringValue(in.toPattern());
-            out.stringKey("localizedPattern");
+            out.key("localizedPattern");
             out.stringValue(in.toLocalizedPattern());
         }
         out.closeObject();

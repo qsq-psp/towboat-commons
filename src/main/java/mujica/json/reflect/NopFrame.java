@@ -95,13 +95,13 @@ class NopFrame extends JsonHandler { // frames are short-lived small objects
     }
 
     @Override
-    public void stringKey(@NotNull String key) { // a cut JsonHandler that only handle values
+    public void key(@NotNull String key) { // a cut JsonHandler that only handle values
         LOGGER.error("stringKey({}) context {}", key, context);
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void stringKey(@NotNull FastString key) { // a cut JsonHandler that only handle values
+    public void key(@NotNull FastString key) { // a cut JsonHandler that only handle values
         LOGGER.error("stringKey({}) context {}", key, context);
         throw new UnsupportedOperationException();
     }

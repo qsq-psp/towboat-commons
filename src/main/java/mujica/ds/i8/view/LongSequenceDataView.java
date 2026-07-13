@@ -1,6 +1,6 @@
 package mujica.ds.i8.view;
 
-import mujica.ds.i64.list.LongSequence;
+import mujica.ds.i64.ReadOnlyI64Array;
 import mujica.io.codec.Base16Case;
 import mujica.algebra.discrete.ClampedMath;
 import mujica.algebra.discrete.IntegralMath;
@@ -13,7 +13,7 @@ import java.nio.ByteOrder;
 public class LongSequenceDataView implements DataView {
 
     @NotNull
-    private final LongSequence longSequence;
+    private final ReadOnlyI64Array longSequence;
 
     @NotNull
     private final ByteOrder byteOrder;
@@ -21,14 +21,14 @@ public class LongSequenceDataView implements DataView {
     @NotNull
     private final Runnable guard;
 
-    public LongSequenceDataView(@NotNull LongSequence longSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
+    public LongSequenceDataView(@NotNull ReadOnlyI64Array longSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
         super();
         this.longSequence = longSequence;
         this.byteOrder = byteOrder;
         this.guard = guard;
     }
 
-    public LongSequenceDataView(@NotNull LongSequence longSequence, @NotNull ByteOrder byteOrder) {
+    public LongSequenceDataView(@NotNull ReadOnlyI64Array longSequence, @NotNull ByteOrder byteOrder) {
         this(longSequence, byteOrder, NOP_GUARD);
     }
 

@@ -1,6 +1,7 @@
 package mujica.ds.i64.list;
 
 import mujica.ds.i64.LongCollection;
+import mujica.ds.i64.ReadOnlyI64Array;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +13,7 @@ import java.util.function.LongPredicate;
 /**
  * Created on 2026/5/10.
  */
-public interface LongList extends LongCollection, LongSequence {
+public interface LongList extends LongCollection, ReadOnlyI64Array {
 
     @NotNull
     @Override

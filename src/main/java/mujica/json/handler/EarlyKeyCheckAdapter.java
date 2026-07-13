@@ -50,14 +50,14 @@ public class EarlyKeyCheckAdapter<H extends JsonHandler> extends JsonHandlerAdap
     }
 
     @Override
-    public void stringKey(@NotNull String key) {
+    public void key(@NotNull String key) {
         checkKey(key);
-        h.stringKey(key);
+        h.key(key);
     }
 
     @Override
-    public void stringKey(@NotNull FastString key) {
+    public void key(@NotNull FastString key) {
         checkKey(key.toString());
-        h.stringKey(key);
+        h.key(key);
     }
 }

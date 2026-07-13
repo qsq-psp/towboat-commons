@@ -1,13 +1,13 @@
 package mujica.ds.slot;
 
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
 
-/**
- * Created on 2026/6/25.
- */
+@CodeHistory(date = "2025/6/13", name = "OperationContext")
+@CodeHistory(date = "2026/6/25")
 public interface SlotArrayAllocator<S, A> extends SlotAllocator<S> {
 
     @NotNull
@@ -20,6 +20,10 @@ public interface SlotArrayAllocator<S, A> extends SlotAllocator<S> {
     @NotNull
     A newArray(int length);
 
+    default void releaseArray(@NotNull A array) {
+        // pass
+    }
+
     default int length(@NotNull A array) {
         return Array.getLength(array);
     }
@@ -27,6 +31,10 @@ public interface SlotArrayAllocator<S, A> extends SlotAllocator<S> {
     void load(@NotNull A array, @Index(of = "array") int index, @NotNull S slot);
 
     void store(@NotNull A array, @Index(of = "array") int index, @NotNull S slot);
+
+    default void releaseReference(@NotNull A array, @Index(of = "array") int index) {
+        // pass
+    }
 
     default void exchange(@NotNull A array, @Index(of = "array") int index, @NotNull S slot) {
         final S temp = newSlot();
@@ -43,7 +51,19 @@ public interface SlotArrayAllocator<S, A> extends SlotAllocator<S> {
     }
 
     @SuppressWarnings("SuspiciousSystemArraycopy")
+    default void copySelf(@NotNull A array, @Index(of = "array") int srcPosition, @Index(of = "array") int dstPosition, int length) {
+        System.arraycopy(array, srcPosition, array, dstPosition, length);
+    }
+
+    @SuppressWarnings("SuspiciousSystemArraycopy")
     default void copy(@NotNull A src, @Index(of = "src") int srcPosition, @NotNull A dst, @Index(of = "dst") int dstPosition, int length) {
         System.arraycopy(src, srcPosition, dst, dstPosition, length);
+    }
+
+    default A cloneArray(@NotNull A original) {
+        final int length = length(original);
+        final A copy = newArray(length);
+        copy(original, 0, copy, 0, length);
+        return copy;
     }
 }

@@ -1,6 +1,6 @@
 package mujica.ds.i8.view;
 
-import mujica.ds.bit.list.BooleanSequence;
+import mujica.ds.bit.ReadOnlyBitArray;
 import mujica.io.codec.Base16Case;
 import mujica.algebra.discrete.ClampedMath;
 import mujica.reflect.modifier.CodeHistory;
@@ -12,7 +12,7 @@ import java.nio.ByteOrder;
 public class BooleanSequenceDataView implements DataView {
 
     @NotNull
-    private final BooleanSequence booleanSequence;
+    private final ReadOnlyBitArray booleanSequence;
 
     @NotNull
     private final ByteOrder byteOrder;
@@ -20,14 +20,14 @@ public class BooleanSequenceDataView implements DataView {
     @NotNull
     private final Runnable guard;
 
-    public BooleanSequenceDataView(@NotNull BooleanSequence booleanSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
+    public BooleanSequenceDataView(@NotNull ReadOnlyBitArray booleanSequence, @NotNull ByteOrder byteOrder, @NotNull Runnable guard) {
         super();
         this.booleanSequence = booleanSequence;
         this.byteOrder = byteOrder;
         this.guard = guard;
     }
 
-    public BooleanSequenceDataView(@NotNull BooleanSequence booleanSequence, @NotNull ByteOrder byteOrder) {
+    public BooleanSequenceDataView(@NotNull ReadOnlyBitArray booleanSequence, @NotNull ByteOrder byteOrder) {
         this(booleanSequence, byteOrder, NOP_GUARD);
     }
 
