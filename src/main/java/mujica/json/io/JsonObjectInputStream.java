@@ -2,6 +2,7 @@ package mujica.json.io;
 
 import mujica.algebra.discrete.BigConstants;
 import mujica.ds.bit.list.CopyOnResizeBitList;
+import mujica.ds.i32.SlotArrayAllocatorI32;
 import mujica.ds.i32.list.CopyOnResizeIntList;
 import mujica.ds.i32.list.PublicIntList;
 import mujica.io.codec.Base16Case;
@@ -907,7 +908,7 @@ public class JsonObjectInputStream extends OneBufferDataInputStream implements J
             }
         }
         if (intList == null) {
-            return PublicIntList.EMPTY.array;
+            return SlotArrayAllocatorI32.EMPTY_ARRAY;
         } else {
             return intList.toIntArray();
         }

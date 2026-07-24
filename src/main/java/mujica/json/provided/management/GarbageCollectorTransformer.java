@@ -4,13 +4,13 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.management.GarbageCollectorMXBean;
 
-/**
- * Created on 2026/4/28.
- */
+@CodeHistory(date = "2026/4/28")
 public class GarbageCollectorTransformer implements JsonContextTransformer<GarbageCollectorMXBean> {
 
     public static final GarbageCollectorTransformer INSTANCE = new GarbageCollectorTransformer();
@@ -22,7 +22,7 @@ public class GarbageCollectorTransformer implements JsonContextTransformer<Garba
     static final FastString TIME = new FastString("time");
 
     @Override
-    public void transform(@NotNull GarbageCollectorMXBean bean, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull GarbageCollectorMXBean bean, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(BufferPoolTransformer.NAME);

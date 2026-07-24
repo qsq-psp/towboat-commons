@@ -8,6 +8,7 @@ import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ConcurrentModificationException;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -19,11 +20,18 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
     @Index(of = "array")
     int startIndex;
 
-    public CenterAlignedSlotList(@NotNull SlotListAllocator<S, A> allocator) {
+    public CenterAlignedSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator) {
+        super(allocator);
+        final int halfCapacity = allocator.length(array) >>> 1;
+        startIndex = halfCapacity;
+        endIndex = halfCapacity;
+    }
+
+    CenterAlignedSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator, @SuppressWarnings("unused") Void doNotInitializeIndexes) {
         super(allocator);
     }
 
-    CenterAlignedSlotList(@NotNull SlotListAllocator<S, A> allocator, @NotNull A array, int startIndex, int endIndex) {
+    CenterAlignedSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator, @NotNull A array, int startIndex, int endIndex) {
         super(allocator, array, endIndex);
         this.startIndex = startIndex;
     }
@@ -126,54 +134,145 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
                 allocator.copySelf(array, index + 1, index, endLength);
             }
             allocator.releaseReference(array, --endIndex);
+            if (startLength == 0) {
+                // now startLength == 0 && endLength == 0
+                int halfCapacity = allocator.length(array) >>> 1;
+                startIndex = halfCapacity;
+                endIndex = halfCapacity;
+            }
+        }
+        version++;
+    }
+
+    void enlargeArray(int newCapacity, int deltaIndex) {
+        final A newArray = allocator.newArray(newCapacity);
+        final int listSize = endIndex - startIndex;
+        final int newStartIndex = (newCapacity - listSize + deltaIndex) >>> 1;
+        allocator.copy(array, startIndex, newArray, newStartIndex, listSize);
+        allocator.releaseArray(array);
+        array = newArray;
+        startIndex = newStartIndex;
+        endIndex = newStartIndex + listSize;
+    }
+
+    @Override
+    public void insertItemBefore(int gapIndex, @NotNull S in) throws IndexOutOfBoundsException {
+        final int startLength = gapIndex;
+        if (startLength < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        gapIndex += startIndex;
+        final int endLength = endIndex - gapIndex;
+        if (endLength < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (startLength < endLength) {
+            if (startIndex == 0) {
+                enlargeArray(allocator.getCapacityPolicy().nextLargerCapacity(allocator.length(array)), 1);
+                assert startIndex > 0;
+            }
+            gapIndex = startIndex + startLength - 1;
+            if (startLength > 0) {
+                allocator.copySelf(array, startIndex, startIndex - 1, startLength);
+            }
+            startIndex--;
+        } else {
+            int capacity = allocator.length(array);
+            if (endIndex == capacity) {
+                enlargeArray(allocator.getCapacityPolicy().nextLargerCapacity(capacity), -1);
+                assert endIndex < allocator.length(array);
+            }
+            gapIndex = endIndex - endLength;
+            if (endLength > 0) {
+                allocator.copySelf(array, gapIndex, gapIndex + 1, endLength);
+            }
+            endIndex++;
+        }
+        allocator.store(array, gapIndex, in);
+        version++;
+    }
+
+    @Override
+    public void insertFirstItem(@NotNull S in) {
+        if (startIndex == 0) {
+            enlargeArray(allocator.getCapacityPolicy().nextLargerCapacity(allocator.length(array)), 1);
+            assert startIndex > 0;
+        }
+        allocator.store(array, --startIndex, in);
+        version++;
+    }
+
+    @Override
+    public void insertLastItem(@NotNull S in) {
+        final int capacity = allocator.length(array);
+        if (endIndex == capacity) {
+            enlargeArray(allocator.getCapacityPolicy().nextLargerCapacity(capacity), -1);
+            assert endIndex < allocator.length(array);
+        }
+        allocator.store(array, endIndex++, in);
+    }
+
+    @Override
+    public void appendTo(@NotNull SlotCollection<S, A> that) {
+        that.insertLast(array, startIndex, endIndex);
+    }
+
+    @Override
+    public void removeRange(int intervalStartIndex, int intervalEndIndex) throws IndexOutOfBoundsException {
+        if (intervalStartIndex >= intervalEndIndex) {
+            if (intervalStartIndex == intervalEndIndex) {
+                return;
+            }
+            throw new IndexOutOfBoundsException();
+        }
+        final int startLength = intervalStartIndex;
+        if (startLength < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        intervalStartIndex += startIndex;
+        intervalEndIndex += endIndex;
+        final int endLength = endIndex - intervalEndIndex;
+        if (endLength < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (startLength < endLength) {
+            int newStartIndex = startIndex + intervalEndIndex - intervalStartIndex;
+            if (startLength > 0) {
+                allocator.copySelf(array, startIndex, newStartIndex, startLength);
+            }
+            allocator.releaseReference(array, startIndex, newStartIndex);
+            startIndex = newStartIndex;
+        } else {
+            int newEndIndex = endIndex + intervalStartIndex - intervalEndIndex;
+            if (endLength > 0) {
+                allocator.copySelf(array, intervalEndIndex, intervalStartIndex, endLength);
+            }
+            allocator.releaseReference(array, newEndIndex, endIndex);
+            endIndex = newEndIndex;
         }
         version++;
     }
 
     @Override
-    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
-        for (int index = startIndex; index < endIndex; index++) {
-            allocator.load(array, index, tempSlot);
-            consumer.accept(tempSlot);
+    public void truncate(int newEndIndex) throws IndexOutOfBoundsException {
+        if (newEndIndex < 0) {
+            throw new IndexOutOfBoundsException();
         }
-    }
-
-    @Override
-    public <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
-        for (int index = startIndex; index < endIndex; index++) {
-            allocator.load(array, index, tempSlot);
-            consumer.accept(tempSlot);
-            allocator.store(array, index, tempSlot);
-        }
-    }
-
-    @Override
-    public <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
-        for (int index = startIndex; index < endIndex; index++) {
-            allocator.load(array, index, tempSlot);
-            if (predicate.test(tempSlot)) {
-                return true;
+        newEndIndex += startIndex;
+        if (newEndIndex >= endIndex) {
+            if (newEndIndex == endIndex) {
+                return;
             }
+            throw new IndexOutOfBoundsException();
         }
-        return false;
-    }
-
-    @Override
-    public <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
-        for (int index = startIndex; index < endIndex; index++) {
-            allocator.load(array, index, tempSlot);
-            if (!predicate.test(tempSlot)) {
-                return false;
-            }
-        }
-        return true;
+        allocator.releaseReference(array, endIndex, newEndIndex);
+        endIndex = newEndIndex;
+        version++;
     }
 
     @Override
     public void clear() {
-        for (int index = startIndex; index < endIndex; index++) {
-            allocator.releaseReference(array, index);
-        }
+        allocator.releaseReference(array, startIndex, endIndex);
         final int halfCapacity = allocator.length(array) >>> 1;
         startIndex = halfCapacity;
         endIndex = halfCapacity;
@@ -224,5 +323,62 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
     @Override
     public void getAll(@NotNull A dst, int dstIndex) {
         allocator.copy(array, startIndex, dst, dstIndex, endIndex - startIndex);
+    }
+
+    @Override
+    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
+        final int expectedVersion = version;
+        for (int index = startIndex; index < endIndex; index++) {
+            allocator.load(array, index, tempSlot);
+            consumer.accept(tempSlot);
+            if (version != expectedVersion) {
+                throw new ConcurrentModificationException();
+            }
+        }
+    }
+
+    @Override
+    public <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
+        final int expectedVersion = version;
+        for (int index = startIndex; index < endIndex; index++) {
+            allocator.load(array, index, tempSlot);
+            consumer.accept(tempSlot);
+            if (version != expectedVersion) {
+                throw new ConcurrentModificationException();
+            }
+            allocator.store(array, index, tempSlot);
+        }
+    }
+
+    @Override
+    public <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
+        final int expectedVersion = version;
+        for (int index = startIndex; index < endIndex; index++) {
+            allocator.load(array, index, tempSlot);
+            boolean predicateResult = predicate.test(tempSlot);
+            if (version != expectedVersion) {
+                throw new ConcurrentModificationException();
+            }
+            if (predicateResult) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
+        final int expectedVersion = version;
+        for (int index = startIndex; index < endIndex; index++) {
+            allocator.load(array, index, tempSlot);
+            boolean predicateResult = predicate.test(tempSlot);
+            if (version != expectedVersion) {
+                throw new ConcurrentModificationException();
+            }
+            if (!predicateResult) {
+                return false;
+            }
+        }
+        return true;
     }
 }

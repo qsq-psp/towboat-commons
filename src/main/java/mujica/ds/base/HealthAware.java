@@ -1,6 +1,6 @@
 package mujica.ds.base;
 
-import mujica.ds.bit.PublicBitSlot;
+import mujica.ds.bit.Bit;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferenceCode;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ public interface HealthAware {
     }
 
     default boolean isHealthy() {
-        final PublicBitSlot slot = new PublicBitSlot();
+        final Bit slot = new Bit();
         checkHealth(re -> slot.value = false);
         return slot.value;
     }

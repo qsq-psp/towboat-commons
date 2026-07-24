@@ -19,7 +19,7 @@ public class TypeTransformer implements JsonContextTransformer<Type> {
     static final FastString TYPE = new FastString("type");
 
     @Override
-    public void transform(@NotNull Type in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Type in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(ClassLoaderTransformer.CLASS);

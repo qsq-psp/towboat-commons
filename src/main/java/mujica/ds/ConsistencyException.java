@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2025/5/28")
+@Deprecated // use RuntimeException instead
 public class ConsistencyException extends RuntimeException {
 
     private static final long serialVersionUID = 0x274924e04274b2b7L;

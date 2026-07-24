@@ -5,6 +5,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.sound.sampled.DataLine;
 
@@ -14,27 +15,27 @@ public class DataLineTransformer implements JsonContextTransformer<DataLine> {
     public static final DataLineTransformer INSTANCE = new DataLineTransformer();
 
     @Override
-    public void transform(@NotNull DataLine in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull DataLine dataLine, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(DataFlavorTransformer.CLASS);
-            out.stringValue(in.getClass().getName());
+            out.stringValue(dataLine.getClass().getName());
             out.key("running");
-            out.booleanValue(in.isRunning());
+            out.booleanValue(dataLine.isRunning());
             out.key("active");
-            out.booleanValue(in.isActive());
+            out.booleanValue(dataLine.isActive());
             out.key("format");
-            AudioFormatTransformer.INSTANCE.transform(in.getFormat(), out, context);
+            AudioFormatTransformer.INSTANCE.transform(dataLine.getFormat(), out, context);
             out.key("bufferSize");
-            out.numberValue(in.getBufferSize());
+            out.numberValue(dataLine.getBufferSize());
             out.key("available");
-            out.numberValue(in.available());
+            out.numberValue(dataLine.available());
             out.key("framePosition");
-            out.numberValue(in.getLongFramePosition());
+            out.numberValue(dataLine.getLongFramePosition());
             out.key("microsecondPosition");
-            out.numberValue(in.getMicrosecondPosition());
+            out.numberValue(dataLine.getMicrosecondPosition());
             out.key("level");
-            out.numberValue(in.getLevel());
+            out.numberValue(dataLine.getLevel());
         }
         out.closeObject();
     }

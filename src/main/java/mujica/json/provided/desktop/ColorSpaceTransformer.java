@@ -5,12 +5,10 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.color.ColorSpace;
 
-/**
- * Created on 2026/5/3.
- */
 @CodeHistory(date = "2026/5/3")
 @SuppressWarnings("SpellCheckingInspection")
 public class ColorSpaceTransformer implements JsonContextTransformer<ColorSpace> {
@@ -18,7 +16,7 @@ public class ColorSpaceTransformer implements JsonContextTransformer<ColorSpace>
     public static final ColorSpaceTransformer INSTANCE = new ColorSpaceTransformer();
 
     @Override
-    public void transform(ColorSpace in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ColorSpace in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             int type = in.getType();

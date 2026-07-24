@@ -1,6 +1,6 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.bit.PublicBitSlot;
+import mujica.ds.bit.Bit;
 import mujica.ds.i32.S32;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
@@ -195,7 +195,7 @@ public abstract class SisterPriorityQueue<E> extends AbstractPriorityQueue<E> {
 
     @Override
     public boolean contains(Object object) {
-        final PublicBitSlot result = new PublicBitSlot();
+        final Bit result = new Bit();
         if (root != null) {
             root.forEach(element -> {
                 if (Objects.equals(element, object)) {

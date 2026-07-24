@@ -7,6 +7,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2022/1/4", project = "infrastructure", name = "ThreadGroupValue")
 @CodeHistory(date = "2022/7/19", project = "Ultramarine", name = "ThreadGroupValueSerializer")
@@ -24,14 +25,14 @@ public class ThreadGroupTransformer implements JsonContextTransformer<ThreadGrou
     static final FastString ACTIVE_COUNT = new FastString("activeCount");
 
     @Override
-    public void transform(@NotNull ThreadGroup in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ThreadGroup threadGroup, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(ClassLoaderTransformer.NAME);
-            out.stringValue(in.getName());
+            out.stringValue(threadGroup.getName());
         }
         {
-            ThreadGroup parent = in.getParent();
+            ThreadGroup parent = threadGroup.getParent();
             if (parent != null) {
                 out.key(PARENT);
                 out.stringValue(parent.getName());
@@ -39,13 +40,13 @@ public class ThreadGroupTransformer implements JsonContextTransformer<ThreadGrou
         }
         {
             out.key(MAX_PRIORITY);
-            out.numberValue(in.getMaxPriority());
+            out.numberValue(threadGroup.getMaxPriority());
             out.key(ThreadTransformer.DAEMON);
-            out.booleanValue(in.isDaemon());
+            out.booleanValue(threadGroup.isDaemon());
             out.key(DESTROYED);
-            out.booleanValue(in.isDestroyed());
+            out.booleanValue(threadGroup.isDestroyed());
             out.key(ACTIVE_COUNT);
-            out.numberValue(in.activeCount());
+            out.numberValue(threadGroup.activeCount());
         }
         out.closeObject();
     }

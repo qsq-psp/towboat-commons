@@ -1,6 +1,5 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.ConsistencyException;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
@@ -42,7 +41,7 @@ public class PairingHeap<E> extends SisterPriorityQueue<E> {
             expectedSize = root.checkPairingHeapHealth(comparator, consumer);
         }
         if (expectedSize != size) {
-            consumer.accept(new ConsistencyException("size", expectedSize, size));
+            consumer.accept(new RuntimeException("expected size" + expectedSize + ", actual size " + size));
         }
     }
 

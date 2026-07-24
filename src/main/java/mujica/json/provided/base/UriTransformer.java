@@ -4,14 +4,13 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 
-/**
- * Created on 2026/5/1.
- */
+@CodeHistory(date = "2026/5/1")
 public class UriTransformer implements JsonContextTransformer<URI> {
 
     public static final UriTransformer INSTANCE = new UriTransformer();
@@ -33,45 +32,45 @@ public class UriTransformer implements JsonContextTransformer<URI> {
     static final FastString FRAGMENT = new FastString("query");
 
     @Override
-    public void transform(@NotNull URI in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull URI uri, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            String str = in.getScheme();
+            String str = uri.getScheme();
             if (str != null) {
                 out.key(SCHEME);
                 out.stringValue(str);
             }
-            str = in.getRawAuthority();
+            str = uri.getRawAuthority();
             if (str != null) {
                 out.key(AUTHORITY);
                 out.stringValue(str);
             }
-            str = in.getRawUserInfo();
+            str = uri.getRawUserInfo();
             if (str != null) {
                 out.key(USER_INFO);
                 out.stringValue(str);
             }
-            str = in.getHost();
+            str = uri.getHost();
             if (str != null) {
                 out.key(HOST);
                 out.stringValue(str);
             }
-            int port = in.getPort();
+            int port = uri.getPort();
             if (port != -1) {
                 out.key(PORT);
                 out.numberValue(port);
             }
-            str = in.getRawPath();
+            str = uri.getRawPath();
             if (str != null) {
                 out.key(PATH);
                 out.stringValue(str);
             }
-            str = in.getRawQuery();
+            str = uri.getRawQuery();
             if (str != null) {
                 out.key(QUERY);
                 out.stringValue(str);
             }
-            str = in.getRawFragment();
+            str = uri.getRawFragment();
             if (str != null) {
                 out.key(FRAGMENT);
                 out.stringValue(str);

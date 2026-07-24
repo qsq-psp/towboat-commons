@@ -1,20 +1,20 @@
 package mujica.json.provided.base;
 
-import mujica.ds.bit.PublicBitSlot;
+import mujica.ds.bit.Bit;
 import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.handler.JsonStructure;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-/**
- * Created on 2026/4/24.
- */
+@CodeHistory(date = "2026/4/24")
 public class ProcessHandleTransformer implements JsonContextTransformer<ProcessHandle>, JsonStructure {
 
     public static final ProcessHandleTransformer INSTANCE = new ProcessHandleTransformer();
@@ -34,7 +34,7 @@ public class ProcessHandleTransformer implements JsonContextTransformer<ProcessH
     static final FastString ALIVE = new FastString("alive");
 
     private static <T> void streamForEach(@NotNull Stream<T> stream, @NotNull Runnable before, @NotNull Consumer<T> consumer, @NotNull Runnable after) {
-        final PublicBitSlot notEmpty = new PublicBitSlot(false);
+        final Bit notEmpty = new Bit(false);
         stream.forEach(item -> {
             if (!notEmpty.getBit()) {
                 notEmpty.setBit(true);
@@ -48,25 +48,25 @@ public class ProcessHandleTransformer implements JsonContextTransformer<ProcessH
     }
 
     @Override
-    public void transform(ProcessHandle in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ProcessHandle processHandle, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(PID);
-            out.numberValue(in.pid());
-            in.parent().ifPresent(parent -> {
+            out.numberValue(processHandle.pid());
+            processHandle.parent().ifPresent(parent -> {
                 out.key(PARENT);
                 out.numberValue(parent.pid());
             });
-            streamForEach(in.children(), () -> {
+            streamForEach(processHandle.children(), () -> {
                 out.key(CHILDREN);
                 out.openArray();
             }, child -> out.numberValue(child.pid()), out::closeArray);
             out.key(INFO);
-            ProcessHandleInfoTransformer.INSTANCE.transform(in.info(), out, context);
+            ProcessHandleInfoTransformer.INSTANCE.transform(processHandle.info(), out, context);
             out.key(SUPPORTS_NORMAL_TERMINATION);
-            out.booleanValue(in.supportsNormalTermination());
+            out.booleanValue(processHandle.supportsNormalTermination());
             out.key(ALIVE);
-            out.booleanValue(in.isAlive());
+            out.booleanValue(processHandle.isAlive());
         }
         out.closeObject();
     }

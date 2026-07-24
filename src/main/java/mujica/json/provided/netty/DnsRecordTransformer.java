@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DnsRecordTransformer implements JsonContextTransformer<DnsRecord> {
 
+    public static final DnsRecordTransformer INSTANCE = new DnsRecordTransformer();
+
     @Override
     public void transform(@NotNull DnsRecord dnsRecord, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();

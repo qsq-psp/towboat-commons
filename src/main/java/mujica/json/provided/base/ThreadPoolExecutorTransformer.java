@@ -5,21 +5,19 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created on 2026/5/3.
- */
 @CodeHistory(date = "2026/5/3")
 public class ThreadPoolExecutorTransformer implements JsonContextTransformer<ThreadPoolExecutor> {
 
     public static final ThreadPoolExecutorTransformer INSTANCE = new ThreadPoolExecutorTransformer();
 
     @Override
-    public void transform(@NotNull ThreadPoolExecutor executor, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ThreadPoolExecutor executor, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("shutdown");

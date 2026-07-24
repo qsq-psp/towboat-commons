@@ -5,6 +5,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
@@ -15,15 +16,15 @@ public class GraphicsConfigurationTransformer implements JsonContextTransformer<
     public static final GraphicsConfigurationTransformer INSTANCE = new GraphicsConfigurationTransformer();
 
     @Override
-    public void transform(GraphicsConfiguration in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull GraphicsConfiguration graphicsConfiguration, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("colorModel");
-            ColorModelTransformer.INSTANCE.transform(in.getColorModel(), out, context);
+            ColorModelTransformer.INSTANCE.transform(graphicsConfiguration.getColorModel(), out, context);
             out.key("bounds");
-            RectangleTransformer.INSTANCE.transform(in.getBounds(), out, context);
+            RectangleTransformer.INSTANCE.transform(graphicsConfiguration.getBounds(), out, context);
             out.key("translucency");
-            out.booleanValue(in.isTranslucencyCapable());
+            out.booleanValue(graphicsConfiguration.isTranslucencyCapable());
         }
         out.closeObject();
     }

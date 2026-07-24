@@ -9,9 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
-/**
- * Created on 2026/4/26.
- */
 @CodeHistory(date = "2026/4/26")
 public class PatternTransformer implements JsonContextTransformer<Pattern> {
 

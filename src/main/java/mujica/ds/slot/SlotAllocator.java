@@ -1,10 +1,9 @@
 package mujica.ds.slot;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2026/6/14.
- */
+@CodeHistory(date = "2026/6/14")
 public interface SlotAllocator<S> {
 
     @NotNull
@@ -29,4 +28,10 @@ public interface SlotAllocator<S> {
         move(b, a);
         move(temp, b);
     }
+
+    @CodeHistory(date = "2026/7/18")
+    interface WithNode2<S, N extends S> extends SlotAllocator<S>, NodeAccess2<N> {}
+
+    @CodeHistory(date = "2026/7/19")
+    interface WithNode3<S, N extends S> extends SlotAllocator<S>, NodeAccess3<N> {}
 }

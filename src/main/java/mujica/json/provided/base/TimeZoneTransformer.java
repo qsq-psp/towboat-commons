@@ -7,6 +7,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.TimeZone;
 
@@ -28,21 +29,21 @@ public class TimeZoneTransformer implements JsonContextTransformer<TimeZone>, Js
     static final FastString USE_DAYLIGHT = new FastString("useDaylight");
 
     @Override
-    public void transform(TimeZone in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull TimeZone zone, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(RAW_OFFSET);
-            out.numberValue(in.getRawOffset());
+            out.numberValue(zone.getRawOffset());
             out.key(ZoneIdTransformer.ID);
-            out.stringValue(in.getID());
+            out.stringValue(zone.getID());
             out.key(ZONE_ID);
-            ZoneIdTransformer.INSTANCE.transform(in.toZoneId(), out, context);
+            ZoneIdTransformer.INSTANCE.transform(zone.toZoneId(), out, context);
             out.key(DISPLAY_NAME);
-            out.stringValue(in.getDisplayName());
+            out.stringValue(zone.getDisplayName());
             out.key(DST_SAVINGS);
-            out.numberValue(in.getDSTSavings());
+            out.numberValue(zone.getDSTSavings());
             out.key(USE_DAYLIGHT);
-            out.booleanValue(in.useDaylightTime());
+            out.booleanValue(zone.useDaylightTime());
         }
         out.closeObject();
     }

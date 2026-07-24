@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @CodeHistory(date = "2026/7/6")
-@DirectSubclass({SlotList.class})
+@DirectSubclass({RandomAccessBasedSlotCollection.class, GapIteratorBasedSlotCollection.class})
 public interface SlotCollection<S, A> extends DataStructure {
 
     @Override
@@ -72,19 +72,21 @@ public interface SlotCollection<S, A> extends DataStructure {
 
     @Name(value = "addFirst", language = "en")
     @Name(value = "unshift", language = "en")
-    void insertFirst(@NotNull S in);
+    void insertFirstItem(@NotNull S in);
 
     @Name(value = "add", language = "en")
     @Name(value = "addLast", language = "en")
     @Name(value = "push", language = "en")
     @Name(value = "enqueue", language = "en")
-    void insertLast(@NotNull S in);
+    void insertLastItem(@NotNull S in);
 
-    void insertLast(@NotNull SlotCollection<S, A> that);
+    void insertLast(@NotNull A thatArray);
 
-    void insertLast(@NotNull A inArray, @Index(of = "inArray") int startIndex, @Index(of = "inArray", inclusive = false) int endIndex);
+    void insertLast(@NotNull A thatArray, @Index(of = "thatArray") int startIndex, @Index(of = "thatArray", inclusive = false) int endIndex);
 
     void insertLastSelf(@Index(of = "this") int startIndex, @Index(of = "this", inclusive = false) int endIndex);
+
+    void appendTo(@NotNull SlotCollection<S, A> that);
 
     void removeRange(@Index(of = "this") int startIndex, @Index(of = "this", inclusive = false) int endIndex) throws IndexOutOfBoundsException;
 
@@ -157,9 +159,9 @@ public interface SlotCollection<S, A> extends DataStructure {
 
         void setNext(@NotNull S in) throws NoSuchElementException, ConcurrentModificationException;
 
-        void removePrevious(@NotNull S out) throws NoSuchElementException, ConcurrentModificationException;
+        void removePrevious(@Nullable S out) throws NoSuchElementException, ConcurrentModificationException;
 
-        void removeNext(@NotNull S out) throws NoSuchElementException, ConcurrentModificationException;
+        void removeNext(@Nullable S out) throws NoSuchElementException, ConcurrentModificationException;
 
         void insertPrevious(@NotNull S in) throws ConcurrentModificationException;
 
@@ -167,7 +169,7 @@ public interface SlotCollection<S, A> extends DataStructure {
     }
 
     @NotNull
-    GapIterator<S> iterator(@Index(canBeNegative = true) int startGapIndex);
+    GapIterator<S> iterator(@Index(canBeNegative = true) int startGapIndex) throws IndexOutOfBoundsException;
 
     @NotNull
     @Override

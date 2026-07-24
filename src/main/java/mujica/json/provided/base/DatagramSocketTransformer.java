@@ -3,21 +3,21 @@ package mujica.json.provided.base;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
-/**
- * Created on 2026/5/18.
- */
+@CodeHistory(date = "2026/5/18")
 public class DatagramSocketTransformer implements JsonContextTransformer<DatagramSocket> {
 
     public static final DatagramSocketTransformer INSTANCE = new DatagramSocketTransformer();
 
     @Override
-    public void transform(@NotNull DatagramSocket socket, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull DatagramSocket socket, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(SocketTransformer.CONNECTED);

@@ -4,15 +4,14 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.plaf.UIResource;
 import java.awt.*;
 
-/**
- * Created on 2026/6/2.
- */
+@CodeHistory(date = "2026/6/2")
 public class InsetsTransformer implements JsonContextTransformer<Insets> {
 
     public static final InsetsTransformer INSTANCE = new InsetsTransformer();
@@ -28,19 +27,19 @@ public class InsetsTransformer implements JsonContextTransformer<Insets> {
     static final FastString UI_RESOURCE = new FastString("uiResource");
 
     @Override
-    public void transform(@NotNull Insets in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull Insets insets, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(TOP);
-            out.numberValue(in.top);
+            out.numberValue(insets.top);
             out.key(LEFT);
-            out.numberValue(in.left);
+            out.numberValue(insets.left);
             out.key(BOTTOM);
-            out.numberValue(in.bottom);
+            out.numberValue(insets.bottom);
             out.key(RIGHT);
-            out.numberValue(in.right);
+            out.numberValue(insets.right);
         }
-        if (in instanceof UIResource) {
+        if (insets instanceof UIResource) {
             out.key(UI_RESOURCE);
             out.booleanValue(true);
         }

@@ -6,13 +6,11 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.module.ModuleDescriptor;
 import java.util.Optional;
 
-/**
- * Created on 2026/4/29.
- */
 @CodeHistory(date = "2026/4/29")
 public class ModuleDescriptorTransformer implements JsonContextTransformer<ModuleDescriptor> {
 
@@ -55,18 +53,18 @@ public class ModuleDescriptorTransformer implements JsonContextTransformer<Modul
     }
 
     @Override
-    public void transform(ModuleDescriptor in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ModuleDescriptor md, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(ClassLoaderTransformer.NAME);
-            out.stringValue(in.name());
+            out.stringValue(md.name());
             out.key(OPEN);
-            out.booleanValue(in.isOpen());
+            out.booleanValue(md.isOpen());
             out.key(AUTOMATIC);
-            out.booleanValue(in.isAutomatic());
+            out.booleanValue(md.isAutomatic());
             out.key(REQUIRES);
             out.openArray();
-            for (ModuleDescriptor.Requires requires : in.requires()) {
+            for (ModuleDescriptor.Requires requires : md.requires()) {
                 out.key(ClassLoaderTransformer.NAME);
                 out.stringValue(requires.name());
                 optionalStringValue(VERSION, requires.rawCompiledVersion(), out);
@@ -74,7 +72,7 @@ public class ModuleDescriptorTransformer implements JsonContextTransformer<Modul
             out.closeArray();
             out.key(EXPORTS);
             out.openArray();
-            for (ModuleDescriptor.Exports exports : in.exports()) {
+            for (ModuleDescriptor.Exports exports : md.exports()) {
                 out.key(SOURCE);
                 out.stringValue(exports.source());
                 out.key(TARGET);
@@ -87,7 +85,7 @@ public class ModuleDescriptorTransformer implements JsonContextTransformer<Modul
             out.closeArray();
             out.key(OPENS);
             out.openArray();
-            for (ModuleDescriptor.Opens opens : in.opens()) {
+            for (ModuleDescriptor.Opens opens : md.opens()) {
                 out.key(SOURCE);
                 out.stringValue(opens.source());
                 out.key(TARGET);
@@ -100,13 +98,13 @@ public class ModuleDescriptorTransformer implements JsonContextTransformer<Modul
             out.closeArray();
             out.key(USES);
             out.openArray();
-            for (String uses : in.uses()) {
+            for (String uses : md.uses()) {
                 out.stringValue(uses);
             }
             out.closeArray();
             out.key(PROVIDES);
             out.openArray();
-            for (ModuleDescriptor.Provides provides : in.provides()) {
+            for (ModuleDescriptor.Provides provides : md.provides()) {
                 out.key(SERVICE);
                 out.stringValue(provides.service());
                 out.key(PROVIDER);
@@ -117,11 +115,11 @@ public class ModuleDescriptorTransformer implements JsonContextTransformer<Modul
                 out.closeArray();
             }
             out.closeArray();
-            optionalStringValue(VERSION, in.rawVersion(), out);
-            optionalStringValue(MAIN_CLASS, in.mainClass(), out);
+            optionalStringValue(VERSION, md.rawVersion(), out);
+            optionalStringValue(MAIN_CLASS, md.mainClass(), out);
             out.key(PACKAGES);
             out.openArray();
-            for (String packageName : in.packages()) {
+            for (String packageName : md.packages()) {
                 out.stringValue(packageName);
             }
             out.closeArray();

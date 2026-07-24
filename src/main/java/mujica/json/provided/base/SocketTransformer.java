@@ -4,15 +4,15 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 
-/**
- * Created on 2026/5/17.
- */
+@CodeHistory(date = "2026/5/17")
 public class SocketTransformer implements JsonContextTransformer<Socket> {
 
     public static final SocketTransformer INSTANCE = new SocketTransformer();
@@ -54,7 +54,7 @@ public class SocketTransformer implements JsonContextTransformer<Socket> {
     }
 
     @Override
-    public void transform(@NotNull Socket socket, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Socket socket, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(CONNECTED);

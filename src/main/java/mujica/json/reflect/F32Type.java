@@ -17,7 +17,7 @@ class F32Type extends JsonType implements F32Slot {
     }
 
     @Override
-    public float getFloat() {
+    public float getF32() {
         if (state == CollectionConstant.PRESENT) {
             return value;
         }
@@ -29,7 +29,7 @@ class F32Type extends JsonType implements F32Slot {
     }
 
     @Override
-    public void setFloat(float newValue) {
+    public void setF32(float newValue) {
         value = newValue;
         state = CollectionConstant.PRESENT;
     }

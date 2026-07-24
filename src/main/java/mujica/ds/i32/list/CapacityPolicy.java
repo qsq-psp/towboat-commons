@@ -96,7 +96,7 @@ public abstract class CapacityPolicy extends AbstractIntList {
     }
 
     @NotNull
-    public static CapacityPolicy checkQuadraticFull(@Nullable CapacityPolicy policy) {
+    public static CapacityPolicy checkQuadraticSupported(@Nullable CapacityPolicy policy) {
         if (policy == null) {
             return ModuloLookUpCapacityPolicy.INSTANCE_59;
         } else if (policy.notQuadraticFull()) {

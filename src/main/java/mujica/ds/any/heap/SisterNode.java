@@ -1,8 +1,6 @@
 package mujica.ds.any.heap;
 
 import mujica.ds.ConsistencyException;
-import mujica.ds.InvariantException;
-import mujica.ds.ReferenceException;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +52,7 @@ class SisterNode<E> implements Serializable {
         {
             String type = map.put(this, "on-stack"); // tag?
             if (type != null) {
-                consumer.accept(new ReferenceException("revisit " + type + " node with element " + element));
+                consumer.accept(new RuntimeException("revisit " + type + " node with element " + element));
                 return 0; // prevent infinite loop
             }
         }
@@ -74,7 +72,7 @@ class SisterNode<E> implements Serializable {
         map.put(this, "on-stack");
         int elementCount = 1;
         if (nextSibling != null) {
-            consumer.accept(new InvariantException("root has sibling(s)"));
+            consumer.accept(new RuntimeException("root has sibling(s)"));
             elementCount += nextSibling.checkHealth(map, consumer);
         }
         if (firstChild != null) {
@@ -91,12 +89,12 @@ class SisterNode<E> implements Serializable {
         {
             String type = map.put(this, "on-stack");
             if (type != null) {
-                consumer.accept(new ReferenceException("revisit " + type + " node with element " + element));
+                consumer.accept(new RuntimeException("revisit " + type + " node with element " + element));
                 return 0; // prevent infinite loop
             }
         }
         if (comparator.compare(element, parent.element) < 0) {
-            consumer.accept(new InvariantException("node with element " + element + " smaller than parent"));
+            consumer.accept(new RuntimeException("node with element " + element + " smaller than parent"));
         }
         int elementCount = 1;
         if (nextSibling != null) {
@@ -116,7 +114,7 @@ class SisterNode<E> implements Serializable {
             {
                 String type = map.put(node, "on-stack");
                 if (type != null) {
-                    consumer.accept(new ReferenceException("revisit " + type + " node with element " + element));
+                    consumer.accept(new RuntimeException("revisit " + type + " node with element " + element));
                     break; // prevent infinite loop
                 }
             }
@@ -136,12 +134,12 @@ class SisterNode<E> implements Serializable {
         {
             String type = map.put(this, "on-stack");
             if (type != null) {
-                consumer.accept(new ReferenceException("revisit " + type + " node with element " + element));
+                consumer.accept(new RuntimeException("revisit " + type + " node with element " + element));
                 return 0; // prevent infinite loop
             }
         }
         if (comparator.compare(element, parent.element) < 0) {
-            consumer.accept(new InvariantException("node with element " + element + " smaller than parent"));
+            consumer.accept(new RuntimeException("node with element " + element + " smaller than parent"));
         }
         int elementCount = 1;
         if (nextSibling != null) {
@@ -149,17 +147,17 @@ class SisterNode<E> implements Serializable {
             if (firstChild != null) {
                 elementCount += firstChild.checkFibonacciHeapHealth(map, comparator, this, consumer);
                 if (nextSibling.order != firstChild.order) {
-                    consumer.accept(new InvariantException("order not balanced; this.order = " + order + ", nextSibling.order = " + nextSibling.order + ", firstChild.order = " + firstChild.order));
+                    consumer.accept(new RuntimeException("order not balanced; this.order = " + order + ", nextSibling.order = " + nextSibling.order + ", firstChild.order = " + firstChild.order));
                 } else if (nextSibling.order + 1 != order) {
                     consumer.accept(new ConsistencyException("order", nextSibling.order + 1, order));
                 }
             } else {
-                consumer.accept(new InvariantException("node with sibling but no child; element = " + element + ", order = " + order));
+                consumer.accept(new RuntimeException("node with sibling but no child; element = " + element + ", order = " + order));
             }
         } else {
             if (firstChild != null) {
                 elementCount += firstChild.checkFibonacciHeapHealth(map, comparator, this, consumer);
-                consumer.accept(new InvariantException("node with child but no sibling; element = " + element + ", order = " + order));
+                consumer.accept(new RuntimeException("node with child but no sibling; element = " + element + ", order = " + order));
             } else {
                 if (order != 0) {
                     consumer.accept(new ConsistencyException("order", 0, order));
@@ -177,12 +175,12 @@ class SisterNode<E> implements Serializable {
         {
             String type = map.put(this, onStackTag);
             if (type != null) {
-                consumer.accept(new ReferenceException("revisit " + type + " node with element " + element));
+                consumer.accept(new RuntimeException("revisit " + type + " node with element " + element));
                 return; // prevent infinite loop
             }
         }
         if (nextSibling != null) {
-            consumer.accept(new InvariantException("root has sibling(s)"));
+            consumer.accept(new RuntimeException("root has sibling(s)"));
             nextSibling.checkHealth(map, consumer);
         }
         if (firstChild != null) {
@@ -199,12 +197,12 @@ class SisterNode<E> implements Serializable {
         {
             String type = map.put(this, onStackTag);
             if (type != null) {
-                consumer.accept(new ReferenceException("revisit " + type + " node with element " + element));
+                consumer.accept(new RuntimeException("revisit " + type + " node with element " + element));
                 return; // prevent infinite loop
             }
         }
         if (comparator.compare(element, parent.element) < 0) {
-            consumer.accept(new InvariantException("node with element " + element + " smaller than parent"));
+            consumer.accept(new RuntimeException("node with element " + element + " smaller than parent"));
         }
         int elementCount = 1;
         if (nextSibling != null) {
@@ -212,17 +210,17 @@ class SisterNode<E> implements Serializable {
             if (firstChild != null) {
                 firstChild.checkBinomialQueueHealth(map, onStackTag, pastTag, comparator, this, consumer);
                 if (nextSibling.order != firstChild.order) {
-                    consumer.accept(new InvariantException("order not balanced; nextSibling.order = " + nextSibling.order + ", firstChild.order = " + firstChild.order));
+                    consumer.accept(new RuntimeException("order not balanced; nextSibling.order = " + nextSibling.order + ", firstChild.order = " + firstChild.order));
                 }
                 order = Math.max(nextSibling.order, firstChild.order) + 1;
             } else {
-                consumer.accept(new InvariantException("node with sibling but no child; element = " + element));
+                consumer.accept(new RuntimeException("node with sibling but no child; element = " + element));
                 order = nextSibling.order + 1;
             }
         } else {
             if (firstChild != null) {
                 firstChild.checkBinomialQueueHealth(map, onStackTag, pastTag, comparator, this, consumer);
-                consumer.accept(new InvariantException("node with child but no sibling; element = " + element));
+                consumer.accept(new RuntimeException("node with child but no sibling; element = " + element));
                 order = firstChild.order + 1;
             } else {
                 order = 0;

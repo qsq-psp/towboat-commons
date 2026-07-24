@@ -6,12 +6,10 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.InputEvent;
 
-/**
- * Created on 2026/4/28.
- */
 @CodeHistory(date = "2026/4/28")
 public class InputEventTransformer implements JsonContextTransformer<InputEvent> {
 
@@ -33,39 +31,39 @@ public class InputEventTransformer implements JsonContextTransformer<InputEvent>
 
     static final FastString ALT_GRAPH = new FastString("altGraph");
 
-    static void transformExposed(@NotNull InputEvent in, @NotNull JsonHandler out) {
+    static void transformExposed(@NotNull InputEvent inputEvent, @NotNull JsonHandler out) {
         out.key(ID);
-        out.numberValue(in.getID());
+        out.numberValue(inputEvent.getID());
         out.key(CONSUMED);
-        out.booleanValue(in.isConsumed());
+        out.booleanValue(inputEvent.isConsumed());
         out.key(WHEN);
-        out.numberValue(in.getWhen());
-        if (in.isShiftDown()) {
+        out.numberValue(inputEvent.getWhen());
+        if (inputEvent.isShiftDown()) {
             out.key(SHIFT);
             out.booleanValue(true);
         }
-        if (in.isControlDown()) {
+        if (inputEvent.isControlDown()) {
             out.key(CONTROL);
             out.booleanValue(true);
         }
-        if (in.isMetaDown()) {
+        if (inputEvent.isMetaDown()) {
             out.key(META);
             out.booleanValue(true);
         }
-        if (in.isAltDown()) {
+        if (inputEvent.isAltDown()) {
             out.key(ALT);
             out.booleanValue(true);
         }
-        if (in.isAltGraphDown()) {
+        if (inputEvent.isAltGraphDown()) {
             out.key(ALT_GRAPH);
             out.booleanValue(true);
         }
     }
 
     @Override
-    public void transform(@NotNull InputEvent in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull InputEvent inputEvent, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
-        transformExposed(in, out);
+        transformExposed(inputEvent, out);
         out.closeObject();
     }
 }

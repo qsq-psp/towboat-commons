@@ -15,17 +15,17 @@ public class FilterInfoTransformer implements JsonContextTransformer<ObjectInput
     public static final FilterInfoTransformer INSTANCE = new FilterInfoTransformer();
 
     @Override
-    public void transform(@NotNull ObjectInputFilter.FilterInfo in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull ObjectInputFilter.FilterInfo filterInfo, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            Class<?> serialClass = in.serialClass();
+            Class<?> serialClass = filterInfo.serialClass();
             if (serialClass != null) {
                 out.key(ClassLoaderTransformer.CLASS);
                 out.stringValue(serialClass.getName());
             }
         }
         {
-            long arrayLength = in.arrayLength();
+            long arrayLength = filterInfo.arrayLength();
             if (arrayLength != -1L) {
                 out.stringValue("arrayLength");
                 out.numberValue(arrayLength);
@@ -33,11 +33,11 @@ public class FilterInfoTransformer implements JsonContextTransformer<ObjectInput
         }
         {
             out.stringValue("depth");
-            out.numberValue(in.depth());
+            out.numberValue(filterInfo.depth());
             out.stringValue("references");
-            out.numberValue(in.references());
+            out.numberValue(filterInfo.references());
             out.stringValue("streamBytes");
-            out.numberValue(in.streamBytes());
+            out.numberValue(filterInfo.streamBytes());
         }
         out.closeObject();
     }

@@ -1,5 +1,7 @@
 package mujica.ds.f64;
 
+import mujica.ds.slot.Base2Float;
+import mujica.ds.slot.Base2Integer;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.FieldOrder;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +13,7 @@ import java.io.Serializable;
 @CodeHistory(date = "2024/1/20", project = "Ultramarine")
 @CodeHistory(date = "2025/3/21")
 @FieldOrder("value") // only "value", not "double"
-public class F64 implements F64Slot, Comparable<F64>, Cloneable, Serializable {
+public class F64 implements F64Slot, Comparable<F64>, Base2Float, Cloneable, Serializable {
 
     private static final long serialVersionUID = 0x6a6bc6ef5338a773L;
 
@@ -27,18 +29,30 @@ public class F64 implements F64Slot, Comparable<F64>, Cloneable, Serializable {
     }
 
     @Override
-    public double getDouble() {
+    public double getF64() {
         return value;
     }
 
     @Override
-    public void setDouble(double newValue) {
+    public void setF64(double newValue) {
         value = newValue;
     }
 
     @Override
     public int compareTo(@NotNull F64 that) {
         return Double.compare(this.value, that.value);
+    }
+
+    @NotNull
+    @Override
+    public Base2Integer exponent() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public Base2Integer mantissa() {
+        return null;
     }
 
     @Override

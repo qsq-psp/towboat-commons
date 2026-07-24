@@ -7,11 +7,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2026/7/8")
-public interface SlotMap<KS, KA, VS, VA> extends DataStructure {
+public interface SlotMap<KS, VS> extends DataStructure {
 
     @NotNull
     @Override
-    SlotMap<KS, KA, VS, VA> duplicate();
+    SlotMap<KS, VS> duplicate();
 
     @Override
     void checkHealth(@NotNull Consumer<RuntimeException> consumer);

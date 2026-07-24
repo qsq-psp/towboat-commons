@@ -1,8 +1,5 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.ConsistencyException;
-import mujica.ds.InvariantException;
-import mujica.ds.ReferenceException;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,10 +68,10 @@ class BiasedNode<E> implements Serializable {
             shallowChild.checkLeftListHealth(map, comparator, this, consumer);
         }
         if (distanceOf(deepChild) < distanceOf(shallowChild)) {
-            consumer.accept(new InvariantException("node not balanced; deep = " + distanceOf(deepChild) + ", shallow = " + distanceOf(shallowChild)));
+            consumer.accept(new RuntimeException("node not balanced; deep = " + distanceOf(deepChild) + ", shallow = " + distanceOf(shallowChild)));
         }
         if (distanceOf(shallowChild) + 1 != distance) {
-            consumer.accept(new ConsistencyException("distance", distanceOf(shallowChild) + 1, distance));
+            consumer.accept(new RuntimeException("expected distance" + (distanceOf(shallowChild) + 1) + ", actual distance " + distance));
         }
         map.put(this, "past");
         return map.size();
@@ -87,12 +84,12 @@ class BiasedNode<E> implements Serializable {
         {
             String type = map.put(this, "on-stack");
             if (type != null) {
-                consumer.accept(new ReferenceException("revisit " + type + " node with element " + element));
+                consumer.accept(new RuntimeException("revisit " + type + " node with element " + element));
                 return; // prevent infinite loop
             }
         }
         if (comparator.compare(element, parent.element) < 0) {
-            consumer.accept(new InvariantException("node with element " + element + " smaller than parent"));
+            consumer.accept(new RuntimeException("node with element " + element + " smaller than parent"));
         }
         if (deepChild != null) {
             deepChild.checkLeftListHealth(map, comparator, this, consumer);
@@ -101,10 +98,10 @@ class BiasedNode<E> implements Serializable {
             shallowChild.checkLeftListHealth(map, comparator, this, consumer);
         }
         if (distanceOf(deepChild) < distanceOf(shallowChild)) {
-            consumer.accept(new InvariantException("node not balanced; deep = " + distanceOf(deepChild) + ", shallow = " + distanceOf(shallowChild)));
+            consumer.accept(new RuntimeException("node not balanced; deep = " + distanceOf(deepChild) + ", shallow = " + distanceOf(shallowChild)));
         }
         if (distanceOf(shallowChild) + 1 != distance) {
-            consumer.accept(new ConsistencyException("distance", distanceOf(shallowChild) + 1, distance));
+            consumer.accept(new RuntimeException("expected distance" + (distanceOf(shallowChild) + 1) + ", actual distance " + distance));
         }
         map.put(this, "past");
     }
@@ -131,12 +128,12 @@ class BiasedNode<E> implements Serializable {
         {
             String type = map.put(this, "on-stack");
             if (type != null) {
-                consumer.accept(new ReferenceException("revisit " + type + " node with element " + element));
+                consumer.accept(new RuntimeException("revisit " + type + " node with element " + element));
                 return; // prevent infinite loop
             }
         }
         if (comparator.compare(element, parent.element) < 0) {
-            consumer.accept(new InvariantException("node with element " + element + " smaller than parent"));
+            consumer.accept(new RuntimeException("node with element " + element + " smaller than parent"));
         }
         if (deepChild != null) {
             deepChild.checkSkewHealth(map, comparator, this, consumer);

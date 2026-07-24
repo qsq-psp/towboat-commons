@@ -6,10 +6,8 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * Created on 2026/4/25.
- */
 @CodeHistory(date = "2026/4/25")
 public class ProcessHandleInfoTransformer implements JsonContextTransformer<ProcessHandle.Info> {
 
@@ -28,7 +26,7 @@ public class ProcessHandleInfoTransformer implements JsonContextTransformer<Proc
     static final FastString USER = new FastString("user");
 
     @Override
-    public void transform(ProcessHandle.Info info, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ProcessHandle.Info info, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             info.command().ifPresent(command -> {

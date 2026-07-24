@@ -7,6 +7,12 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/6/25")
 public class SlotArrayAllocatorI8 implements SlotArrayAllocator<I8Slot, byte[]> {
 
+    public static final byte[] EMPTY_ARRAY = new byte[0];
+
+    public SlotArrayAllocatorI8() {
+        super();
+    }
+
     @NotNull
     @Override
     public I8Slot newSlot() {
@@ -32,6 +38,9 @@ public class SlotArrayAllocatorI8 implements SlotArrayAllocator<I8Slot, byte[]> 
     @NotNull
     @Override
     public byte[] newArray(int length) {
+        if (length == 0) {
+            return EMPTY_ARRAY;
+        }
         return new byte[length];
     }
 
@@ -60,5 +69,19 @@ public class SlotArrayAllocatorI8 implements SlotArrayAllocator<I8Slot, byte[]> 
         final byte temp = array[i];
         array[i] = array[j];
         array[j] = temp;
+    }
+
+    @Override
+    public byte[] cloneArray(@NotNull byte[] original) {
+        if (original.length == 0) {
+            return EMPTY_ARRAY;
+        }
+        return original.clone();
+    }
+
+    @Override
+    @NotNull
+    public String toString() {
+        return "SlotTool[dataType = i8, slotType = I8Slot, arrayType = byte[]]";
     }
 }

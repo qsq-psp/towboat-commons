@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.image.ColorModel;
@@ -19,19 +20,19 @@ public class ColorModelTransformer implements JsonContextTransformer<ColorModel>
     public static final ColorModelTransformer INSTANCE = new ColorModelTransformer();
 
     @Override
-    public void transform(ColorModel in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ColorModel colorModel, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            boolean alpha = in.hasAlpha();
+            boolean alpha = colorModel.hasAlpha();
             out.key("alpha");
             out.booleanValue(alpha);
             if (alpha) {
                 out.key("alphaPremultiplied");
-                out.booleanValue(in.isAlphaPremultiplied());
+                out.booleanValue(colorModel.isAlphaPremultiplied());
             }
         }
         {
-            int transferType = in.getTransferType();
+            int transferType = colorModel.getTransferType();
             out.key("transferType");
             switch (transferType) {
                 case DataBuffer.TYPE_BYTE:
@@ -62,16 +63,16 @@ public class ColorModelTransformer implements JsonContextTransformer<ColorModel>
         }
         {
             out.key("pixelSize");
-            out.numberValue(in.getPixelSize());
+            out.numberValue(colorModel.getPixelSize());
             out.key("componentCount");
-            out.numberValue(in.getNumComponents());
+            out.numberValue(colorModel.getNumComponents());
             out.key("colorComponentCount");
-            out.numberValue(in.getNumColorComponents());
+            out.numberValue(colorModel.getNumColorComponents());
             out.key("componentSizes");
-            out.arrayValue(in.getComponentSize());
+            out.arrayValue(colorModel.getComponentSize());
         }
         {
-            int transparency = in.getTransparency();
+            int transparency = colorModel.getTransparency();
             out.key("transparency");
             switch (transparency) {
                 case Transparency.OPAQUE:
@@ -90,10 +91,10 @@ public class ColorModelTransformer implements JsonContextTransformer<ColorModel>
         }
         {
             out.key("colorSpace");
-            ColorSpaceTransformer.INSTANCE.transform(in.getColorSpace(), out, context);
+            ColorSpaceTransformer.INSTANCE.transform(colorModel.getColorSpace(), out, context);
         }
-        if (in instanceof DirectColorModel) {
-            DirectColorModel direct = (DirectColorModel) in;
+        if (colorModel instanceof DirectColorModel) {
+            DirectColorModel direct = (DirectColorModel) colorModel;
             out.key("redMask");
             out.numberValue(direct.getRedMask());
             out.key("greenMask");

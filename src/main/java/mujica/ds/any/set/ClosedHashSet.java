@@ -11,7 +11,6 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 @CodeHistory(date = "2025/7/4")
-@ReferencePage(title = "Closed Hashing", href = "https://www.cs.usfca.edu/~galles/visualization/ClosedHash.html")
 public abstract class ClosedHashSet<E> extends AbstractHashSet<E> {
 
     private static final long serialVersionUID = 0xa5bf061d9ea35761L;

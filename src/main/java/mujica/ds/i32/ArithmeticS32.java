@@ -1,17 +1,15 @@
 package mujica.ds.i32;
 
-import mujica.ds.slot.AbstractArithmetic;
+import mujica.ds.slot.PrimitiveArithmetic;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.RoundingMode;
+import java.util.Arrays;
 
-/**
- * Created on 2026/6/29.
- */
 @CodeHistory(date = "2026/6/29")
-public class ArithmeticS32 extends AbstractArithmetic<I32Slot> {
+public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
 
     public ArithmeticS32() {
         super();
@@ -21,6 +19,49 @@ public class ArithmeticS32 extends AbstractArithmetic<I32Slot> {
     @Override
     public I32Slot newSlot() {
         return new S32();
+    }
+
+    @NotNull
+    @Override
+    public I32Slot cloneSlot(@NotNull I32Slot original) {
+        return new I32(original.getI32());
+    }
+
+    @NotNull
+    @Override
+    public int[] newArray(int length) {
+        if (length == 0) {
+            return SlotArrayAllocatorI32.EMPTY_ARRAY;
+        }
+        return new int[length];
+    }
+
+    @Override
+    public int[] cloneArray(@NotNull int[] original) {
+        if (original.length == 0) {
+            return SlotArrayAllocatorI32.EMPTY_ARRAY;
+        }
+        return original.clone();
+    }
+
+    @Override
+    public int compareArray(@NotNull int[] left, @NotNull int[] right) {
+        return Arrays.compare(left, right);
+    }
+
+    @Override
+    public int length(@NotNull int[] array) {
+        return array.length;
+    }
+
+    @Override
+    public void load(@NotNull int[] array, int index, @NotNull I32Slot slot) {
+        slot.setI32(array[index]);
+    }
+
+    @Override
+    public void store(@NotNull int[] array, int index, @NotNull I32Slot slot) {
+        array[index] = slot.getI32();
     }
 
     @Override
@@ -39,6 +80,26 @@ public class ArithmeticS32 extends AbstractArithmetic<I32Slot> {
     }
 
     @Override
+    public void min(@NotNull I32Slot result) {
+        result.setI32(Integer.MIN_VALUE);
+    }
+
+    @Override
+    public void max(@NotNull I32Slot result) {
+        result.setI32(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public void min(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+        result.setI32(Math.min(left.getI32(), right.getI32()));
+    }
+
+    @Override
+    public void max(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+        result.setI32(Math.max(left.getI32(), right.getI32()));
+    }
+
+    @Override
     public int compareSlot(@NotNull I32Slot a, @NotNull I32Slot b) {
         return Integer.compare(a.getI32(), b.getI32());
     }
@@ -51,6 +112,11 @@ public class ArithmeticS32 extends AbstractArithmetic<I32Slot> {
     @Override
     public void move(@NotNull I32Slot src, @NotNull I32Slot dst) {
         dst.setI32(src.getI32());
+    }
+
+    @Override
+    public void exchange(@NotNull I32Slot a, @NotNull I32Slot b) {
+        a.setI32(b.updateI32(a.getI32()));
     }
 
     @Override

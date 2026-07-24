@@ -33,9 +33,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.*;
 import java.util.regex.Pattern;
 
-/**
- * Created on 2026/5/27.
- */
 @CodeHistory(date = "2026/5/27")
 public class ProvidedTest {
 

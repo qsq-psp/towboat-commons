@@ -3,14 +3,13 @@ package mujica.json.provided.base;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.CoderResult;
 
-/**
- * Created on 2026/6/5.
- */
+@CodeHistory(date = "2026/6/5")
 public class CoderResultTransformer implements JsonContextTransformer<CoderResult> {
 
     public static final CoderResultTransformer INSTANCE = new CoderResultTransformer();

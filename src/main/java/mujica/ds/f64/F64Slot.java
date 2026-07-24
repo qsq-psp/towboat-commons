@@ -13,75 +13,75 @@ import java.util.function.DoubleSupplier;
 public interface F64Slot {
 
     @ReferencePage(title = "MAX_SAFE_INTEGER", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER")
-    long MAX_SAFE_S64 = (1L << 53) - 1;
+    long MAX_SAFE_F64 = (1L << 53) - 1;
 
     @ReferencePage(title = "MIN_SAFE_INTEGER", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_SAFE_INTEGER")
-    long MIN_SAFE_S64 = -MAX_SAFE_S64;
+    long MIN_SAFE_F64 = -MAX_SAFE_F64;
 
     @ReferencePage(title = "Number.EPSILON", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON")
     double EPSILON = Math.ulp(1.0);
 
-    double getDouble();
+    double getF64();
 
-    void setDouble(double newValue);
+    void setF64(double newValue);
 
-    default void setDouble(@NotNull F64Slot newValueSlot) {
-        setDouble(newValueSlot.getDouble());
+    default void setF64(@NotNull F64Slot newValueSlot) {
+        setF64(newValueSlot.getF64());
     }
 
-    default void setDouble(@NotNull Number newNumberValue) {
-        setDouble(newNumberValue.doubleValue());
+    default void setF64(@NotNull Number newNumberValue) {
+        setF64(newNumberValue.doubleValue());
     }
 
-    default void setDouble(@NotNull DoubleSupplier newValueSupplier) {
-        setDouble(newValueSupplier.getAsDouble());
+    default void setF64(@NotNull DoubleSupplier newValueSupplier) {
+        setF64(newValueSupplier.getAsDouble());
     }
 
-    default double updateDouble(double newValue) {
-        final double oldValue = getDouble();
-        setDouble(newValue);
+    default double updateF64(double newValue) {
+        final double oldValue = getF64();
+        setF64(newValue);
         return oldValue;
     }
 
-    default double updateDouble(@NotNull F64Slot newValueSlot) {
-        return updateDouble(newValueSlot.getDouble());
+    default double updateF64(@NotNull F64Slot newValueSlot) {
+        return updateF64(newValueSlot.getF64());
     }
 
-    default double updateDouble(@NotNull Number newNumberValue) {
-        return updateDouble(newNumberValue.doubleValue());
+    default double updateF64(@NotNull Number newNumberValue) {
+        return updateF64(newNumberValue.doubleValue());
     }
 
-    default double updateDouble(@NotNull DoubleSupplier newValueSupplier) {
-        return updateDouble(newValueSupplier.getAsDouble());
+    default double updateF64(@NotNull DoubleSupplier newValueSupplier) {
+        return updateF64(newValueSupplier.getAsDouble());
     }
 
     static void exchangeDouble(@NotNull F64Slot a, @NotNull F64Slot b) {
-        a.setDouble(b.updateDouble(a.getDouble()));
+        a.setF64(b.updateF64(a.getF64()));
     }
 
     @NotNull
-    default F64Slot boxDouble(double newValue) {
-        setDouble(newValue);
+    default F64Slot boxF64(double newValue) {
+        setF64(newValue);
         return this;
     }
 
     @NotNull
-    default F64Slot boxDouble(@NotNull F64Slot newValueSlot) {
-        return boxDouble(newValueSlot.getDouble());
+    default F64Slot boxF64(@NotNull F64Slot newValueSlot) {
+        return boxF64(newValueSlot.getF64());
     }
 
     @NotNull
-    default F64Slot boxDouble(@NotNull Number newNumberValue) {
-        return boxDouble(newNumberValue.doubleValue());
+    default F64Slot boxF64(@NotNull Number newNumberValue) {
+        return boxF64(newNumberValue.doubleValue());
     }
 
     @NotNull
-    default F64Slot boxDouble(@NotNull DoubleSupplier newValueSupplier) {
-        return boxDouble(newValueSupplier.getAsDouble());
+    default F64Slot boxF64(@NotNull DoubleSupplier newValueSupplier) {
+        return boxF64(newValueSupplier.getAsDouble());
     }
 
     @NotNull
-    default F64Slot swapDouble(@NotNull F64Slot that) {
-        return boxDouble(that.updateDouble(getDouble()));
+    default F64Slot swapF64(@NotNull F64Slot that) {
+        return boxF64(that.updateF64(getF64()));
     }
 }

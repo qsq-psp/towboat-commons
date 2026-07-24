@@ -11,9 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
 
-/**
- * Created on 2026/6/20.
- */
 @CodeHistory(date = "2026/6/20")
 public class MidiDeviceTransformer implements JsonContextTransformer<MidiDevice>, JsonStructure {
 
@@ -55,13 +52,12 @@ public class MidiDeviceTransformer implements JsonContextTransformer<MidiDevice>
                 out.numberValue(maxTransmitters);
             }
         }
-
     }
 
     @Override
-    public void transform(@NotNull MidiDevice in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull MidiDevice device, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
-        transformExposed(in, out);
+        transformExposed(device, out);
         out.closeObject();
     }
 

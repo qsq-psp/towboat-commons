@@ -3,61 +3,61 @@ package mujica.json.provided.desktop;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-/**
- * Created on 2026/5/14.
- */
+@CodeHistory(date = "2026/5/14")
 public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
 
     public static final GraphicsTransformer INSTANCE = new GraphicsTransformer();
 
     @Override
-    public void transform(@NotNull Graphics in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Graphics graphics, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            Color color = in.getColor();
+            Color color = graphics.getColor();
             if (color != null) {
                 out.key("color");
                 ColorTransformer.INSTANCE.transform(color, out, context);
             }
         }
         {
-            Font font = in.getFont();
+            Font font = graphics.getFont();
             if (font != null) {
                 out.key(GlyphVectorTransformer.FONT);
                 FontTransformer.INSTANCE.transform(font, out, context);
             }
         }
         {
-            Rectangle clipBounds = in.getClipBounds();
+            Rectangle clipBounds = graphics.getClipBounds();
             if (clipBounds != null) {
                 out.key("clipBounds");
                 RectangleTransformer.INSTANCE.transform(clipBounds, out, context);
             }
         }
-        if (in instanceof Graphics2D) {
-            transformExposed2D((Graphics2D) in, out, context);
+        if (graphics instanceof Graphics2D) {
+            transformExposed2D((Graphics2D) graphics, out, context);
         }
         out.closeObject();
     }
 
-    private void transformExposed2D(@NotNull Graphics2D in, @NotNull JsonHandler out, JsonContext context) {
+    private void transformExposed2D(@NotNull Graphics2D graphics2D, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.key("configuration");
-        GraphicsConfigurationTransformer.INSTANCE.transform(in.getDeviceConfiguration(), out, context);
-        transformExposedRenderingHints(in, out, context);
+        GraphicsConfigurationTransformer.INSTANCE.transform(graphics2D.getDeviceConfiguration(), out, context);
+        transformExposedRenderingHints(graphics2D, out);
         {
-            AffineTransform transform = in.getTransform();
+            AffineTransform transform = graphics2D.getTransform();
             if (transform != null && !transform.isIdentity()) {
                 out.key("transform");
                 AffineTransformTransformer.INSTANCE.transform(transform, out, context);
             }
         }
         {
-            Composite composite = in.getComposite();
+            Composite composite = graphics2D.getComposite();
             if (composite != null) {
                 out.key("composite");
                 if (composite instanceof AlphaComposite) {
@@ -68,14 +68,14 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
             }
         }
         {
-            Color background = in.getBackground();
+            Color background = graphics2D.getBackground();
             if (background != null) {
                 out.key("background");
                 ColorTransformer.INSTANCE.transform(background, out, context);
             }
         }
         {
-            Stroke stroke = in.getStroke();
+            Stroke stroke = graphics2D.getStroke();
             if (stroke != null) {
                 out.key("stroke");
                 if (stroke instanceof BasicStroke) {
@@ -87,7 +87,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         }
     }
 
-    private void transformExposedRenderingHints(@NotNull Graphics2D in, @NotNull JsonHandler out, JsonContext context) {
+    private void transformExposedRenderingHints(@NotNull Graphics2D in, @NotNull JsonHandler out) {
         {
             Object value = in.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
             out.key("antialiasing");

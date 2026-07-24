@@ -1,8 +1,8 @@
 package mujica.ds.any.heap;
 
 import mujica.ds.ConsistencyException;
-import mujica.ds.ReferenceException;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -41,6 +41,8 @@ public class LinkedPriorityQueue<E> extends AbstractCollection<E> implements Pri
 
     @NotNull
     @Override
+    @Name(value = "duplicate double linked list", language = "en")
+    @Name(value = "复制双向链表", language = "zh")
     public LinkedPriorityQueue<E> duplicate(@NotNull UnaryOperator<E> operator) {
         final LinkedPriorityQueue<E> that = new LinkedPriorityQueue<>(priorityQueue.duplicate(thisNode -> {
             LinkedNode<E> thatNode = new LinkedNode<>(operator.apply(thisNode.element));
@@ -76,20 +78,20 @@ public class LinkedPriorityQueue<E> extends AbstractCollection<E> implements Pri
         LinkedNode<E> current = head;
         while (current != null) {
             if (!set.add(current)) {
-                consumer.accept(new ReferenceException("revisit link node " + current));
+                consumer.accept(new RuntimeException("revisit link node " + current));
                 return;
             }
             if (previous != current.previous) {
-                consumer.accept(new ReferenceException("back link from " + current + " to " + previous));
+                consumer.accept(new RuntimeException("back link from " + current + " to " + previous));
             }
             previous = current;
             current = current.next;
         }
         if (previous != tail) {
-            consumer.accept(new ReferenceException("tail link expected " + previous + " actual " + tail));
+            consumer.accept(new RuntimeException("tail link expected " + previous + " actual " + tail));
         }
         if (set.size() != priorityQueue.size()) {
-            consumer.accept(new ConsistencyException("size", set.size(), priorityQueue.size()));
+            consumer.accept(new RuntimeException("size expected " + set.size() + " actual " + priorityQueue.size()));
         }
     }
 

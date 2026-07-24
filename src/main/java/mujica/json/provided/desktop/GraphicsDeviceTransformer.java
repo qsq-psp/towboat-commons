@@ -10,9 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
-/**
- * Created on 2026/5/4.
- */
 @CodeHistory(date = "2022/9/1", project = "Ultramarine", name = "GraphicsDeviceValueSerializer")
 @CodeHistory(date = "2026/5/4")
 public class GraphicsDeviceTransformer implements JsonContextTransformer<GraphicsDevice>, JsonStructure {
@@ -20,14 +17,14 @@ public class GraphicsDeviceTransformer implements JsonContextTransformer<Graphic
     public static final GraphicsDeviceTransformer INSTANCE = new GraphicsDeviceTransformer();
 
     @Override
-    public void transform(@Nullable GraphicsDevice in, @NotNull JsonHandler out, JsonContext context) {
-        if (in == null) {
+    public void transform(@Nullable GraphicsDevice graphicsDevice, @NotNull JsonHandler out, @Nullable JsonContext context) {
+        if (graphicsDevice == null) {
             out.nullValue();
             return;
         }
         out.openObject();
         {
-            int type = in.getType();
+            int type = graphicsDevice.getType();
             out.key("type");
             switch (type) {
                 case GraphicsDevice.TYPE_RASTER_SCREEN:
@@ -46,23 +43,23 @@ public class GraphicsDeviceTransformer implements JsonContextTransformer<Graphic
         }
         {
             out.key("id");
-            out.stringValue(in.getIDstring());
+            out.stringValue(graphicsDevice.getIDstring());
             out.key("configuration");
-            GraphicsConfigurationTransformer.INSTANCE.transform(in.getDefaultConfiguration(), out, context);
+            GraphicsConfigurationTransformer.INSTANCE.transform(graphicsDevice.getDefaultConfiguration(), out, context);
             out.key("fullScreenSupported");
-            out.booleanValue(in.isFullScreenSupported());
+            out.booleanValue(graphicsDevice.isFullScreenSupported());
             out.key("displayChangeSupported");
-            out.booleanValue(in.isDisplayChangeSupported());
+            out.booleanValue(graphicsDevice.isDisplayChangeSupported());
             out.key("displayMode");
-            DisplayModeTransformer.INSTANCE.transform(in.getDisplayMode(), out, context);
+            DisplayModeTransformer.INSTANCE.transform(graphicsDevice.getDisplayMode(), out, context);
             out.key("memory");
-            out.numberValue(in.getAvailableAcceleratedMemory());
+            out.numberValue(graphicsDevice.getAvailableAcceleratedMemory());
             out.key("windowShapingSupported");
-            out.booleanValue(in.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.PERPIXEL_TRANSPARENT));
+            out.booleanValue(graphicsDevice.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.PERPIXEL_TRANSPARENT));
             out.key("windowOpacitySupported");
-            out.booleanValue(in.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.TRANSLUCENT));
+            out.booleanValue(graphicsDevice.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.TRANSLUCENT));
             out.key("windowPerpixelTranslucencySupported");
-            out.booleanValue(in.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.PERPIXEL_TRANSLUCENT));
+            out.booleanValue(graphicsDevice.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.PERPIXEL_TRANSLUCENT));
         }
         out.closeObject();
     }

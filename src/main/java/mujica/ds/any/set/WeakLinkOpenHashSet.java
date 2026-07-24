@@ -94,7 +94,7 @@ public class WeakLinkOpenHashSet<E> extends AbstractHashSet<E> {
                 int expectedHash = node.hash;
                 int i = (Integer.MAX_VALUE & expectedHash) % mod;
                 if (i != j) {
-                    consumer.accept(new InvariantException("misplaced node " + node + " from " + i + " to " + j));
+                    consumer.accept(new RuntimeException("misplaced node " + node + " from " + i + " to " + j));
                 }
                 E element = node.get();
                 if (element == null) {
@@ -102,17 +102,17 @@ public class WeakLinkOpenHashSet<E> extends AbstractHashSet<E> {
                 }
                 int actualHash = element.hashCode();
                 if (expectedHash != actualHash) {
-                    consumer.accept(new InvariantException("mismatched hash expect " + expectedHash + " actual " + actualHash));
+                    consumer.accept(new RuntimeException("mismatched hash expect " + expectedHash + " actual " + actualHash));
                 }
                 if (!set.add(element)) {
-                    consumer.accept(new InvariantException("identical element " + element));
+                    consumer.accept(new RuntimeException("identical element " + element));
                     break; // prevent infinite loop
                 }
                 node = node.next;
             }
         }
         if (set.size() != size) {
-            consumer.accept(new ConsistencyException("size", set.size(), size));
+            consumer.accept(new RuntimeException("expected size " + set.size() + ", actual size " + size));
         }
     }
 

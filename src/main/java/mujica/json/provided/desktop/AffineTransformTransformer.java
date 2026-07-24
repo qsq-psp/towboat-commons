@@ -3,33 +3,33 @@ package mujica.json.provided.desktop;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 
-/**
- * Created on 2026/5/15.
- */
+@CodeHistory(date = "2026/5/15")
 public class AffineTransformTransformer implements JsonContextTransformer<AffineTransform> {
 
     public static final AffineTransformTransformer INSTANCE = new AffineTransformTransformer();
 
     @Override
-    public void transform(@NotNull AffineTransform in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull AffineTransform affineTransform, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("scaleX");
-            out.numberValue(in.getScaleX()); // m00
+            out.numberValue(affineTransform.getScaleX()); // m00
             out.key("scaleY");
-            out.numberValue(in.getScaleY()); // m11
+            out.numberValue(affineTransform.getScaleY()); // m11
             out.key("shearX");
-            out.numberValue(in.getShearX()); // m01
+            out.numberValue(affineTransform.getShearX()); // m01
             out.key("shearY");
-            out.numberValue(in.getShearY()); // m10
+            out.numberValue(affineTransform.getShearY()); // m10
             out.key("translateX");
-            out.numberValue(in.getTranslateX()); // m02
+            out.numberValue(affineTransform.getTranslateX()); // m02
             out.key("translateY");
-            out.numberValue(in.getTranslateY()); // m12
+            out.numberValue(affineTransform.getTranslateY()); // m12
         }
         out.closeObject();
     }

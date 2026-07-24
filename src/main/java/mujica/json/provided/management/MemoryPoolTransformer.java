@@ -4,15 +4,14 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.MemoryUsage;
 
-/**
- * Created on 2026/6/11.
- */
+@CodeHistory(date = "2026/6/11")
 public class MemoryPoolTransformer implements JsonContextTransformer<MemoryPoolMXBean> {
 
     public static final MemoryPoolTransformer INSTANCE = new MemoryPoolTransformer();

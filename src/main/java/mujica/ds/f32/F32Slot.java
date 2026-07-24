@@ -15,67 +15,67 @@ public interface F32Slot {
 
     float EPSILON = Math.ulp(1.0f);
 
-    float getFloat();
+    float getF32();
 
-    void setFloat(float newValue);
+    void setF32(float newValue);
 
-    default void setFloat(@NotNull F32Slot newValueSlot) {
-        setFloat(newValueSlot.getFloat());
+    default void setF32(@NotNull F32Slot newValueSlot) {
+        setF32(newValueSlot.getF32());
     }
 
-    default void setFloat(@NotNull Number newNumberValue) {
-        setFloat(newNumberValue.floatValue());
+    default void setF32(@NotNull Number newNumberValue) {
+        setF32(newNumberValue.floatValue());
     }
 
-    default void setFloat(@NotNull FloatSupplier newValueSupplier) {
-        setFloat(newValueSupplier.getAsFloat());
+    default void setF32(@NotNull FloatSupplier newValueSupplier) {
+        setF32(newValueSupplier.getAsFloat());
     }
 
-    default float updateFloat(float newValue) {
-        final float oldValue = getFloat();
-        setFloat(newValue);
+    default float updateF32(float newValue) {
+        final float oldValue = getF32();
+        setF32(newValue);
         return oldValue;
     }
 
-    default float updateFloat(@NotNull F32Slot newValueSlot) {
-        return updateFloat(newValueSlot.getFloat());
+    default float updateF32(@NotNull F32Slot newValueSlot) {
+        return updateF32(newValueSlot.getF32());
     }
 
-    default float updateFloat(@NotNull Number newNumberValue) {
-        return updateFloat(newNumberValue.floatValue());
+    default float updateF32(@NotNull Number newNumberValue) {
+        return updateF32(newNumberValue.floatValue());
     }
 
-    default float updateFloat(@NotNull FloatSupplier newValueSupplier) {
-        return updateFloat(newValueSupplier.getAsFloat());
+    default float updateF32(@NotNull FloatSupplier newValueSupplier) {
+        return updateF32(newValueSupplier.getAsFloat());
     }
 
-    static void exchangeFloat(@NotNull F32Slot a, @NotNull F32Slot b) {
-        a.setFloat(b.updateFloat(a.getFloat()));
+    static void exchangeF32(@NotNull F32Slot a, @NotNull F32Slot b) {
+        a.setF32(b.updateF32(a.getF32()));
     }
 
     @NotNull
-    default F32Slot boxFloat(float newValue) {
-        setFloat(newValue);
+    default F32Slot boxF32(float newValue) {
+        setF32(newValue);
         return this;
     }
 
     @NotNull
-    default F32Slot boxFloat(@NotNull F32Slot newValueSlot) {
-        return boxFloat(newValueSlot.getFloat());
+    default F32Slot boxF32(@NotNull F32Slot newValueSlot) {
+        return boxF32(newValueSlot.getF32());
     }
 
     @NotNull
-    default F32Slot boxFloat(@NotNull Number newNumberValue) {
-        return boxFloat(newNumberValue.floatValue());
+    default F32Slot boxF32(@NotNull Number newNumberValue) {
+        return boxF32(newNumberValue.floatValue());
     }
 
     @NotNull
-    default F32Slot boxFloat(@NotNull FloatSupplier newValueSupplier) {
-        return boxFloat(newValueSupplier.getAsFloat());
+    default F32Slot boxF32(@NotNull FloatSupplier newValueSupplier) {
+        return boxF32(newValueSupplier.getAsFloat());
     }
 
     @NotNull
-    default F32Slot swapFloat(@NotNull F32Slot that) {
-        return boxFloat(that.updateFloat(getFloat()));
+    default F32Slot swapF32(@NotNull F32Slot that) {
+        return boxF32(that.updateF32(getF32()));
     }
 }

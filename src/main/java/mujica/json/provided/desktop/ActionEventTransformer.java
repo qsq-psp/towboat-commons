@@ -6,12 +6,10 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.ActionEvent;
 
-/**
- * Created on 2026/5/18.
- */
 @CodeHistory(date = "2026/5/18")
 public class ActionEventTransformer implements JsonContextTransformer<ActionEvent> {
 
@@ -20,7 +18,7 @@ public class ActionEventTransformer implements JsonContextTransformer<ActionEven
     static final FastString COMMAND = new FastString("command");
 
     @Override
-    public void transform(@NotNull ActionEvent event, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ActionEvent event, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(InputEventTransformer.ID);

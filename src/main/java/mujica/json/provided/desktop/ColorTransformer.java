@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
@@ -15,8 +16,8 @@ public class ColorTransformer implements JsonContextTransformer<Color>, Base16Ca
     public static final ColorTransformer INSTANCE = new ColorTransformer();
 
     @Override
-    public void transform(@NotNull Color in, @NotNull JsonHandler out, JsonContext context) {
-        final int argb = in.getRGB();
+    public void transform(@NotNull Color color, @NotNull JsonHandler out, @Nullable JsonContext context) {
+        final int argb = color.getRGB();
         int charIndex;
         if ((argb & 0xff000000) == 0xff000000) {
             charIndex = 6;

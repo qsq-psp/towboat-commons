@@ -17,9 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-/**
- * Created on 2026/5/28.
- */
 @CodeHistory(date = "2026/5/28")
 public class ProvidedManagementTest {
 

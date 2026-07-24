@@ -12,12 +12,12 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
 
     boolean empty;
 
-    public CyclicSlotList(@NotNull SlotListAllocator<S, A> allocator) {
-        super(allocator);
+    public CyclicSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator) {
+        super(allocator, null);
         empty = true;
     }
 
-    CyclicSlotList(@NotNull SlotListAllocator<S, A> allocator, @NotNull A array, int startIndex, int endIndex) {
+    CyclicSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator, @NotNull A array, int startIndex, int endIndex) {
         super(allocator, array, startIndex, endIndex);
     }
 
@@ -157,9 +157,7 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
             return;
         }
         if (startIndex < endIndex) {
-            for (int index = startIndex; index < endIndex; index++) {
-                allocator.releaseReference(array, index);
-            }
+            allocator.releaseReference(array, startIndex, endIndex);
         } else {
             int capacity = allocator.length(array);
             int index = startIndex;

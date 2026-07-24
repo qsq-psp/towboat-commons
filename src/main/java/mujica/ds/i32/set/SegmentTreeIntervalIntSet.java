@@ -1,6 +1,5 @@
 package mujica.ds.i32.set;
 
-import mujica.algebra.discrete.CastToZero;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,7 +48,7 @@ public class SegmentTreeIntervalIntSet extends IntervalIntSet {
         }
 
         static int split(int min, int max) {
-            return CastToZero.INSTANCE.mean(min, max);
+            return (min + max) >>> 1;
         }
 
         long longLength(int min, int max) {

@@ -24,7 +24,7 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
     transient QuadraticProbingList probingList;
 
     public QuadraticClosedHashSet(@Nullable CapacityPolicy policy) {
-        super(CapacityPolicy.checkQuadraticFull(policy));
+        super(CapacityPolicy.checkQuadraticSupported(policy));
         probingList = new QuadraticProbingList(array.length);
     }
 

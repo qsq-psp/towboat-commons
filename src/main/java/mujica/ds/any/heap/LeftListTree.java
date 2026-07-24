@@ -1,7 +1,6 @@
 package mujica.ds.any.heap;
 
 import mujica.ds.ConsistencyException;
-import mujica.ds.ReferenceException;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
@@ -76,7 +75,7 @@ public class LeftListTree<E> extends BiasedPriorityQueue<E> {
             } else if (parent.deepChild == node) {
                 shallow = false;
             } else {
-                throw new ReferenceException();
+                throw new RuntimeException();
             }
             node = merge(node.deepChild, node.shallowChild);
             if (shallow) {

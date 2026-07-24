@@ -57,17 +57,17 @@ public class LinearClosedHashIntSet extends AbstractHashIntSet {
                 continue;
             }
             if (!set.add(v)) {
-                consumer.accept(new InvariantException("identical value " + v));
+                consumer.accept(new RuntimeException("identical value " + v));
             }
             int i0 = (Integer.MAX_VALUE & v) % m;
             for (int i = i0; i != k; i = (i + 1) % m) {
                 if (array[i] == EMPTY_MARK) {
-                    consumer.accept(new InvariantException("empty interval from " + i0 + " to " + k + " at " + i));
+                    consumer.accept(new RuntimeException("empty interval from " + i0 + " to " + k + " at " + i));
                 }
             }
         }
         if (set.size() != size) {
-            consumer.accept(new ConsistencyException("size", set.size(), size));
+            consumer.accept(new RuntimeException("expected size" + set.size() + ", actual size " + size));
         }
     }
 

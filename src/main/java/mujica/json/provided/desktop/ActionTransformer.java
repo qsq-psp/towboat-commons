@@ -12,6 +12,8 @@ import javax.swing.*;
 @CodeHistory(date = "2026/6/15")
 public class ActionTransformer implements JsonContextTransformer<Action> {
 
+    public static final ActionTransformer INSTANCE = new ActionTransformer();
+
     static void transformProperty(@NotNull String key, @NotNull Action in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         final Object value = in.getValue(key);
         if (value == null) {

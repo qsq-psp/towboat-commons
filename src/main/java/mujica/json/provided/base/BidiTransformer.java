@@ -9,9 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.text.Bidi;
 
-/**
- * Created on 2026/6/7.
- */
 @CodeHistory(date = "2026/6/7")
 public class BidiTransformer implements JsonContextTransformer<Bidi> {
 

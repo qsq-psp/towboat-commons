@@ -9,28 +9,25 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-/**
- * Created on 2026/6/3.
- */
 @CodeHistory(date = "2026/6/3")
 public class BoundedRangeModelTransformer implements JsonContextTransformer<BoundedRangeModel> {
 
     public static final BoundedRangeModelTransformer INSTANCE = new BoundedRangeModelTransformer();
 
     @Override
-    public void transform(@NotNull BoundedRangeModel in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull BoundedRangeModel model, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("min");
-            out.numberValue(in.getMinimum());
+            out.numberValue(model.getMinimum());
             out.key("max");
-            out.numberValue(in.getMaximum());
+            out.numberValue(model.getMaximum());
             out.key("value");
-            out.numberValue(in.getValue());
+            out.numberValue(model.getValue());
             out.key("adjusting");
-            out.booleanValue(in.getValueIsAdjusting());
+            out.booleanValue(model.getValueIsAdjusting());
             out.key("extent");
-            out.numberValue(in.getExtent());
+            out.numberValue(model.getExtent());
         }
         out.closeObject();
     }

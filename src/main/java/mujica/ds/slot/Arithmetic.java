@@ -10,9 +10,10 @@ import java.math.RoundingMode;
 @CodeHistory(date = "2025/6/11", name = "NumberStorage")
 @CodeHistory(date = "2025/6/14", name = "NumericContext")
 @CodeHistory(date = "2026/6/5")
-public interface Arithmetic<S> {
+public interface Arithmetic<S> extends SlotAllocator<S> {
 
     @NotNull
+    @Override
     S newSlot();
 
     @Name(value = "零元", language = "zh")
@@ -27,6 +28,7 @@ public interface Arithmetic<S> {
 
     int sign(@NotNull S variable);
 
+    @Override
     void move(@NotNull S src, @NotNull S dst);
 
     void negate(@NotNull S variable, @NotNull S result);

@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -20,7 +21,7 @@ public class LanguageRangeTransformer implements JsonContextTransformer<Locale.L
     static final FastString WEIGHT = new FastString("weight");
 
     @Override
-    public void transform(@NotNull Locale.LanguageRange range, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Locale.LanguageRange range, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(RANGE);

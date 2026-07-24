@@ -4,20 +4,20 @@ import mujica.json.handler.JsonHandler;
 import mujica.json.handler.JsonStructure;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-/**
- * Created on 2026/4/28.
- */
+@CodeHistory(date = "2026/4/28")
 public class UuidTransformer implements JsonContextTransformer<UUID>, JsonStructure {
 
     public static final UuidTransformer INSTANCE = new UuidTransformer();
 
     @Override
-    public void transform(UUID in, @NotNull JsonHandler out, JsonContext context) {
-        out.stringValue(in.toString());
+    public void transform(@NotNull UUID uuid, @NotNull JsonHandler out, @Nullable JsonContext context) {
+        out.stringValue(uuid.toString());
     }
 
     @Override

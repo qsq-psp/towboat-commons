@@ -1,6 +1,7 @@
 package mujica.ds.i32.list;
 
-import mujica.ds.any.TypeSlot;
+import mujica.ds.slot.TypeSlot;
+import mujica.ds.i32.SlotArrayAllocatorI32;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +16,7 @@ public class IntListHandle implements TypeSlot<int[]>, Serializable {
 
     private static final long serialVersionUID = 0x82814632642cdc7cL;
 
-    private int[] array = PublicIntList.EMPTY.array;
+    private int[] array = SlotArrayAllocatorI32.EMPTY_ARRAY;
 
     @NotNull
     @Override

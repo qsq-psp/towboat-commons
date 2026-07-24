@@ -3,13 +3,12 @@ package mujica.json.provided.base;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.IntSummaryStatistics;
 
-/**
- * Created on 2026/5/3.
- */
+@CodeHistory(date = "2026/5/3")
 public class IntSummaryStatisticsTransformer implements JsonContextTransformer<IntSummaryStatistics> {
 
     public static final IntSummaryStatisticsTransformer INSTANCE = new IntSummaryStatisticsTransformer();

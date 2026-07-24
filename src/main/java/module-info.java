@@ -50,7 +50,6 @@ module CRYCHIC {
     exports mujica.ds.i32.list;
     exports mujica.ds.i32.set;
     exports mujica.ds.i32.map;
-    exports mujica.ds.i32.heap;
     exports mujica.ds.i64;
     exports mujica.ds.i64.list;
     exports mujica.ds.f32;

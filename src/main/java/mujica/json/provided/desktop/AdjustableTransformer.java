@@ -9,9 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
-/**
- * Created on 2026/6/3.
- */
 @CodeHistory(date = "2026/6/3")
 public class AdjustableTransformer implements JsonContextTransformer<Adjustable> {
 

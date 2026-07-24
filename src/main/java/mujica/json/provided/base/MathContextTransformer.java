@@ -9,9 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.MathContext;
 
-/**
- * Created on 2026/5/16.
- */
 @CodeHistory(date = "2026/5/16")
 public class MathContextTransformer implements JsonContextTransformer<MathContext> {
 

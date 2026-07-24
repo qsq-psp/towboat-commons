@@ -13,7 +13,7 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-@CodeHistory(date = "2019", project = "bone", name = "JavaConstantUtf8")
+@CodeHistory(date = "2019/1/1", project = "bone", name = "JavaConstantUtf8")
 @CodeHistory(date = "2025/9/6")
 @ReferencePage(title = "JVMS12 The CONSTANT_Utf8_info Structure", href = "https://docs.oracle.com/javase/specs/jvms/se12/html/jvms-4.html#jvms-4.4.7")
 class Utf8ConstantInfo extends ConstantInfo {

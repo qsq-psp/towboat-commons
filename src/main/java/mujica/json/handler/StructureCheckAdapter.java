@@ -1,6 +1,9 @@
 package mujica.json.handler;
 
-import mujica.ds.i32.list.CopyOnResizeIntList;
+import mujica.ds.i32.I32;
+import mujica.ds.i32.I32Slot;
+import mujica.ds.i32.SlotArrayAllocatorI32;
+import mujica.ds.slot.CopyOnResizeSlotList;
 import mujica.json.container.FastString;
 import mujica.json.io.JsonWriter;
 import mujica.reflect.modifier.CodeHistory;
@@ -16,7 +19,9 @@ public class StructureCheckAdapter<H extends JsonHandler> extends JsonHandlerAda
     public static final int STATE_OBJECT = JsonWriter.STATE_OBJECT;
     public static final int STATE_KEY = JsonWriter.STATE_KEY;
 
-    protected final CopyOnResizeIntList stack = new CopyOnResizeIntList(null);
+    protected final CopyOnResizeSlotList<I32Slot, int[]> stack = new CopyOnResizeSlotList<>(SlotArrayAllocatorI32.WithHashImpl.TWICE);
+
+    protected final I32Slot slot = new I32();
 
     @CodeHistory(date = "2026/4/13")
     private static class Debug {
@@ -35,18 +40,12 @@ public class StructureCheckAdapter<H extends JsonHandler> extends JsonHandlerAda
         }
 
         @NotNull
-        protected static String stateToString(@NotNull CopyOnResizeIntList stack) {
+        protected static String stateToString(@NotNull CopyOnResizeSlotList<I32Slot, int[]> stack, @NotNull I32Slot slot) {
             final StringBuilder sb = new StringBuilder();
-            boolean subsequent = false;
-            sb.append("[");
-            for (int state : stack) {
-                if (subsequent) {
-                    sb.append(", ");
-                }
-                sb.append(stateToString(state));
-                subsequent = true;
-            }
-            return sb.append("]").toString();
+            final int topState = slot.getI32();
+            stack.forEach(tempSlot -> sb.append(stateToString(tempSlot.getI32())).append(", "), slot);
+            slot.setI32(topState);
+            return sb.append(stateToString(topState)).append("]").toString();
         }
 
         private Debug() {
@@ -55,17 +54,17 @@ public class StructureCheckAdapter<H extends JsonHandler> extends JsonHandlerAda
     }
 
     protected void throwState() throws IllegalStateException {
-        throw new IllegalStateException(Debug.stateToString(stack));
+        throw new IllegalStateException(Debug.stateToString(stack, slot));
     }
 
     public StructureCheckAdapter(@NotNull H h) {
         super(h);
-        stack.offerLast(STATE_START);
+        slot.setI32(STATE_START);
     }
 
     public void reset() {
         stack.clear();
-        stack.offerLast(STATE_START);
+        slot.setI32(STATE_START);
     }
 
     @Override
@@ -74,30 +73,26 @@ public class StructureCheckAdapter<H extends JsonHandler> extends JsonHandlerAda
     }
 
     protected void beforeKey() {
-        final int state = stack.removeLast();
-        if (state == STATE_OBJECT) {
-            stack.offerLast(STATE_KEY);
+        if (slot.getI32() == STATE_OBJECT) {
+            slot.setI32(STATE_KEY);
         } else {
-            stack.offerLast(state);
             throwState();
         }
     }
 
     @Override
     protected void beforeValue() {
-        final int state = stack.removeLast();
-        switch (state) {
+        switch (slot.getI32()) {
             case STATE_START:
-                stack.offerLast(STATE_END);
+                slot.setI32(STATE_END);
                 break;
             case STATE_ARRAY:
-                stack.offerLast(STATE_ARRAY);
+                slot.setI32(STATE_ARRAY);
                 break;
             case STATE_KEY:
-                stack.offerLast(STATE_OBJECT);
+                slot.setI32(STATE_OBJECT);
                 break;
             default:
-                stack.offerLast(state);
                 throwState();
                 break; // never
         }
@@ -106,35 +101,35 @@ public class StructureCheckAdapter<H extends JsonHandler> extends JsonHandlerAda
     @Override
     public void openArray() {
         beforeValue();
-        stack.offerLast(STATE_ARRAY);
+        stack.insertLastItem(slot);
+        slot.setI32(STATE_ARRAY);
         h.openArray();
     }
 
     @Override
     public void closeArray() {
         h.closeArray();
-        final int state = stack.removeLast();
-        if (state != STATE_ARRAY) {
-            stack.offerLast(state);
+        if (slot.getI32() != STATE_ARRAY) {
             throwState();
         }
+        stack.removeLastItem(slot);
     }
 
     @Override
     public void openObject() {
         beforeValue();
-        stack.offerLast(STATE_OBJECT);
+        stack.insertLastItem(slot);
+        slot.setI32(STATE_ARRAY);
         h.openObject();
     }
 
     @Override
     public void closeObject() {
         h.closeObject();
-        final int state = stack.removeLast();
-        if (state != STATE_OBJECT) {
-            stack.offerLast(state);
+        if (slot.getI32() != STATE_ARRAY) {
             throwState();
         }
+        stack.removeLastItem(slot);
     }
 
     @Override

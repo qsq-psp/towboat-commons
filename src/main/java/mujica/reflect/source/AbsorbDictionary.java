@@ -73,7 +73,10 @@ public final class AbsorbDictionary extends DefaultHandler implements IORunnable
             StreamResult result;
             Path currentProjectDictionary = Path.of(".idea", "dictionaries" + getUserName() + ".xml");
             if (Files.exists(currentProjectDictionary)) {
-                result = new StreamResult(Files.newOutputStream(currentProjectDictionary, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING));
+                result = new StreamResult(Files.newOutputStream(
+                        currentProjectDictionary,
+                        StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
+                ));
             } else {
                 result = new StreamResult(System.out);
             }

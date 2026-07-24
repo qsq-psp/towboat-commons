@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
@@ -23,21 +24,21 @@ public class InterfaceAddressTransformer implements JsonContextTransformer<Inter
     static final FastString PREFIX_LENGTH = new FastString("prefixLength");
 
     @Override
-    public void transform(InterfaceAddress in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull InterfaceAddress interfaceAddress, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            InetAddress inetAddress = in.getAddress();
+            InetAddress inetAddress = interfaceAddress.getAddress();
             if (inetAddress != null) {
                 out.key(ADDRESS);
                 out.stringValue(inetAddress.toString());
             }
-            inetAddress = in.getBroadcast();
+            inetAddress = interfaceAddress.getBroadcast();
             if (inetAddress != null) {
                 out.key(BROADCAST);
                 out.stringValue(inetAddress.toString());
             }
             out.key(PREFIX_LENGTH);
-            out.numberValue(in.getNetworkPrefixLength());
+            out.numberValue(interfaceAddress.getNetworkPrefixLength());
         }
         out.closeObject();
     }

@@ -14,7 +14,7 @@ public class KahanSum extends F64 {
     double correction;
 
     @Override
-    public void setDouble(double newValue) {
+    public void setF64(double newValue) {
         correction = 0.0;
         value = newValue;
     }

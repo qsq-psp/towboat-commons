@@ -1,6 +1,6 @@
 package mujica.json.container;
 
-import mujica.ds.any.TypeSlot;
+import mujica.ds.slot.TypeSlot;
 import mujica.ds.any.list.TruncateList;
 import mujica.ds.i32.list.CompatibleIntegerList;
 import mujica.ds.i32.list.NaturalIntList;

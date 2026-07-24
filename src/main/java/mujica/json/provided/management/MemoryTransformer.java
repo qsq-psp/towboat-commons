@@ -10,9 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.management.MemoryMXBean;
 
-/**
- * Created on 2026/6/14.
- */
 @CodeHistory(date = "2026/6/14")
 public class MemoryTransformer implements JsonContextTransformer<MemoryMXBean> {
 

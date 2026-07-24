@@ -1,13 +1,12 @@
 package mujica.ds.slot;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.RoundingMode;
 
-/**
- * Created on 2026/6/17.
- */
+@CodeHistory(date = "2026/6/17")
 public class ComplexArithmetic<S extends Real> extends AbstractArithmetic<Complex<S>> {
 
     @NotNull

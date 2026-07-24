@@ -13,10 +13,10 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @CodeHistory(date = "2026/7/9")
-public class CopyOnResizeSlotList<S, A> extends SlotList<S, A> {
+public class CopyOnResizeSlotList<S, A> extends VersionSlotList<S, A> {
 
     @NotNull
-    final SlotListAllocator<S, A> allocator;
+    final SlotArrayAllocator.WithPolicy<S, A> allocator;
 
     @NotNull
     A array;
@@ -25,16 +25,13 @@ public class CopyOnResizeSlotList<S, A> extends SlotList<S, A> {
     @Index(of = "array", inclusive = false)
     int endIndex;
 
-    @Name(value = "modCount", language = "en")
-    int version;
-
-    public CopyOnResizeSlotList(@NotNull SlotListAllocator<S, A> allocator) {
+    public CopyOnResizeSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator) {
         super();
         this.allocator = allocator;
         this.array = allocator.newArray(allocator.getCapacityPolicy().initialCapacity());
     }
 
-    CopyOnResizeSlotList(@NotNull SlotListAllocator<S, A> allocator, @NotNull A array, int endIndex) {
+    CopyOnResizeSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator, @NotNull A array, int endIndex) {
         super();
         this.allocator = allocator;
         this.array = array;
@@ -60,7 +57,7 @@ public class CopyOnResizeSlotList<S, A> extends SlotList<S, A> {
 
     @Override
     @NotNull
-    public SlotListAllocator<S, A> getAllocator() {
+    public SlotArrayAllocator.WithPolicy<S, A> getAllocator() {
         return allocator;
     }
 
@@ -120,15 +117,19 @@ public class CopyOnResizeSlotList<S, A> extends SlotList<S, A> {
         version++;
     }
 
+    void enlargeArray(int newCapacity) {
+        final A newArray = allocator.newArray(newCapacity);
+        allocator.copy(array, 0, newArray, 0, endIndex);
+        allocator.releaseArray(array);
+        array = newArray;
+    }
+
     @Override
     public void insertItemBefore(int gapIndex, @NotNull S in) throws IndexOutOfBoundsException {
         // ensure one end room
         final int capacity = allocator.length(array);
         if (endIndex == capacity) {
-            int newCapacity = allocator.getCapacityPolicy().nextLargerCapacity(capacity);
-            A newArray = allocator.newArray(newCapacity);
-            allocator.copy(array, 0, newArray, 0, endIndex);
-            array = newArray;
+            enlargeArray(allocator.getCapacityPolicy().nextLargerCapacity(capacity));
         }
         final int endLength = endIndex - gapIndex;
         if (endLength < 0) {
@@ -142,67 +143,51 @@ public class CopyOnResizeSlotList<S, A> extends SlotList<S, A> {
     }
 
     @Override
-    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
-        final int expectedVersion = version;
-        for (int index = 0; index < endIndex; index++) {
-            allocator.load(array, index, tempSlot);
-            consumer.accept(tempSlot);
-            if (version != expectedVersion) {
-                throw new ConcurrentModificationException();
+    public void insertLast(@NotNull A thatArray, int thatStartIndex, int thatEndIndex) {
+        final int transferLength = Math.subtractExact(thatEndIndex, thatStartIndex);
+        if (transferLength <= 0) {
+            if (transferLength == 0) {
+                return;
             }
+            throw new IndexOutOfBoundsException();
         }
+        final int newEndIndex = Math.addExact(endIndex, transferLength);
+        final int capacity = allocator.length(array);
+        if (newEndIndex > capacity) {
+            enlargeArray(allocator.getCapacityPolicy().notSmallerCapacity(newEndIndex));
+        }
+        allocator.copy(thatArray, thatStartIndex, array, endIndex, transferLength);
+        endIndex = newEndIndex;
+        version++;
     }
 
     @Override
-    public <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
-        final int expectedVersion = version;
-        for (int index = 0; index < endIndex; index++) {
-            allocator.load(array, index, tempSlot);
-            consumer.accept(tempSlot);
-            if (version != expectedVersion) {
-                throw new ConcurrentModificationException();
-            }
-            allocator.store(array, index, tempSlot);
+    public void insertLastSelf(int srcStartIndex, int srcEndIndex) {
+        if (!(0 <= srcStartIndex && srcStartIndex <= srcEndIndex && srcEndIndex <= endIndex)) {
+            throw new IndexOutOfBoundsException();
         }
+        final int transferLength = srcEndIndex - srcStartIndex;
+        if (transferLength == 0) {
+            return;
+        }
+        final int newEndIndex = Math.addExact(endIndex, transferLength);
+        final int capacity = allocator.length(array);
+        if (newEndIndex > capacity) {
+            enlargeArray(allocator.getCapacityPolicy().notSmallerCapacity(newEndIndex));
+        }
+        allocator.copySelf(array, srcStartIndex, endIndex, transferLength);
+        endIndex = newEndIndex;
+        version++;
     }
 
     @Override
-    public <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
-        final int expectedVersion = version;
-        for (int index = 0; index < endIndex; index++) {
-            allocator.load(array, index, tempSlot);
-            boolean predicateResult = predicate.test(tempSlot);
-            if (version != expectedVersion) {
-                throw new ConcurrentModificationException();
-            }
-            if (predicateResult) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
-        final int expectedVersion = version;
-        for (int index = 0; index < endIndex; index++) {
-            allocator.load(array, index, tempSlot);
-            boolean predicateResult = predicate.test(tempSlot);
-            if (version != expectedVersion) {
-                throw new ConcurrentModificationException();
-            }
-            if (!predicateResult) {
-                return false;
-            }
-        }
-        return true;
+    public void appendTo(@NotNull SlotCollection<S, A> that) {
+        that.insertLast(array, 0, endIndex);
     }
 
     @Override
     public void clear() {
-        for (int index = endIndex - 1; index >= 0; index--) {
-            allocator.releaseReference(array, index);
-        }
+        allocator.releaseReference(array, 0, endIndex);
         endIndex = 0;
         version++;
     }
@@ -257,5 +242,62 @@ public class CopyOnResizeSlotList<S, A> extends SlotList<S, A> {
     @Override
     public void getAll(@NotNull A dst, int dstIndex) {
         allocator.copy(array, 0, dst, dstIndex, endIndex);
+    }
+
+    @Override
+    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
+        final int expectedVersion = version;
+        for (int index = 0; index < endIndex; index++) {
+            allocator.load(array, index, tempSlot);
+            consumer.accept(tempSlot);
+            if (version != expectedVersion) {
+                throw new ConcurrentModificationException();
+            }
+        }
+    }
+
+    @Override
+    public <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
+        final int expectedVersion = version;
+        for (int index = 0; index < endIndex; index++) {
+            allocator.load(array, index, tempSlot);
+            boolean predicateResult = predicate.test(tempSlot);
+            if (version != expectedVersion) {
+                throw new ConcurrentModificationException();
+            }
+            if (predicateResult) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
+        final int expectedVersion = version;
+        for (int index = 0; index < endIndex; index++) {
+            allocator.load(array, index, tempSlot);
+            boolean predicateResult = predicate.test(tempSlot);
+            if (version != expectedVersion) {
+                throw new ConcurrentModificationException();
+            }
+            if (!predicateResult) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
+        final int expectedVersion = version;
+        for (int index = 0; index < endIndex; index++) {
+            allocator.load(array, index, tempSlot);
+            consumer.accept(tempSlot);
+            if (version != expectedVersion) {
+                throw new ConcurrentModificationException();
+            }
+            allocator.store(array, index, tempSlot);
+        }
     }
 }

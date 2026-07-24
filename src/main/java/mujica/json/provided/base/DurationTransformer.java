@@ -4,13 +4,13 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 
-/**
- * Created on 2026/4/26.
- */
+@CodeHistory(date = "2026/4/26")
 public class DurationTransformer implements JsonContextTransformer<Duration> {
 
     public static final DurationTransformer INSTANCE = new DurationTransformer();
@@ -20,7 +20,7 @@ public class DurationTransformer implements JsonContextTransformer<Duration> {
     static final FastString NANO = new FastString("nano");
 
     @Override
-    public void transform(Duration in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(Duration in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(SECONDS);

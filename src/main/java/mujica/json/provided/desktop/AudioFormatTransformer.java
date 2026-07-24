@@ -5,35 +5,33 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.sound.sampled.AudioFormat;
 
-/**
- * Created on 2026/5/1.
- */
 @CodeHistory(date = "2026/5/1")
 public class AudioFormatTransformer implements JsonContextTransformer<AudioFormat> {
 
     public static final AudioFormatTransformer INSTANCE = new AudioFormatTransformer();
 
     @Override
-    public void transform(AudioFormat in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull AudioFormat audioFormat, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("encoding");
-            out.stringValue(in.getEncoding().toString());
+            out.stringValue(audioFormat.getEncoding().toString());
             out.key("sampleRate");
-            out.numberValue(in.getSampleRate());
+            out.numberValue(audioFormat.getSampleRate());
             out.key("sampleSizeInBits");
-            out.numberValue(in.getSampleSizeInBits());
+            out.numberValue(audioFormat.getSampleSizeInBits());
             out.key("channels");
-            out.numberValue(in.getChannels());
+            out.numberValue(audioFormat.getChannels());
             out.key("frameSize");
-            out.numberValue(in.getFrameSize());
+            out.numberValue(audioFormat.getFrameSize());
             out.key("frameRate");
-            out.numberValue(in.getFrameRate());
+            out.numberValue(audioFormat.getFrameRate());
             out.key("bigEndian");
-            out.booleanValue(in.isBigEndian());
+            out.booleanValue(audioFormat.isBigEndian());
         }
         out.closeObject();
     }

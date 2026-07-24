@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2022/7/12", project = "Ultramarine", name = "RuntimeValueSerializer")
 @CodeHistory(date = "2026/5/12")
@@ -14,17 +15,17 @@ public class RuntimeTransformer implements JsonContextTransformer<Runtime>, Json
     public static final RuntimeTransformer INSTANCE = new RuntimeTransformer();
 
     @Override
-    public void transform(@NotNull Runtime in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Runtime runtime, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("availableProcessors");
-            out.numberValue(in.availableProcessors());
+            out.numberValue(runtime.availableProcessors());
             out.key("freeMemory");
-            out.numberValue(in.freeMemory());
+            out.numberValue(runtime.freeMemory());
             out.key("totalMemory");
-            out.numberValue(in.totalMemory());
+            out.numberValue(runtime.totalMemory());
             out.key("maxMemory");
-            out.numberValue(in.maxMemory());
+            out.numberValue(runtime.maxMemory());
         }
         out.closeObject();
     }

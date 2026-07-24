@@ -1,5 +1,6 @@
 package mujica.ds.bit;
 
+import mujica.ds.i32.SlotArrayAllocatorI32;
 import mujica.ds.slot.SlotArrayAllocator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -7,10 +8,16 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/6/26")
 public class SlotArrayAllocatorI32B implements SlotArrayAllocator<BitSlot, int[]> {
 
+    public static final int[] EMPTY_ARRAY = SlotArrayAllocatorI32.EMPTY_ARRAY;
+
+    public SlotArrayAllocatorI32B() {
+        super();
+    }
+
     @NotNull
     @Override
     public BitSlot newSlot() {
-        return new PublicBitSlot();
+        return new Bit();
     }
 
     @Override
@@ -21,7 +28,7 @@ public class SlotArrayAllocatorI32B implements SlotArrayAllocator<BitSlot, int[]
     @NotNull
     @Override
     public BitSlot cloneSlot(@NotNull BitSlot original) {
-        return new PublicBitSlot(original.getBit());
+        return new Bit(original.getBit());
     }
 
     @Override
@@ -32,7 +39,10 @@ public class SlotArrayAllocatorI32B implements SlotArrayAllocator<BitSlot, int[]
     @NotNull
     @Override
     public int[] newArray(int length) {
-        if (length < 0) {
+        if (length <= 0) {
+            if (length == 0) {
+                return EMPTY_ARRAY;
+            }
             throw new NegativeArraySizeException();
         }
         length = (length + Integer.SIZE - 1) >>> 5;
@@ -91,5 +101,19 @@ public class SlotArrayAllocatorI32B implements SlotArrayAllocator<BitSlot, int[]
             load(src, srcIndex++, slot);
             store(dst, dstIndex++, slot);
         }
+    }
+
+    @Override
+    public int[] cloneArray(@NotNull int[] original) {
+        if (original.length == 0) {
+            return EMPTY_ARRAY;
+        }
+        return original.clone();
+    }
+
+    @Override
+    @NotNull
+    public String toString() {
+        return "SlotTool[dataType = boolean, slotType = BitSlot, arrayType = int[]]";
     }
 }

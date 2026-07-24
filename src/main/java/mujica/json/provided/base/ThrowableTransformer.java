@@ -25,27 +25,27 @@ public class ThrowableTransformer implements JsonContextTransformer<Throwable> {
     static final FastString SUPPRESSED = new FastString("suppressed");
 
     @Override
-    public void transform(@NotNull Throwable in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull Throwable t, @NotNull JsonHandler out, @Nullable JsonContext context) {
         if (context == null) {
             context = new JsonContext();
         }
-        if (context.addContainerObject(in)) {
+        if (context.addContainerObject(t)) {
             try {
                 out.openObject();
                 {
                     out.key(ClassLoaderTransformer.CLASS);
-                    out.stringValue(in.getClass().getName());
-                    String message = in.getMessage();
+                    out.stringValue(t.getClass().getName());
+                    String message = t.getMessage();
                     if (message != null) {
                         out.key(MESSAGE);
                         out.stringValue(message);
                     }
-                    Throwable cause = in.getCause();
+                    Throwable cause = t.getCause();
                     if (cause != null) {
                         out.key(CAUSE);
                         transform(cause, out, context);
                     }
-                    Throwable[] suppressedArray = in.getSuppressed();
+                    Throwable[] suppressedArray = t.getSuppressed();
                     if (suppressedArray != null && suppressedArray.length != 0) {
                         out.key(SUPPRESSED);
                         out.openArray();
@@ -57,7 +57,7 @@ public class ThrowableTransformer implements JsonContextTransformer<Throwable> {
                 }
                 out.closeObject();
             } finally {
-                context.removeContainerObject(in);
+                context.removeContainerObject(t);
             }
         } else if (context.any(((long) JsonEmpty.FROM_LOOP_OBJECT) << ReflectConfig.UNDEFINED_SHIFT)) {
             context.getLogger().debug("throwable loop to undefined");

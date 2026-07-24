@@ -1,7 +1,5 @@
 package mujica.ds.i64;
 
-import mujica.ds.bit.BitSlot;
-import mujica.ds.slot.*;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.FieldOrder;
 import org.jetbrains.annotations.NotNull;
@@ -48,5 +46,29 @@ public class I64 implements I64Slot, Cloneable, Serializable {
     @Override
     public int hashCode() {
         return Long.hashCode(value);
+    }
+
+    @CodeHistory(date = "2026/7/21")
+    public static class Node1 extends I64 {
+
+        private static final long serialVersionUID = 0x211F9396194DF282L;
+
+        Node1 first;
+    }
+
+    @CodeHistory(date = "2026/7/21")
+    public static class Node2 extends I64 {
+
+        private static final long serialVersionUID = 0x99FD2C85026CEED6L;
+
+        Node2 first, second;
+    }
+
+    @CodeHistory(date = "2026/7/21")
+    public static class Node3 extends I64 {
+
+        private static final long serialVersionUID = 0x409C3CA230790E6EL;
+
+        Node3 first, second, third;
     }
 }

@@ -1,6 +1,6 @@
 package mujica.json.container;
 
-import mujica.ds.any.TypeSlot;
+import mujica.ds.slot.TypeSlot;
 import mujica.json.reflect.ContainerConfig;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;

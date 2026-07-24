@@ -4,13 +4,13 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.management.MemoryUsage;
 
-/**
- * Created on 2026/5/3.
- */
+@CodeHistory(date = "2026/5/3")
 public class MemoryUsageTransformer implements JsonContextTransformer<MemoryUsage> {
 
     public static final MemoryUsageTransformer INSTANCE = new MemoryUsageTransformer();
@@ -24,7 +24,7 @@ public class MemoryUsageTransformer implements JsonContextTransformer<MemoryUsag
     static final FastString MAX = new FastString("max");
 
     @Override
-    public void transform(@NotNull MemoryUsage in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull MemoryUsage in, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(INIT);

@@ -4,13 +4,13 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.management.ThreadMXBean;
 
-/**
- * Created on 2026/5/19.
- */
+@CodeHistory(date = "2026/5/19")
 public class ThreadSystemTransformer implements JsonContextTransformer<ThreadMXBean> {
 
     public static final ThreadSystemTransformer INSTANCE = new ThreadSystemTransformer();
@@ -28,35 +28,35 @@ public class ThreadSystemTransformer implements JsonContextTransformer<ThreadMXB
     static final FastString USER_TIME = new FastString("userTime");
 
     @Override
-    public void transform(@NotNull ThreadMXBean in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ThreadMXBean bean, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(BufferPoolTransformer.COUNT);
-            out.numberValue(in.getThreadCount());
+            out.numberValue(bean.getThreadCount());
             out.key(PEAK_COUNT);
-            out.numberValue(in.getPeakThreadCount());
+            out.numberValue(bean.getPeakThreadCount());
             out.key(TOTAL_COUNT);
-            out.numberValue(in.getTotalStartedThreadCount());
+            out.numberValue(bean.getTotalStartedThreadCount());
             out.key(DAEMON_COUNT);
-            out.numberValue(in.getDaemonThreadCount());
+            out.numberValue(bean.getDaemonThreadCount());
             out.key(TID);
-            out.arrayValue(in.getAllThreadIds());
+            out.arrayValue(bean.getAllThreadIds());
             try {
-                long time = in.getCurrentThreadCpuTime(); // ns
+                long time = bean.getCurrentThreadCpuTime(); // ns
                 out.key(CPU_TIME);
                 out.numberValue(time);
             } catch (UnsupportedOperationException e) {
                 if (context != null) {
-                    context.getLogger().debug("{}", in, e);
+                    context.getLogger().debug("{}", bean, e);
                 }
             }
             try {
-                long time = in.getCurrentThreadUserTime(); // ns
+                long time = bean.getCurrentThreadUserTime(); // ns
                 out.key(USER_TIME);
                 out.numberValue(time);
             } catch (UnsupportedOperationException e) {
                 if (context != null) {
-                    context.getLogger().debug("{}", in, e);
+                    context.getLogger().debug("{}", bean, e);
                 }
             }
         }

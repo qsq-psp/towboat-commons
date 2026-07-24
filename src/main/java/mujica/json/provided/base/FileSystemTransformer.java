@@ -7,6 +7,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
@@ -34,32 +35,32 @@ public class FileSystemTransformer implements JsonContextTransformer<FileSystem>
     static final FastString VIEWS = new FastString("views");
 
     @Override
-    public void transform(FileSystem in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull FileSystem fileSystem, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(SCHEME);
-            out.stringValue(in.provider().getScheme());
+            out.stringValue(fileSystem.provider().getScheme());
             out.key(OPEN);
-            out.booleanValue(in.isOpen());
+            out.booleanValue(fileSystem.isOpen());
             out.key(READ_ONLY);
-            out.booleanValue(in.isReadOnly());
+            out.booleanValue(fileSystem.isReadOnly());
             out.key(SEPARATOR);
-            out.stringValue(in.getSeparator());
+            out.stringValue(fileSystem.getSeparator());
             out.key(ROOTS);
             out.openArray();
-            for (Path path : in.getRootDirectories()) {
+            for (Path path : fileSystem.getRootDirectories()) {
                 PathTransformer.INSTANCE.transform(path, out, context);
             }
             out.closeArray();
             out.key(STORES);
             out.openArray();
-            for (FileStore store : in.getFileStores()) {
+            for (FileStore store : fileSystem.getFileStores()) {
                 FileStoreTransformer.INSTANCE.transform(store, out, context);
             }
             out.closeArray();
             out.key(VIEWS);
             out.openArray();
-            for (String view : in.supportedFileAttributeViews()) {
+            for (String view : fileSystem.supportedFileAttributeViews()) {
                 out.stringValue(view);
             }
             out.closeArray();

@@ -1,6 +1,6 @@
 package mujica.ds.text.regex;
 
-import mujica.ds.any.TypeSlot;
+import mujica.ds.slot.TypeSlot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;

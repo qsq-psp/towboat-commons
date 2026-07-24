@@ -26,7 +26,7 @@ class F64Type extends JsonType implements F64Slot {
     }
 
     @Override
-    public double getDouble() {
+    public double getF64() {
         if (state == CollectionConstant.PRESENT) {
             return value;
         }
@@ -38,7 +38,7 @@ class F64Type extends JsonType implements F64Slot {
     }
 
     @Override
-    public void setDouble(double newValue) {
+    public void setF64(double newValue) {
         value = newValue;
         state = CollectionConstant.PRESENT;
     }

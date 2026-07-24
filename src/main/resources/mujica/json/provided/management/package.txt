@@ -7,4 +7,5 @@ mujica.json.provided.management.MemoryPoolTransformer java.lang.management.Memor
 mujica.json.provided.management.MemoryTransformer java.lang.management.MemoryMXBean sun.management.MemoryImpl
 mujica.json.provided.management.MemoryUsageTransformer java.lang.management.MemoryUsage
 mujica.json.provided.management.OperatingSystemTransformer java.lang.management.OperatingSystemMXBean sun.management.BaseOperatingSystemImpl
+mujica.json.provided.management.RuntimeTransformer java.lang.management.RuntimeMXBean
 mujica.json.provided.management.ThreadSystemTransformer java.lang.management.ThreadMXBean

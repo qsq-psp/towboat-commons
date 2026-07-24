@@ -7,6 +7,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.ZoneId;
 import java.time.zone.ZoneRules;
@@ -22,12 +23,12 @@ public class ZoneIdTransformer implements JsonContextTransformer<ZoneId>, JsonSt
     static final FastString FIXED_OFFSET = new FastString("fixedOffset");
     
     @Override
-    public void transform(ZoneId in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ZoneId zoneId, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(ID);
-            out.stringValue(in.getId());
-            final ZoneRules zoneRules = in.getRules();
+            out.stringValue(zoneId.getId());
+            final ZoneRules zoneRules = zoneId.getRules();
             out.key(FIXED_OFFSET);
             out.booleanValue(zoneRules.isFixedOffset());
         }

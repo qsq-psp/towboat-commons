@@ -10,9 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.datatransfer.DataFlavor;
 
-/**
- * Created on 2026/5/19.
- */
 @CodeHistory(date = "2026/5/19")
 public class DataFlavorTransformer implements JsonContextTransformer<DataFlavor> {
 

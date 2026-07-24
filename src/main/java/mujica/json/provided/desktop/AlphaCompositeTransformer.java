@@ -3,26 +3,26 @@ package mujica.json.provided.desktop;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
-/**
- * Created on 2026/5/16.
- */
+@CodeHistory(date = "2026/5/16")
 public class AlphaCompositeTransformer implements JsonContextTransformer<AlphaComposite> {
 
     public static final AlphaCompositeTransformer INSTANCE = new AlphaCompositeTransformer();
 
     @Override
-    public void transform(@NotNull AlphaComposite in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull AlphaComposite alphaComposite, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("alpha");
-            out.numberValue(in.getAlpha());
+            out.numberValue(alphaComposite.getAlpha());
         }
         {
-            int rule = in.getRule();
+            int rule = alphaComposite.getRule();
             out.key("rule");
             switch (rule) {
                 case AlphaComposite.CLEAR:

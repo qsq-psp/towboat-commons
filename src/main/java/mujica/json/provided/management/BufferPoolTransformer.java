@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.management.BufferPoolMXBean;
 
@@ -23,17 +24,17 @@ public class BufferPoolTransformer implements JsonContextTransformer<BufferPoolM
     static final FastString MEMORY_USED = new FastString("memoryUsed");
 
     @Override
-    public void transform(@NotNull BufferPoolMXBean in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull BufferPoolMXBean bean, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(NAME);
-            out.stringValue(in.getName());
+            out.stringValue(bean.getName());
             out.key(COUNT);
-            out.numberValue(in.getCount());
+            out.numberValue(bean.getCount());
             out.key(TOTAL_CAPACITY);
-            out.numberValue(in.getTotalCapacity());
+            out.numberValue(bean.getTotalCapacity());
             out.key(MEMORY_USED);
-            out.numberValue(in.getMemoryUsed());
+            out.numberValue(bean.getMemoryUsed());
         }
         out.closeObject();
     }

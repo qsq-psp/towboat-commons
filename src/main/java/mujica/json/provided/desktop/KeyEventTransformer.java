@@ -6,12 +6,10 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.KeyEvent;
 
-/**
- * Created on 2026/4/29.
- */
 @CodeHistory(date = "2026/4/29")
 public class KeyEventTransformer implements JsonContextTransformer<KeyEvent> {
 
@@ -24,15 +22,15 @@ public class KeyEventTransformer implements JsonContextTransformer<KeyEvent> {
     static final FastString KEY_LOCATION = new FastString("keyLocation");
 
     @Override
-    public void transform(@NotNull KeyEvent in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull KeyEvent keyEvent, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            InputEventTransformer.transformExposed(in, out);
+            InputEventTransformer.transformExposed(keyEvent, out);
             out.key(KEY_CODE);
-            out.numberValue(in.getKeyCode());
+            out.numberValue(keyEvent.getKeyCode());
             out.key(KEY_CHAR);
-            out.stringValue(String.valueOf(in.getKeyChar()));
-            int keyLocation = in.getKeyLocation();
+            out.stringValue(String.valueOf(keyEvent.getKeyChar()));
+            int keyLocation = keyEvent.getKeyLocation();
             out.key(KEY_LOCATION);
             switch (keyLocation) {
                 case KeyEvent.KEY_LOCATION_UNKNOWN:

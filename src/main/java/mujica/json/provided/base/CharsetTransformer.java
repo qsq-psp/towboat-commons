@@ -7,6 +7,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
@@ -33,7 +34,7 @@ public class CharsetTransformer implements JsonContextTransformer<Charset>, Json
     static final FastString MAX_CHARS_PER_BYTE = new FastString("maxCharsPerByte");
 
     @Override
-    public void transform(@NotNull Charset charset, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Charset charset, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(ClassLoaderTransformer.NAME);

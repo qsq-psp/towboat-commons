@@ -16,19 +16,19 @@ public class IterableTransformer implements JsonContextTransformer<Iterable<?>> 
     public static final IterableTransformer INSTANCE = new IterableTransformer();
 
     @Override
-    public void transform(Iterable<?> in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(Iterable<?> iterable, @NotNull JsonHandler out, JsonContext context) {
         if (context == null) {
             context = new JsonContext();
         }
-        if (context.addContainerObject(in)) {
+        if (context.addContainerObject(iterable)) {
             try {
                 out.openArray();
-                for (Iterator<?> iterator = in.iterator(); iterator.hasNext(); ) {
-                    context.transform(in, out);
+                for (Iterator<?> iterator = iterable.iterator(); iterator.hasNext(); ) {
+                    context.transform(iterable, out);
                 }
                 out.closeArray();
             } finally {
-                context.removeContainerObject(in);
+                context.removeContainerObject(iterable);
             }
         } else if (context.any(((long) JsonEmpty.FROM_LOOP_OBJECT) << ReflectConfig.UNDEFINED_SHIFT)) {
             context.getLogger().debug("loop to undefined");

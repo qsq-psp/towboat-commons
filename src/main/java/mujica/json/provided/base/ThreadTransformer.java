@@ -7,6 +7,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2022/1/3", project = "infrastructure", name = "ThreadValue")
 @CodeHistory(date = "2022/7/16", project = "Ultramarine", name = "ThreadValueSerializer")
@@ -26,23 +27,23 @@ public class ThreadTransformer implements JsonContextTransformer<Thread>, JsonSt
     static final FastString CLASS_LOADER = new FastString("classLoader");
 
     @Override
-    public void transform(Thread in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Thread thread, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(ClassLoaderTransformer.CLASS);
-            out.stringValue(in.getClass().getName());
+            out.stringValue(thread.getClass().getName());
             out.key(ClassLoaderTransformer.NAME);
-            out.stringValue(in.getName());
+            out.stringValue(thread.getName());
             out.key(ID);
-            out.numberValue(in.getId());
+            out.numberValue(thread.getId());
             out.key(STATE);
-            out.stringValue(in.getState().toString());
+            out.stringValue(thread.getState().toString());
             out.key(DAEMON);
-            out.booleanValue(in.isDaemon());
+            out.booleanValue(thread.isDaemon());
             out.key(PRIORITY);
-            out.numberValue(in.getPriority());
+            out.numberValue(thread.getPriority());
             out.key(CLASS_LOADER);
-            ClassLoaderTransformer.INSTANCE.transform(in.getContextClassLoader(), out, context);
+            ClassLoaderTransformer.INSTANCE.transform(thread.getContextClassLoader(), out, context);
         }
         out.closeObject();
     }

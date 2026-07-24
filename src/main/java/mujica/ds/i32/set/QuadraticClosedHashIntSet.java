@@ -34,7 +34,7 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
     transient QuadraticProbingList probingList;
 
     public QuadraticClosedHashIntSet(@Nullable CapacityPolicy policy) {
-        super(CapacityPolicy.checkQuadraticFull(policy));
+        super(CapacityPolicy.checkQuadraticSupported(policy));
         array = new int[this.policy.initialCapacity()];
         probingList = new QuadraticProbingList(array.length);
     }

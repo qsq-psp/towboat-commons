@@ -1,6 +1,6 @@
 package mujica.ds.i32.list;
 
-import mujica.ds.bit.PublicBitSlot;
+import mujica.ds.bit.Bit;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -117,7 +117,7 @@ public class CompatibleIntegerList implements List<Integer>, RandomAccess, Seria
 
     @Override
     public boolean removeAll(@NotNull Collection<?> c) {
-        final PublicBitSlot result = new PublicBitSlot();
+        final Bit result = new Bit();
         intList.removeIf(t -> {
             if (c.contains(t)) {
                 result.value = true;
@@ -131,7 +131,7 @@ public class CompatibleIntegerList implements List<Integer>, RandomAccess, Seria
 
     @Override
     public boolean retainAll(@NotNull Collection<?> c) {
-        final PublicBitSlot result = new PublicBitSlot();
+        final Bit result = new Bit();
         intList.removeIf(t -> {
             if (c.contains(t)) {
                 return false;

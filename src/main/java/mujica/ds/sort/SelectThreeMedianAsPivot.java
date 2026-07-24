@@ -27,8 +27,8 @@ public class SelectThreeMedianAsPivot<S, A> implements SelectPivot<S, A> {
     public void selectPivot(@NotNull A target, int startIndex, int endIndex, @NotNull S out) {
         if (endIndex - startIndex >= 3) {
             comparator.load(target, startIndex, first);
-            comparator.load(target, startIndex + 1, first);
-            comparator.load(target, startIndex + 2, first);
+            comparator.load(target, startIndex + 1, second);
+            comparator.load(target, startIndex + 2, third);
             comparator.median(first, second, third, out);
         } else {
             assert startIndex < endIndex;

@@ -5,13 +5,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.RoundingMode;
 
-/**
- * Created on 2026/6/28.
- */
 @CodeHistory(date = "2026/6/28")
 public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
 
-    protected S slot0, slot1, slot2;
+    protected S slot0, slot1, slot2; // remove these
 
     protected AbstractArithmetic() {
         super();

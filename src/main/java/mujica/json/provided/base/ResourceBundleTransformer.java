@@ -6,20 +6,20 @@ import mujica.json.modifier.JsonEmpty;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.json.reflect.ReflectConfig;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-/**
- * Created on 2026/6/23.
- */
+@CodeHistory(date = "2026/6/23")
 public class ResourceBundleTransformer implements JsonContextTransformer<ResourceBundle> {
 
     static final FastString LOCALE = new FastString("locale");
 
     @Override
-    public void transform(ResourceBundle bundle, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ResourceBundle bundle, @NotNull JsonHandler out, @Nullable JsonContext context) {
         if (context == null) {
             context = new JsonContext();
         }
