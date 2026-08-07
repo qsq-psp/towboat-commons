@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Array;
 import java.util.Objects;
 
+@Deprecated
 @CodeHistory(date = "2025/3/15")
 public abstract class SortingAlgorithm<T> {
 

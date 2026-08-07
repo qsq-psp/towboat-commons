@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/6/26")
 public class SlotArrayAllocatorI32B implements SlotArrayAllocator<BitSlot, int[]> {
 
+    public static final SlotArrayAllocatorI32B INSTANCE = new SlotArrayAllocatorI32B();
+
     public static final int[] EMPTY_ARRAY = SlotArrayAllocatorI32.EMPTY_ARRAY;
 
     public SlotArrayAllocatorI32B() {
@@ -38,15 +40,19 @@ public class SlotArrayAllocatorI32B implements SlotArrayAllocator<BitSlot, int[]
 
     @NotNull
     @Override
-    public int[] newArray(int length) {
-        if (length <= 0) {
-            if (length == 0) {
+    public int[] newArray(int bitCount) {
+        if (bitCount <= 0) {
+            if (bitCount == 0) {
                 return EMPTY_ARRAY;
             }
             throw new NegativeArraySizeException();
         }
-        length = (length + Integer.SIZE - 1) >>> 5;
-        return new int[length + 1];
+        final int intCount = (bitCount + Integer.SIZE - 1) >>> 5;
+        final int lastBits = bitCount - ((intCount - 1) << 5);
+        assert 0 < lastBits && lastBits <= Integer.SIZE;
+        final int[] array = new int[intCount + 1];
+        array[intCount] = lastBits;
+        return array;
     }
 
     @Override
@@ -95,11 +101,42 @@ public class SlotArrayAllocatorI32B implements SlotArrayAllocator<BitSlot, int[]
     }
 
     @Override
-    public void copy(@NotNull int[] src, int srcIndex, @NotNull int[] dst, int dstIndex, int length) {
-        final BitSlot slot = newSlot();
-        for (int index = 0; index < length; index++) {
-            load(src, srcIndex++, slot);
-            store(dst, dstIndex++, slot);
+    public void copySelf(@NotNull int[] array, int srcPosition, int dstPosition, int length) {
+        final BitSlot tempSlot = newSlot();
+        try {
+            if (srcPosition < dstPosition) {
+                for (int index = length - 1; index >= 0; index--) {
+                    load(array, srcPosition + index, tempSlot);
+                    store(array, dstPosition + index, tempSlot);
+                }
+            } else if (srcPosition > dstPosition) {
+                for (int index = 0; index < length; index++) {
+                    load(array, srcPosition + index, tempSlot);
+                    store(array, dstPosition + index, tempSlot);
+                }
+            }
+        } finally {
+            releaseSlot(tempSlot);
+        }
+    }
+
+    @Override
+    public void copy(@NotNull int[] src, int srcPosition, @NotNull int[] dst, int dstPosition, int length) {
+        final BitSlot tempSlot = newSlot();
+        try {
+            if (src == dst && srcPosition < dstPosition) {
+                for (int index = length - 1; index >= 0; index--) {
+                    load(src, srcPosition + index, tempSlot);
+                    store(dst, dstPosition + index, tempSlot);
+                }
+            } else {
+                for (int index = 0; index < length; index++) {
+                    load(src, srcPosition + index, tempSlot);
+                    store(dst, dstPosition + index, tempSlot);
+                }
+            }
+        } finally {
+            releaseSlot(tempSlot);
         }
     }
 

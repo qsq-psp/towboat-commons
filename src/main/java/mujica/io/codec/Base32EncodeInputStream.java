@@ -164,7 +164,7 @@ public class Base32EncodeInputStream extends FilterInputStream implements Base32
         }
     }
 
-    @Override
+    @Override // needed only in FilterInputStream, not FilterOutputStream
     public int read(@NotNull byte[] array, int offset, int length) throws IOException {
         int count = 0;
         for (int limit = Math.addExact(offset, length); offset < limit; offset++) {

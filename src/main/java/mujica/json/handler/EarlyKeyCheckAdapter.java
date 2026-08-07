@@ -1,7 +1,7 @@
 package mujica.json.handler;
 
 import mujica.ds.any.list.TruncateList;
-import mujica.ds.text.format.AppenderToStringBuilder;
+import mujica.text.format.AppenderToStringBuilder;
 import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;

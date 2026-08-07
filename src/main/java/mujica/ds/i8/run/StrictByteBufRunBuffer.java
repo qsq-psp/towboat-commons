@@ -11,9 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created on 2025/11/29.
- */
 @CodeHistory(date = "2025/11/29")
 public class StrictByteBufRunBuffer extends ByteBufRunBuffer {
 

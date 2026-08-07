@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Array;
 
-/**
- * Created on 2026/4/10.
- */
 @CodeHistory(date = "2026/4/10")
 class ArrayNewInstance extends Getter {
 

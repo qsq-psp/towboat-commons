@@ -6,37 +6,27 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2024/1/20", project = "Ultramarine")
 @CodeHistory(date = "2025/3/12", name = "Slot")
 @CodeHistory(date = "2026/6/25")
-public interface TypeSlot<T> {
+public class TypeSlot<T> {
 
-    T get();
+    T value;
 
-    void set(T newValue);
+    public T get() {
+        return value;
+    }
 
-    default T update(T newValue) {
+    public void set(T newValue) {
+        value = newValue;
+    }
+
+    public T update(T newValue) {
         final T oldValue = get();
         set(newValue);
         return oldValue;
     }
 
     @NotNull
-    default TypeSlot<T> box(T newValue) {
+    public TypeSlot<T> box(T newValue) {
         set(newValue);
         return this;
-    }
-
-    @CodeHistory(date = "2026/7/22")
-    class Generic<T> implements TypeSlot<T> {
-
-        T value;
-
-        @Override
-        public T get() {
-            return value;
-        }
-
-        @Override
-        public void set(T newValue) {
-            value = newValue;
-        }
     }
 }

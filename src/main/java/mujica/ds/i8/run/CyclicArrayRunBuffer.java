@@ -53,7 +53,7 @@ public class CyclicArrayRunBuffer extends ArrayRunBuffer {
         if (tail >= capacity) {
             assert tail == capacity;
             if (capacity < maxDistance) {
-                capacity = policy.nextLargerCapacity(capacity);
+                capacity = policy.largerCapacity(capacity);
                 array = Arrays.copyOf(array, capacity);
             } else {
                 tail = 0;
@@ -96,7 +96,7 @@ public class CyclicArrayRunBuffer extends ArrayRunBuffer {
             assert tail == capacity;
             if (capacity < maxDistance) {
                 assert policy != null;
-                capacity = policy.nextLargerCapacity(capacity);
+                capacity = policy.largerCapacity(capacity);
                 this.array = Arrays.copyOf(array, capacity);
             } else {
                 tail = 0;

@@ -1,6 +1,6 @@
 package mujica.ds.i32.map;
 
-import mujica.ds.InvariantException;
+import mujica.ds.common.InvariantException;
 import mujica.ds.i32.I32Slot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
@@ -42,10 +42,10 @@ public abstract class I32ValueS32Interval extends IntervalS32Map implements I32S
         final int left = getLeft();
         final int right = getRight();
         if (left > right) {
-            throw new InvariantException("left = " + left + ", right = " + right);
+            throw new RuntimeException("left = " + left + ", right = " + right);
         }
         if (getI32() == 0) {
-            throw new InvariantException("value = 0");
+            throw new RuntimeException("value = 0");
         }
     }
 

@@ -1,7 +1,13 @@
 package mujica.reflect.source;
 
+import mujica.ds.bit.Bit;
+import mujica.ds.bit.BitSlot;
+import mujica.ds.bit.SlotArrayAllocatorB;
 import mujica.ds.bit.list.BitList;
 import mujica.ds.bit.list.CopyOnResizeBitList;
+import mujica.ds.slot.CopyOnResizeSlotList;
+import mujica.ds.slot.LinkedSlotList;
+import mujica.ds.slot.SlotCollection;
 import mujica.reflect.modifier.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -155,18 +161,18 @@ public final class Distribute implements Runnable {
         @NotNull
         final ArrayList<Path> toDelete = new ArrayList<>();
 
-        final BitList isDirectoryEmptyStack = new CopyOnResizeBitList(null);
+        final SlotCollection<BitSlot, ?> isDirectoryEmptyStack = new LinkedSlotList<>(SlotArrayAllocatorB.INSTANCE, Bit.BitNodeAllocator2.INSTANCE);
 
-        boolean isDirectoryEmpty;
+        final Bit isDirectoryEmpty = new Bit();
 
         @Override
         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-            isDirectoryEmptyStack.offerLast(isDirectoryEmpty);
+            isDirectoryEmptyStack.insertLastItem(isDirectoryEmpty);
             if (includedDst.contains(dir)) {
-                isDirectoryEmpty = false;
+                isDirectoryEmpty.setBit(false);
                 return FileVisitResult.SKIP_SUBTREE;
             } else {
-                isDirectoryEmpty = true;
+                isDirectoryEmpty.setBit(true);
                 return FileVisitResult.CONTINUE;
             }
         }
@@ -174,7 +180,7 @@ public final class Distribute implements Runnable {
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             if (includedDst.contains(file)) {
-                isDirectoryEmpty = false;
+                isDirectoryEmpty.setBit(false);
             } else {
                 toDelete.add(file);
             }
@@ -192,11 +198,12 @@ public final class Distribute implements Runnable {
             if (exc != null) {
                 LOGGER.warn("{}", dir, exc);
             }
-            if (isDirectoryEmpty) {
+            if (isDirectoryEmpty.getBit()) {
                 toDelete.add(dir);
-                isDirectoryEmpty = isDirectoryEmptyStack.getLast();
+                isDirectoryEmptyStack.removeLastItem(isDirectoryEmpty);
+            } else {
+                isDirectoryEmptyStack.removeLastItem(null);
             }
-            isDirectoryEmptyStack.removeLast();
             return FileVisitResult.CONTINUE;
         }
 
@@ -204,7 +211,6 @@ public final class Distribute implements Runnable {
             LOGGER.info("{} path(s) to delete", toDelete.size());
             for (Path path : toDelete) {
                 try {
-                    // Files.getLastModifiedTime(path);
                     Files.delete(path);
                     LOGGER.info("deleted {}", path);
                 } catch (IOException e) {

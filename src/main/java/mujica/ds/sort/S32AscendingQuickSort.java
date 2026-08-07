@@ -1,7 +1,7 @@
 package mujica.ds.sort;
 
-import mujica.ds.i32.I32;
 import mujica.ds.i32.I32Slot;
+import mujica.ds.i32.S32;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
 public class S32AscendingQuickSort implements Sort<int[]> {
 
     @NotNull
-    final SelectPivot<I32, int[]> selectPivot;
+    final SelectPivot<S32, int[]> selectPivot;
 
     @NotNull
-    final I32 pivotSlot = new I32();
+    final S32 pivotSlot = new S32();
 
-    public S32AscendingQuickSort(@NotNull SelectPivot<I32, int[]> selectPivot) {
+    public S32AscendingQuickSort(@NotNull SelectPivot<S32, int[]> selectPivot) {
         super();
         this.selectPivot = selectPivot;
     }

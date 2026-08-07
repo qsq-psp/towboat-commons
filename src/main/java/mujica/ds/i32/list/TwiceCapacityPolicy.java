@@ -48,9 +48,9 @@ public class TwiceCapacityPolicy extends CapacityPolicy {
     }
 
     @Override
-    public int nextCapacity(int currentCapacity) {
-        assert initial << (Integer.numberOfLeadingZeros(initial) - Integer.numberOfLeadingZeros(currentCapacity)) == currentCapacity;
-        return Math.max(currentCapacity, currentCapacity << 1);
+    public int tryLargerCapacity(int smallCapacity) {
+        assert initial << (Integer.numberOfLeadingZeros(initial) - Integer.numberOfLeadingZeros(smallCapacity)) == smallCapacity;
+        return Math.max(smallCapacity, smallCapacity << 1);
     }
 
     @NotNull

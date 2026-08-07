@@ -11,6 +11,8 @@ import java.util.Arrays;
 @CodeHistory(date = "2026/6/25")
 public class SlotArrayAllocatorI64 implements SlotArrayAllocator<I64Slot, long[]> {
 
+    public static final SlotArrayAllocatorI64 INSTANCE = new SlotArrayAllocatorI64();
+
     public static final long[] EMPTY_ARRAY = new long[0];
 
     public SlotArrayAllocatorI64() {
@@ -69,10 +71,20 @@ public class SlotArrayAllocatorI64 implements SlotArrayAllocator<I64Slot, long[]
     }
 
     @Override
-    public void exchange(@NotNull long[] array, int i, int j) {
-        final long temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+    public void exchange(@NotNull long[] array, int firstIndex, int secondIndex) {
+        final long temp = array[firstIndex];
+        array[firstIndex] = array[secondIndex];
+        array[secondIndex] = temp;
+    }
+
+    @Override
+    public void reverse(@NotNull long[] array, int startIndex, int endIndex) {
+        endIndex--;
+        while (startIndex < endIndex) {
+            exchange(array, startIndex, endIndex);
+            startIndex++;
+            endIndex--;
+        }
     }
 
     @Override
@@ -90,14 +102,14 @@ public class SlotArrayAllocatorI64 implements SlotArrayAllocator<I64Slot, long[]
     }
 
     @CodeHistory(date = "2026/7/23")
-    public static class WithHashImpl extends SlotArrayAllocatorI64 implements WithHash<I64Slot, long[]> {
+    public static class WithHashI64 extends SlotArrayAllocatorI64 implements HashSAA<I64Slot, long[]> {
 
-        public static final WithHashImpl TWICE = new WithHashImpl(TwiceCapacityPolicy.INSTANCE);
+        public static final WithHashI64 TWICE = new WithHashI64(TwiceCapacityPolicy.INSTANCE);
 
         @NotNull
         final CapacityPolicy capacityPolicy;
 
-        public WithHashImpl(@NotNull CapacityPolicy capacityPolicy) {
+        public WithHashI64(@NotNull CapacityPolicy capacityPolicy) {
             super();
             this.capacityPolicy = capacityPolicy;
         }
@@ -132,36 +144,6 @@ public class SlotArrayAllocatorI64 implements SlotArrayAllocator<I64Slot, long[]
         @NotNull
         public String toString() {
             return "SlotTool[dataType = i64, slotType = I64Slot, arrayType = long[], capacityPolicy = " + capacityPolicy + "]";
-        }
-    }
-
-    @CodeHistory(date = "2026/7/23")
-    public static class WithNode2Impl extends SlotArrayAllocatorI64 implements WithNode2<I64Slot, I64.Node2> {
-
-        @NotNull
-        @Override
-        public I64.Node2 newNode() {
-            return new I64.Node2();
-        }
-
-        @Override
-        public I64.Node2 getFirstLink(@NotNull I64.Node2 self) {
-            return self.first;
-        }
-
-        @Override
-        public void setFirstLink(@NotNull I64.Node2 self, I64.Node2 node) {
-            self.first = node;
-        }
-
-        @Override
-        public I64.Node2 getSecondLink(@NotNull I64.Node2 self) {
-            return self.second;
-        }
-
-        @Override
-        public void setSecondLink(@NotNull I64.Node2 self, I64.Node2 node) {
-            self.second = node;
         }
     }
 }

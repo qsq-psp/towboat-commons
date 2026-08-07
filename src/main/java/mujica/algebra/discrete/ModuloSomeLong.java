@@ -153,7 +153,7 @@ public class ModuloSomeLong extends ModularMath {
         if (level >= LARGER_THAN_MAX_INT_SUM) {
             int d = Math.subtractExact(x, y);
             if (d < 0 || x < 0 && y >= 0) {
-                throw new ArithmeticException("Integer overflow");
+                throw new ArithmeticException("integer overflow");
             }
             return d;
         } else {

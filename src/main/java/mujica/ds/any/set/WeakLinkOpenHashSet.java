@@ -1,7 +1,5 @@
 package mujica.ds.any.set;
 
-import mujica.ds.ConsistencyException;
-import mujica.ds.InvariantException;
 import mujica.ds.any.list.TruncateList;
 import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
@@ -14,6 +12,7 @@ import java.util.Iterator;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2026/3/1")
+@Deprecated
 public class WeakLinkOpenHashSet<E> extends AbstractHashSet<E> {
 
     private static final long serialVersionUID = 0xB51B35650B328FC7L;

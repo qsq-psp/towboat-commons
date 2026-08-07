@@ -61,11 +61,11 @@ public class MergeSort<S, A> implements Sort<A> {
         final int leftLength = length >>> 1;
         long reverseOrderNumber = sort(target, targetIndex, auxiliary, auxiliaryIndex, leftLength)
                 + sort(target, targetIndex + leftLength, auxiliary, auxiliaryIndex + leftLength, length - leftLength);
-        comparator.copy(target, 0, auxiliary, 0, length);
-        int leftIndex = targetIndex;
-        final int leftEndIndex = targetIndex + leftLength;
+        comparator.copy(target, targetIndex, auxiliary, auxiliaryIndex, length);
+        int leftIndex = auxiliaryIndex;
+        final int leftEndIndex = auxiliaryIndex + leftLength;
         int rightIndex = leftEndIndex;
-        final int rightEndIndex = targetIndex + length;
+        final int rightEndIndex = auxiliaryIndex + length;
         while (leftIndex < leftEndIndex && rightIndex < rightEndIndex) {
             comparator.load(auxiliary, leftIndex, leftSlot);
             comparator.load(auxiliary, rightIndex, rightSlot);

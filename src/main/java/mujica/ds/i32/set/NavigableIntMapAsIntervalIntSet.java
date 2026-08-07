@@ -1,6 +1,6 @@
 package mujica.ds.i32.set;
 
-import mujica.ds.InvariantException;
+import mujica.ds.common.InvariantException;
 import mujica.ds.i32.I32Slot;
 import mujica.ds.i32.S32;
 import mujica.ds.i32.map.I32Map;
@@ -41,10 +41,10 @@ public class NavigableIntMapAsIntervalIntSet extends IntervalIntSet {
             int left = entry.getI32Key();
             int right = entry.getI32Value();
             if (left < start) {
-                consumer.accept(new InvariantException(left + "<" + start));
+                consumer.accept(new RuntimeException(left + "<" + start));
             }
             if (right < left) {
-                consumer.accept(new InvariantException(right + "<" + left));
+                consumer.accept(new RuntimeException(right + "<" + left));
             }
             start = right + 2; // start is long so there is no overflow
         }

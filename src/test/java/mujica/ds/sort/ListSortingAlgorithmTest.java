@@ -1,7 +1,7 @@
 package mujica.ds.sort;
 
 import mujica.algebra.random.RandomContext;
-import mujica.ds.any.ComparableComparator;
+import mujica.ds.common.ComparableComparator;
 import mujica.ds.any.list.MonotonicityDirection;
 import mujica.ds.any.list.SortingAlgorithm;
 import mujica.ds.any.list.TruncateList;

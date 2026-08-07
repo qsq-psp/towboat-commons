@@ -78,14 +78,14 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
             } else if ((in & 0xf8) == 0xf0) {
                 buffer = (0xff & in) << 24;
             } else {
-                LOGGER.warn("push 1st {}", in);
+                LOGGER.warn("push (1) {}", in);
                 out.accept(REPLACEMENT);
             }
         } else {
             if ((in & 0xc0) == 0x80) {
                 buffer |= (0xff & in) << shift;
             } else {
-                LOGGER.warn("push 2nd {} {}", shift, in);
+                LOGGER.warn("push (2) {} {}", shift, in);
                 out.accept(REPLACEMENT);
                 buffer = 0;
                 shift = 32;
@@ -144,14 +144,14 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
             } else if ((in & 0xf8) == 0xf0) {
                 buffer = (0xff & in) << 24;
             } else {
-                LOGGER.warn("push 1st {}", in);
+                LOGGER.warn("push (1) {}", in);
                 out.accept(REPLACEMENT);
             }
         } else {
             if ((in & 0xc0) == 0x80) {
                 buffer |= (0xff & in) << shift;
             } else {
-                LOGGER.warn("push 2nd {} {}", shift, in);
+                LOGGER.warn("push (2) {} {}", shift, in);
                 out.accept(REPLACEMENT);
                 buffer = 0;
                 shift = 32;
@@ -187,7 +187,7 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                         buffer |= 0xff & value;
                         value = codePoint2();
                     } else {
-                        LOGGER.warn("pull 1st {}", value);
+                        LOGGER.warn("pull (1.1) {}", value);
                         value = REPLACEMENT;
                     }
                 } else if ((value & 0xf0) == 0xe0) {
@@ -195,7 +195,7 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                     if (((value = in.getAsByte()) & 0xc0) == 0x80) {
                         buffer |= (0xff & value) << 8;
                     } else {
-                        LOGGER.warn("pull 2nd {}", value);
+                        LOGGER.warn("pull (1.2.1) {}", value);
                         value = REPLACEMENT;
                         break;
                     }
@@ -203,7 +203,7 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                         buffer |= 0xff & value;
                         value = codePoint3();
                     } else {
-                        LOGGER.warn("pull 3rd {}", value);
+                        LOGGER.warn("pull (1.2.2) {}", value);
                         value = REPLACEMENT;
                     }
                 } else if ((value & 0xf8) == 0xf0) {
@@ -211,14 +211,14 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                     if (((value = in.getAsByte()) & 0xc0) == 0x80) {
                         buffer |= (0xff & value) << 16;
                     } else {
-                        LOGGER.warn("pull 4th {}", value);
+                        LOGGER.warn("pull (1.3.1) {}", value);
                         value = REPLACEMENT;
                         break;
                     }
                     if (((value = in.getAsByte()) & 0xc0) == 0x80) {
                         buffer |= (0xff & value) << 8;
                     } else {
-                        LOGGER.warn("pull 5th {}", value);
+                        LOGGER.warn("pull (1.3.2) {}", value);
                         value = REPLACEMENT;
                         break;
                     }
@@ -226,11 +226,11 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                         buffer |= 0xff & value;
                         return Character.highSurrogate(codePoint4());
                     } else {
-                        LOGGER.warn("pull 6th {}", value);
+                        LOGGER.warn("pull (1.3.3) {}", value);
                         value = REPLACEMENT;
                     }
                 } else {
-                    LOGGER.warn("pull 7th {}", value);
+                    LOGGER.warn("pull (1.4) {}", value);
                     value = REPLACEMENT;
                 }
             } else if ((buffer & 0xff000000) != 0) {
@@ -238,7 +238,7 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                     if (((value = in.getAsByte()) & 0xc0) == 0x80) {
                         buffer |= (0xff & value) << 16;
                     } else {
-                        LOGGER.warn("pull 8th {}", value);
+                        LOGGER.warn("pull (2.1) {}", value);
                         value = REPLACEMENT;
                         break;
                     }
@@ -247,7 +247,7 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                     if (((value = in.getAsByte()) & 0xc0) == 0x80) {
                         buffer |= (0xff & value) << 8;
                     } else {
-                        LOGGER.warn("pull 9th {}", value);
+                        LOGGER.warn("pull (2.2) {}", value);
                         value = REPLACEMENT;
                         break;
                     }
@@ -257,7 +257,7 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                         buffer |= 0xff & value;
                         return Character.highSurrogate(codePoint4());
                     } else {
-                        LOGGER.warn("pull 10th {}", value);
+                        LOGGER.warn("pull (2.3) {}", value);
                         value = REPLACEMENT;
                     }
                 } else {
@@ -268,7 +268,7 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                     if (((value = in.getAsByte()) & 0xc0) == 0x80) {
                         buffer |= (0xff & value) << 8;
                     } else {
-                        LOGGER.warn("pull 11th {}", value);
+                        LOGGER.warn("pull (3.1) {}", value);
                         value = REPLACEMENT;
                         break;
                     }
@@ -277,7 +277,7 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                     buffer |= 0xff & value;
                     value = codePoint3();
                 } else {
-                    LOGGER.warn("pull 12th {}", value);
+                    LOGGER.warn("pull (3.2) {}", value);
                     value = REPLACEMENT;
                 }
             } else {
@@ -287,7 +287,7 @@ public class UTF8PushPullDecoder extends PushPullDecoder {
                     buffer |= 0xff & value;
                     value = codePoint2();
                 } else {
-                    LOGGER.warn("pull 13th {}", value);
+                    LOGGER.warn("pull (4) {}", value);
                     value = REPLACEMENT;
                 }
             }

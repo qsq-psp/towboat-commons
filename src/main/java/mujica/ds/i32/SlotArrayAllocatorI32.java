@@ -11,6 +11,8 @@ import java.util.Arrays;
 @CodeHistory(date = "2026/6/25")
 public class SlotArrayAllocatorI32 implements SlotArrayAllocator<I32Slot, int[]> {
 
+    public static final SlotArrayAllocatorI32 INSTANCE = new SlotArrayAllocatorI32();
+
     public static final int[] EMPTY_ARRAY = new int[0];
 
     public SlotArrayAllocatorI32() {
@@ -69,10 +71,20 @@ public class SlotArrayAllocatorI32 implements SlotArrayAllocator<I32Slot, int[]>
     }
 
     @Override
-    public void exchange(@NotNull int[] array, int i, int j) {
-        final int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+    public void exchange(@NotNull int[] array, int firstIndex, int secondIndex) {
+        final int tempValue = array[firstIndex];
+        array[firstIndex] = array[secondIndex];
+        array[secondIndex] = tempValue;
+    }
+
+    @Override
+    public void reverse(@NotNull int[] array, int startIndex, int endIndex) {
+        endIndex--;
+        while (startIndex < endIndex) {
+            exchange(array, startIndex, endIndex);
+            startIndex++;
+            endIndex--;
+        }
     }
 
     @Override
@@ -90,14 +102,14 @@ public class SlotArrayAllocatorI32 implements SlotArrayAllocator<I32Slot, int[]>
     }
 
     @CodeHistory(date = "2026/7/16")
-    public static class WithHashImpl extends SlotArrayAllocatorI32 implements WithHash<I32Slot, int[]> {
+    public static class WithHashI32 extends SlotArrayAllocatorI32 implements HashSAA<I32Slot, int[]> {
 
-        public static final WithHashImpl TWICE = new WithHashImpl(TwiceCapacityPolicy.INSTANCE);
+        public static final WithHashI32 TWICE = new WithHashI32(TwiceCapacityPolicy.INSTANCE);
 
         @NotNull
         final CapacityPolicy capacityPolicy;
 
-        public WithHashImpl(@NotNull CapacityPolicy capacityPolicy) {
+        public WithHashI32(@NotNull CapacityPolicy capacityPolicy) {
             super();
             this.capacityPolicy = capacityPolicy;
         }
@@ -132,84 +144,6 @@ public class SlotArrayAllocatorI32 implements SlotArrayAllocator<I32Slot, int[]>
         @NotNull
         public String toString() {
             return "SlotTool[dataType = i32, slotType = I32Slot, arrayType = int[], capacityPolicy = " + capacityPolicy + "]";
-        }
-    }
-
-    @CodeHistory(date = "2026/7/18")
-    public static class WithNode2Impl extends SlotArrayAllocatorI32 implements WithNode2<I32Slot, I32.Node2> {
-
-        public WithNode2Impl() {
-            super();
-        }
-
-        @NotNull
-        @Override
-        public I32.Node2 newNode() {
-            return new I32.Node2();
-        }
-
-        @Override
-        public I32.Node2 getFirstLink(@NotNull I32.Node2 self) {
-            return self.first;
-        }
-
-        @Override
-        public void setFirstLink(@NotNull I32.Node2 self, I32.Node2 node) {
-            self.first = node;
-        }
-
-        @Override
-        public I32.Node2 getSecondLink(@NotNull I32.Node2 self) {
-            return self.second;
-        }
-
-        @Override
-        public void setSecondLink(@NotNull I32.Node2 self, I32.Node2 node) {
-            self.second = node;
-        }
-    }
-
-    @CodeHistory(date = "2026/7/19")
-    public static class WithNode3Impl extends SlotArrayAllocatorI32 implements WithNode3<I32Slot, I32.Node3> {
-
-        public WithNode3Impl() {
-            super();
-        }
-
-        @NotNull
-        @Override
-        public I32.Node3 newNode() {
-            return new I32.Node3();
-        }
-
-        @Override
-        public I32.Node3 getFirstLink(@NotNull I32.Node3 self) {
-            return self.first;
-        }
-
-        @Override
-        public void setFirstLink(@NotNull I32.Node3 self, I32.Node3 node) {
-            self.first = node;
-        }
-
-        @Override
-        public I32.Node3 getSecondLink(@NotNull I32.Node3 self) {
-            return self.second;
-        }
-
-        @Override
-        public void setSecondLink(@NotNull I32.Node3 self, I32.Node3 node) {
-            self.second = node;
-        }
-
-        @Override
-        public I32.Node3 getThirdLink(@NotNull I32.Node3 self) {
-            return self.third;
-        }
-
-        @Override
-        public void setThirdLink(@NotNull I32.Node3 self, I32.Node3 node) {
-            self.third = node;
         }
     }
 }

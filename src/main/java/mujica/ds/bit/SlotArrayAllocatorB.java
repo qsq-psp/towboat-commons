@@ -1,7 +1,6 @@
 package mujica.ds.bit;
 
 import mujica.ds.i32.list.CapacityPolicy;
-import mujica.ds.i32.list.TwiceCapacityPolicy;
 import mujica.ds.slot.SlotArrayAllocator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +9,8 @@ import java.util.Arrays;
 
 @CodeHistory(date = "2026/6/25")
 public class SlotArrayAllocatorB implements SlotArrayAllocator<BitSlot, boolean[]> {
+
+    public static final SlotArrayAllocatorB INSTANCE = new SlotArrayAllocatorB();
 
     public static final boolean[] EMPTY_ARRAY = new boolean[0];
 
@@ -90,14 +91,12 @@ public class SlotArrayAllocatorB implements SlotArrayAllocator<BitSlot, boolean[
     }
 
     @CodeHistory(date = "2026/7/23")
-    public static class WithHashImpl extends SlotArrayAllocatorB implements WithHash<BitSlot, boolean[]> {
-
-        public static final WithHashImpl TWICE = new WithHashImpl(TwiceCapacityPolicy.INSTANCE);
+    public static class WithHashB extends SlotArrayAllocatorB implements HashSAA<BitSlot, boolean[]> {
 
         @NotNull
         final CapacityPolicy capacityPolicy;
 
-        public WithHashImpl(@NotNull CapacityPolicy capacityPolicy) {
+        public WithHashB(@NotNull CapacityPolicy capacityPolicy) {
             super();
             this.capacityPolicy = capacityPolicy;
         }
@@ -127,49 +126,11 @@ public class SlotArrayAllocatorB implements SlotArrayAllocator<BitSlot, boolean[
         public int arrayHash(@NotNull boolean[] array) {
             return Arrays.hashCode(array);
         }
-    }
 
-    @CodeHistory(date = "2026/7/23")
-    public static class WithNode3Impl extends SlotArrayAllocatorB implements WithNode3<BitSlot, Bit.Node3> {
-
-        public WithNode3Impl() {
-            super();
-        }
-
+        @Override
         @NotNull
-        @Override
-        public Bit.Node3 newNode() {
-            return new Bit.Node3();
-        }
-
-        @Override
-        public Bit.Node3 getFirstLink(@NotNull Bit.Node3 self) {
-            return self.first;
-        }
-
-        @Override
-        public void setFirstLink(@NotNull Bit.Node3 self, Bit.Node3 node) {
-            self.first = node;
-        }
-
-        @Override
-        public Bit.Node3 getSecondLink(@NotNull Bit.Node3 self) {
-            return self.second;
-        }
-
-        @Override
-        public void setSecondLink(@NotNull Bit.Node3 self, Bit.Node3 node) {
-            self.second = node;
-        }
-
-        @Override
-        public Bit.Node3 getThirdLink(@NotNull Bit.Node3 self) {
-            return self.third;
-        }
-
-        @Override
-        public void setThirdLink(@NotNull Bit.Node3 self, Bit.Node3 node) {
-            self.third = node;
+        public String toString() {
+            return "SlotTool[dataType = boolean, slotType = BitSlot, arrayType = boolean[], capacityPolicy = " + capacityPolicy + "]";
         }
     }
 }

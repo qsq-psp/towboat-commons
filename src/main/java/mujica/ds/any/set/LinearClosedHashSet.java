@@ -1,7 +1,7 @@
 package mujica.ds.any.set;
 
-import mujica.ds.ConsistencyException;
-import mujica.ds.InvariantException;
+import mujica.ds.common.ConsistencyException;
+import mujica.ds.common.InvariantException;
 import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -95,7 +95,7 @@ public class LinearClosedHashSet<E> extends ClosedHashSet<E> {
      */
     private boolean rehash() {
         final int oldModulo = array.length;
-        final int newModulo = policy.nextCapacity(oldModulo);
+        final int newModulo = policy.tryLargerCapacity(oldModulo);
         if (newModulo <= oldModulo) {
             return false;
         }

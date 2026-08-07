@@ -2,6 +2,7 @@ package mujica.ds.f64;
 
 import mujica.ds.slot.Base2Float;
 import mujica.ds.slot.Base2Integer;
+import mujica.ds.slot.NodeAllocator1;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.FieldOrder;
 import org.jetbrains.annotations.NotNull;
@@ -75,5 +76,48 @@ public class F64 implements F64Slot, Comparable<F64>, Base2Float, Cloneable, Ser
     @Override
     public String toString() {
         return Double.toString(value);
+    }
+
+    @CodeHistory(date = "2026/8/6")
+    public static class F64Node1 extends F64 {
+
+        F64Node1 first;
+
+        int tag;
+    }
+
+    @CodeHistory(date = "2026/8/6")
+    public static class F64NodeAllocator1 implements NodeAllocator1<F64Node1> {
+
+        @NotNull
+        @Override
+        public F64Node1 newNode() {
+            return new F64Node1();
+        }
+
+        @Override
+        public F64Node1[] newNodeArray(int length) {
+            return new F64Node1[length];
+        }
+
+        @Override
+        public int getTag(@NotNull F64Node1 self) {
+            return self.tag;
+        }
+
+        @Override
+        public void setTag(@NotNull F64Node1 self, int newTag) {
+            self.tag = newTag;
+        }
+
+        @Override
+        public F64Node1 getFirstLink(@NotNull F64Node1 self) {
+            return self.first;
+        }
+
+        @Override
+        public void setFirstLink(@NotNull F64Node1 self, F64Node1 node) {
+            self.first = node;
+        }
     }
 }

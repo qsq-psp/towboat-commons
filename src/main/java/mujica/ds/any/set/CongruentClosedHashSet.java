@@ -1,7 +1,5 @@
 package mujica.ds.any.set;
 
-import mujica.ds.ConsistencyException;
-import mujica.ds.InvariantException;
 import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +13,8 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2025/7/4")
 public class CongruentClosedHashSet<E> extends ClosedHashSet<E> {
 
-    public CongruentClosedHashSet(@Nullable CapacityPolicy policy) {
-        super(CapacityPolicy.checkPrime(policy));
+    public CongruentClosedHashSet(@NotNull CapacityPolicy policy) {
+        super(policy.requireCongruent());
     }
 
     CongruentClosedHashSet(@NotNull CapacityPolicy policy, @NotNull Object[] array) {
@@ -49,7 +47,7 @@ public class CongruentClosedHashSet<E> extends ClosedHashSet<E> {
                 continue;
             }
             if (!set.add(item)) {
-                consumer.accept(new InvariantException("identical item " + item));
+                consumer.accept(new RuntimeException("identical item " + item));
             }
             int i = positiveHash(item);
             int u = i / modulo;
@@ -61,7 +59,7 @@ public class CongruentClosedHashSet<E> extends ClosedHashSet<E> {
                     break;
                 }
                 if (array[i] == CollectionConstant.EMPTY) {
-                    consumer.accept(new InvariantException("empty interval from " + i0 + " to " + k0 + " at " + i));
+                    consumer.accept(new RuntimeException("empty interval from " + i0 + " to " + k0 + " at " + i));
                 }
                 i += u;
                 if (i < modulo) {
@@ -71,7 +69,7 @@ public class CongruentClosedHashSet<E> extends ClosedHashSet<E> {
             }
         }
         if (set.size() != size) {
-            consumer.accept(new ConsistencyException("size", set.size(), size));
+            consumer.accept(new RuntimeException("expected size " + set.size() + ", actual size " + size));
         }
     }
 
@@ -108,7 +106,7 @@ public class CongruentClosedHashSet<E> extends ClosedHashSet<E> {
      */
     private boolean rehash() {
         final int oldModulo = array.length;
-        final int newModulo = policy.nextCapacity(oldModulo);
+        final int newModulo = policy.tryLargerCapacity(oldModulo);
         if (newModulo <= oldModulo) {
             return false;
         }

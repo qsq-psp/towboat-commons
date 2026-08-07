@@ -2,7 +2,7 @@ package mujica.algebra.random;
 
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
-import mujica.ds.text.sequence.ArrayRepeatCharSequence;
+import mujica.text.sequence.ArrayRepeatCharSequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

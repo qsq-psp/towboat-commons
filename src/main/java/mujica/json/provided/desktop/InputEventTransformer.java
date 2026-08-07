@@ -31,30 +31,30 @@ public class InputEventTransformer implements JsonContextTransformer<InputEvent>
 
     static final FastString ALT_GRAPH = new FastString("altGraph");
 
-    static void transformExposed(@NotNull InputEvent inputEvent, @NotNull JsonHandler out) {
+    static void transformExposed(@NotNull InputEvent event, @NotNull JsonHandler out) {
         out.key(ID);
-        out.numberValue(inputEvent.getID());
+        out.numberValue(event.getID());
         out.key(CONSUMED);
-        out.booleanValue(inputEvent.isConsumed());
+        out.booleanValue(event.isConsumed());
         out.key(WHEN);
-        out.numberValue(inputEvent.getWhen());
-        if (inputEvent.isShiftDown()) {
+        out.numberValue(event.getWhen());
+        if (event.isShiftDown()) {
             out.key(SHIFT);
             out.booleanValue(true);
         }
-        if (inputEvent.isControlDown()) {
+        if (event.isControlDown()) {
             out.key(CONTROL);
             out.booleanValue(true);
         }
-        if (inputEvent.isMetaDown()) {
+        if (event.isMetaDown()) {
             out.key(META);
             out.booleanValue(true);
         }
-        if (inputEvent.isAltDown()) {
+        if (event.isAltDown()) {
             out.key(ALT);
             out.booleanValue(true);
         }
-        if (inputEvent.isAltGraphDown()) {
+        if (event.isAltGraphDown()) {
             out.key(ALT_GRAPH);
             out.booleanValue(true);
         }

@@ -1,6 +1,5 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.ConsistencyException;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -149,7 +148,7 @@ class SisterNode<E> implements Serializable {
                 if (nextSibling.order != firstChild.order) {
                     consumer.accept(new RuntimeException("order not balanced; this.order = " + order + ", nextSibling.order = " + nextSibling.order + ", firstChild.order = " + firstChild.order));
                 } else if (nextSibling.order + 1 != order) {
-                    consumer.accept(new ConsistencyException("order", nextSibling.order + 1, order));
+                    consumer.accept(new RuntimeException("order expect " + (nextSibling.order + 1) + " actual " + order));
                 }
             } else {
                 consumer.accept(new RuntimeException("node with sibling but no child; element = " + element + ", order = " + order));
@@ -160,7 +159,7 @@ class SisterNode<E> implements Serializable {
                 consumer.accept(new RuntimeException("node with child but no sibling; element = " + element + ", order = " + order));
             } else {
                 if (order != 0) {
-                    consumer.accept(new ConsistencyException("order", 0, order));
+                    consumer.accept(new RuntimeException("order expect 0 actual " + order));
                 }
             }
         }

@@ -1,8 +1,11 @@
 package mujica.ds.f32;
 
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.ds.slot.SlotArrayAllocator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 @CodeHistory(date = "2026/7/15")
 public class SlotArrayAllocatorF32 implements SlotArrayAllocator<F32Slot, float[]> {
@@ -83,5 +86,49 @@ public class SlotArrayAllocatorF32 implements SlotArrayAllocator<F32Slot, float[
     @NotNull
     public String toString() {
         return "SlotTool[dataType = f32, slotType = F32Slot, arrayType = float[]]";
+    }
+
+    @CodeHistory(date = "2026/7/26")
+    public static class WithHashF32 extends SlotArrayAllocatorF32 implements HashSAA<F32Slot, float[]> {
+
+        @NotNull
+        final CapacityPolicy capacityPolicy;
+
+        public WithHashF32(@NotNull CapacityPolicy capacityPolicy) {
+            super();
+            this.capacityPolicy = capacityPolicy;
+        }
+
+        @NotNull
+        @Override
+        public CapacityPolicy getCapacityPolicy() {
+            return capacityPolicy;
+        }
+
+        @Override
+        public boolean slotEquals(@NotNull F32Slot left, @NotNull F32Slot right) {
+            return Float.floatToIntBits(left.getF32()) == Float.floatToIntBits(right.getF32()); // raw int bits not used
+        }
+
+        @Override
+        public boolean arrayEquals(@NotNull float[] leftArray, @NotNull float[] rightArray) {
+            return Arrays.equals(leftArray, rightArray);
+        }
+
+        @Override
+        public int slotHash(@NotNull F32Slot slot) {
+            return Float.floatToIntBits(slot.getF32()); // raw int bits not used, too
+        }
+
+        @Override
+        public int arrayHash(@NotNull float[] array) {
+            return Arrays.hashCode(array);
+        }
+
+        @Override
+        @NotNull
+        public String toString() {
+            return "SlotTool[dataType = f32, slotType = F32Slot, arrayType = float[], capacityPolicy = " + capacityPolicy + "]";
+        }
     }
 }

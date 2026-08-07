@@ -4,7 +4,7 @@ import mujica.reflect.modifier.CodeHistory;
 
 @CodeHistory(date = "2022/7/8", project = "Ultramarine", name = "JsonConstant")
 @CodeHistory(date = "2025/6/5")
-public enum CollectionConstant {
+public enum CollectionConstant { // move to ds.common
 
     UNDEFINED, EMPTY, REMOVED, PRESENT;
 

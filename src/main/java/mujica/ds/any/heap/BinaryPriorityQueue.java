@@ -1,6 +1,6 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.InvariantException;
+import mujica.ds.common.InvariantException;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;

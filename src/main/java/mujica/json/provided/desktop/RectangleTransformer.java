@@ -4,14 +4,14 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-/**
- * Created on 2026/5/2.
- */
+@CodeHistory(date = "2026/5/2")
 public class RectangleTransformer implements JsonContextTransformer<Rectangle2D> {
 
     public static final RectangleTransformer INSTANCE = new RectangleTransformer();
@@ -25,10 +25,10 @@ public class RectangleTransformer implements JsonContextTransformer<Rectangle2D>
     static final FastString HEIGHT = new FastString("height");
 
     @Override
-    public void transform(@NotNull Rectangle2D in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Rectangle2D rectangle, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
-        if (in instanceof Rectangle) {
-            Rectangle r = (Rectangle) in;
+        if (rectangle instanceof Rectangle) {
+            Rectangle r = (Rectangle) rectangle;
             out.key(X);
             out.numberValue(r.x);
             out.key(Y);
@@ -37,8 +37,8 @@ public class RectangleTransformer implements JsonContextTransformer<Rectangle2D>
             out.numberValue(r.width);
             out.key(HEIGHT);
             out.numberValue(r.height);
-        } else if (in instanceof Rectangle2D.Float) {
-            Rectangle2D.Float rf = (Rectangle2D.Float) in;
+        } else if (rectangle instanceof Rectangle2D.Float) {
+            Rectangle2D.Float rf = (Rectangle2D.Float) rectangle;
             out.key(X);
             out.numberValue(rf.x);
             out.key(Y);
@@ -49,13 +49,13 @@ public class RectangleTransformer implements JsonContextTransformer<Rectangle2D>
             out.numberValue(rf.height);
         } else {
             out.key(X);
-            out.numberValue(in.getX());
+            out.numberValue(rectangle.getX());
             out.key(Y);
-            out.numberValue(in.getY());
+            out.numberValue(rectangle.getY());
             out.key(WIDTH);
-            out.numberValue(in.getWidth());
+            out.numberValue(rectangle.getWidth());
             out.key(HEIGHT);
-            out.numberValue(in.getHeight());
+            out.numberValue(rectangle.getHeight());
         }
         out.closeObject();
     }

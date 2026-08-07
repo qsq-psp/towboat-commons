@@ -1,6 +1,7 @@
 package mujica.ds.slot;
 
 import mujica.algebra.random.RandomContext;
+import mujica.ds.i32.I32;
 import mujica.ds.sort.Sort;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -13,9 +14,20 @@ import java.util.function.Predicate;
 @CodeHistory(date = "2026/7/21")
 public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollection<S, A> {
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     @NotNull
-    public abstract GapIteratorBasedSlotCollection<S, A> duplicate();
+    public SlotCollection<S, A> clone() {
+        return duplicate();
+    }
+
+    @NotNull
+    @Override
+    public abstract SlotCollection<S, A> duplicateNew();
+
+    @Override
+    @NotNull
+    public abstract SlotCollection<S, A> duplicate();
 
     @Override
     public abstract void checkHealth(@NotNull Consumer<RuntimeException> consumer);
@@ -151,7 +163,16 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     @Override
     public void getArbitraryItem(@NotNull S out, @Nullable RandomContext rc) throws NoSuchElementException {
         if (rc != null) {
-
+            int count = 0;
+            GapIterator<S> iterator = iterator(0);
+            while (iterator.nextGap()) {
+                if (rc.nextInt(++count) == 0) {
+                    iterator.getPrevious(out);
+                }
+            }
+            if (count == 0) {
+                throw new NoSuchElementException();
+            }
         } else {
             getFirstItem(out);
         }
@@ -170,9 +191,59 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     @Override
     public void removeArbitraryItem(@NotNull S out, @Nullable RandomContext rc) throws NoSuchElementException {
         if (rc != null) {
-
+            int count = 0;
+            GapIterator<S> iterator = iterator(0);
+            while (iterator.nextGap()) {
+                if (rc.nextInt(++count) == 0) {
+                    iterator.getPrevious(out);
+                }
+            }
+            if (count == 0) {
+                throw new NoSuchElementException();
+            }
+            if (!removeFirstEqualItem(out)) {
+                throw new RuntimeException();
+            }
         } else {
             removeFirstItem(out);
+        }
+    }
+
+    @Override
+    public boolean removeFirstEqualItem(@NotNull S slot) {
+        final SlotArrayAllocator<S, A> allocator = getAllocator();
+        final GapIterator<S> iterator = iterator(0);
+        final S scanSlot = allocator.newSlot();
+        try {
+            while (iterator.nextGap()) {
+                iterator.getPrevious(scanSlot);
+                if (slot.equals(scanSlot)) {
+                    iterator.removePrevious(slot);
+                    return true;
+                }
+            }
+        } finally {
+            getAllocator().releaseSlot(scanSlot);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean internItem(@NotNull S slot) {
+        final GapIterator<S> iterator = iterator(0);
+        final S scanSlot = getAllocator().newSlot();
+        try {
+            while (iterator.nextGap()) {
+                iterator.getPrevious(scanSlot);
+                if (slot.equals(scanSlot)) {
+                    getAllocator().move(scanSlot, slot);
+                    return true;
+                }
+            }
+            insertLastItem(slot);
+            return false;
+        } finally {
+            getAllocator().releaseSlot(scanSlot);
         }
     }
 
@@ -276,17 +347,100 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
 
     @Override
     public long sort(@NotNull Sort<A> sort) {
-        return 0L;
+        final SlotArrayAllocator<S, A> allocator = getAllocator();
+        final S tempSlot = allocator.newSlot();
+        final A tempArray = allToArray();
+        try {
+            int thisSize = allocator.length(tempArray);
+            long operationCount = sort.sort(tempArray, 0, thisSize);
+            clear();
+            insertLast(tempArray);
+            return operationCount;
+        } finally {
+            allocator.releaseSlot(tempSlot);
+            allocator.releaseArray(tempArray);
+        }
     }
 
     @Override
     public long sortPart(@NotNull Sort<A> sort, int newEndIndex) {
-        return 0L;
+        final SlotArrayAllocator<S, A> allocator = getAllocator();
+        final S tempSlot = allocator.newSlot();
+        final A tempArray = allToArray();
+        try {
+            int thisSize = allocator.length(tempArray);
+            if (!(0 <= newEndIndex && newEndIndex <= thisSize)) {
+                throw new IndexOutOfBoundsException();
+            }
+            long operationCount = sort.sortPart(tempArray, 0, newEndIndex, thisSize);
+            clear();
+            insertLast(tempArray, 0, newEndIndex);
+            return operationCount;
+        } finally {
+            allocator.releaseSlot(tempSlot);
+            allocator.releaseArray(tempArray);
+        }
     }
 
     @Override
     public long sortUnique(@NotNull Sort<A> sort) {
-        return 0L;
+        final SlotArrayAllocator<S, A> allocator = getAllocator();
+        final S tempSlot = allocator.newSlot();
+        final A tempArray = allToArray();
+        try {
+            int thisSize = allocator.length(tempArray);
+            I32 endSlot = new I32(thisSize);
+            long operationCount = sort.sortUnique(tempArray, 0, endSlot);
+            thisSize = endSlot.getI32();
+            clear();
+            insertLast(tempArray, 0, thisSize);
+            return operationCount;
+        } finally {
+            allocator.releaseSlot(tempSlot);
+            allocator.releaseArray(tempArray);
+        }
+    }
+
+    @Override
+    public void getRange(int srcIndex, @NotNull A dst, int dstIndex, int length) {
+        if (srcIndex < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        final SlotArrayAllocator<S, A> allocator = getAllocator();
+        final GapIterator<S> iterator = iterator(srcIndex);
+        final S tempSlot = allocator.newSlot();
+        try {
+            for (int index = 0; index < length; index++) {
+                if (iterator.nextGap()) {
+                    iterator.getPrevious(tempSlot);
+                    allocator.store(dst, dstIndex + index, tempSlot);
+                } else {
+                    throw new IndexOutOfBoundsException();
+                }
+            }
+        } finally {
+            allocator.releaseSlot(tempSlot);
+        }
+    }
+
+    @NotNull
+    @Override
+    public A rangeToArray(int startIndex, int endIndex) {
+        final int length = Math.subtractExact(endIndex, startIndex);
+        final A newArray = getAllocator().newArray(length);
+        getRange(startIndex, newArray, 0, length);
+        return newArray;
+    }
+
+    @Override
+    public void getAll(@NotNull A dst, int dstIndex) {
+        getRange(0, dst, dstIndex, size());
+    }
+
+    @NotNull
+    @Override
+    public A allToArray() {
+        return rangeToArray(0, size());
     }
 
     @Override
@@ -334,13 +488,52 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     }
 
     @Override
-    public boolean tryInternItem(@NotNull S slot) {
-        final S temp0 = getAllocator().newSlot();
-        if (some(temp1 -> temp1.equals(slot), temp0)) {
-            getAllocator().move(temp0, slot);
-            return true;
+    public boolean tryGetArbitraryItem(@NotNull S out, @Nullable RandomContext rc) {
+        if (rc != null) {
+            int count = 0;
+            GapIterator<S> iterator = iterator(0);
+            while (iterator.nextGap()) {
+                if (rc.nextInt(++count) == 0) {
+                    iterator.getPrevious(out);
+                }
+            }
+            return count != 0;
         } else {
+            return tryGetFirstItem(out);
+        }
+    }
+
+    @Override
+    public boolean tryRemoveArbitraryItem(@NotNull S out, @Nullable RandomContext rc) {
+        if (rc != null) {
+            int count = 0;
+            GapIterator<S> iterator = iterator(0);
+            while (iterator.nextGap()) {
+                if (rc.nextInt(++count) == 0) {
+                    iterator.getPrevious(out);
+                }
+            }
+            return count != 0 && removeFirstEqualItem(out);
+        } else {
+            return tryRemoveFirstItem(out);
+        }
+    }
+
+    @Override
+    public boolean tryInternItem(@NotNull S slot) {
+        final GapIterator<S> iterator = iterator(0);
+        final S scanSlot = getAllocator().newSlot();
+        try {
+            while (iterator.nextGap()) {
+                iterator.getPrevious(scanSlot);
+                if (slot.equals(scanSlot)) {
+                    getAllocator().move(scanSlot, slot);
+                    return true;
+                }
+            }
             return false;
+        } finally {
+            getAllocator().releaseSlot(scanSlot);
         }
     }
 
@@ -392,7 +585,7 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
         final GapIterator<S> iterator = iterator(0);
         while (iterator.nextGap()) {
             iterator.getPrevious(tempSlot);
-            if (!filter.test(tempSlot)) {
+            if (filter.test(tempSlot)) {
                 iterator.removePrevious(null);
             }
         }
@@ -401,4 +594,47 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     @NotNull
     @Override
     public abstract GapIterator<S> iterator(int startGapIndex);
+
+    @NotNull
+    @Override
+    public String summaryToString() {
+        return "size = " + size();
+    }
+
+    @NotNull
+    @Override
+    public String detailToString() {
+        final StringBuilder sb = new StringBuilder();
+        final GapIterator<S> iterator = iterator(0);
+        final S tempSlot = getAllocator().newSlot();
+        try {
+            boolean plural = false;
+            while (iterator.nextGap()) {
+                if (plural) {
+                    sb.append(", ");
+                }
+                iterator.getPrevious(tempSlot);
+                sb.append(tempSlot);
+                plural = true;
+            }
+        } finally {
+            getAllocator().releaseSlot(tempSlot);
+        }
+        return sb.toString();
+    }
+
+    @Override
+    @NotNull
+    public String toString() {
+        try {
+            String summary = summaryToString();
+            try {
+                return getClass().getSimpleName() + " [" + summary + "] {" + detailToString() + "}";
+            } catch (RuntimeException e) {
+                return getClass().getSimpleName() + " [" + summary + "] " + e;
+            }
+        } catch (RuntimeException e) {
+            return getClass().getSimpleName() + " " + e;
+        }
+    }
 }

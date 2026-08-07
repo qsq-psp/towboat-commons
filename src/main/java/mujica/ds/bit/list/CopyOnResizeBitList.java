@@ -65,7 +65,7 @@ public class CopyOnResizeBitList extends AbstractBitList {
     @Override
     public boolean isFull() {
         final int capacity = array.length;
-        return endIndex == capacity && policy.nextCapacity(capacity) == capacity;
+        return endIndex == capacity && policy.tryLargerCapacity(capacity) == capacity;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class CopyOnResizeBitList extends AbstractBitList {
 
     protected boolean ensureOneSlot() {
         if (array.length == endIndex) {
-            int capacity = policy.nextCapacity(endIndex);
+            int capacity = policy.tryLargerCapacity(endIndex);
             if (capacity <= endIndex) {
                 return false;
             }
@@ -110,7 +110,7 @@ public class CopyOnResizeBitList extends AbstractBitList {
         count = Math.addExact(endIndex, count);
         int oldCapacity = array.length;
         while (oldCapacity < count) {
-            int newCapacity = policy.nextCapacity(endIndex);
+            int newCapacity = policy.tryLargerCapacity(endIndex);
             if (newCapacity <= oldCapacity) {
                 return false;
             }

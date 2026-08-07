@@ -53,7 +53,7 @@ public class UTF8PushPullEncoder extends PushPullEncoder {
                                 out.accept((byte) (buffer >>> shift));
                             }
                         } else {
-                            LOGGER.warn("push 1st {}", in);
+                            LOGGER.warn("push (1) {}", in);
                         }
                         buffer = 0;
                         return;
@@ -77,7 +77,7 @@ public class UTF8PushPullEncoder extends PushPullEncoder {
         } else if (Character.isHighSurrogate(in)) {
             buffer = in << 16;
         } else {
-            LOGGER.warn("push 2nd {}", in);
+            LOGGER.warn("push (2) {}", in);
         }
     }
 
@@ -93,7 +93,7 @@ public class UTF8PushPullEncoder extends PushPullEncoder {
                                 out.accept((byte) (buffer >>> shift));
                             }
                         } else {
-                            LOGGER.warn("push 1st {}", in);
+                            LOGGER.warn("push (1) {}", in);
                         }
                         buffer = 0;
                         return;
@@ -117,7 +117,7 @@ public class UTF8PushPullEncoder extends PushPullEncoder {
         } else if (Character.isHighSurrogate(in)) {
             buffer = in << 16;
         } else {
-            LOGGER.warn("push 2nd {}", in);
+            LOGGER.warn("push (2) {}", in);
         }
     }
 
@@ -135,7 +135,7 @@ public class UTF8PushPullEncoder extends PushPullEncoder {
                                 value = buffer >>> 24;
                                 buffer &= 0x00ffffff;
                             } else {
-                                LOGGER.warn("pull 1st {}", in);
+                                LOGGER.warn("pull (1) {}", in);
                                 buffer = 0;
                             }
                         } else {
@@ -161,7 +161,7 @@ public class UTF8PushPullEncoder extends PushPullEncoder {
                 } else if (Character.isHighSurrogate(ch)) {
                     buffer = ch << 16;
                 } else {
-                    LOGGER.warn("pull 2nd {}", in);
+                    LOGGER.warn("pull (2) {}", in);
                 }
             }
         } while (value == -1);
@@ -182,7 +182,7 @@ public class UTF8PushPullEncoder extends PushPullEncoder {
                                 value = buffer >>> 24;
                                 buffer &= 0x00ffffff;
                             } else {
-                                LOGGER.warn("pull 1st {}", in);
+                                LOGGER.warn("pull (1) {}", in);
                                 buffer = 0;
                             }
                         } else {
@@ -208,7 +208,7 @@ public class UTF8PushPullEncoder extends PushPullEncoder {
                 } else if (Character.isHighSurrogate((char) ch)) {
                     buffer = ch << 16;
                 } else {
-                    LOGGER.warn("pull 2nd {}", in);
+                    LOGGER.warn("pull (2) {}", in);
                 }
             }
         } while (value == -1);

@@ -8,8 +8,8 @@ public class ModuloLookUpCapacityPolicy extends LookUpCapacityPolicy {
 
     private static final long serialVersionUID = 0x1bf5a339f6be2cbaL;
 
-    protected ModuloLookUpCapacityPolicy(@NotNull int[] array, boolean isPrime, boolean isQuadraticFull) {
-        super(array, isPrime, isQuadraticFull);
+    protected ModuloLookUpCapacityPolicy(@NotNull int[] array, boolean isCongruent, boolean isQuadratic) {
+        super(array, isCongruent, isQuadratic);
     }
 
     protected ModuloLookUpCapacityPolicy(@NotNull int[] array) {
@@ -17,10 +17,10 @@ public class ModuloLookUpCapacityPolicy extends LookUpCapacityPolicy {
     }
 
     @Override
-    public int nextCapacity(int currentCapacity) {
+    public int tryLargerCapacity(int smallCapacity) {
         final int modulo = array[0];
-        final int index = currentCapacity % modulo;
-        assert array[index] == currentCapacity || array[modulo] == currentCapacity;
+        final int index = smallCapacity % modulo;
+        assert array[index] == smallCapacity || array[modulo] == smallCapacity;
         return array[index + 1];
     }
 

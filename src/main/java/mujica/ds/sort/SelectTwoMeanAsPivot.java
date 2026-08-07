@@ -41,7 +41,7 @@ public class SelectTwoMeanAsPivot<S, A> implements SelectPivot<S, A> {
     public void selectPivot(@NotNull A target, int startIndex, int endIndex, @NotNull S out) {
         if (endIndex - startIndex >= 2) {
             allocator.load(target, startIndex, first);
-            allocator.load(target, startIndex + 1, first);
+            allocator.load(target, startIndex + 1, second);
             arithmetic.mean(first, second, out, roundingMode);
         } else {
             assert startIndex < endIndex;

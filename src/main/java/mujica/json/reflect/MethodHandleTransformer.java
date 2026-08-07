@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
 
-/**
- * Created on 2026/4/9.
- */
 @CodeHistory(date = "2026/4/9")
 class MethodHandleTransformer extends ReflectedTransformer {
 

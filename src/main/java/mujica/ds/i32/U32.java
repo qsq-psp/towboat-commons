@@ -2,15 +2,15 @@ package mujica.ds.i32;
 
 import mujica.ds.bit.BitSlot;
 import mujica.ds.slot.Base2Iterator;
+import mujica.ds.slot.NodeAllocator1;
 import mujica.ds.slot.ReadOnlyBase2Iterator;
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.NoSuchElementException;
 
-/**
- * Created on 2026/7/1.
- */
+@CodeHistory(date = "2026/7/1")
 public class U32 extends Base2I32Slot {
 
     private static final long serialVersionUID = 0xF919C433CBD61776L;
@@ -125,13 +125,57 @@ public class U32 extends Base2I32Slot {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return this.getClass() == obj.getClass() && this.value == ((U32) obj).value;
-    }
-
-    @Override
     @NotNull
     public String toString() {
         return "(" + (0xffffffffL & value) + ")";
+    }
+
+    @CodeHistory(date = "2026/8/1")
+    public static class U32Node1 extends U32 {
+
+        private static final long serialVersionUID = 0x5E8391974660C7F4L;
+
+        U32Node1 first;
+
+        int tag;
+    }
+
+    @CodeHistory(date = "2026/8/1")
+    public static class U32NodeAllocator1 implements NodeAllocator1<U32Node1> {
+
+        private static final long serialVersionUID = 0x0CB05C70BCA281EBL;
+
+        public static final U32NodeAllocator1 INSTANCE = new U32NodeAllocator1();
+
+        @NotNull
+        @Override
+        public U32Node1 newNode() {
+            return new U32Node1();
+        }
+
+        @Override
+        public U32Node1[] newNodeArray(int length) {
+            return new U32Node1[length];
+        }
+
+        @Override
+        public int getTag(@NotNull U32Node1 self) {
+            return self.tag;
+        }
+
+        @Override
+        public void setTag(@NotNull U32Node1 self, int newTag) {
+            self.tag = newTag;
+        }
+
+        @Override
+        public U32Node1 getFirstLink(@NotNull U32Node1 self) {
+            return self.first;
+        }
+
+        @Override
+        public void setFirstLink(@NotNull U32Node1 self, U32Node1 node) {
+            self.first = node;
+        }
     }
 }

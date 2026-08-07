@@ -4,14 +4,14 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-/**
- * Created on 2026/5/22.
- */
+@CodeHistory(date = "2026/5/22")
 public class ShapeTransformer implements JsonContextTransformer<Shape> {
 
     public static final ShapeTransformer INSTANCE = new ShapeTransformer();
@@ -19,7 +19,7 @@ public class ShapeTransformer implements JsonContextTransformer<Shape> {
     static final FastString BOUND = new FastString("bound");
 
     @Override
-    public void transform(@NotNull Shape shape, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Shape shape, @NotNull JsonHandler out, @Nullable JsonContext context) {
         if (shape instanceof Rectangle2D) {
             RectangleTransformer.INSTANCE.transform((Rectangle2D) shape, out, context);
         } else {

@@ -3,23 +3,28 @@ package mujica.json.container;
 import mujica.json.reflect.ContainerConfig;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2022/6/4", project = "Ultramarine", name = "JsonArray")
 @CodeHistory(date = "2025/9/23", name = "JsonArray")
 @CodeHistory(date = "2025/12/29", name = "GeneralJsonArray")
 @CodeHistory(date = "2026/1/6")
-class UtilListAsJsonArray<T extends List<Object>> extends JsonArray {
+class UtilListAsJsonArray extends JsonArray {
 
     private static final long serialVersionUID = 0x326e01ada4ba3c92L;
 
-    @NotNull
-    protected T list;
+    private static final Logger LOGGER = LoggerFactory.getLogger(UtilListAsJsonArray.class);
 
-    UtilListAsJsonArray(@NotNull T list) {
+    @NotNull
+    List<Object> list;
+
+    UtilListAsJsonArray(@NotNull List<Object> list) {
         super();
         this.list = list;
     }
@@ -39,34 +44,40 @@ class UtilListAsJsonArray<T extends List<Object>> extends JsonArray {
         list.set(index, value);
     }
 
+    @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public Consumer<Object> consumer(@NotNull ContainerConfig.ArrayAction action) {
         switch (action) {
             case NEW:
-                list.clear();
-                if (list instanceof ArrayList) {
-                    ((ArrayList<?>) list).trimToSize();
+                try {
+                    list = (List<Object>) list.getClass().getConstructor().newInstance();
+                } catch (Exception e) {
+                    LOGGER.error("", e);
+                    list.clear();
+                    if (list instanceof ArrayList) {
+                        ((ArrayList<Object>) list).trimToSize();
+                    }
                 }
-                return new ConsumerImpl(0);
+                return new IteratorConsumer(list.listIterator());
             case CLEAR:
                 list.clear();
-                return new ConsumerImpl(0);
+                return new IteratorConsumer(list.listIterator());
             case COVER:
-                return new ConsumerImpl(0);
+                return new IndexedConsumer(0);
             case APPEND:
-                return new ConsumerImpl(size());
+                return new IteratorConsumer(list.listIterator(list.size()));
             default:
                 throw new IllegalArgumentException();
         }
     }
 
     @CodeHistory(date = "2026/4/13")
-    private class ConsumerImpl implements Consumer<Object> {
+    private class IndexedConsumer implements Consumer<Object> {
 
-        int index;
+        int index; // no check for comodification, not safe
 
-        ConsumerImpl(int index) {
+        IndexedConsumer(int index) {
             super();
             this.index = index;
         }
@@ -79,6 +90,23 @@ class UtilListAsJsonArray<T extends List<Object>> extends JsonArray {
                 list.add(value);
             }
             index++;
+        }
+    }
+
+    @CodeHistory(date = "2026/8/6")
+    private static class IteratorConsumer implements Consumer<Object> {
+
+        @NotNull
+        final ListIterator<Object> iterator;
+
+        private IteratorConsumer(@NotNull ListIterator<Object> iterator) {
+            super();
+            this.iterator = iterator;
+        }
+
+        @Override
+        public void accept(Object value) {
+            iterator.add(value);
         }
     }
 }

@@ -1,15 +1,12 @@
 package mujica.ds.i32.set;
 
-import mujica.ds.ConsistencyException;
-import mujica.ds.InvariantException;
 import mujica.ds.any.list.MonotonicityDirection;
 import mujica.ds.any.set.CollectionConstant;
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.ds.i32.list.CopyOnResizeIntList;
 import mujica.ds.i32.list.QuadraticProbingList;
-import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -33,8 +30,8 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
     @NotNull
     transient QuadraticProbingList probingList;
 
-    public QuadraticClosedHashIntSet(@Nullable CapacityPolicy policy) {
-        super(CapacityPolicy.checkQuadraticSupported(policy));
+    public QuadraticClosedHashIntSet(@NotNull CapacityPolicy policy) {
+        super(policy.requireQuadratic());
         array = new int[this.policy.initialCapacity()];
         probingList = new QuadraticProbingList(array.length);
     }
@@ -67,7 +64,7 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
         for (int i = 1; i < n; i++) {
             int v1 = list.getInt(i);
             if (v0 >= v1) {
-                consumer.accept(new InvariantException(v0 + " >= " + v1));
+                consumer.accept(new RuntimeException(v0 + " >= " + v1));
             }
             v0 = v1;
         }
@@ -78,7 +75,7 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
             n++;
         }
         if (n != size) {
-            consumer.accept(new ConsistencyException(n + " != " + size));
+            consumer.accept(new RuntimeException(n + " != " + size));
         }
     }
 
@@ -105,7 +102,7 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
     @Override
     public boolean isFull() {
         final int capacity = array.length;
-        return size == capacity && policy.nextCapacity(capacity) == capacity;
+        return size == capacity && policy.tryLargerCapacity(capacity) == capacity;
     }
 
     @Override
@@ -133,7 +130,7 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
      */
     private boolean rehash() {
         final int m0 = array.length;
-        final int m1 = policy.nextCapacity(m0);
+        final int m1 = policy.tryLargerCapacity(m0);
         if (m1 <= m0) {
             return false;
         }

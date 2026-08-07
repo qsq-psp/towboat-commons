@@ -6,8 +6,6 @@ import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
-
 @CodeHistory(date = "2025/6/14", name = "ComparableContext")
 @CodeHistory(date = "2026/6/27")
 public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
@@ -80,12 +78,12 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
         final int rightLength = length(right);
         final int minLength = Math.min(leftLength, rightLength);
         if (minLength > 0) {
-            S as = newSlot();
-            S bs = newSlot();
+            S leftSlot = newSlot();
+            S rightSlot = newSlot();
             for (int index = 0; index < minLength; index++) {
-                load(left, index, as);
-                load(right, index, bs);
-                int result = compareSlot(as, bs);
+                load(left, index, leftSlot);
+                load(right, index, rightSlot);
+                int result = compareSlot(leftSlot, rightSlot);
                 if (result != 0) {
                     return result;
                 }
@@ -94,8 +92,41 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
         return Integer.compare(leftLength, rightLength);
     }
 
+    int FLAG_EQUAL = 1;
+    int FLAG_ASCENDING = 1 << 1;
+    int FLAG_DESCENDING = 1 << 2;
+
     default int compareAdjacent(@NotNull A array, @Index(of = "array") int startIndex, @Index(of = "array", inclusive = false) int endIndex) {
-        return 0; // todo
+        if (endIndex - startIndex < 2) {
+            return 0;
+        }
+        S previousSlot = newSlot();
+        S currentSlot = newSlot();
+        try {
+            load(array, startIndex, previousSlot);
+            int flags = 0;
+            for (int index = startIndex + 1; index < endIndex; index++) {
+                load(array, index, currentSlot);
+                int result = compareSlot(previousSlot, currentSlot);
+                if (result < 0) {
+                    flags |= FLAG_ASCENDING;
+                } else if (result > 0) {
+                    flags |= FLAG_DESCENDING;
+                } else {
+                    flags |= FLAG_EQUAL;
+                }
+                if (flags == (FLAG_EQUAL | FLAG_ASCENDING | FLAG_DESCENDING)) {
+                    break;
+                }
+                S tempSlot = previousSlot;
+                previousSlot = currentSlot;
+                currentSlot = tempSlot;
+            }
+            return flags;
+        } finally {
+            releaseSlot(previousSlot);
+            releaseSlot(currentSlot);
+        }
     }
 
     default int compareAdjacent(@NotNull A array) {
@@ -103,7 +134,7 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
     }
 
     default boolean isAscending(@NotNull A array, @Index(of = "array") int startIndex, @Index(of = "array", inclusive = false) int endIndex) {
-        return false;
+        return (compareAdjacent(array, startIndex, endIndex) & FLAG_DESCENDING) == 0;
     }
 
     default boolean isAscending(@NotNull A array) {
@@ -111,7 +142,7 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
     }
 
     default boolean isDescending(@NotNull A array, @Index(of = "array") int startIndex, @Index(of = "array", inclusive = false) int endIndex) {
-        return false;
+        return (compareAdjacent(array, startIndex, endIndex) & FLAG_ASCENDING) == 0;
     }
 
     default boolean isDescending(@NotNull A array) {
@@ -119,7 +150,8 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
     }
 
     default boolean isStrictAscending(@NotNull A array, @Index(of = "array") int startIndex, @Index(of = "array", inclusive = false) int endIndex) {
-        return false;
+        final int flags = compareAdjacent(array, startIndex, endIndex);
+        return (flags & FLAG_ASCENDING) == flags;
     }
 
     default boolean isStrictAscending(@NotNull A array) {
@@ -127,7 +159,8 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
     }
 
     default boolean isStrictDescending(@NotNull A array, @Index(of = "array") int startIndex, @Index(of = "array", inclusive = false) int endIndex) {
-        return false;
+        final int flags = compareAdjacent(array, startIndex, endIndex);
+        return (flags & FLAG_DESCENDING) == flags;
     }
 
     default boolean isStrictDescending(@NotNull A array) {
@@ -135,7 +168,7 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
     }
 
     @CodeHistory(date = "2026/7/7")
-    interface WithPolicy<S, A> extends SlotArrayComparator<S, A>, CapacityPolicyProvider {
+    interface PolicySAC<S, A> extends SlotArrayComparator<S, A>, CapacityPolicyProvider {
 
         @NotNull
         @Override
@@ -162,33 +195,50 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
         CapacityPolicy getCapacityPolicy();
     }
 
-    @CodeHistory(date = "2026/7/22")
-    class OfComparable<T extends Comparable<T>> extends OfType<T> implements SlotArrayComparator<TypeSlot<T>, T[]> {
-
-        public OfComparable(@NotNull Class<T> classT) {
-            super(classT);
-        }
-
-        @Override
-        public int compareSlot(@NotNull TypeSlot<T> left, @NotNull TypeSlot<T> right) {
-            return left.get().compareTo(right.get());
-        }
-    }
-
-    @CodeHistory(date = "2026/7/22")
-    class OfComparator<T> extends OfType<T> implements SlotArrayComparator<TypeSlot<T>, T[]> {
+    @CodeHistory(date = "2026/8/6")
+    interface HashSAC<S, A> extends PolicySAC<S, A> {
 
         @NotNull
-        final Comparator<T> comparator;
-
-        public OfComparator(@NotNull Class<T> classT, @NotNull Comparator<T> comparator) {
-            super(classT);
-            this.comparator = comparator;
-        }
+        @Override
+        S newSlot();
 
         @Override
-        public int compareSlot(@NotNull TypeSlot<T> left, @NotNull TypeSlot<T> right) {
-            return comparator.compare(left.get(), right.get());
+        void move(@NotNull S src, @NotNull S dst);
+
+        @NotNull
+        @Override
+        A newArray(int length);
+
+        @Override
+        void load(@NotNull A array, int index, @NotNull S slot);
+
+        @Override
+        void store(@NotNull A array, int index, @NotNull S slot);
+
+        @Override
+        int compareSlot(@NotNull S left, @NotNull S right);
+
+        @NotNull
+        @Override
+        CapacityPolicy getCapacityPolicy();
+
+        // no slotEquals()
+
+        int slotHash(@NotNull S slot);
+
+        default int arrayHash(@NotNull A array) {
+            final int length = length(array);
+            int result = 1;
+            final S slot = newSlot();
+            try {
+                for (int index = 0; index < length; index++) {
+                    load(array, index, slot);
+                    result = 31 * result + slotHash(slot);
+                }
+            } finally {
+                releaseSlot(slot);
+            }
+            return result;
         }
     }
 }

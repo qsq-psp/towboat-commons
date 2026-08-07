@@ -8,9 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
-/**
- * Created on 2025/4/9.
- */
 @CodeHistory(date = "2025/4/9")
 public interface ByteStreamHash extends StreamHash, BytesHash {
 

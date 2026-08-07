@@ -12,16 +12,18 @@ import java.util.Objects;
 
 @CodeHistory(date = "2025/3/15", name = "SortingAlgorithm")
 @CodeHistory(date = "2026/7/10")
+@Name(value = "排序算法", language = "zh")
 public interface Sort<A> {
 
     default boolean isDescending() {
         return false;
     }
 
+    // a sorting algorithm is stable if equal elements always reserve order after sorting
     @Name(value = "稳定性", language = "zh")
     @ReferencePage(title = "稳定性", href = "https://oi-wiki.org/basic/sort-intro/#%E7%A8%B3%E5%AE%9A%E6%80%A7")
     default boolean isStable() {
-        return false; // a sorting algorithm is stable if equal elements always reserve order after sorting
+        return false;
     }
 
     default boolean returnsReverseOrderNumber() {
@@ -35,6 +37,7 @@ public interface Sort<A> {
     }
 
     default long sortPart(@NotNull A target, @Index(of = "target") int startIndex, @Index(of = "target", inclusive = false) int midIndex, @Index(of = "target", inclusive = false) int endIndex) {
+        // 0 <= startIndex <= midIndex <= endIndex <= length(target)
         return sort(target, startIndex, endIndex);
     }
 
@@ -57,5 +60,12 @@ public interface Sort<A> {
         }
         endSlot.setI32(writeIndex);
         return operationCount;
+    }
+
+    @ReferencePage(title = "Algorithms Jeff Erickson", href = "http://jeffe.cs.illinois.edu/teaching/algorithms/")
+    default int select(@NotNull A target, @Index(of = "target") int startIndex, @Index(of = "target", inclusive = false) int midIndex, @Index(of = "target", inclusive = false) int endIndex) {
+        // 0 <= startIndex <= midIndex < endIndex <= length(target)
+        sortPart(target, startIndex, midIndex + 1, endIndex);
+        return midIndex;
     }
 }

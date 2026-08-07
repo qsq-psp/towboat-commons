@@ -20,20 +20,26 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
     @Index(of = "array")
     int startIndex;
 
-    public CenterAlignedSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator) {
+    public CenterAlignedSlotList(@NotNull SlotArrayAllocator.PolicySAA<S, A> allocator) {
         super(allocator);
         final int halfCapacity = allocator.length(array) >>> 1;
         startIndex = halfCapacity;
         endIndex = halfCapacity;
     }
 
-    CenterAlignedSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator, @SuppressWarnings("unused") Void doNotInitializeIndexes) {
+    CenterAlignedSlotList(@NotNull SlotArrayAllocator.PolicySAA<S, A> allocator, @SuppressWarnings("unused") Void doNotInitializeIndexes) {
         super(allocator);
     }
 
-    CenterAlignedSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator, @NotNull A array, int startIndex, int endIndex) {
+    CenterAlignedSlotList(@NotNull SlotArrayAllocator.PolicySAA<S, A> allocator, @NotNull A array, int startIndex, int endIndex) {
         super(allocator, array, endIndex);
         this.startIndex = startIndex;
+    }
+
+    @NotNull
+    @Override
+    public SlotCollection<S, A> duplicateNew() {
+        return new CenterAlignedSlotList<>(allocator);
     }
 
     @NotNull
@@ -71,7 +77,7 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
             return false;
         }
         final int capacity = allocator.length(array);
-        return endIndex == capacity && allocator.getCapacityPolicy().nextCapacity(capacity) == capacity;
+        return endIndex == capacity && allocator.getCapacityPolicy().tryLargerCapacity(capacity) == capacity;
     }
 
     @Override
@@ -144,7 +150,7 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
         version++;
     }
 
-    void enlargeArray(int newCapacity, int deltaIndex) {
+    private void enlargeArray(int newCapacity, int deltaIndex) {
         final A newArray = allocator.newArray(newCapacity);
         final int listSize = endIndex - startIndex;
         final int newStartIndex = (newCapacity - listSize + deltaIndex) >>> 1;
@@ -168,7 +174,7 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
         }
         if (startLength < endLength) {
             if (startIndex == 0) {
-                enlargeArray(allocator.getCapacityPolicy().nextLargerCapacity(allocator.length(array)), 1);
+                enlargeArray(allocator.getCapacityPolicy().largerCapacity(allocator.length(array)), 1);
                 assert startIndex > 0;
             }
             gapIndex = startIndex + startLength - 1;
@@ -179,7 +185,7 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
         } else {
             int capacity = allocator.length(array);
             if (endIndex == capacity) {
-                enlargeArray(allocator.getCapacityPolicy().nextLargerCapacity(capacity), -1);
+                enlargeArray(allocator.getCapacityPolicy().largerCapacity(capacity), -1);
                 assert endIndex < allocator.length(array);
             }
             gapIndex = endIndex - endLength;
@@ -195,7 +201,7 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
     @Override
     public void insertFirstItem(@NotNull S in) {
         if (startIndex == 0) {
-            enlargeArray(allocator.getCapacityPolicy().nextLargerCapacity(allocator.length(array)), 1);
+            enlargeArray(allocator.getCapacityPolicy().largerCapacity(allocator.length(array)), 1);
             assert startIndex > 0;
         }
         allocator.store(array, --startIndex, in);
@@ -206,10 +212,11 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
     public void insertLastItem(@NotNull S in) {
         final int capacity = allocator.length(array);
         if (endIndex == capacity) {
-            enlargeArray(allocator.getCapacityPolicy().nextLargerCapacity(capacity), -1);
+            enlargeArray(allocator.getCapacityPolicy().largerCapacity(capacity), -1);
             assert endIndex < allocator.length(array);
         }
         allocator.store(array, endIndex++, in);
+        version++;
     }
 
     @Override
@@ -265,7 +272,7 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
             }
             throw new IndexOutOfBoundsException();
         }
-        allocator.releaseReference(array, endIndex, newEndIndex);
+        allocator.releaseReference(array, newEndIndex, endIndex);
         endIndex = newEndIndex;
         version++;
     }
@@ -313,7 +320,7 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
         if (srcIndex < 0 || length < 0) {
             throw new IndexOutOfBoundsException();
         }
-        srcIndex = Math.addExact(srcIndex, length);
+        srcIndex = Math.addExact(startIndex, srcIndex);
         if (Math.addExact(srcIndex, length) > endIndex) {
             throw new IndexOutOfBoundsException();
         }
@@ -380,5 +387,11 @@ public class CenterAlignedSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
             }
         }
         return true;
+    }
+
+    @NotNull
+    @Override
+    public String summaryToString() {
+        return "size = " + size() + ", start = " + startIndex + ", end = " + endIndex + ", capacity = " + allocator.length(array) + ", version = " + version;
     }
 }

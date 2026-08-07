@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+@SuppressWarnings("SpellCheckingInspection")
 @CodeHistory(date = "2025/4/22")
 public class Base16StreamingCodecTest {
 

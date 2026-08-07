@@ -5,7 +5,7 @@ import mujica.ds.any.set.CollectionConstant;
 import mujica.json.container.FastNumber;
 import mujica.json.container.FastString;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.text.sanitizer.CharSequenceAppender;
+import mujica.text.sanitizer.CharSequenceAppender;
 import mujica.reflect.modifier.DirectSubclass;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;

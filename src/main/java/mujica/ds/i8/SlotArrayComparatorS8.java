@@ -10,6 +10,8 @@ import java.util.Arrays;
 @CodeHistory(date = "2026/7/24")
 public class SlotArrayComparatorS8 implements SlotArrayComparator<S8, byte[]> {
 
+    public static final SlotArrayComparatorS8 INSTANCE = new SlotArrayComparatorS8();
+
     public SlotArrayComparatorS8() {
         super();
     }

@@ -48,7 +48,7 @@ public class CenterAlignedIntList extends CopyOnResizeIntList {
     @Override
     public boolean isFull() {
         final int capacity = array.length;
-        return startIndex == 0 && endIndex == capacity && policy.nextCapacity(capacity) == capacity;
+        return startIndex == 0 && endIndex == capacity && policy.tryLargerCapacity(capacity) == capacity;
     }
 
     @Override

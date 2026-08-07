@@ -3,9 +3,6 @@ package mujica.algebra.prime;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2025/3/18.
- */
 @CodeHistory(date = "2025/3/18")
 public class PrimePredicate {
 

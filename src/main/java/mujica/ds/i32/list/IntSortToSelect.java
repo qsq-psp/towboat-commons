@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created on 2026/4/24.
  */
+@Deprecated
 public class IntSortToSelect implements IntSelectAlgorithm {
 
     @NotNull

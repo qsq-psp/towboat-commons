@@ -15,8 +15,6 @@ import java.nio.CharBuffer;
 @CodeHistory(date = "2026/3/25")
 class PushPullEncoder {
 
-    // protected static final int REPLACEMENT = 0x80efbfbd;
-
     public void reset() {
         // pass
     }

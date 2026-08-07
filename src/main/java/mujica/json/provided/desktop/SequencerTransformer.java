@@ -9,9 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.sound.midi.Sequencer;
 
-/**
- * Created on 2026/6/21.
- */
 @CodeHistory(date = "2026/6/21")
 public class SequencerTransformer implements JsonContextTransformer<Sequencer> {
 

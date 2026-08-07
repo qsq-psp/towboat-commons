@@ -1,5 +1,6 @@
 package mujica.ds.i64;
 
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.ds.slot.SlotArrayAllocator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ public class SlotArrayAllocatorI64ForTest implements SlotArrayAllocator<I64Slot,
     @NotNull
     @Override
     public I64Slot newSlot() {
-        return new S64(CANARY);
+        return new I64(CANARY);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class SlotArrayAllocatorI64ForTest implements SlotArrayAllocator<I64Slot,
     @NotNull
     @Override
     public I64Slot cloneSlot(@NotNull I64Slot original) {
-        return new S64(original.getI64());
+        return new I64(original.getI64());
     }
 
     @Override
@@ -91,5 +92,55 @@ public class SlotArrayAllocatorI64ForTest implements SlotArrayAllocator<I64Slot,
     @Override
     public long[] cloneArray(@NotNull long[] original) {
         return Arrays.copyOf(original, original.length);
+    }
+
+    @Override
+    @NotNull
+    public String toString() {
+        return "SlotTool[dataType = i64, slotType = I64Slot, arrayType = long[]]";
+    }
+
+    @CodeHistory(date = "2026/8/5")
+    public static class WithHashI64 extends SlotArrayAllocatorI64ForTest implements HashSAA<I64Slot, long[]> {
+
+        @NotNull
+        final CapacityPolicy capacityPolicy;
+
+        public WithHashI64(@NotNull CapacityPolicy capacityPolicy) {
+            super();
+            this.capacityPolicy = capacityPolicy;
+        }
+
+        @Override
+        @NotNull
+        public CapacityPolicy getCapacityPolicy() {
+            return capacityPolicy;
+        }
+
+        @Override
+        public boolean slotEquals(@NotNull I64Slot left, @NotNull I64Slot right) {
+            return left.getI64() == right.getI64();
+        }
+
+        @Override
+        public boolean arrayEquals(@NotNull long[] leftArray, @NotNull long[] rightArray) {
+            return Arrays.equals(leftArray, rightArray);
+        }
+
+        @Override
+        public int slotHash(@NotNull I64Slot slot) {
+            return Long.hashCode(slot.getI64());
+        }
+
+        @Override
+        public int arrayHash(@NotNull long[] array) {
+            return Arrays.hashCode(array);
+        }
+
+        @Override
+        @NotNull
+        public String toString() {
+            return "SlotTool[dataType = i64, slotType = I64Slot, arrayType = long[], capacityPolicy = " + capacityPolicy + "]";
+        }
     }
 }

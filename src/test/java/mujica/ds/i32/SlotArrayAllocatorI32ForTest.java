@@ -1,5 +1,6 @@
 package mujica.ds.i32;
 
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.ds.slot.SlotArrayAllocator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ public class SlotArrayAllocatorI32ForTest implements SlotArrayAllocator<I32Slot,
     @NotNull
     @Override
     public I32Slot newSlot() {
-        return new S32(CANARY);
+        return new I32(CANARY);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class SlotArrayAllocatorI32ForTest implements SlotArrayAllocator<I32Slot,
     @NotNull
     @Override
     public I32Slot cloneSlot(@NotNull I32Slot original) {
-        return new S32(original.getI32());
+        return new I32(original.getI32());
     }
 
     @Override
@@ -95,5 +96,55 @@ public class SlotArrayAllocatorI32ForTest implements SlotArrayAllocator<I32Slot,
     @Override
     public int[] cloneArray(@NotNull int[] original) {
         return Arrays.copyOf(original, original.length);
+    }
+
+    @Override
+    @NotNull
+    public String toString() {
+        return "SlotTool[dataType = i32, slotType = I32Slot, arrayType = int[]]";
+    }
+
+    @CodeHistory(date = "2026/7/27")
+    public static class WithHashI32 extends SlotArrayAllocatorI32ForTest implements HashSAA<I32Slot, int[]> {
+
+        @NotNull
+        final CapacityPolicy capacityPolicy;
+
+        public WithHashI32(@NotNull CapacityPolicy capacityPolicy) {
+            super();
+            this.capacityPolicy = capacityPolicy;
+        }
+
+        @NotNull
+        @Override
+        public CapacityPolicy getCapacityPolicy() {
+            return capacityPolicy;
+        }
+
+        @Override
+        public boolean slotEquals(@NotNull I32Slot left, @NotNull I32Slot right) {
+            return left.getI32() == right.getI32();
+        }
+
+        @Override
+        public boolean arrayEquals(@NotNull int[] leftArray, @NotNull int[] rightArray) {
+            return Arrays.equals(leftArray, rightArray);
+        }
+
+        @Override
+        public int slotHash(@NotNull I32Slot slot) {
+            return slot.getI32();
+        }
+
+        @Override
+        public int arrayHash(@NotNull int[] array) {
+            return Arrays.hashCode(array);
+        }
+
+        @Override
+        @NotNull
+        public String toString() {
+            return "SlotTool[dataType = i32, slotType = I32Slot, arrayType = int[], capacityPolicy = " + capacityPolicy + "]";
+        }
     }
 }

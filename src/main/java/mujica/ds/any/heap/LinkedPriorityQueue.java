@@ -1,6 +1,5 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.ConsistencyException;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
@@ -41,8 +40,6 @@ public class LinkedPriorityQueue<E> extends AbstractCollection<E> implements Pri
 
     @NotNull
     @Override
-    @Name(value = "duplicate double linked list", language = "en")
-    @Name(value = "复制双向链表", language = "zh")
     public LinkedPriorityQueue<E> duplicate(@NotNull UnaryOperator<E> operator) {
         final LinkedPriorityQueue<E> that = new LinkedPriorityQueue<>(priorityQueue.duplicate(thisNode -> {
             LinkedNode<E> thatNode = new LinkedNode<>(operator.apply(thisNode.element));

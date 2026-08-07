@@ -1,5 +1,6 @@
 package mujica.ds.slot;
 
+import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,6 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
 
     @CodeHistory(date = "2026/7/14")
     @Name(value = "double linked list node", language = "en")
-    @Name(value = "双向链表节点", language = "zh")
     static class LinkedBlock<A> {
 
         LinkedBlock<A> previous;
@@ -54,8 +54,12 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
 
     @NotNull
     @Override
-    @Name(value = "duplicate double linked list", language = "en")
-    @Name(value = "复制双向链表", language = "zh")
+    public SlotCollection<S, A> duplicateNew() {
+        return new LinkedBlockSlotList<>(allocator, blockCapacity);
+    }
+
+    @NotNull
+    @Override
     public LinkedBlockSlotList<S, A> duplicate() {
         final LinkedBlockSlotList<S, A> that = new LinkedBlockSlotList<>(allocator, blockCapacity);
         LinkedBlock<A> thisBlock = this.head;
@@ -233,7 +237,8 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
         throw new IndexOutOfBoundsException();
     }
 
-    void removeEmptyBlock(@NotNull LinkedBlock<A> block) { // empty blocks must be removed
+    private void removeBlock(@NotNull LinkedBlock<A> block) {
+        // empty blocks must be removed
         if (block.previous != null) {
             block.previous.next = block.next;
         } else {
@@ -267,7 +272,7 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
                     allocator.copySelf(block.array, index + 1, index, endLength);
                 }
                 if (--block.size == 0) {
-                    removeEmptyBlock(block);
+                    removeBlock(block);
                 } else {
                     allocator.releaseReference(block.array, block.size);
                 }
@@ -280,10 +285,189 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
         throw new IndexOutOfBoundsException();
     }
 
+    private void insertItem(@NotNull LinkedBlock<A> block, int gapIndex, @NotNull S in) {
+        if (block.size == blockCapacity) {
+            if (gapIndex <= blockCapacity - gapIndex) {
+                LinkedBlock<A> next = new LinkedBlock<>(allocator.newArray(blockCapacity));
+                next.next = block.next;
+                if (block.next == null) {
+                    assert tail == block;
+                    tail = next;
+                } else {
+                    block.next.previous = next;
+                }
+                next.previous = block;
+                block.next = next;
+                allocator.copy(block.array, gapIndex, next.array, 0, blockCapacity - gapIndex);
+                next.size = blockCapacity - gapIndex;
+                allocator.releaseReference(block.array, gapIndex, blockCapacity);
+                block.size = gapIndex;
+            } else {
+                LinkedBlock<A> previous = new LinkedBlock<>(allocator.newArray(blockCapacity));
+                previous.previous = block.previous;
+                if (block.previous == null) {
+                    assert head == block;
+                    head = previous;
+                } else {
+                    block.previous.next = previous;
+                }
+                previous.next = block;
+                block.previous = previous;
+                allocator.copy(block.array, 0, previous.array, 0, gapIndex);
+                previous.size = gapIndex;
+                if (gapIndex < blockCapacity) {
+                    allocator.copySelf(block.array, gapIndex, 0, blockCapacity - gapIndex);
+                }
+                allocator.releaseReference(block.array, blockCapacity - gapIndex);
+                block.size = blockCapacity - gapIndex;
+            }
+        }
+        assert block.size < blockCapacity;
+        if (gapIndex < block.size) {
+            allocator.copySelf(block.array, gapIndex, gapIndex + 1, block.size - gapIndex);
+        }
+        allocator.store(block.array, gapIndex, in);
+        block.size++;
+        version++;
+    }
+
+    @Override
+    public void insertItemBefore(int gapIndex, @NotNull S in) throws IndexOutOfBoundsException {
+        if (gapIndex < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        LinkedBlock<A> block = head;
+        if (block == null) {
+            if (gapIndex != 0) {
+                throw new IndexOutOfBoundsException();
+            }
+            assert tail == null;
+            block = new LinkedBlock<>(allocator.newArray(blockCapacity));
+            head = block;
+            tail = block;
+            insertItem(block, 0, in);
+            return;
+        }
+        do {
+            if (gapIndex > block.size) {
+                gapIndex -= block.size;
+                block = block.next;
+                continue;
+            } else if (gapIndex < block.size) {
+                insertItem(block, gapIndex, in);
+            } else {
+                LinkedBlock<A> next = block.next;
+                if (next == null) {
+                    assert tail == block;
+                    insertItem(block, gapIndex, in);
+                } else if (block.size <= next.size) {
+                    insertItem(block, gapIndex, in);
+                } else {
+                    insertItem(next, 0, in);
+                }
+            }
+            break;
+        } while (block != null);
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
+    public void getFirstItem(@NotNull S out) throws NoSuchElementException {
+        if (head == null) {
+            throw new NoSuchElementException();
+        }
+        allocator.load(head.array, 0, out);
+    }
+
+    @Override
+    public void getLastItem(@NotNull S out) throws NoSuchElementException {
+        if (tail == null) {
+            throw new NoSuchElementException();
+        }
+        allocator.load(tail.array, tail.size - 1, out);
+    }
+
+    @Override
+    public void getArbitraryItem(@NotNull S out, @Nullable RandomContext rc) throws NoSuchElementException {
+        if (rc != null) {
+            int count = 0;
+            LinkedBlock<A> block = head;
+            while (block != null) {
+                count += block.size;
+                int index = rc.nextInt(count);
+                if (index < block.size) {
+                    allocator.load(block.array, index, out);
+                }
+                block = block.next;
+            }
+            if (count == 0) {
+                throw new NoSuchElementException();
+            }
+        } else {
+            getFirstItem(out);
+        }
+    }
+
+    @Override
+    public void removeFirstItem(@Nullable S out) throws NoSuchElementException {
+        if (head == null) {
+            throw new NoSuchElementException();
+        }
+        if (out != null) {
+            allocator.load(head.array, 0, out);
+        }
+        final int endLength = head.size - 1;
+        if (endLength > 0) {
+            allocator.copySelf(head.array, 1, 0, endLength);
+            head.size = endLength;
+        } else {
+            head.size = 0;
+            removeBlock(head);
+        }
+        version++;
+    }
+
+    @Override
+    public void removeLastItem(@Nullable S out) throws NoSuchElementException {
+        if (tail == null) {
+            throw new NoSuchElementException();
+        }
+        if (out != null) {
+            allocator.load(tail.array, tail.size - 1, out);
+        }
+        if (--tail.size > 0) {
+            allocator.releaseReference(tail.array, tail.size);
+        } else {
+            removeBlock(tail);
+        }
+        version++;
+    }
+
+    @Override
+    public void insertFirstItem(@NotNull S in) {
+        if (head == null) {
+            assert tail == null;
+            LinkedBlock<A> block = new LinkedBlock<>(allocator.newArray(blockCapacity));
+            head = block;
+            tail = block;
+        }
+        insertItem(head, 0, in);
+    }
+
+    @Override
+    public void insertLastItem(@NotNull S in) {
+        if (tail == null) {
+            assert head == null;
+            LinkedBlock<A> block = new LinkedBlock<>(allocator.newArray(blockCapacity));
+            head = block;
+            tail = block;
+        }
+        insertItem(tail, tail.size, in);
+    }
+
     @NotNull
     @Override
     public GapIterator<S> iterator(int startGapIndex) {
-
         return new GapIterator<>() {
 
             LinkedBlock<A> previousBlock;
@@ -295,6 +479,27 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
             int nextIndex;
 
             int expectedVersion = version;
+
+            {
+                int index = startGapIndex;
+                if (index < 0) {
+                    previousBlock = tail;
+                    if (previousBlock != null) {
+                        previousIndex = previousBlock.size - 1;
+                    }
+                    nextBlock = null;
+                } else {
+                    previousBlock = null;
+                    nextBlock = head;
+                    nextIndex = 0;
+                    while (nextBlock != null) {
+                        if (index <= nextBlock.size) {
+                            break;
+                        }
+                    }
+                    // todo
+                }
+            }
 
             @Override
             public boolean previousGap() throws ConcurrentModificationException {
@@ -410,7 +615,7 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
                     assert nextIndex >= 0;
                 }
                 if (--previousBlock.size == 0) {
-                    removeEmptyBlock(previousBlock);
+                    removeBlock(previousBlock);
                 } else {
                     allocator.releaseReference(previousBlock.array, previousBlock.size);
                 }
@@ -449,7 +654,7 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
                     allocator.copySelf(nextBlock.array, nextIndex + 1, nextIndex, endLength);
                 }
                 if (--nextBlock.size == 0) {
-                    removeEmptyBlock(nextBlock);
+                    removeBlock(nextBlock);
                 } else {
                     allocator.releaseReference(nextBlock.array, nextBlock.size);
                 }

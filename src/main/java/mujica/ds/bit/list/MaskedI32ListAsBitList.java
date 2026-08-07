@@ -1,6 +1,6 @@
 package mujica.ds.bit.list;
 
-import mujica.ds.InvariantException;
+import mujica.ds.common.InvariantException;
 import mujica.ds.i32.list.IntList;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +55,7 @@ public class MaskedI32ListAsBitList extends AbstractBitList {
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
         intList.checkHealth(consumer);
         if (mask == 0) {
-            consumer.accept(new InvariantException("mask = 0"));
+            consumer.accept(new RuntimeException("mask = 0"));
         }
     }
 

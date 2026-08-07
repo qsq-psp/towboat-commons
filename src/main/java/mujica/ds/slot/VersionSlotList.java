@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @CodeHistory(date = "2026/7/18")
-@DirectSubclass({CopyOnResizeSlotList.class, LinkedBlockSlotList.class, LinkedSlotList.class})
+@DirectSubclass({CopyOnResizeSlotList.class, SortedSlotList.class})
 public abstract class VersionSlotList<S, A> extends RandomAccessBasedSlotCollection<S, A> {
 
     @Name(value = "modCount", language = "en")
@@ -91,11 +91,11 @@ public abstract class VersionSlotList<S, A> extends RandomAccessBasedSlotCollect
                 throw new ConcurrentModificationException();
             }
             if (filterResult) {
-                index++;
-            } else {
                 removeItemAt(index, null);
                 expectedVersion = version;
                 listSize--;
+            } else {
+                index++;
             }
         }
     }
@@ -236,5 +236,11 @@ public abstract class VersionSlotList<S, A> extends RandomAccessBasedSlotCollect
                 expectedVersion = version;
             }
         };
+    }
+
+    @NotNull
+    @Override
+    public String summaryToString() {
+        return "size = " + size() + ", version = " + version;
     }
 }

@@ -5,22 +5,20 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.sound.midi.Instrument;
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.VoiceStatus;
 
-/**
- * Created on 2026/6/22.
- */
 @CodeHistory(date = "2026/6/22")
 public class SynthesizerTransformer implements JsonContextTransformer<Synthesizer> {
 
     public static final SynthesizerTransformer INSTANCE = new SynthesizerTransformer();
 
     @Override
-    public void transform(@NotNull Synthesizer synthesizer, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Synthesizer synthesizer, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             MidiDeviceTransformer.transformExposed(synthesizer, out);

@@ -1,7 +1,5 @@
 package mujica.ds.any.set;
 
-import mujica.ds.ConsistencyException;
-import mujica.ds.InvariantException;
 import mujica.ds.any.list.TruncateList;
 import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
@@ -100,17 +98,17 @@ public class LinkOpenHashSet<E> extends AbstractHashSet<E> {
             while (node != null) {
                 int i = index(node.element, mod);
                 if (i != j) {
-                    consumer.accept(new InvariantException("misplaced element " + node.element + " from " + i + " to " + j));
+                    consumer.accept(new RuntimeException("misplaced element " + node.element + " from " + i + " to " + j));
                 }
                 if (!set.add(node.element)) {
-                    consumer.accept(new InvariantException("identical element " + node.element));
+                    consumer.accept(new RuntimeException("identical element " + node.element));
                     break; // prevent infinite loop
                 }
                 node = node.next;
             }
         }
         if (set.size() != size) {
-            consumer.accept(new ConsistencyException("size", set.size(), size));
+            consumer.accept(new RuntimeException("expected size " + set.size() + ", actual size " + size));
         }
     }
 

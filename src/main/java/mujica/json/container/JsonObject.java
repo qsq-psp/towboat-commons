@@ -52,7 +52,7 @@ public abstract class JsonObject extends JsonContainer<String> {
     }
 
     @CodeHistory(date = "2025/10/2")
-    class JsonObjectSlot implements TypeSlot<Object>, Serializable {
+    class JsonObjectSlot extends TypeSlot<Object> implements Serializable {
 
         private static final long serialVersionUID = 0xec1ecf6f2a21b14fL;
 

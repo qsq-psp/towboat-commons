@@ -4,21 +4,21 @@ import mujica.json.handler.JsonHandler;
 import mujica.json.handler.JsonStructure;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.ColorModel;
 
-/**
- * Created on 2026/6/2.
- */
+@CodeHistory(date = "2026/6/2")
 public class ToolkitTransformer implements JsonContextTransformer<Toolkit>, JsonStructure {
 
     public static final ToolkitTransformer INSTANCE = new ToolkitTransformer();
 
     @Override
-    public void transform(@NotNull Toolkit toolkit, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Toolkit toolkit, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         try {
             Dimension screenSize = toolkit.getScreenSize();
@@ -28,7 +28,7 @@ public class ToolkitTransformer implements JsonContextTransformer<Toolkit>, Json
             out.numberValue(screenSize.height);
         } catch (HeadlessException ignore) {}
         try {
-            int screenResolution = toolkit.getScreenResolution();
+            int screenResolution = toolkit.getScreenResolution(); // dots per inch
             out.key("screenResolution");
             out.numberValue(screenResolution);
         } catch (HeadlessException ignore) {}

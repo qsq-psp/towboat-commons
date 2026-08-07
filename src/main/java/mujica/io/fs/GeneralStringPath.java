@@ -1,9 +1,9 @@
 package mujica.io.fs;
 
-import mujica.ds.base.HealthAware;
-import mujica.ds.InvariantException;
+import mujica.ds.common.HealthAware;
+import mujica.ds.common.InvariantException;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.text.sequence.TowboatCharSequence;
+import mujica.text.sequence.TowboatCharSequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +33,7 @@ public abstract class GeneralStringPath implements HealthAware, Path, Serializab
 
     protected void checkSegmentHealth(int currentSeparatorIndex, int nextSeparatorIndex) {
         if (currentSeparatorIndex == nextSeparatorIndex) {
-            throw new InvariantException("empty segment");
+            throw new RuntimeException("empty segment");
         }
     }
 
@@ -41,7 +41,7 @@ public abstract class GeneralStringPath implements HealthAware, Path, Serializab
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
         final String separator = getFileSystem().getSeparator();
         if (separator.isEmpty()) {
-            throw new InvariantException("empty separator");
+            throw new RuntimeException("empty separator");
         }
         int currentSeparatorIndex, nextSeparatorIndex;
         if (string.startsWith(separator)) {

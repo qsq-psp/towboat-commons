@@ -1,7 +1,7 @@
 package mujica.algebra.discrete;
 
 
-import mujica.ds.any.LeftRightIteratorState;
+import mujica.ds.common.LeftRightIteratorState;
 import mujica.ds.i32.list.IntList;
 import mujica.ds.i32.list.IntListHandle;
 import mujica.ds.i32.list.PrivateIntList;

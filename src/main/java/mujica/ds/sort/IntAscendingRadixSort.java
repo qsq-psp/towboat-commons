@@ -19,7 +19,7 @@ public class IntAscendingRadixSort extends SortingAlgorithm<int[]> {
     private transient IntList[] buckets0;
 
     @NotNull
-    private transient IntList[] buckets1;
+    private transient IntList[] buckets1; // used to rotate array
 
     public IntAscendingRadixSort(int modulo) {
         super();

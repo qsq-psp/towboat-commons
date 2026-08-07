@@ -12,7 +12,7 @@ import java.util.Spliterators;
 
 @CodeHistory(date = "2025/3/12", name = "IntArrayHandle")
 @CodeHistory(date = "2025/5/31")
-public class IntListHandle implements TypeSlot<int[]>, Serializable {
+public class IntListHandle extends TypeSlot<int[]> implements Serializable {
 
     private static final long serialVersionUID = 0x82814632642cdc7cL;
 

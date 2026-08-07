@@ -1,6 +1,6 @@
 package mujica.ds.i32.map;
 
-import mujica.ds.base.DataStructure;
+import mujica.ds.common.DataStructure;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.Name;

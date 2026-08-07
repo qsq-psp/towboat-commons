@@ -83,17 +83,22 @@ public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
     public void triangle(@NotNull S variable, @NotNull S result) {
         increase(variable, slot1);
         multiply(variable, slot1, slot0);
-        one(slot1);
-        add(slot1, slot1, slot2);
+        two(slot2);
         divide(slot0, slot2, result, RoundingMode.UNNECESSARY);
     }
 
     @Override
     public void mean(@NotNull S left, @NotNull S right, @NotNull S result, @NotNull RoundingMode mode) {
-        add(left, right, slot0);
-        one(slot1);
-        add(slot1, slot1, slot2);
-        divide(slot0, slot2, result, mode);
+        final S sumSlot = newSlot();
+        final S twoSlot = newSlot();
+        try {
+            add(left, right, sumSlot);
+            two(twoSlot);
+            divide(sumSlot, twoSlot, result, mode);
+        } finally {
+            releaseSlot(sumSlot);
+            releaseSlot(twoSlot);
+        }
     }
 
     @Override

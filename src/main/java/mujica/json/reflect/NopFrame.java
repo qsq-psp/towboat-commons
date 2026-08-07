@@ -4,7 +4,7 @@ import mujica.ds.any.set.CollectionConstant;
 import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.text.format.AppenderToStringBuilder;
+import mujica.text.format.AppenderToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.any.ComparableComparator;
+import mujica.ds.common.ComparableComparator;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.Name;

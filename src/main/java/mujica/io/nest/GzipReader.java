@@ -2,6 +2,7 @@ package mujica.io.nest;
 
 import mujica.io.fs.EmptyFileAttributes;
 import mujica.io.stream.BufferedLimitedInputStream;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,9 +12,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created on 2025/11/8.
- */
+@CodeHistory(date = "2025/11/8")
 public class GzipReader implements NestReader<NestResourceKey.Gzip, BasicFileAttributes> { // GzipFileAttributes
 
     private static final int FLAG_TEXT          = 0x01;

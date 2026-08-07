@@ -26,41 +26,37 @@ module CRYCHIC {
     exports mujica.io.compress;
     exports mujica.io.nest;
     exports mujica.io.fs;
-    exports mujica.ds;
-    exports mujica.ds.any;
+    exports mujica.ds.common;
     exports mujica.ds.any.list;
     exports mujica.ds.any.set;
-    exports mujica.ds.any.map;
     exports mujica.ds.any.heap;
     exports mujica.ds.bit;
     exports mujica.ds.bit.list;
     exports mujica.ds.i8;
     exports mujica.ds.i8.view;
     exports mujica.ds.i8.run;
-    exports mujica.ds.text.sequence;
-    exports mujica.ds.text.filter;
-    exports mujica.ds.text.sanitizer;
-    exports mujica.ds.text.collation;
-    exports mujica.ds.text.number;
-    exports mujica.ds.text.format;
-    exports mujica.ds.text.bnf;
-    exports mujica.ds.text.regex;
-    exports mujica.ds.base;
     exports mujica.ds.i32;
     exports mujica.ds.i32.list;
     exports mujica.ds.i32.set;
     exports mujica.ds.i32.map;
     exports mujica.ds.i64;
-    exports mujica.ds.i64.list;
     exports mujica.ds.f32;
     exports mujica.ds.f64;
     exports mujica.ds.slot;
     exports mujica.ds.sort;
-    exports mujica.algebra.discrete;
-    exports mujica.algebra.prime;
-    exports mujica.algebra.random;
-    exports mujica.geometry;
-    exports mujica.geometry.g2d;
+    exports mujica.text.sequence;
+    exports mujica.text.filter;
+    exports mujica.text.sanitizer;
+    exports mujica.text.collation;
+    exports mujica.text.number;
+    exports mujica.text.format;
+    exports mujica.text.bnf;
+    exports mujica.text.regex;
+    exports mujica.algebra.discrete; // remove it later
+    exports mujica.algebra.prime; // remove it later
+    exports mujica.algebra.random; // remove it later
+    exports mujica.geometry; // remove it later
+    exports mujica.geometry.g2d; // remove it later
     exports mujica.json.container;
     exports mujica.json.handler;
     exports mujica.json.io;

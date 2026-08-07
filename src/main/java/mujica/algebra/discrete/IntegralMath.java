@@ -249,11 +249,11 @@ public class IntegralMath {
         if (sign <= 0) {
             if (sign == 0) {
                 if (base.signum() == 0) {
-                    throw new ArithmeticException("Power zero");
+                    throw new ArithmeticException("power zero");
                 }
                 return BigInteger.ONE;
             }
-            throw new ArithmeticException("Power negative");
+            throw new ArithmeticException("power negative");
         }
         if (BigInteger.ONE.equals(base) || BigInteger.ZERO.equals(base)) {
             return base;
@@ -266,7 +266,7 @@ public class IntegralMath {
             }
         }
         if (exponent.compareTo(BIG_POWER_THRESHOLD) > 0) {
-            throw new ArithmeticException("Assumed power overflow");
+            throw new ArithmeticException("assumed power overflow");
         }
         return base.pow(exponent.intValue());
     }
@@ -277,10 +277,10 @@ public class IntegralMath {
      */
     public int factorial(int a) {
         if (a < 0) {
-            throw new ArithmeticException("Factorial negative");
+            throw new ArithmeticException("factorial negative");
         }
         if (a > 12) {
-            throw new ArithmeticException("Factorial overflow");
+            throw new ArithmeticException("factorial overflow");
         }
         int f = 1;
         for (int i = 2; i <= a; i++) {
@@ -295,10 +295,10 @@ public class IntegralMath {
      */
     public long factorial(long a) {
         if (a < 0L) {
-            throw new ArithmeticException("Factorial negative");
+            throw new ArithmeticException("factorial negative");
         }
         if (a > 20L) {
-            throw new ArithmeticException("Factorial overflow");
+            throw new ArithmeticException("factorial overflow");
         }
         long f = 1;
         for (long i = 2; i <= a; i++) {
@@ -310,10 +310,10 @@ public class IntegralMath {
     @NotNull
     public BigInteger factorial(@NotNull BigInteger a) {
         if (a.signum() < 0) {
-            throw new ArithmeticException("Factorial negative");
+            throw new ArithmeticException("factorial negative");
         }
         if (a.compareTo(BIG_POWER_THRESHOLD) > 0) {
-            throw new ArithmeticException("Assumed factorial overflow");
+            throw new ArithmeticException("assumed factorial overflow");
         }
         final int ia = a.intValue();
         BigInteger f = BigInteger.ONE;
@@ -329,10 +329,10 @@ public class IntegralMath {
      */
     public int doubleFactorial(int a) {
         if (a < 0) {
-            throw new ArithmeticException("Double factorial negative");
+            throw new ArithmeticException("double factorial negative");
         }
         if (a > 19) {
-            throw new ArithmeticException("Double factorial overflow");
+            throw new ArithmeticException("double factorial overflow");
         }
         int product = 1;
         for (; a >= 2; a -= 2) {
@@ -347,10 +347,10 @@ public class IntegralMath {
      */
     public long doubleFactorial(long a) {
         if (a < 0L) {
-            throw new ArithmeticException("Double factorial negative");
+            throw new ArithmeticException("double factorial negative");
         }
         if (a > 33L) {
-            throw new ArithmeticException("Double factorial overflow");
+            throw new ArithmeticException("double factorial overflow");
         }
         long product = 1L;
         for (; a >= 2L; a -= 2L) {
@@ -364,7 +364,7 @@ public class IntegralMath {
         int ia = a.intValueExact();
         if (ia < 2) {
             if (ia < 0) {
-                throw new ArithmeticException("Double factorial negative");
+                throw new ArithmeticException("double factorial negative");
             }
             return BigInteger.ONE;
         }
@@ -444,7 +444,7 @@ public class IntegralMath {
         int ii = i.intValueExact();
         if (ii < 2) {
             if (ii < 0) {
-                throw new ArithmeticException("Fibonacci negative");
+                throw new ArithmeticException("fibonacci negative");
             }
             return i;
         }
@@ -498,7 +498,7 @@ public class IntegralMath {
     public BigInteger arrangement(@NotNull BigInteger n, @NotNull BigInteger m) {
         final int signM = m.signum();
         if (!(0 <= signM && m.compareTo(n) <= 0)) {
-            throw new ArithmeticException("Bad arrangement arguments");
+            throw new ArithmeticException("bad arrangement arguments");
         }
         if (signM == 0) {
             return BigInteger.ONE;
@@ -512,7 +512,7 @@ public class IntegralMath {
 
     public int combination(int n, int m) {
         if (!(0 <= m && m <= n)) {
-            throw new ArithmeticException("Bad combination arguments");
+            throw new ArithmeticException("bad combination arguments");
         }
         m = Math.min(m, n - m); // C(n, m) = C(n, n - m)
         if (m == 0) {
@@ -527,7 +527,7 @@ public class IntegralMath {
 
     public long combination(long n, long m) {
         if (!(0L <= m && m <= n)) {
-            throw new ArithmeticException("Bad combination arguments");
+            throw new ArithmeticException("bad combination arguments");
         }
         m = Math.min(m, n - m); // C(n, m) = C(n, n - m)
         if (m <= 2L) { // long value can not use switch
@@ -571,7 +571,7 @@ public class IntegralMath {
 
     public BigInteger combination(@NotNull BigInteger n, @NotNull BigInteger m) {
         if (!(0 <= m.signum() && m.compareTo(n) <= 0)) {
-            throw new ArithmeticException("Bad combination arguments");
+            throw new ArithmeticException("bad combination arguments");
         }
         {
             BigInteger em = n.subtract(m);
@@ -601,7 +601,7 @@ public class IntegralMath {
         for (int k = 1; k < length; k++) {
             int m = array[k];
             if (m < 0) {
-                throw new ArithmeticException("Negative combination element");
+                throw new ArithmeticException("negative combination element");
             }
             if (m > s) {
                 mk = k;
@@ -634,7 +634,7 @@ public class IntegralMath {
         while (index < length) {
             long value = array[index++];
             if (value < 0L) {
-                throw new ArithmeticException("Negative combination element");
+                throw new ArithmeticException("negative combination element");
             }
             if (value > 0L) {
                 sum = value;
@@ -657,7 +657,7 @@ public class IntegralMath {
         for (int k = 1; k < length; k++) {
             BigInteger m = array[k];
             if (m.signum() < 0) {
-                throw new ArithmeticException("Negative combination element");
+                throw new ArithmeticException("negative combination element");
             }
             if (m.compareTo(s) > 0) {
                 mk = k;
@@ -693,7 +693,7 @@ public class IntegralMath {
             throw new ArithmeticException();
         }
         if (i.compareTo(BIG_POWER_THRESHOLD) > 0) {
-            throw new ArithmeticException("Assumed derangement overflow");
+            throw new ArithmeticException("assumed derangement overflow");
         }
         final int ii = i.intValue();
         BigInteger sum = BigInteger.ZERO;
@@ -742,11 +742,11 @@ public class IntegralMath {
             } else if (length == 1) {
                 int value = array[0];
                 if (value <= 0) {
-                    throw new ArithmeticException("Non-positive gcd");
+                    throw new ArithmeticException("non-positive gcd");
                 }
                 return value;
             } else {
-                throw new ArithmeticException("Empty array gcd");
+                throw new ArithmeticException("empty array gcd");
             }
         }
         while (true) {

@@ -30,6 +30,12 @@ public class CopyOnWriteSlotList<S, A> extends RandomAccessBasedSlotCollection<S
 
     @NotNull
     @Override
+    public SlotCollection<S, A> duplicateNew() {
+        return new CopyOnWriteSlotList<>(allocator);
+    }
+
+    @NotNull
+    @Override
     public CopyOnWriteSlotList<S, A> duplicate() {
         return new CopyOnWriteSlotList<>(allocator, array);
     }
@@ -79,12 +85,20 @@ public class CopyOnWriteSlotList<S, A> extends RandomAccessBasedSlotCollection<S
     public void removeItemAt(int index, @Nullable S slot) throws IndexOutOfBoundsException {
         final A oldArray = array;
         final int oldLength = allocator.length(oldArray);
-        if (index < 0 || index >= oldLength) {
+        final int endLength = oldLength - index - 1;
+        if (index < 0 || endLength < 0) {
             throw new IndexOutOfBoundsException();
         }
         final A newArray = allocator.newArray(oldLength - 1);
-        allocator.copy(oldArray, 0, newArray, 0, index);
-        allocator.copy(oldArray, index + 1, newArray, index, oldLength - index - 1);
+        if (index > 0) {
+            allocator.copy(oldArray, 0, newArray, 0, index);
+        }
+        if (slot != null) {
+            allocator.load(oldArray, index, slot);
+        }
+        if (endLength > 0) {
+            allocator.copy(oldArray, index + 1, newArray, index, endLength);
+        }
         array = newArray;
         allocator.releaseArray(oldArray);
     }
@@ -100,6 +114,7 @@ public class CopyOnWriteSlotList<S, A> extends RandomAccessBasedSlotCollection<S
         if (gapIndex > 0) {
             allocator.copy(oldArray, 0, newArray, 0, gapIndex);
         }
+        allocator.store(newArray, gapIndex, in);
         if (gapIndex < oldLength) {
             allocator.copy(oldArray, gapIndex, newArray, gapIndex + 1, oldLength - gapIndex);
         }

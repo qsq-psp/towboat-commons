@@ -1,12 +1,13 @@
 package mujica.ds.f64;
 
-import mujica.ds.f32.F32Slot;
 import mujica.ds.slot.SlotArrayAllocator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2026/7/24")
 public class SlotArrayAllocatorF64 implements SlotArrayAllocator<F64Slot, double[]> {
+
+    public static final SlotArrayAllocatorF64 INSTANCE = new SlotArrayAllocatorF64();
 
     public static final double[] EMPTY_ARRAY = new double[0];
 

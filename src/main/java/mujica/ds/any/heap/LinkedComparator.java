@@ -1,6 +1,6 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.any.ComparableComparator;
+import mujica.ds.common.ComparableComparator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

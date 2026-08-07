@@ -1,6 +1,7 @@
 package mujica.ds.i32.set;
 
 import mujica.algebra.random.FuzzyContext;
+import mujica.ds.i32.list.ModuloLookUpCapacityPolicy;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class IntSetTest {
     @Test
     public void fuzzAdd() {
         fuzzAdd(new LinearClosedHashIntSet(null));
-        fuzzAdd(new QuadraticClosedHashIntSet(null));
+        fuzzAdd(new QuadraticClosedHashIntSet(ModuloLookUpCapacityPolicy.INSTANCE_67));
         fuzzAdd(new JdkNavigableIntSet());
     }
 
@@ -47,7 +48,7 @@ public class IntSetTest {
     @Test
     public void fuzzRemove() {
         fuzzRemove(new LinearClosedHashIntSet(null));
-        fuzzRemove(new QuadraticClosedHashIntSet(null));
+        fuzzRemove(new QuadraticClosedHashIntSet(ModuloLookUpCapacityPolicy.INSTANCE_67));
         fuzzRemove(new JdkNavigableIntSet());
     }
 
@@ -64,7 +65,7 @@ public class IntSetTest {
     @Test
     public void fuzzAddDuplicate() {
         fuzzAddDuplicate(new LinearClosedHashIntSet(null));
-        fuzzAddDuplicate(new QuadraticClosedHashIntSet(null));
+        fuzzAddDuplicate(new QuadraticClosedHashIntSet(ModuloLookUpCapacityPolicy.INSTANCE_67));
         fuzzAddDuplicate(new JdkNavigableIntSet());
     }
 }

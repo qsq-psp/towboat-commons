@@ -17,9 +17,20 @@ import java.util.function.Predicate;
 @DirectSubclass({VersionSlotList.class, CopyOnWriteSlotList.class})
 public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotCollection<S, A> {
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     @NotNull
-    public abstract RandomAccessBasedSlotCollection<S, A> duplicate();
+    public SlotCollection<S, A> clone() {
+        return duplicate();
+    }
+
+    @NotNull
+    @Override
+    public abstract SlotCollection<S, A> duplicateNew();
+
+    @Override
+    @NotNull
+    public abstract SlotCollection<S, A> duplicate();
 
     @Override
     public abstract void checkHealth(@NotNull Consumer<RuntimeException> consumer);
@@ -48,33 +59,33 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     @Override
     public int firstIndexOf(@NotNull S in) {
         final int listSize = size();
-        final S tempSlot = getAllocator().newSlot();
+        final S scanSlot = getAllocator().newSlot();
         try {
             for (int index = 0; index < listSize; index++) {
-                getItemAt(index, tempSlot);
-                if (in.equals(tempSlot)) {
+                getItemAt(index, scanSlot);
+                if (in.equals(scanSlot)) {
                     return index;
                 }
             }
             return -1;
         } finally {
-            getAllocator().releaseSlot(tempSlot);
+            getAllocator().releaseSlot(scanSlot);
         }
     }
 
     @Override
     public int lastIndexOf(@NotNull S in) {
-        final S tempSlot = getAllocator().newSlot();
+        final S scanSlot = getAllocator().newSlot();
         try {
             for (int index = size() - 1; index >= 0; index--) {
-                getItemAt(index, tempSlot);
-                if (in.equals(tempSlot)) {
+                getItemAt(index, scanSlot);
+                if (in.equals(scanSlot)) {
                     return index;
                 }
             }
             return -1;
         } finally {
-            getAllocator().releaseSlot(tempSlot);
+            getAllocator().releaseSlot(scanSlot);
         }
     }
 
@@ -164,6 +175,27 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
         } else {
             removeFirstItem(out);
         }
+    }
+
+    @Override
+    public boolean removeFirstEqualItem(@NotNull S slot) {
+        final int index = firstIndexOf(slot);
+        if (index == -1) {
+            return false;
+        }
+        removeItemAt(index, slot);
+        return true;
+    }
+
+    @Override
+    public boolean internItem(@NotNull S slot) {
+        final int index = firstIndexOf(slot);
+        if (index == -1) {
+            insertLastItem(slot);
+            return false;
+        }
+        getItemAt(index, slot);
+        return true;
     }
 
     @Override
@@ -324,10 +356,14 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     public void getRange(int srcIndex, @NotNull A dst, int dstIndex, int length) {
         final SlotArrayAllocator<S, A> allocator = getAllocator();
         final S tempSlot = allocator.newSlot();
-        while (length > 0) {
-            getItemAt(srcIndex++, tempSlot);
-            allocator.store(dst, dstIndex++, tempSlot);
-            length--;
+        try {
+            while (length > 0) {
+                getItemAt(srcIndex++, tempSlot);
+                allocator.store(dst, dstIndex++, tempSlot);
+                length--;
+            }
+        } finally {
+            allocator.releaseSlot(tempSlot);
         }
     }
 
@@ -352,18 +388,6 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
         final A newArray = getAllocator().newArray(length);
         getRange(0, newArray, 0, length);
         return newArray;
-    }
-
-    @Override
-    public boolean internItem(@NotNull S slot) {
-        final S tempSlot0 = getAllocator().newSlot();
-        if (some(tempSlot1 -> tempSlot1.equals(slot), tempSlot0)) {
-            getAllocator().move(tempSlot0, slot);
-            return true;
-        } else {
-            insertLastItem(slot);
-            return false;
-        }
     }
 
     @Override
@@ -464,13 +488,12 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
 
     @Override
     public boolean tryInternItem(@NotNull S slot) {
-        final S temp0 = getAllocator().newSlot();
-        if (some(temp1 -> temp1.equals(slot), temp0)) {
-            getAllocator().move(temp0, slot);
-            return true;
-        } else {
+        final int index = firstIndexOf(slot);
+        if (index == -1) {
             return false;
         }
+        getItemAt(index, slot);
+        return true;
     }
 
     @Override
@@ -523,10 +546,10 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
         while (index < listSize) {
             getItemAt(index, tempSlot);
             if (filter.test(tempSlot)) {
-                index++;
-            } else {
                 removeItemAt(index, null);
                 listSize--;
+            } else {
+                index++;
             }
         }
     }
@@ -634,23 +657,41 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     @NotNull
     @Override
     public String summaryToString() {
-        return "[size = " + size() + "]";
+        return "size = " + size();
     }
 
     @NotNull
     @Override
     public String detailToString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        final S tempSlot = getAllocator().newSlot();
         final int listSize = size();
-        for (int index = 0; index < listSize; index++) {
-            if (index != 0) {
-                sb.append(", ");
+        final S tempSlot = getAllocator().newSlot();
+        try {
+            for (int index = 0; index < listSize; index++) {
+                if (index != 0) {
+                    sb.append(", ");
+                }
+                getItemAt(index, tempSlot);
+                sb.append(tempSlot);
             }
-            getItemAt(index, tempSlot);
-            sb.append(tempSlot);
+        } finally {
+            getAllocator().releaseSlot(tempSlot);
         }
-        return sb.append("}").toString();
+        return sb.toString();
+    }
+
+    @Override
+    @NotNull
+    public String toString() {
+        try {
+            String summary = summaryToString();
+            try {
+                return getClass().getSimpleName() + " [" + summary + "] {" + detailToString() + "}";
+            } catch (RuntimeException e) {
+                return getClass().getSimpleName() + " [" + summary + "] " + e;
+            }
+        } catch (RuntimeException e) {
+            return getClass().getSimpleName() + " " + e;
+        }
     }
 }

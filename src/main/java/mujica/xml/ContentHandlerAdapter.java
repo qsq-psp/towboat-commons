@@ -1,14 +1,13 @@
 package mujica.xml;
 
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-/**
- * Created on 2026/6/20.
- */
+@CodeHistory(date = "2026/6/20")
 public class ContentHandlerAdapter<H extends ContentHandler> implements ContentHandler {
 
     @NotNull

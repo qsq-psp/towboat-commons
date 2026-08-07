@@ -1,7 +1,7 @@
 package mujica.io.fs;
 
-import mujica.ds.base.HealthAware;
-import mujica.ds.InvariantException;
+import mujica.ds.common.HealthAware;
+import mujica.ds.common.InvariantException;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,7 +49,7 @@ public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implemen
             slow = slow.parent;
             fast = fast.parent.parent;
         }
-        consumer.accept(new InvariantException("loop"));
+        consumer.accept(new RuntimeException("loop"));
     }
 
     @Override

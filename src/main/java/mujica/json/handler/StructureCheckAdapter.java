@@ -19,7 +19,7 @@ public class StructureCheckAdapter<H extends JsonHandler> extends JsonHandlerAda
     public static final int STATE_OBJECT = JsonWriter.STATE_OBJECT;
     public static final int STATE_KEY = JsonWriter.STATE_KEY;
 
-    protected final CopyOnResizeSlotList<I32Slot, int[]> stack = new CopyOnResizeSlotList<>(SlotArrayAllocatorI32.WithHashImpl.TWICE);
+    protected final CopyOnResizeSlotList<I32Slot, int[]> stack = new CopyOnResizeSlotList<>(SlotArrayAllocatorI32.WithHashI32.TWICE);
 
     protected final I32Slot slot = new I32();
 

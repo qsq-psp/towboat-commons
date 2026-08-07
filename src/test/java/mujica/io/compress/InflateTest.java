@@ -48,7 +48,7 @@ public class InflateTest {
         switch (fc.nextInt(10)) {
             case 0:
             case 1:
-                return new Order1CapacityPolicy(fc);
+                return new LinearCapacityPolicy(fc);
             case 2:
                 return new TwiceCapacityPolicy(fc.nextInt(2, 20));
             case 3:

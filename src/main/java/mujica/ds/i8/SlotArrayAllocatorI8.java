@@ -1,11 +1,15 @@
 package mujica.ds.i8;
 
+import mujica.ds.i32.list.CapacityPolicy;
+import mujica.ds.i32.list.TwiceCapacityPolicy;
 import mujica.ds.slot.SlotArrayAllocator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2026/6/25")
 public class SlotArrayAllocatorI8 implements SlotArrayAllocator<I8Slot, byte[]> {
+
+    public static final SlotArrayAllocatorI8 INSTANCE = new SlotArrayAllocatorI8();
 
     public static final byte[] EMPTY_ARRAY = new byte[0];
 
@@ -65,10 +69,20 @@ public class SlotArrayAllocatorI8 implements SlotArrayAllocator<I8Slot, byte[]> 
     }
 
     @Override
-    public void exchange(@NotNull byte[] array, int i, int j) {
-        final byte temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+    public void exchange(@NotNull byte[] array, int firstIndex, int secondIndex) {
+        final byte tempValue = array[firstIndex];
+        array[firstIndex] = array[secondIndex];
+        array[secondIndex] = tempValue;
+    }
+
+    @Override
+    public void reverse(@NotNull byte[] array, int startIndex, int endIndex) {
+        endIndex--;
+        while (startIndex < endIndex) {
+            exchange(array, startIndex, endIndex);
+            startIndex++;
+            endIndex--;
+        }
     }
 
     @Override
@@ -83,5 +97,35 @@ public class SlotArrayAllocatorI8 implements SlotArrayAllocator<I8Slot, byte[]> 
     @NotNull
     public String toString() {
         return "SlotTool[dataType = i8, slotType = I8Slot, arrayType = byte[]]";
+    }
+
+    @CodeHistory(date = "2026/7/26")
+    public static class WithHashI8 extends SlotArrayAllocatorI8 implements HashSAA<I8Slot, byte[]> {
+
+        public static final WithHashI8 TWICE = new WithHashI8(TwiceCapacityPolicy.INSTANCE);
+
+        @NotNull
+        final CapacityPolicy capacityPolicy;
+
+        public WithHashI8(@NotNull CapacityPolicy capacityPolicy) {
+            super();
+            this.capacityPolicy = capacityPolicy;
+        }
+
+        @NotNull
+        @Override
+        public CapacityPolicy getCapacityPolicy() {
+            return capacityPolicy;
+        }
+
+        @Override
+        public boolean slotEquals(@NotNull I8Slot left, @NotNull I8Slot right) {
+            return left.getI8() == right.getI8();
+        }
+
+        @Override
+        public int slotHash(@NotNull I8Slot slot) {
+            return slot.getI8();
+        }
     }
 }

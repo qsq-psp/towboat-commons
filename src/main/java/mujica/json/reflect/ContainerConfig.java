@@ -31,7 +31,7 @@ public class ContainerConfig {
     }
 
     @NotNull
-    ArrayAction arrayAction = ArrayAction.NEW;
+    ArrayAction arrayAction = ArrayAction.CLEAR;
 
     @NotNull
     public ArrayAction getArrayAction() {

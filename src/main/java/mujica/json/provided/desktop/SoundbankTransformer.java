@@ -16,18 +16,18 @@ public class SoundbankTransformer implements JsonContextTransformer<Soundbank> {
     public static final SoundbankTransformer INSTANCE = new SoundbankTransformer();
 
     @Override
-    public void transform(@NotNull Soundbank in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull Soundbank soundbank, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(DataFlavorTransformer.NAME);
-            out.stringValue(in.getName());
+            out.stringValue(soundbank.getName());
             out.key("version");
-            out.stringValue(in.getVersion());
+            out.stringValue(soundbank.getVersion());
             out.key("description");
-            out.stringValue(in.getDescription());
+            out.stringValue(soundbank.getDescription());
         }
         {
-            Instrument[] instruments = in.getInstruments();
+            Instrument[] instruments = soundbank.getInstruments();
             if (instruments != null && instruments.length != 0) {
                 out.key("instruments");
                 out.openArray();

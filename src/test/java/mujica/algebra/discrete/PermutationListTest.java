@@ -216,11 +216,8 @@ public class PermutationListTest {
         }
     }
 
-    /**
-     * Blind means that hasNext() is not called before calling next() and hasPrevious() is not called before calling previous()
-     */
     @Test
-    public void checkBlindIterator() {
+    public void checkBlindIterator() { // 'blind' means that hasNext() is not called before calling next() and hasPrevious() is not called before calling previous()
         for (int n = 2; n <= MAX_N; n++) {
             PermutationList list = new PermutationList(n);
             try {

@@ -1,6 +1,6 @@
 package mujica.ds.bit.list;
 
-import mujica.ds.base.DataStructure;
+import mujica.ds.common.DataStructure;
 import mujica.ds.bit.ReadOnlyBitArray;
 import mujica.reflect.function.BooleanConsumer;
 import mujica.reflect.modifier.CodeHistory;

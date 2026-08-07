@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-@ReferenceCode(groupId = "org.bouncycastle", artifactId = "bcprov-lts8on", fullyQualifiedName = "org.bouncycastle.util.io.TeeInputStream")
 @CodeHistory(date = "2025/12/28")
+@ReferenceCode(groupId = "org.bouncycastle", artifactId = "bcprov-lts8on", fullyQualifiedName = "org.bouncycastle.util.io.TeeInputStream")
 public class TeeInputStream extends FilterInputStream {
 
     @NotNull

@@ -1,14 +1,13 @@
 package mujica.xml;
 
 import mujica.ds.any.list.TruncateList;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-/**
- * Created on 2026/6/21.
- */
+@CodeHistory(date = "2026/6/21")
 public class ElementStructureCheckAdapter<H extends ContentHandler> extends ContentHandlerAdapter<H> {
 
     @NotNull

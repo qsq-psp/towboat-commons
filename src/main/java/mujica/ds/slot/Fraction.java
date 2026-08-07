@@ -1,11 +1,10 @@
 package mujica.ds.slot;
 
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2026/6/5.
- */
+@CodeHistory(date = "2026/6/5")
 public class Fraction<S extends Base2Integer> implements Rational {
 
     @NotNull

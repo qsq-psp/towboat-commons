@@ -3,7 +3,7 @@ package mujica.io.compress;
 import mujica.ds.i8.run.CyclicArrayRunBuffer;
 import mujica.io.stream.BufferedLimitedUniversalDataInputStream;
 import mujica.reflect.modifier.CodeHistory;
-import mujica.ds.text.number.HexEncoder;
+import mujica.text.number.HexEncoder;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.runner.Description;

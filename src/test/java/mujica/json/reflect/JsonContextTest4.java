@@ -1,10 +1,9 @@
 package mujica.json.reflect;
 
+import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.ReferencePage;
 
-/**
- * Created on 2026/4/28.
- */
+@CodeHistory(date = "2026/4/28")
 @ReferencePage(title = "Algorithms Jeff Erickson 07 strings", href = "http://jeffe.cs.illinois.edu/teaching/algorithms/")
 public class JsonContextTest4 {
 

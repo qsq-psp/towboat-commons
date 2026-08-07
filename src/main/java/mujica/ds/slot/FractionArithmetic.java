@@ -6,9 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.RoundingMode;
 
-/**
- * Created on 2026/6/17.
- */
 @CodeHistory(date = "2026/6/17")
 public class FractionArithmetic<S extends Base2Integer> extends AbstractArithmetic<Fraction<S>> {
 

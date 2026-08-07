@@ -21,17 +21,12 @@ public abstract class JsonArray extends JsonContainer<Integer> {
 
     @NotNull
     public static JsonArray newArrayList() {
-        return new UtilListAsJsonArray<>(new ArrayList<>());
+        return new UtilListAsJsonArray(new ArrayList<>());
     }
 
     @NotNull
     public static JsonArray newLinkedList() {
-        return new UtilListAsJsonArray<>(new LinkedList<>());
-    }
-
-    @NotNull
-    public static JsonArray newTruncateList() {
-        return new UtilListAsJsonArray<>(new TruncateList<>());
+        return new UtilListAsJsonArray(new LinkedList<>());
     }
 
     protected JsonArray() {
@@ -60,7 +55,7 @@ public abstract class JsonArray extends JsonContainer<Integer> {
     }
 
     @CodeHistory(date = "2025/9/26")
-    class SlotImpl implements TypeSlot<Object>, Serializable {
+    class SlotImpl extends TypeSlot<Object> implements Serializable {
 
         private static final long serialVersionUID = 0xb83ccb1367e96deeL;
 

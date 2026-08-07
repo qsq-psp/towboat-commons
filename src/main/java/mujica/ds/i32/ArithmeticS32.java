@@ -9,7 +9,9 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 
 @CodeHistory(date = "2026/6/29")
-public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
+public class ArithmeticS32 extends PrimitiveArithmetic<S32, int[]> {
+    
+    public static final ArithmeticS32 INSTANCE = new ArithmeticS32();
 
     public ArithmeticS32() {
         super();
@@ -17,14 +19,14 @@ public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
 
     @NotNull
     @Override
-    public I32Slot newSlot() {
+    public S32 newSlot() {
         return new S32();
     }
 
     @NotNull
     @Override
-    public I32Slot cloneSlot(@NotNull I32Slot original) {
-        return new I32(original.getI32());
+    public S32 cloneSlot(@NotNull S32 original) {
+        return new S32(original.value);
     }
 
     @NotNull
@@ -55,148 +57,155 @@ public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
     }
 
     @Override
-    public void load(@NotNull int[] array, int index, @NotNull I32Slot slot) {
-        slot.setI32(array[index]);
+    public void load(@NotNull int[] array, int index, @NotNull S32 slot) {
+        slot.value = array[index];
     }
 
     @Override
-    public void store(@NotNull int[] array, int index, @NotNull I32Slot slot) {
-        array[index] = slot.getI32();
+    public void store(@NotNull int[] array, int index, @NotNull S32 slot) {
+        array[index] = slot.value;
     }
 
     @Override
-    public void zero(@NotNull I32Slot result) {
-        result.setI32(0);
+    public void zero(@NotNull S32 result) {
+        result.value = 0;
     }
 
     @Override
-    public void one(@NotNull I32Slot result) {
-        result.setI32(1);
+    public void one(@NotNull S32 result) {
+        result.value = 1;
     }
 
     @Override
-    public void two(@NotNull I32Slot result) {
-        result.setI32(2);
+    public void two(@NotNull S32 result) {
+        result.value = 2;
     }
 
     @Override
-    public void min(@NotNull I32Slot result) {
-        result.setI32(Integer.MIN_VALUE);
+    public void min(@NotNull S32 result) {
+        result.value = Integer.MIN_VALUE;
     }
 
     @Override
-    public void max(@NotNull I32Slot result) {
-        result.setI32(Integer.MAX_VALUE);
+    public void max(@NotNull S32 result) {
+        result.value = Integer.MAX_VALUE;
     }
 
     @Override
-    public void min(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
-        result.setI32(Math.min(left.getI32(), right.getI32()));
+    public void min(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
+        result.value = Math.min(left.value, right.value);
     }
 
     @Override
-    public void max(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
-        result.setI32(Math.max(left.getI32(), right.getI32()));
+    public void max(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
+        result.value = Math.max(left.value, right.value);
     }
 
     @Override
-    public int compareSlot(@NotNull I32Slot a, @NotNull I32Slot b) {
-        return Integer.compare(a.getI32(), b.getI32());
+    public int compareSlot(@NotNull S32 a, @NotNull S32 b) {
+        return Integer.compare(a.value, b.value);
     }
 
     @Override
-    public int sign(@NotNull I32Slot variable) {
-        return Integer.signum(variable.getI32());
+    public int sign(@NotNull S32 variable) {
+        return Integer.signum(variable.value);
     }
 
     @Override
-    public void move(@NotNull I32Slot src, @NotNull I32Slot dst) {
-        dst.setI32(src.getI32());
+    public void move(@NotNull S32 src, @NotNull S32 dst) {
+        dst.value = src.value;
     }
 
     @Override
-    public void exchange(@NotNull I32Slot a, @NotNull I32Slot b) {
+    public void exchange(@NotNull S32 a, @NotNull S32 b) {
         a.setI32(b.updateI32(a.getI32()));
     }
 
     @Override
-    public void negate(@NotNull I32Slot variable, @NotNull I32Slot result) {
-        result.setI32(Math.negateExact(variable.getI32()));
+    public void negate(@NotNull S32 variable, @NotNull S32 result) {
+        result.value = Math.negateExact(variable.value);
     }
 
     @Override
-    public void absolute(@NotNull I32Slot variable, @NotNull I32Slot result) {
-        final int value = variable.getI32();
-        if (value >= 0) {
-            result.setI32(value);
-        } else if (value != Integer.MIN_VALUE) {
-            result.setI32(-value);
+    public void absolute(@NotNull S32 variable, @NotNull S32 result) {
+        if (variable.value >= 0) {
+            result.value = variable.value;
+        } else if (variable.value != Integer.MIN_VALUE) {
+            result.value = -variable.value;
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public boolean isInvertible(@NotNull I32Slot variable) {
-        final int value = variable.getI32();
-        return value == 1 || value == -1;
+    public boolean isInvertible(@NotNull S32 variable) {
+        return variable.value == 1 || variable.value == -1;
     }
 
     @Override
-    public void invert(@NotNull I32Slot variable, @NotNull I32Slot result) {
+    public void invert(@NotNull S32 variable, @NotNull S32 result) {
         if (isInvertible(variable)) {
             // same as move
-            result.setI32(variable.getI32());
+            result.value = variable.value;
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void increase(@NotNull I32Slot variable, @NotNull I32Slot result) {
+    public void increase(@NotNull S32 variable, @NotNull S32 result) {
         result.setI32(Math.incrementExact(variable.getI32()));
     }
 
     @Override
-    public void decrease(@NotNull I32Slot variable, @NotNull I32Slot result) {
+    public void decrease(@NotNull S32 variable, @NotNull S32 result) {
         result.setI32(Math.decrementExact(variable.getI32()));
     }
 
     @Override
-    public void add(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void add(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
         result.setI32(Math.addExact(left.getI32(), result.getI32()));
     }
 
     @Override
-    public void subtract(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void subtract(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
         result.setI32(Math.subtractExact(left.getI32(), result.getI32()));
     }
 
     @Override
-    public void multiply(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void multiply(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
         result.setI32(Math.multiplyExact(left.getI32(), result.getI32()));
     }
 
     @Override
-    public void square(@NotNull I32Slot variable, @NotNull I32Slot result) {
-        final int value = variable.getI32();
-        result.setI32(Math.multiplyExact(value, value));
-    }
-
-    @Override
-    public void triangle(@NotNull I32Slot variable, @NotNull I32Slot result) {
-        int left = variable.getI32();
-        int right = Math.incrementExact(left);
-        if ((left & 1) == 0) {
-            left >>= 1;
-        } else {
-            right >>= 1;
+    public void square(@NotNull S32 variable, @NotNull S32 result) {
+        // 46340**2 = 2147395600 < 2147483647 = Integer.MAX_VALUE
+        // 46341**2 = 2147488281 < 2147483647 = Integer.MAX_VALUE
+        if (variable.value < -46340 || variable.value > 46340) {
+            throw new ArithmeticException();
         }
-        result.setI32(Math.multiplyExact(left, right));
+        result.value = variable.value * variable.value;
     }
 
     @Override
-    public void divide(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result, @NotNull RoundingMode mode) {
+    public void triangle(@NotNull S32 variable, @NotNull S32 result) {
+        // 65535 * (65535 + 1) / 2 = 2147450880 < 2147483647 = Integer.MAX_VALUE
+        // 65536 * (65536 + 1) / 2 = 2147516416 > 2147483647 = Integer.MAX_VALUE
+        if (variable.value < -65536 || variable.value > 65535) {
+            throw new ArithmeticException();
+        }
+        int leftValue = variable.value;
+        int rightValue = Math.incrementExact(leftValue);
+        if ((leftValue & 1) == 0) {
+            leftValue >>= 1;
+        } else {
+            rightValue >>= 1;
+        }
+        result.value = leftValue * rightValue;
+    }
+
+    @Override
+    public void divide(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result, @NotNull RoundingMode mode) {
         final int leftValue = left.getI32();
         final int rightValue = right.getI32();
         final int resultValue = leftValue / rightValue;
@@ -208,7 +217,7 @@ public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
     }
 
     @Override
-    public void divide(@NotNull I32Slot left, @NotNull I32Slot right, @Nullable I32Slot quotient, @Nullable I32Slot remainder) {
+    public void divide(@NotNull S32 left, @NotNull S32 right, @Nullable S32 quotient, @Nullable S32 remainder) {
         final int leftValue = left.getI32();
         final int rightValue = right.getI32();
         if (quotient != null) {
@@ -220,7 +229,7 @@ public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
     }
 
     @Override
-    public void gcd(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void gcd(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
         int leftValue = left.getI32();
         int rightValue = right.getI32();
         if (leftValue <= 0 || rightValue <= 0) {
@@ -235,7 +244,7 @@ public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
     }
 
     @Override
-    public void lcm(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void lcm(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
         int leftValue = left.getI32();
         int rightValue = right.getI32();
         long product = ((long) leftValue) * rightValue;
@@ -256,8 +265,8 @@ public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
     }
 
     @Override
-    public void factorial(@NotNull I32Slot variable, @NotNull I32Slot result) {
-        final int value = variable.getI32();
+    public void factorial(@NotNull S32 variable, @NotNull S32 result) {
+        final int value = variable.value;
         if (value < 0) {
             throw new ArithmeticException();
         }
@@ -270,12 +279,12 @@ public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
         for (int index = 2; index <= value; index++) {
             product *= index;
         }
-        result.setI32(product);
+        result.value = product;
     }
 
     @Override
-    public void doubleFactorial(@NotNull I32Slot variable, @NotNull I32Slot result) {
-        int value = variable.getI32();
+    public void doubleFactorial(@NotNull S32 variable, @NotNull S32 result) {
+        int value = variable.value;
         if (value < 0) {
             throw new ArithmeticException();
         }
@@ -289,11 +298,11 @@ public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
             product *= value;
             value -= 2;
         }
-        result.setI32(product);
+        result.value = product;
     }
 
     @Override
-    public void arrangement(@NotNull I32Slot nSlot, @NotNull I32Slot mSlot, @NotNull I32Slot result) {
+    public void arrangement(@NotNull S32 nSlot, @NotNull S32 mSlot, @NotNull S32 result) {
         final int n = nSlot.getI32();
         final int m = mSlot.getI32();
         if (!(0 <= m && m <= n)) {
@@ -307,7 +316,7 @@ public class ArithmeticS32 extends PrimitiveArithmetic<I32Slot, int[]> {
     }
 
     @Override
-    public void combination(@NotNull I32Slot nSlot, @NotNull I32Slot mSlot, @NotNull I32Slot result) {
+    public void combination(@NotNull S32 nSlot, @NotNull S32 mSlot, @NotNull S32 result) {
         final int n = nSlot.getI32();
         int m = mSlot.getI32();
         if (!(0 <= m && m <= n)) {

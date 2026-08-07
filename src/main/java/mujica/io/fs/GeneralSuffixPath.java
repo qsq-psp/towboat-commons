@@ -1,7 +1,7 @@
 package mujica.io.fs;
 
-import mujica.ds.base.HealthAware;
-import mujica.ds.InvariantException;
+import mujica.ds.common.HealthAware;
+import mujica.ds.common.InvariantException;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +46,7 @@ public abstract class GeneralSuffixPath<P extends GeneralSuffixPath<P>> implemen
             slow = slow.child;
             fast = fast.child.child;
         }
-        consumer.accept(new InvariantException("loop"));
+        consumer.accept(new RuntimeException("loop"));
     }
 
     @Override

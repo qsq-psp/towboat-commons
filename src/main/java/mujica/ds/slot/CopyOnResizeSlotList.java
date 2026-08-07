@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 public class CopyOnResizeSlotList<S, A> extends VersionSlotList<S, A> {
 
     @NotNull
-    final SlotArrayAllocator.WithPolicy<S, A> allocator;
+    final SlotArrayAllocator.PolicySAA<S, A> allocator;
 
     @NotNull
     A array;
@@ -25,17 +25,23 @@ public class CopyOnResizeSlotList<S, A> extends VersionSlotList<S, A> {
     @Index(of = "array", inclusive = false)
     int endIndex;
 
-    public CopyOnResizeSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator) {
+    public CopyOnResizeSlotList(@NotNull SlotArrayAllocator.PolicySAA<S, A> allocator) {
         super();
         this.allocator = allocator;
         this.array = allocator.newArray(allocator.getCapacityPolicy().initialCapacity());
     }
 
-    CopyOnResizeSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator, @NotNull A array, int endIndex) {
+    CopyOnResizeSlotList(@NotNull SlotArrayAllocator.PolicySAA<S, A> allocator, @NotNull A array, int endIndex) {
         super();
         this.allocator = allocator;
         this.array = array;
         this.endIndex = endIndex;
+    }
+
+    @NotNull
+    @Override
+    public SlotCollection<S, A> duplicateNew() {
+        return new CopyOnResizeSlotList<>(allocator);
     }
 
     @NotNull
@@ -57,7 +63,7 @@ public class CopyOnResizeSlotList<S, A> extends VersionSlotList<S, A> {
 
     @Override
     @NotNull
-    public SlotArrayAllocator.WithPolicy<S, A> getAllocator() {
+    public SlotArrayAllocator.PolicySAA<S, A> getAllocator() {
         return allocator;
     }
 
@@ -74,7 +80,7 @@ public class CopyOnResizeSlotList<S, A> extends VersionSlotList<S, A> {
     @Override
     public boolean isFull() {
         final int capacity = allocator.length(array);
-        return endIndex == capacity && allocator.getCapacityPolicy().nextCapacity(capacity) == capacity;
+        return endIndex == capacity && allocator.getCapacityPolicy().tryLargerCapacity(capacity) == capacity;
     }
 
     @Override
@@ -117,7 +123,7 @@ public class CopyOnResizeSlotList<S, A> extends VersionSlotList<S, A> {
         version++;
     }
 
-    void enlargeArray(int newCapacity) {
+    private void enlargeArray(int newCapacity) {
         final A newArray = allocator.newArray(newCapacity);
         allocator.copy(array, 0, newArray, 0, endIndex);
         allocator.releaseArray(array);
@@ -129,7 +135,7 @@ public class CopyOnResizeSlotList<S, A> extends VersionSlotList<S, A> {
         // ensure one end room
         final int capacity = allocator.length(array);
         if (endIndex == capacity) {
-            enlargeArray(allocator.getCapacityPolicy().nextLargerCapacity(capacity));
+            enlargeArray(allocator.getCapacityPolicy().largerCapacity(capacity));
         }
         final int endLength = endIndex - gapIndex;
         if (endLength < 0) {
@@ -139,6 +145,7 @@ public class CopyOnResizeSlotList<S, A> extends VersionSlotList<S, A> {
             allocator.copySelf(array, gapIndex, gapIndex + 1, endLength);
         }
         allocator.store(array, gapIndex, in);
+        endIndex++;
         version++;
     }
 
@@ -299,5 +306,11 @@ public class CopyOnResizeSlotList<S, A> extends VersionSlotList<S, A> {
             }
             allocator.store(array, index, tempSlot);
         }
+    }
+
+    @NotNull
+    @Override
+    public String summaryToString() {
+        return "size = " + endIndex + ", capacity = " + allocator.length(array) + ", version = " + version;
     }
 }

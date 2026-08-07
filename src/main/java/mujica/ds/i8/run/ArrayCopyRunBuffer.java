@@ -36,7 +36,7 @@ public class ArrayCopyRunBuffer extends ArrayRunBuffer {
         int capacity = array.length;
         if (position >= capacity) {
             assert position == capacity;
-            int newCapacity = policy.nextCapacity(capacity);
+            int newCapacity = policy.tryLargerCapacity(capacity);
             if (capacity < newCapacity) {
                 array = Arrays.copyOf(array, newCapacity);
                 capacity = newCapacity;

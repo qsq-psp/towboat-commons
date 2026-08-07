@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.util.PrimitiveIterator;
 
 @CodeHistory(date = "2025/6/30")
+@Deprecated
 public class QuadraticProbingList extends AbstractIntList {
 
     private static final long serialVersionUID = 0x441a2613c30e8e18L;
@@ -92,14 +93,14 @@ public class QuadraticProbingList extends AbstractIntList {
 
     @Override
     public int getInt(int i) {
-        if ((i & 1) == 0) {
+        if ((i & 1) == 0) { // even
             i >>= 1; // [0, 1, 2, 3, 4, ...] -> [0, _, 1, _, 2, ...]
             i = (base - i * i) % modulo;
             if (i < 0) {
                 i += modulo;
             }
             return i;
-        } else {
+        } else { // odd
             i = (i + 1) >> 1; // [0, 1, 2, 3, 4, ...] -> [_, 1, _, 2, _, ...]
             return (base + i * i) % modulo;
         }

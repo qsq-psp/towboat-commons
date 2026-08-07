@@ -10,9 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 
-/**
- * Created on 2026/7/2.
- */
 @CodeHistory(date = "2026/7/2")
 public class TransferableTransformer implements JsonContextTransformer<Transferable> {
 

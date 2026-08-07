@@ -3,8 +3,10 @@ package mujica.ds.slot;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+
 @CodeHistory(date = "2026/6/14")
-public interface SlotAllocator<S> {
+public interface SlotAllocator<S> extends Serializable {
 
     @NotNull
     S newSlot();
@@ -28,10 +30,4 @@ public interface SlotAllocator<S> {
         move(b, a);
         move(temp, b);
     }
-
-    @CodeHistory(date = "2026/7/18")
-    interface WithNode2<S, N extends S> extends SlotAllocator<S>, NodeAccess2<N> {}
-
-    @CodeHistory(date = "2026/7/19")
-    interface WithNode3<S, N extends S> extends SlotAllocator<S>, NodeAccess3<N> {}
 }

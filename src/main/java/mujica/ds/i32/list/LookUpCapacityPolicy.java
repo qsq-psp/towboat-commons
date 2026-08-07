@@ -1,11 +1,13 @@
 package mujica.ds.i32.list;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
 @CodeHistory(date = "2025/7/2")
+@DirectSubclass({ModuloLookUpCapacityPolicy.class})
 public class LookUpCapacityPolicy extends CapacityPolicy {
 
     private static final long serialVersionUID = 0x0ab3151d3950e646L;
@@ -13,15 +15,15 @@ public class LookUpCapacityPolicy extends CapacityPolicy {
     @NotNull
     final int[] array;
 
-    final boolean isPrime;
+    final boolean isCongruent;
 
-    final boolean isQuadraticFull;
+    final boolean isQuadratic;
 
-    protected LookUpCapacityPolicy(@NotNull int[] array, boolean isPrime, boolean isQuadraticFull) {
+    protected LookUpCapacityPolicy(@NotNull int[] array, boolean isCongruent, boolean isQuadratic) {
         super();
         this.array = array;
-        this.isPrime = isPrime;
-        this.isQuadraticFull = isQuadraticFull;
+        this.isCongruent = isCongruent;
+        this.isQuadratic = isQuadratic;
     }
 
     protected LookUpCapacityPolicy(@NotNull int[] array) {
@@ -52,8 +54,8 @@ public class LookUpCapacityPolicy extends CapacityPolicy {
     }
 
     @Override
-    public int nextCapacity(int currentCapacity) {
-        int index = Arrays.binarySearch(array, currentCapacity);
+    public int tryLargerCapacity(int smallCapacity) {
+        int index = Arrays.binarySearch(array, smallCapacity);
         if (index < 0) {
             index = -(index + 1);
         } else {
@@ -66,13 +68,13 @@ public class LookUpCapacityPolicy extends CapacityPolicy {
     }
 
     @Override
-    public boolean notPrime() {
-        return !isPrime;
+    public boolean tryCongruent() {
+        return isCongruent;
     }
 
     @Override
-    public boolean notQuadraticFull() {
-        return !isQuadraticFull;
+    public boolean tryQuadratic() {
+        return isQuadratic;
     }
 
     private static final long LIMIT = Integer.MAX_VALUE + 1L;

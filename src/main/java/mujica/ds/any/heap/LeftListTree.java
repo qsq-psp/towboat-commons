@@ -1,6 +1,6 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.ConsistencyException;
+import mujica.ds.common.ConsistencyException;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;

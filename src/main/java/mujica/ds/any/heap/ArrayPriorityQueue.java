@@ -190,7 +190,7 @@ public class ArrayPriorityQueue<E> extends AbstractPriorityQueue<E> {
         int capacity = elements.length;
         if (head == 0) {
             if (tail == capacity) {
-                int newCapacity = policy.nextCapacity(capacity);
+                int newCapacity = policy.tryLargerCapacity(capacity);
                 if (!(capacity < newCapacity)) {
                     return false;
                 }

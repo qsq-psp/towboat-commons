@@ -1,7 +1,5 @@
 package mujica.ds.i32.set;
 
-import mujica.ds.ConsistencyException;
-import mujica.ds.InvariantException;
 import mujica.ds.any.set.CollectionConstant;
 import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
@@ -110,7 +108,7 @@ public class LinearClosedHashIntSet extends AbstractHashIntSet {
     @Override
     public boolean isFull() {
         final int capacity = array.length;
-        return size == capacity && policy.nextCapacity(capacity) == capacity;
+        return size == capacity && policy.tryLargerCapacity(capacity) == capacity;
     }
 
     @Override
@@ -143,7 +141,7 @@ public class LinearClosedHashIntSet extends AbstractHashIntSet {
      */
     private boolean rehash() {
         final int m0 = array.length;
-        final int m1 = policy.nextCapacity(m0);
+        final int m1 = policy.tryLargerCapacity(m0);
         if (m1 <= m0) {
             return false;
         }

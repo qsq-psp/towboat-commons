@@ -1,8 +1,7 @@
 package mujica.ds.i32;
 
 import mujica.ds.bit.BitSlot;
-import mujica.ds.slot.Base2Iterator;
-import mujica.ds.slot.ReadOnlyBase2Iterator;
+import mujica.ds.slot.*;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.FieldOrder;
 import org.jetbrains.annotations.NotNull;
@@ -173,11 +172,6 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
         return Integer.compare(this.value, that.value);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return this.getClass() == obj.getClass() && this.value == ((S32) obj).value;
-    }
-
     @NotNull
     @Override
     public String toString() {
@@ -328,5 +322,174 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
             slot.addExact(delta);
         }
         return slot.value;
+    }
+
+    @CodeHistory(date = "2026/7/27")
+    public static class S32Node1 extends S32 {
+
+        private static final long serialVersionUID = 0x343DC7B058F2ACD3L;
+
+        S32Node1 first;
+
+        int tag;
+    }
+
+    @CodeHistory(date = "2026/8/1")
+    public static class S32NodeAllocator1 implements NodeAllocator1<S32Node1> {
+
+        public static final S32NodeAllocator1 INSTANCE = new S32NodeAllocator1();
+
+        @NotNull
+        @Override
+        public S32Node1 newNode() {
+            return new S32Node1();
+        }
+
+        @Override
+        public S32Node1[] newNodeArray(int length) {
+            return new S32Node1[length];
+        }
+
+        @Override
+        public int getTag(@NotNull S32Node1 self) {
+            return self.tag;
+        }
+
+        @Override
+        public void setTag(@NotNull S32Node1 self, int newTag) {
+            self.tag = newTag;
+        }
+
+        @Override
+        public S32Node1 getFirstLink(@NotNull S32Node1 self) {
+            return self.first;
+        }
+
+        @Override
+        public void setFirstLink(@NotNull S32Node1 self, S32Node1 node) {
+            self.first = node;
+        }
+    }
+
+    @CodeHistory(date = "2026/7/27")
+    public static class S32Node2 extends S32 {
+
+        private static final long serialVersionUID = 0xBBB5F867CC6A6CCCL;
+
+        S32Node2 first, second;
+
+        int tag;
+    }
+
+    @CodeHistory(date = "2026/8/4")
+    public static class S32NodeAllocator2 implements NodeAllocator2<S32Node2> {
+
+        public static final S32NodeAllocator2 INSTANCE = new S32NodeAllocator2();
+
+        @NotNull
+        @Override
+        public S32Node2 newNode() {
+            return new S32Node2();
+        }
+
+        @Override
+        public S32Node2[] newNodeArray(int length) {
+            return new S32Node2[length];
+        }
+
+        @Override
+        public int getTag(@NotNull S32Node2 self) {
+            return self.tag;
+        }
+
+        @Override
+        public void setTag(@NotNull S32Node2 self, int newTag) {
+            self.tag = newTag;
+        }
+
+        @Override
+        public S32Node2 getFirstLink(@NotNull S32Node2 self) {
+            return self.first;
+        }
+
+        @Override
+        public void setFirstLink(@NotNull S32Node2 self, S32Node2 node) {
+            self.first = node;
+        }
+
+        @Override
+        public S32Node2 getSecondLink(@NotNull S32Node2 self) {
+            return self.second;
+        }
+
+        @Override
+        public void setSecondLink(@NotNull S32Node2 self, S32Node2 node) {
+            self.second = node;
+        }
+    }
+
+    @CodeHistory(date = "2026/7/27")
+    public static class S32Node3 extends S32 {
+
+        private static final long serialVersionUID = 0xC98E2D2ED4E15143L;
+
+        S32Node3 first, second, third;
+
+        int tag;
+    }
+
+    @CodeHistory(date = "2026/8/4")
+    public static class S32NodeAllocator3 implements NodeAllocator3<S32Node3> {
+
+        @NotNull
+        @Override
+        public S32Node3 newNode() {
+            return new S32Node3();
+        }
+
+        @Override
+        public S32Node3[] newNodeArray(int length) {
+            return new S32Node3[length];
+        }
+
+        @Override
+        public int getTag(@NotNull S32Node3 self) {
+            return self.tag;
+        }
+
+        @Override
+        public void setTag(@NotNull S32Node3 self, int newTag) {
+            self.tag = newTag;
+        }
+
+        @Override
+        public S32Node3 getFirstLink(@NotNull S32Node3 self) {
+            return self.first;
+        }
+
+        @Override
+        public void setFirstLink(@NotNull S32Node3 self, S32Node3 node) {
+            self.first = node;
+        }
+
+        @Override
+        public S32Node3 getSecondLink(@NotNull S32Node3 self) {
+            return self.second;
+        }
+
+        @Override
+        public void setSecondLink(@NotNull S32Node3 self, S32Node3 node) {
+            self.second = node;
+        }
+
+        @Override
+        public S32Node3 getThirdLink(@NotNull S32Node3 self) {
+            return self.third;
+        }
+
+        @Override
+        public void setThirdLink(@NotNull S32Node3 self, S32Node3 node) {
+            self.third = node;
+        }
     }
 }

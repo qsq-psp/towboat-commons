@@ -51,8 +51,8 @@ public class HalfCapacityPolicy extends CapacityPolicy {
     }
 
     @Override
-    public int nextCapacity(int currentCapacity) {
-        return super.nextCapacity(currentCapacity);
+    public int tryLargerCapacity(int smallCapacity) {
+        return super.tryLargerCapacity(smallCapacity);
     }
 
     @NotNull

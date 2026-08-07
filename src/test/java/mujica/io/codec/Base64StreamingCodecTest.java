@@ -10,9 +10,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-/**
- * Created on 2025/4/27.
- */
+@SuppressWarnings("SpellCheckingInspection")
 @CodeHistory(date = "2025/4/27")
 public class Base64StreamingCodecTest {
 

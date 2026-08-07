@@ -8,20 +8,18 @@ import mujica.json.reflect.JsonContextTransformer;
 import mujica.json.reflect.ReflectConfig;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Map;
 
-/**
- * Created on 2026/6/23.
- */
 @CodeHistory(date = "2026/6/23")
 public class UIDefaultsTransformer implements JsonContextTransformer<UIDefaults>, JsonStructure {
 
     public static final UIDefaultsTransformer INSTANCE = new UIDefaultsTransformer();
 
     @Override
-    public void transform(UIDefaults map, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull UIDefaults map, @NotNull JsonHandler out, @Nullable JsonContext context) {
         if (context == null) {
             context = (new JsonContext()).loadProvidedDesktop();
         }

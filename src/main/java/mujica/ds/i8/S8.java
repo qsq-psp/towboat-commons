@@ -164,11 +164,6 @@ public class S8 extends Base2I8Slot implements Comparable<S8> {
         return Byte.compare(this.value, that.value);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return this.getClass() == obj.getClass() && this.value == ((S8) obj).value;
-    }
-
     @NotNull
     @Override
     public String toString() {

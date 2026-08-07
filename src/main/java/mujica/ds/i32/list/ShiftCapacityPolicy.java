@@ -38,13 +38,13 @@ public class ShiftCapacityPolicy extends CapacityPolicy {
     }
 
     @Override
-    public int nextCapacity(int currentCapacity) {
-        assert currentCapacity != 0;
-        assert (currentCapacity & (currentCapacity - 1)) == 0;
-        if ((currentCapacity & (1 << MAX_SHIFT)) != 0) {
-            return currentCapacity;
+    public int tryLargerCapacity(int smallCapacity) {
+        assert smallCapacity != 0;
+        assert (smallCapacity & (smallCapacity - 1)) == 0;
+        if ((smallCapacity & (1 << MAX_SHIFT)) != 0) {
+            return smallCapacity;
         } else {
-            return currentCapacity << 1;
+            return smallCapacity << 1;
         }
     }
 

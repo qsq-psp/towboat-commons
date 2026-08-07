@@ -22,15 +22,15 @@ public class KeyEventTransformer implements JsonContextTransformer<KeyEvent> {
     static final FastString KEY_LOCATION = new FastString("keyLocation");
 
     @Override
-    public void transform(@NotNull KeyEvent keyEvent, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull KeyEvent event, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
-            InputEventTransformer.transformExposed(keyEvent, out);
+            InputEventTransformer.transformExposed(event, out);
             out.key(KEY_CODE);
-            out.numberValue(keyEvent.getKeyCode());
+            out.numberValue(event.getKeyCode());
             out.key(KEY_CHAR);
-            out.stringValue(String.valueOf(keyEvent.getKeyChar()));
-            int keyLocation = keyEvent.getKeyLocation();
+            out.stringValue(String.valueOf(event.getKeyChar()));
+            int keyLocation = event.getKeyLocation();
             out.key(KEY_LOCATION);
             switch (keyLocation) {
                 case KeyEvent.KEY_LOCATION_UNKNOWN:

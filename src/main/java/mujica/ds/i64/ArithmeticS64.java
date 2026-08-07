@@ -9,7 +9,9 @@ import java.math.RoundingMode;
 
 @CodeHistory(date = "2025/6/23", name = "SlotLongContext")
 @CodeHistory(date = "2026/6/15")
-public class ArithmeticS64 extends PrimitiveArithmetic<I64Slot, long[]> {
+public class ArithmeticS64 extends PrimitiveArithmetic<S64, long[]> {
+
+    public static final ArithmeticS64 INSTANCE = new ArithmeticS64();
 
     public ArithmeticS64() {
         super();
@@ -17,14 +19,14 @@ public class ArithmeticS64 extends PrimitiveArithmetic<I64Slot, long[]> {
 
     @NotNull
     @Override
-    public I64Slot newSlot() {
+    public S64 newSlot() {
         return new S64();
     }
 
     @NotNull
     @Override
-    public I64Slot cloneSlot(@NotNull I64Slot original) {
-        return new S64(original.getI64());
+    public S64 cloneSlot(@NotNull S64 original) {
+        return new S64(original.value);
     }
 
     @NotNull
@@ -50,77 +52,77 @@ public class ArithmeticS64 extends PrimitiveArithmetic<I64Slot, long[]> {
     }
 
     @Override
-    public void load(@NotNull long[] array, int index, @NotNull I64Slot slot) {
-        slot.setI64(array[index]);
+    public void load(@NotNull long[] array, int index, @NotNull S64 slot) {
+        slot.value = array[index];
     }
 
     @Override
-    public void store(@NotNull long[] array, int index, @NotNull I64Slot slot) {
-        array[index] = slot.getI64();
+    public void store(@NotNull long[] array, int index, @NotNull S64 slot) {
+        array[index] = slot.value;
     }
 
     @Override
-    public void zero(@NotNull I64Slot result) {
-        result.setI64(0L);
+    public void zero(@NotNull S64 result) {
+        result.value = 0L;
     }
 
     @Override
-    public void one(@NotNull I64Slot result) {
-        result.setI64(1L);
+    public void one(@NotNull S64 result) {
+        result.value = 1L;
     }
 
     @Override
-    public void two(@NotNull I64Slot result) {
-        result.setI64(2L);
+    public void two(@NotNull S64 result) {
+        result.value = 2L;
     }
 
     @Override
-    public void min(@NotNull I64Slot result) {
-        result.setI64(Long.MIN_VALUE);
+    public void min(@NotNull S64 result) {
+        result.value = Long.MIN_VALUE;
     }
 
     @Override
-    public void max(@NotNull I64Slot result) {
-        result.setI64(Long.MAX_VALUE);
+    public void max(@NotNull S64 result) {
+        result.value = Long.MAX_VALUE;
     }
 
     @Override
-    public void min(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
-        result.setI64(Math.min(left.getI64(), right.getI64()));
+    public void min(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
+        result.value = Math.min(left.value, right.value);
     }
 
     @Override
-    public void max(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
-        result.setI64(Math.max(left.getI64(), right.getI64()));
+    public void max(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
+        result.value = Math.max(left.value, right.value);
     }
 
     @Override
-    public int compareSlot(@NotNull I64Slot a, @NotNull I64Slot b) {
-        return Long.compare(a.getI64(), b.getI64());
+    public int compareSlot(@NotNull S64 left, @NotNull S64 right) {
+        return Long.compare(left.value, right.value);
     }
 
     @Override
-    public int sign(@NotNull I64Slot variable) {
-        return Long.signum(variable.getI64());
+    public int sign(@NotNull S64 variable) {
+        return Long.signum(variable.value);
     }
 
     @Override
-    public void move(@NotNull I64Slot src, @NotNull I64Slot dst) {
-        dst.setI64(src.getI64());
+    public void move(@NotNull S64 src, @NotNull S64 dst) {
+        dst.value = src.value;
     }
 
     @Override
-    public void exchange(@NotNull I64Slot a, @NotNull I64Slot b) {
+    public void exchange(@NotNull S64 a, @NotNull S64 b) {
         a.setI64(b.updateI64(a.getI64()));
     }
 
     @Override
-    public void negate(@NotNull I64Slot variable, @NotNull I64Slot result) {
+    public void negate(@NotNull S64 variable, @NotNull S64 result) {
         result.setI64(Math.negateExact(variable.getI64()));
     }
 
     @Override
-    public void absolute(@NotNull I64Slot variable, @NotNull I64Slot result) {
+    public void absolute(@NotNull S64 variable, @NotNull S64 result) {
         final long value = variable.getI64();
         if (value >= 0L) {
             result.setI64(value);
@@ -132,54 +134,53 @@ public class ArithmeticS64 extends PrimitiveArithmetic<I64Slot, long[]> {
     }
 
     @Override
-    public boolean isInvertible(@NotNull I64Slot variable) {
-        final long value = variable.getI64();
-        return value == 1L || value == -1L;
+    public boolean isInvertible(@NotNull S64 variable) {
+        return variable.value == 1L || variable.value == -1L;
     }
 
     @Override
-    public void invert(@NotNull I64Slot variable, @NotNull I64Slot result) {
+    public void invert(@NotNull S64 variable, @NotNull S64 result) {
         if (isInvertible(variable)) {
             // same as move
-            result.setI64(variable.getI64());
+            result.value = variable.value;
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void increase(@NotNull I64Slot variable, @NotNull I64Slot result) {
+    public void increase(@NotNull S64 variable, @NotNull S64 result) {
         result.setI64(Math.incrementExact(variable.getI64()));
     }
 
     @Override
-    public void decrease(@NotNull I64Slot variable, @NotNull I64Slot result) {
+    public void decrease(@NotNull S64 variable, @NotNull S64 result) {
         result.setI64(Math.decrementExact(variable.getI64()));
     }
 
     @Override
-    public void add(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
+    public void add(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
         result.setI64(Math.addExact(left.getI64(), right.getI64()));
     }
 
     @Override
-    public void subtract(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
+    public void subtract(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
         result.setI64(Math.subtractExact(left.getI64(), right.getI64()));
     }
 
     @Override
-    public void multiply(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
-        result.setI64(Math.multiplyExact(left.getI64(), right.getI64()));
+    public void multiply(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
+        result.value = Math.multiplyExact(left.value, right.value);
     }
 
     @Override
-    public void square(@NotNull I64Slot variable, @NotNull I64Slot result) {
+    public void square(@NotNull S64 variable, @NotNull S64 result) {
         final long value = variable.getI64();
         result.setI64(Math.multiplyExact(value, value));
     }
 
     @Override
-    public void triangle(@NotNull I64Slot variable, @NotNull I64Slot result) {
+    public void triangle(@NotNull S64 variable, @NotNull S64 result) {
         long left = variable.getI64();
         long right = Math.incrementExact(left);
         if ((left & 1L) == 0) {
@@ -191,31 +192,27 @@ public class ArithmeticS64 extends PrimitiveArithmetic<I64Slot, long[]> {
     }
 
     @Override
-    public void divide(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result, @NotNull RoundingMode mode) {
-        final long leftValue = left.getI64();
-        final long rightValue = right.getI64();
-        final long resultValue = leftValue / rightValue;
-        if (leftValue == rightValue * resultValue) {
-            result.setI64(resultValue);
+    public void divide(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result, @NotNull RoundingMode mode) {
+        final long resultValue = left.value / right.value;
+        if (left.value == right.value * resultValue) {
+            result.value = resultValue;
         } else {
             throw new ArithmeticException("can not divide exact");
         }
     }
 
     @Override
-    public void divide(@NotNull I64Slot left, @NotNull I64Slot right, @Nullable I64Slot quotient, @Nullable I64Slot remainder) {
-        final long leftValue = left.getI64();
-        final long rightValue = right.getI64();
+    public void divide(@NotNull S64 left, @NotNull S64 right, @Nullable S64 quotient, @Nullable S64 remainder) {
         if (quotient != null) {
-            quotient.setI64(leftValue / rightValue);
+            quotient.setI64(left.value / right.value);
         }
         if (remainder != null) {
-            remainder.setI64(leftValue % rightValue);
+            remainder.setI64(left.value % right.value);
         }
     }
 
     @Override
-    public void gcd(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
+    public void gcd(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
         long leftValue = left.getI64();
         long rightValue = right.getI64();
         if (leftValue <= 0L || rightValue <= 0L) {
@@ -230,7 +227,7 @@ public class ArithmeticS64 extends PrimitiveArithmetic<I64Slot, long[]> {
     }
 
     @Override
-    public void factorial(@NotNull I64Slot variable, @NotNull I64Slot result) {
+    public void factorial(@NotNull S64 variable, @NotNull S64 result) {
         final long value = variable.getI64();
         if (value < 0L) {
             throw new ArithmeticException();
@@ -248,7 +245,7 @@ public class ArithmeticS64 extends PrimitiveArithmetic<I64Slot, long[]> {
     }
 
     @Override
-    public void doubleFactorial(@NotNull I64Slot variable, @NotNull I64Slot result) {
+    public void doubleFactorial(@NotNull S64 variable, @NotNull S64 result) {
         long value = variable.getI64();
         if (value < 0L) {
             throw new ArithmeticException();
@@ -267,7 +264,7 @@ public class ArithmeticS64 extends PrimitiveArithmetic<I64Slot, long[]> {
     }
 
     @Override
-    public void arrangement(@NotNull I64Slot nSlot, @NotNull I64Slot mSlot, @NotNull I64Slot result) {
+    public void arrangement(@NotNull S64 nSlot, @NotNull S64 mSlot, @NotNull S64 result) {
         final long n = nSlot.getI64();
         final long m = mSlot.getI64();
         if (!(0 <= m && m <= n)) {
@@ -281,7 +278,7 @@ public class ArithmeticS64 extends PrimitiveArithmetic<I64Slot, long[]> {
     }
 
     @Override
-    public void combination(@NotNull I64Slot nSlot, @NotNull I64Slot mSlot, @NotNull I64Slot result) {
+    public void combination(@NotNull S64 nSlot, @NotNull S64 mSlot, @NotNull S64 result) {
         final long n = nSlot.getI64();
         long m = mSlot.getI64();
         if (!(0 <= m && m <= n)) {

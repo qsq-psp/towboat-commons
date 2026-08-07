@@ -1,6 +1,6 @@
 package mujica.json.container;
 
-import mujica.ds.text.sequence.TowboatCharSequence;
+import mujica.text.sequence.TowboatCharSequence;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 

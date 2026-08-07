@@ -6,12 +6,10 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.geom.PathIterator;
 
-/**
- * Created on 2026/5/22.
- */
 @CodeHistory(date = "2026/5/22")
 public class PathIteratorTransformer implements JsonContextTransformer<PathIterator> {
 
@@ -49,9 +47,9 @@ public class PathIteratorTransformer implements JsonContextTransformer<PathItera
 
     static final FastString CLOSE = new FastString("close");
 
-    static void transformExposed(@NotNull PathIterator in, @NotNull JsonHandler out) {
+    static void transformExposed(@NotNull PathIterator pathIterator, @NotNull JsonHandler out) {
         {
-            int windingRule = in.getWindingRule();
+            int windingRule = pathIterator.getWindingRule();
             out.key(WINDING_RULE);
             switch (windingRule) {
                 case PathIterator.WIND_EVEN_ODD:
@@ -69,8 +67,8 @@ public class PathIteratorTransformer implements JsonContextTransformer<PathItera
             float[] coords = new float[6];
             out.key(SEGMENTS);
             out.openArray();
-            while (!in.isDone()) {
-                int segmentType = in.currentSegment(coords);
+            while (!pathIterator.isDone()) {
+                int segmentType = pathIterator.currentSegment(coords);
                 out.openObject();
                 out.key(TYPE);
                 switch (segmentType) {
@@ -122,16 +120,16 @@ public class PathIteratorTransformer implements JsonContextTransformer<PathItera
                         break;
                 }
                 out.closeObject();
-                in.next();
+                pathIterator.next();
             }
             out.closeArray();
         }
     }
 
     @Override
-    public void transform(@NotNull PathIterator in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull PathIterator pathIterator, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
-        transformExposed(in, out);
+        transformExposed(pathIterator, out);
         out.closeObject();
     }
 }

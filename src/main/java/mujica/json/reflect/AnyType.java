@@ -7,9 +7,6 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Created on 2026/5/29.
- */
 @CodeHistory(date = "2026/5/29")
 class AnyType extends JsonType {
 

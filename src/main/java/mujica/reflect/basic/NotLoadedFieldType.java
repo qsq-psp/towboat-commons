@@ -1,6 +1,6 @@
 package mujica.reflect.basic;
 
-import mujica.ds.base.HealthAware;
+import mujica.ds.common.HealthAware;
 import mujica.ds.bit.Bit;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;

@@ -1,12 +1,9 @@
 package mujica.ds.slot;
 
 import mujica.algebra.random.RandomContext;
-import mujica.ds.base.DataStructure;
+import mujica.ds.common.DataStructure;
 import mujica.ds.sort.Sort;
-import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.DirectSubclass;
-import mujica.reflect.modifier.Index;
-import mujica.reflect.modifier.Name;
+import mujica.reflect.modifier.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +15,12 @@ import java.util.function.Predicate;
 @CodeHistory(date = "2026/7/6")
 @DirectSubclass({RandomAccessBasedSlotCollection.class, GapIteratorBasedSlotCollection.class})
 public interface SlotCollection<S, A> extends DataStructure {
+
+    @NotNull
+    SlotCollection<S, A> clone();
+
+    @NotNull
+    SlotCollection<S, A> duplicateNew();
 
     @Override
     @NotNull
@@ -68,7 +71,12 @@ public interface SlotCollection<S, A> extends DataStructure {
     @Name(value = "pop", language = "en")
     void removeLastItem(@Nullable S out) throws NoSuchElementException;
 
+    @ReferencePage(title = "set.pop()", href = "https://docs.python.org/3/library/stdtypes.html#frozenset.pop")
     void removeArbitraryItem(@NotNull S out, @Nullable RandomContext rc) throws NoSuchElementException;
+
+    boolean removeFirstEqualItem(@NotNull S slot);
+
+    boolean internItem(@NotNull S slot);
 
     @Name(value = "addFirst", language = "en")
     @Name(value = "unshift", language = "en")
@@ -117,8 +125,6 @@ public interface SlotCollection<S, A> extends DataStructure {
     @NotNull
     @Name(value = "toArray", language = "en")
     A allToArray();
-
-    boolean internItem(@NotNull S slot);
 
     boolean tryGetFirstItem(@NotNull S out);
 

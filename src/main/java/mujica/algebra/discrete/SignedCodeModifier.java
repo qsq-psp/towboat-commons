@@ -12,7 +12,7 @@ public class SignedCodeModifier extends DimensionCodecModifier {
     public SignedCodeModifier(@NotNull DimensionCodec codec) {
         super(codec);
         if (codec.codeSigned()) {
-            throw new IllegalArgumentException("Inner codec has signed code");
+            throw new IllegalArgumentException("inner codec has signed code");
         }
     }
 

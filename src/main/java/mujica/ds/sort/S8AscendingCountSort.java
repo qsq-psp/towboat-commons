@@ -10,7 +10,7 @@ import java.util.Arrays;
 @Name(value = "8位有符号整数递增计数排序", language = "zh")
 public class S8AscendingCountSort implements Sort<byte[]> {
 
-    final int[] count = new int[1 << Byte.SIZE];
+    final int[] countArray = new int[1 << Byte.SIZE];
 
     public S8AscendingCountSort() {
         super();
@@ -22,17 +22,17 @@ public class S8AscendingCountSort implements Sort<byte[]> {
         if (length < 2) {
             return 0L;
         }
-        Arrays.fill(count, 0);
+        Arrays.fill(countArray, 0);
         for (int index = startIndex; index < endIndex; index++) {
-            count[0xff & array[index]]++;
+            countArray[0xff & array[index]]++;
         }
         for (int index = 0xff & Byte.MIN_VALUE; index < (1 << Byte.SIZE); index++) {
-            for (int remain = count[index]; remain > 0; remain--) {
+            for (int remain = countArray[index]; remain > 0; remain--) {
                 array[startIndex++] = (byte) index;
             }
         }
         for (int index = 0; index < Byte.MAX_VALUE; index++) {
-            for (int remain = count[index]; remain > 0; remain--) {
+            for (int remain = countArray[index]; remain > 0; remain--) {
                 array[startIndex++] = (byte) index;
             }
         }

@@ -44,7 +44,7 @@ class PercentDecoder extends CharsetDecoder {
             int ch = in.get();
             if (ch != '%') {
                 if (ch < 0) {
-                    LOGGER.warn("non-ASCII {}", ch);
+                    LOGGER.warn("non-ASCII char {}", ch);
                     return CoderResult.malformedForLength(1);
                 }
                 out.put((char) ch);

@@ -5,6 +5,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.undo.UndoableEdit;
 
@@ -14,7 +15,7 @@ public class UndoableEditTransformer implements JsonContextTransformer<UndoableE
     public static final UndoableEditTransformer INSTANCE = new UndoableEditTransformer();
 
     @Override
-    public void transform(UndoableEdit edit, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull UndoableEdit edit, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("canUndo");

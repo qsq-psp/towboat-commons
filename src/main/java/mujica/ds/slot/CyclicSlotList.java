@@ -2,23 +2,32 @@ package mujica.ds.slot;
 
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
+import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2026/7/11")
+@Name(value = "循环列表", language = "zh")
 @DirectSubclass({CyclicRewriteSlotList.class})
 public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
 
     boolean empty;
 
-    public CyclicSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator) {
+    public CyclicSlotList(@NotNull SlotArrayAllocator.PolicySAA<S, A> allocator) {
         super(allocator, null);
         empty = true;
     }
 
-    CyclicSlotList(@NotNull SlotArrayAllocator.WithPolicy<S, A> allocator, @NotNull A array, int startIndex, int endIndex) {
+    CyclicSlotList(@NotNull SlotArrayAllocator.PolicySAA<S, A> allocator, @NotNull A array, int startIndex, int endIndex) {
         super(allocator, array, startIndex, endIndex);
+    }
+
+    @NotNull
+    @Override
+    public SlotCollection<S, A> duplicateNew() {
+        return new CyclicSlotList<>(allocator);
     }
 
     @NotNull
@@ -66,11 +75,11 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
         if (empty) {
             return false;
         }
-        if (startIndex == endIndex) {
+        if (startIndex != endIndex) {
             return false;
         }
         final int capacity = allocator.length(array);
-        return allocator.getCapacityPolicy().nextCapacity(capacity) == capacity;
+        return allocator.getCapacityPolicy().tryLargerCapacity(capacity) == capacity;
     }
 
     @Override
@@ -152,6 +161,188 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
     }
 
     @Override
+    public void removeItemAt(int thisIndex, @Nullable S slot) throws IndexOutOfBoundsException {
+        if (empty || thisIndex < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        int arrayIndex = startIndex + thisIndex;
+        if (startIndex < endIndex) {
+            int endLength = endIndex - arrayIndex - 1;
+            if (endLength < 0) {
+                throw new IndexOutOfBoundsException();
+            }
+            if (slot != null) {
+                allocator.load(array, arrayIndex, slot);
+            }
+            if (thisIndex < endLength) {
+                if (thisIndex > 0) {
+                    allocator.copySelf(array, startIndex, startIndex + 1, thisIndex);
+                }
+                allocator.releaseReference(array, startIndex++);
+            } else {
+                if (endLength > 0) {
+                    allocator.copySelf(array, arrayIndex + 1, arrayIndex, endLength);
+                }
+                allocator.releaseReference(array, --endIndex);
+                if (thisIndex == 0) {
+                    empty = true;
+                }
+            }
+        } else {
+            int capacity = allocator.length(array);
+            if (arrayIndex < capacity) {
+                if (slot != null) {
+                    allocator.load(array, arrayIndex, slot);
+                }
+                if (thisIndex > 0) {
+                    allocator.copySelf(array, startIndex, startIndex + 1, thisIndex);
+                }
+                allocator.releaseReference(array, startIndex);
+                startIndex++;
+                if (startIndex == capacity) {
+                    startIndex = 0;
+                    if (startIndex == endIndex) {
+                        empty = true;
+                    }
+                }
+            } else {
+                arrayIndex -= capacity;
+                if (arrayIndex < endIndex) {
+                    if (slot != null) {
+                        allocator.load(array, arrayIndex, slot);
+                    }
+                    if (arrayIndex + 1 < endIndex) {
+                        allocator.copySelf(array, arrayIndex + 1, arrayIndex, endIndex - (arrayIndex + 1));
+                    }
+                    if (endIndex == 0) {
+                        endIndex = capacity - 1;
+                        if (startIndex == endIndex) {
+                            empty = true;
+                        }
+                    } else {
+                        endIndex--;
+                    }
+                    allocator.releaseReference(array, endIndex);
+                } else {
+                    throw new IndexOutOfBoundsException();
+                }
+            }
+        }
+        version++;
+    }
+
+    private void enlargeArray(int newCapacity) {
+        final A newArray = allocator.newArray(newCapacity);
+        if (!empty) {
+            int listSize = endIndex - startIndex;
+            if (listSize > 0) {
+                allocator.copy(array, startIndex, newArray, 0, listSize);
+            } else {
+                int oldCapacity = allocator.length(array);
+                listSize += oldCapacity;
+                assert listSize > 0;
+                allocator.copy(array, startIndex, newArray, 0, oldCapacity - startIndex);
+                allocator.copy(array, 0, newArray, oldCapacity - startIndex, endIndex);
+                startIndex = 0;
+                endIndex = oldCapacity;
+            }
+        }
+        array = newArray;
+    }
+
+    @Override
+    public void insertItemBefore(int gapIndex, @NotNull S in) throws IndexOutOfBoundsException {
+        if (gapIndex < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        int capacity = allocator.length(array);
+        if (empty) {
+            if (gapIndex != 0) {
+                throw new IndexOutOfBoundsException();
+            }
+            if (capacity == 0) {
+                enlargeArray(capacity = allocator.getCapacityPolicy().largerCapacity(capacity));
+            }
+            allocator.store(array, 0, in);
+            empty = false;
+            startIndex = 0;
+            if (capacity == 1) {
+                endIndex = 0;
+            } else {
+                endIndex = 1;
+            }
+            version++;
+            return;
+        }
+        int arrayIndex = startIndex + gapIndex;
+        if (startIndex < endIndex) {
+            int endLength = endIndex - arrayIndex;
+            if (endLength < 0) {
+                throw new IndexOutOfBoundsException();
+            }
+            if (gapIndex < endLength && startIndex > 0) {
+                if (gapIndex > 0) {
+                    allocator.copySelf(array, startIndex, startIndex - 1, gapIndex);
+                }
+                startIndex--;
+                allocator.store(array, arrayIndex - 1, in);
+            } else {
+                if (endLength > 0) {
+                    allocator.copySelf(array, arrayIndex, arrayIndex + 1, endLength);
+                }
+                endIndex++;
+                if (endIndex == capacity) {
+                    endIndex = 0;
+                }
+                allocator.store(array, arrayIndex, in);
+            }
+            version++;
+            return;
+        } else if (endIndex < startIndex) {
+            if (arrayIndex < capacity) {
+                if (gapIndex > 0) {
+                    allocator.copySelf(array, startIndex, startIndex - 1, gapIndex);
+                }
+                startIndex--;
+                assert startIndex >= 0;
+                allocator.store(array, arrayIndex - 1, in);
+            } else {
+                arrayIndex -= capacity;
+                if (arrayIndex < endIndex) {
+                    allocator.copySelf(array, arrayIndex, arrayIndex + 1, endIndex - arrayIndex);
+                }
+                endIndex++;
+                assert endIndex < capacity;
+                allocator.store(array, arrayIndex, in);
+            }
+            version++;
+            return;
+        }
+        enlargeArray(capacity = allocator.getCapacityPolicy().largerCapacity(capacity));
+        if (gapIndex > endIndex) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (gapIndex < endIndex) {
+            allocator.copySelf(array, gapIndex, gapIndex + 1, endIndex - gapIndex);
+        }
+        allocator.store(array, gapIndex, in);
+        endIndex++;
+        if (endIndex == capacity) {
+            endIndex = 0;
+        }
+    }
+
+    @Override
+    public void insertFirstItem(@NotNull S in) {
+        insertItemBefore(0, in);
+    }
+
+    @Override
+    public void insertLastItem(@NotNull S in) {
+        insertItemBefore(size(), in);
+    }
+
+    @Override
     public void clear() {
         if (empty) {
             return;
@@ -160,16 +351,18 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
             allocator.releaseReference(array, startIndex, endIndex);
         } else {
             int capacity = allocator.length(array);
-            int index = startIndex;
-            do {
-                allocator.releaseReference(array, index);
-                index++;
-                if (index >= capacity) {
-                    index = 0;
-                }
-            } while (index != endIndex);
+            allocator.releaseReference(array, startIndex, capacity);
+            if (endIndex > 0) {
+                allocator.releaseReference(array, 0, endIndex);
+            }
         }
         empty = true;
         version++;
+    }
+
+    @NotNull
+    @Override
+    public String summaryToString() {
+        return "size = " + size() + ", start = " + startIndex + ", end = " + endIndex + ", modulo = " + allocator.length(array) + ", version = " + version;
     }
 }

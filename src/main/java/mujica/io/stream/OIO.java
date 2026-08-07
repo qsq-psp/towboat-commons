@@ -1,9 +1,7 @@
 package mujica.io.stream;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,17 +16,13 @@ public final class OIO {
     public static final int MAX_BUFFER_SIZE = 0x40000000; // 1073741824 bytes, 1GiB
 
     public static Object copy(Object obj) throws Exception {
-        final ByteBuf buf = Unpooled.buffer();
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new ByteBufOutputStream(buf)); // use ByteArrayOutputStream
-            oos.writeObject(obj);
-            oos.flush();
-            oos.close();
-            ObjectInputStream ois = new ObjectInputStream(new ByteBufInputStream(buf));
-            return ois.readObject();
-        } finally {
-            buf.release();
-        }
+        final ByteArrayOutputStream aos = new ByteArrayOutputStream(BUFFER_SIZE);
+        final ObjectOutputStream oos = new ObjectOutputStream(aos);
+        oos.writeObject(obj);
+        oos.flush();
+        oos.close();
+        final ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(aos.toByteArray()));
+        return ois.readObject();
     }
 
     @NotNull
@@ -98,7 +92,7 @@ public final class OIO {
                 throw new EOFException();
             }
         } else if (actual > count) {
-            throw new IOException("Unable to skip exactly");
+            throw new IOException("unable to skip exactly");
         }
     }
 }

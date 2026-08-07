@@ -72,21 +72,23 @@ public interface SlotArrayAllocator<S, A> extends SlotAllocator<S> {
         final S startSlot = newSlot();
         final S endSlot = newSlot();
         try {
-            while (true) {
-                endIndex--;
-                if (startIndex >= endIndex) {
-                    break;
-                }
+            endIndex--;
+            while (startIndex < endIndex) {
                 load(array, startIndex, startSlot);
                 load(array, endIndex, endSlot);
                 store(array, endIndex, startSlot);
                 store(array, startIndex, endSlot);
                 startIndex++;
+                endIndex--;
             }
         } finally {
             releaseSlot(startSlot);
             releaseSlot(endSlot);
         }
+    }
+
+    default void reverse(@NotNull A array) {
+        reverse(array, 0, length(array));
     }
 
     @SuppressWarnings("SuspiciousSystemArraycopy")
@@ -107,7 +109,7 @@ public interface SlotArrayAllocator<S, A> extends SlotAllocator<S> {
     }
 
     @CodeHistory(date = "2026/7/7")
-    interface WithPolicy<S, A> extends SlotArrayAllocator<S, A>, CapacityPolicyProvider {
+    interface PolicySAA<S, A> extends SlotArrayAllocator<S, A>, CapacityPolicyProvider {
 
         @NotNull
         @Override
@@ -131,8 +133,9 @@ public interface SlotArrayAllocator<S, A> extends SlotAllocator<S> {
         CapacityPolicy getCapacityPolicy();
     }
 
+    @CodeHistory(date = "2026/3/3", name = "OverrideHashEqual")
     @CodeHistory(date = "2026/7/21")
-    interface WithHash<S, A> extends WithPolicy<S, A> {
+    interface HashSAA<S, A> extends PolicySAA<S, A> {
 
         @NotNull
         @Override
@@ -194,46 +197,6 @@ public interface SlotArrayAllocator<S, A> extends SlotAllocator<S> {
                 releaseSlot(slot);
             }
             return result;
-        }
-    }
-
-    @CodeHistory(date = "2026/7/22")
-    class OfType<T> implements SlotArrayAllocator<TypeSlot<T>, T[]> {
-
-        @NotNull
-        final Class<T> classT;
-
-        public OfType(@NotNull Class<T> classT) {
-            super();
-            this.classT = classT;
-        }
-
-        @NotNull
-        @Override
-        public TypeSlot<T> newSlot() {
-            return new TypeSlot.Generic<>();
-        }
-
-        @Override
-        public void move(@NotNull TypeSlot<T> src, @NotNull TypeSlot<T> dst) {
-            dst.set(src.get());
-        }
-
-        @SuppressWarnings("unchecked")
-        @NotNull
-        @Override
-        public T[] newArray(int length) {
-            return (T[]) Array.newInstance(classT, length);
-        }
-
-        @Override
-        public void load(@NotNull T[] array, int index, @NotNull TypeSlot<T> slot) {
-            slot.set(array[index]);
-        }
-
-        @Override
-        public void store(@NotNull T[] array, int index, @NotNull TypeSlot<T> slot) {
-            array[index] = slot.get();
         }
     }
 }

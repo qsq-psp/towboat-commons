@@ -54,7 +54,7 @@ public class AxiomSetTest {
             case 12:
                 return new HalfCapacityPolicy(rc);
             case 13:
-                return new Order1CapacityPolicy(rc);
+                return new LinearCapacityPolicy(rc);
             case 14:
                 return ModuloLookUpCapacityPolicy.INSTANCE_59;
             case 15:

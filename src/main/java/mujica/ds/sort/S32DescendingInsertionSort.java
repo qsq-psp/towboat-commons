@@ -19,7 +19,7 @@ public class S32DescendingInsertionSort implements Sort<int[]> {
 
     @Override
     public boolean isDescending() {
-        return false;
+        return true;
     }
 
     @Override

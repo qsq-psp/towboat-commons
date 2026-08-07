@@ -1,6 +1,6 @@
 package mujica.ds.i32.set;
 
-import mujica.ds.InvariantException;
+import mujica.ds.common.InvariantException;
 import mujica.ds.any.list.MonotonicityDirection;
 import mujica.ds.i32.IntCollection;
 import mujica.algebra.random.RandomContext;
@@ -42,7 +42,7 @@ public abstract class IntSet implements IntCollection {
         for (int i = 1; i < n; i++) {
             int v1 = intList.getInt(i);
             if (v0 >= v1) {
-                consumer.accept(new InvariantException(v0 + " >= " + v1));
+                consumer.accept(new RuntimeException(v0 + " >= " + v1));
             }
             v0 = v1;
         }

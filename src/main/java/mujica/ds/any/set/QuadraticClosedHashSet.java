@@ -1,7 +1,5 @@
 package mujica.ds.any.set;
 
-import mujica.ds.ConsistencyException;
-import mujica.ds.InvariantException;
 import mujica.ds.i32.list.QuadraticProbingList;
 import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
@@ -23,8 +21,8 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
     @NotNull
     transient QuadraticProbingList probingList;
 
-    public QuadraticClosedHashSet(@Nullable CapacityPolicy policy) {
-        super(CapacityPolicy.checkQuadraticSupported(policy));
+    public QuadraticClosedHashSet(@NotNull CapacityPolicy policy) {
+        super(policy.requireQuadratic());
         probingList = new QuadraticProbingList(array.length);
     }
 
@@ -50,7 +48,7 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
         final int modulo = array.length;
         if (modulo != probingList.intLength()) {
-            consumer.accept(new ConsistencyException("modulo"));
+            consumer.accept(new RuntimeException("modulo"));
             return;
         }
         final HashSet<Object> set = new HashSet<>();
@@ -60,19 +58,19 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
                 continue;
             }
             if (!set.add(item)) {
-                consumer.accept(new InvariantException("identical item " + item));
+                consumer.accept(new RuntimeException("identical item " + item));
             }
             for (int index : probingList.setBase(Objects.hashCode(item))) {
                 if (k == index) {
                     break;
                 }
                 if (array[index] == CollectionConstant.EMPTY) {
-                    consumer.accept(new InvariantException("empty interval from to " + k + " at " + index));
+                    consumer.accept(new RuntimeException("empty interval from to " + k + " at " + index));
                 }
             }
         }
         if (set.size() != size) {
-            consumer.accept(new ConsistencyException("size", set.size(), size));
+            consumer.accept(new RuntimeException("expected size " + set.size() + ", actual size " + size));
         }
     }
 
@@ -96,7 +94,7 @@ public class QuadraticClosedHashSet<E> extends ClosedHashSet<E> {
 
     private boolean rehash() {
         final int oldModulo = array.length;
-        final int newModulo = policy.nextCapacity(oldModulo);
+        final int newModulo = policy.tryLargerCapacity(oldModulo);
         if (newModulo <= oldModulo) {
             return false;
         }

@@ -45,7 +45,7 @@ public class CapacityPolicyTest {
             checkIteratorOrder(new HalfCapacityPolicy(rc));
         }
         for (int repeatIndex = 0; repeatIndex < REPEAT; repeatIndex++) {
-            checkIteratorOrder(new Order1CapacityPolicy(rc));
+            checkIteratorOrder(new LinearCapacityPolicy(rc));
         }
         checkIteratorOrder(ModuloLookUpCapacityPolicy.INSTANCE_59);
         checkIteratorOrder(ModuloLookUpCapacityPolicy.INSTANCE_67);
@@ -91,7 +91,7 @@ public class CapacityPolicyTest {
             checkIndexedOrder(new HalfCapacityPolicy(rc));
         }
         for (int repeatIndex = 0; repeatIndex < REPEAT; repeatIndex++) {
-            checkIndexedOrder(new Order1CapacityPolicy(rc));
+            checkIndexedOrder(new LinearCapacityPolicy(rc));
         }
         checkIndexedOrder(ModuloLookUpCapacityPolicy.INSTANCE_59);
         checkIndexedOrder(ModuloLookUpCapacityPolicy.INSTANCE_67);
@@ -122,52 +122,52 @@ public class CapacityPolicyTest {
             checkNotSmallerCapacity(new HalfCapacityPolicy(rc));
         }
         for (int repeatIndex = 0; repeatIndex < REPEAT; repeatIndex++) {
-            checkNotSmallerCapacity(new Order1CapacityPolicy(rc));
+            checkNotSmallerCapacity(new LinearCapacityPolicy(rc));
         }
         checkNotSmallerCapacity(ModuloLookUpCapacityPolicy.INSTANCE_59);
         checkNotSmallerCapacity(ModuloLookUpCapacityPolicy.INSTANCE_67);
     }
 
-    private void checkNextCapacity(@NotNull CapacityPolicy policy) {
+    private void checkTryLargerCapacity(@NotNull CapacityPolicy policy) {
         final int length = policy.intLength();
         for (int repeatIndex = 0; repeatIndex < REPEAT; repeatIndex++) {
             int index = rc.nextInt(length);
             int currentCapacity = policy.getInt(index);
-            int nextCapacity = policy.nextCapacity(currentCapacity);
+            int tryLargerCapacity = policy.tryLargerCapacity(currentCapacity);
             try {
                 if (index + 1 < length) {
-                    Assert.assertTrue(currentCapacity < nextCapacity);
-                    Assert.assertEquals(policy.getInt(index + 1), nextCapacity);
+                    Assert.assertTrue(currentCapacity < tryLargerCapacity);
+                    Assert.assertEquals(policy.getInt(index + 1), tryLargerCapacity);
                 } else {
-                    Assert.assertEquals(currentCapacity, nextCapacity);
+                    Assert.assertEquals(currentCapacity, tryLargerCapacity);
                 }
             } catch (AssertionError e) {
                 System.out.println(policy);
-                System.out.println("index = " + index + ", currentCapacity = " + currentCapacity + ", nextCapacity = " + nextCapacity);
+                System.out.println("index = " + index + ", currentCapacity = " + currentCapacity + ", tryLargerCapacity = " + tryLargerCapacity);
                 throw e;
             }
         }
     }
 
     @Test
-    public void checkNextCapacity() {
-        checkNextCapacity(LookUpCapacityPolicy.PAPER);
-        checkNextCapacity(LookUpCapacityPolicy.GOLDEN);
-        checkNextCapacity(LookUpCapacityPolicy.NATURAL);
-        checkNextCapacity(LookUpCapacityPolicy.PRIME_PAPER);
-        checkNextCapacity(LookUpCapacityPolicy.PRIME_GOLDEN);
-        checkNextCapacity(LookUpCapacityPolicy.PRIME_FIBONACCI);
-        checkNextCapacity(ShiftCapacityPolicy.INSTANCE);
+    public void checkTryLargerCapacity() {
+        checkTryLargerCapacity(LookUpCapacityPolicy.PAPER);
+        checkTryLargerCapacity(LookUpCapacityPolicy.GOLDEN);
+        checkTryLargerCapacity(LookUpCapacityPolicy.NATURAL);
+        checkTryLargerCapacity(LookUpCapacityPolicy.PRIME_PAPER);
+        checkTryLargerCapacity(LookUpCapacityPolicy.PRIME_GOLDEN);
+        checkTryLargerCapacity(LookUpCapacityPolicy.PRIME_FIBONACCI);
+        checkTryLargerCapacity(ShiftCapacityPolicy.INSTANCE);
         for (int repeatIndex = 0; repeatIndex < REPEAT; repeatIndex++) {
-            checkNextCapacity(new TwiceCapacityPolicy(rc));
+            checkTryLargerCapacity(new TwiceCapacityPolicy(rc));
         }
         for (int repeatIndex = 0; repeatIndex < REPEAT; repeatIndex++) {
-            checkNextCapacity(new HalfCapacityPolicy(rc));
+            checkTryLargerCapacity(new HalfCapacityPolicy(rc));
         }
         for (int repeatIndex = 0; repeatIndex < REPEAT; repeatIndex++) {
-            checkNextCapacity(new Order1CapacityPolicy(rc));
+            checkTryLargerCapacity(new LinearCapacityPolicy(rc));
         }
-        checkNextCapacity(ModuloLookUpCapacityPolicy.INSTANCE_59);
-        checkNextCapacity(ModuloLookUpCapacityPolicy.INSTANCE_67);
+        checkTryLargerCapacity(ModuloLookUpCapacityPolicy.INSTANCE_59);
+        checkTryLargerCapacity(ModuloLookUpCapacityPolicy.INSTANCE_67);
     }
 }
