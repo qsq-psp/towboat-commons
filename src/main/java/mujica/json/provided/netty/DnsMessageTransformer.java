@@ -1,6 +1,7 @@
 package mujica.json.provided.netty;
 
 import io.netty.handler.codec.dns.DnsMessage;
+import io.netty.handler.codec.dns.DnsResponse;
 import io.netty.handler.codec.dns.DnsSection;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
@@ -38,6 +39,15 @@ public class DnsMessageTransformer implements JsonContextTransformer<DnsMessage>
             out.stringValue(dnsMessage.opCode().toString());
             out.key("recursionDesired");
             out.booleanValue(dnsMessage.isRecursionDesired());
+        }
+        if (dnsMessage instanceof DnsResponse) {
+            DnsResponse dnsResponse = (DnsResponse) dnsMessage;
+            out.key("truncated");
+            out.booleanValue(dnsResponse.isTruncated());
+            out.key("recursionAvailable");
+            out.booleanValue(dnsResponse.isRecursionAvailable());
+        }
+        {
             transformDnsSection(dnsMessage, DnsSection.QUESTION, out, context);
             transformDnsSection(dnsMessage, DnsSection.ANSWER, out, context);
             transformDnsSection(dnsMessage, DnsSection.AUTHORITY, out, context);

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.math.RoundingMode;
 
 @CodeHistory(date = "2026/6/17")
-public class FractionArithmetic<S extends Base2Integer> extends AbstractArithmetic<Fraction<S>> {
+public class FractionArithmetic<S extends Base2Integer> extends CompoundArithmetic<Fraction<S>> {
 
     @NotNull
     protected final Arithmetic<S> arithmetic;
@@ -40,6 +40,12 @@ public class FractionArithmetic<S extends Base2Integer> extends AbstractArithmet
     @Override
     public void one(@NotNull Fraction<S> result) {
         arithmetic.one(result.p);
+        arithmetic.one(result.q);
+    }
+
+    @Override
+    public void two(@NotNull Fraction<S> result) {
+        arithmetic.two(result.p);
         arithmetic.one(result.q);
     }
 

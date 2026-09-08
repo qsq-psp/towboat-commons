@@ -15,7 +15,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2022/6/11", project = "Ultramarine", name = "JsonDoubleType")
 @CodeHistory(date = "2026/6/6", name = "DoubleType")
 @CodeHistory(date = "2026/6/8")
-class F64Type extends JsonType implements F64Slot {
+class F64Type extends VoidType implements F64Slot {
 
     private static final long serialVersionUID = 0x79D5392531C49BB6L;
 

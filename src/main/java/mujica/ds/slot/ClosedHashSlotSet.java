@@ -16,6 +16,8 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2026/7/23")
 public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
 
+    private static final long serialVersionUID = 0x7AD47FCF06E07CFDL;
+
     static final int SPECIAL_EMPTY = -1;
 
     static final int SPECIAL_REMOVED = -2;
@@ -52,7 +54,7 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
     @Override
     public abstract SlotCollection<S, A> duplicate();
 
-    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+    private void readObject(@NotNull ObjectInputStream ois) throws IOException, ClassNotFoundException {
         ois.defaultReadObject();
         modulo = hashCache.length;
     }
@@ -78,7 +80,7 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
         return "modulo = " + modulo;
     }
 
-    void rehash() {
+    private void rehash() {
         final int oldModulo = modulo;
         final A oldHashTable = hashTable;
         final int[] oldHashCache = hashCache;
@@ -144,6 +146,11 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
     }
 
     @Override
+    public int countItem(@NotNull S in) {
+        return contains(in) ? 1 : 0;
+    }
+
+    @Override
     public int firstIndexOf(@NotNull S in) {
         final int positiveHashCode = hashFunction.slotHash(in) & Integer.MAX_VALUE; // normalizedHash
         S equalSlot = null;
@@ -183,8 +190,7 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
         return firstIndexOf(in);
     }
 
-    @Override
-    public boolean removeFirstEqualItem(@NotNull S slot) {
+    private boolean removeEqualItem(@NotNull S slot, boolean moveOut) {
         final int positiveHashCode = hashFunction.slotHash(slot) & Integer.MAX_VALUE;
         S equalSlot = null;
         try {
@@ -198,7 +204,9 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
                     }
                     hashFunction.load(hashTable, tableIndex, equalSlot);
                     if (hashFunction.slotEquals(slot, equalSlot)) {
-                        hashFunction.move(equalSlot, slot);
+                        if (moveOut) {
+                            hashFunction.move(equalSlot, slot);
+                        }
                         hashFunction.releaseReference(hashTable, tableIndex);
                         hashCache[tableIndex] = SPECIAL_REMOVED;
                         size--;
@@ -215,6 +223,26 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean removeFirstEqualItem(@NotNull S inOut) {
+        return removeEqualItem(inOut, true);
+    }
+
+    @Override
+    public boolean removeLastEqualItem(@NotNull S inOut) {
+        return removeEqualItem(inOut, true);
+    }
+
+    @Override
+    public boolean removeOneEqualItem(@NotNull S inOut) {
+        return removeEqualItem(inOut, true);
+    }
+
+    @Override
+    public int removeAllEqualItems(@NotNull S in) {
+        return removeEqualItem(in, false) ? 1 : 0;
     }
 
     @Override
@@ -282,7 +310,7 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
     }
 
     @Override
-    public void truncate(int newEndIndex) throws IndexOutOfBoundsException {
+    public void setSize(int newEndIndex) throws IndexOutOfBoundsException {
         throw new UnsupportedOperationException();
     }
 
@@ -301,11 +329,6 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
 
     @Override
     public void rotate(int distance) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void sort(boolean descending) {
         throw new UnsupportedOperationException();
     }
 
@@ -496,6 +519,8 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
     @CodeHistory(date = "2026/7/25")
     public static class Linear<S, A> extends ClosedHashSlotSet<S, A> {
 
+        private static final long serialVersionUID = 0x4C6495BEB2B3A570L;
+
         private transient int limit, tableIndex;
 
         public Linear(@NotNull SlotArrayAllocator.HashSAA<S, A> hashFunction) {
@@ -549,6 +574,8 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
     @CodeHistory(date = "2025/7/3", name = "QuadraticClosedHashIntSet")
     @CodeHistory(date = "2026/7/25")
     public static class Quadratic<S, A> extends ClosedHashSlotSet<S, A> {
+
+        private static final long serialVersionUID = 0x047C13EC8B1668F5L;
 
         private transient int base, countingIndex;
 
@@ -611,6 +638,8 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
     @CodeHistory(date = "2025/7/4", name = "CongruentClosedHashSet")
     @CodeHistory(date = "2026/7/25")
     public static class Congruent<S, A> extends ClosedHashSlotSet<S, A> {
+
+        private static final long serialVersionUID = 0x158032AD8C029262L;
 
         private transient int addend, tableIndex, countingIndex;
 

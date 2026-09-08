@@ -33,7 +33,7 @@ public class S32ModuloArithmetic extends PrimitiveArithmetic<S32, int[]> {
     @Override
     public int[] newArray(int length) {
         if (length == 0) {
-            return SlotArrayAllocatorI32.EMPTY_ARRAY;
+            return I32SlotArrayAllocator.EMPTY_ARRAY;
         }
         return new int[length];
     }
@@ -41,7 +41,7 @@ public class S32ModuloArithmetic extends PrimitiveArithmetic<S32, int[]> {
     @Override
     public int[] cloneArray(@NotNull int[] original) {
         if (original.length == 0) {
-            return SlotArrayAllocatorI32.EMPTY_ARRAY;
+            return I32SlotArrayAllocator.EMPTY_ARRAY;
         }
         return original.clone();
     }
@@ -117,8 +117,8 @@ public class S32ModuloArithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public void exchange(@NotNull S32 a, @NotNull S32 b) {
-        a.setI32(b.updateI32(a.getI32()));
+    public void exchange(@NotNull S32 first, @NotNull S32 second) {
+        first.setI32(second.updateI32(first.getI32()));
     }
 
     @Override

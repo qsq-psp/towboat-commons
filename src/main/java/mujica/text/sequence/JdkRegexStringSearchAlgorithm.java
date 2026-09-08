@@ -1,6 +1,7 @@
 package mujica.text.sequence;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferenceCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;

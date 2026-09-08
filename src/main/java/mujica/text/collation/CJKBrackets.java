@@ -2,9 +2,6 @@ package mujica.text.collation;
 
 import mujica.reflect.modifier.CodeHistory;
 
-/**
- * Created on 2026/3/14.
- */
 @CodeHistory(date = "2026/3/14")
 public interface CJKBrackets {
 
@@ -12,11 +9,27 @@ public interface CJKBrackets {
 
     Bracket ZH_DOUBLE_QUOTE = new Bracket("\u201c", "\u201d");
 
+    Bracket ANGLE_QUOTATION_MARK = new Bracket("\u2039", "\u203a");
+
+    Bracket SQUARE_WITH_QUILL = new Bracket("\u2045", "\u2046");
+
     Bracket ZH_SINGLE_SHARP = new Bracket("\u3008", "\u3009");
 
     Bracket ZH_DOUBLE_SHARP = new Bracket("\u300a", "\u300b");
 
     Bracket ZH_CORNER = new Bracket("\u300c", "\u300d");
+
+    Bracket ZH_WHITE_CORNER = new Bracket("\u300e", "\u300f");
+
+    Bracket BLACK_LENTICULAR = new Bracket("\u3010", "\u3011");
+
+    Bracket TORTOISE_SHELL = new Bracket("\u3014", "\u3015");
+
+    Bracket WHITE_LENTICULAR = new Bracket("\u3016", "\u3017");
+
+    Bracket WHITE_TORTOISE_SHELL = new Bracket("\u3018", "\u3019");
+
+    Bracket WHITE_SQUARE = new Bracket("\u301a", "\u301b");
 
     Bracket ROUND = new Bracket("\uff08", "\uff09");
 

@@ -102,4 +102,15 @@ public class MergeSort<S, A> implements Sort<A> {
     public long sort(@NotNull A target) {
         return sort(target, 0, comparator.length(target));
     }
+
+    @NotNull
+    @Override
+    public String toString() {
+        final A auxiliaryArray = this.auxiliaryArray;
+        if (auxiliaryArray == null) {
+            return "MergeSort[comparator = " + comparator + "]";
+        } else {
+            return "MergeSort[comparator = " + comparator + ", auxiliaryArray = " + comparator.length(auxiliaryArray) + "]";
+        }
+    }
 }

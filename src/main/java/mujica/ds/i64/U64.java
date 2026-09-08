@@ -3,6 +3,7 @@ package mujica.ds.i64;
 import mujica.ds.bit.BitSlot;
 import mujica.ds.slot.Base2Iterator;
 import mujica.ds.slot.NodeAllocator1;
+import mujica.ds.slot.NodeAllocator2;
 import mujica.ds.slot.ReadOnlyBase2Iterator;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DataType;
@@ -76,6 +77,11 @@ public class U64 extends Base2I64Slot {
         public static final U64NodeAllocator1 INSTANCE = new U64NodeAllocator1();
 
         @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
+
+        @NotNull
         @Override
         public U64Node1 newNode() {
             return new U64Node1();
@@ -104,6 +110,61 @@ public class U64 extends Base2I64Slot {
         @Override
         public void setFirstLink(@NotNull U64Node1 self, U64Node1 node) {
             self.first = node;
+        }
+    }
+
+    @CodeHistory(date = "2026/8/19")
+    public static class U64Node2 extends U64 {
+
+        private static final long serialVersionUID = 0xB52EB96BD0284D0BL;
+
+        U64Node2 first, second;
+
+        int tag;
+    }
+
+    @CodeHistory(date = "2026/8/24")
+    public static class U64NodeAllocator2 implements NodeAllocator2<U64Node2> {
+
+        @NotNull
+        @Override
+        public U64Node2 newNode() {
+            return new U64Node2();
+        }
+
+        @Override
+        public U64Node2[] newNodeArray(int length) {
+            return new U64Node2[length];
+        }
+
+        @Override
+        public int getTag(@NotNull U64Node2 self) {
+            return self.tag;
+        }
+
+        @Override
+        public void setTag(@NotNull U64Node2 self, int newTag) {
+            self.tag = newTag;
+        }
+
+        @Override
+        public U64Node2 getFirstLink(@NotNull U64Node2 self) {
+            return self.first;
+        }
+
+        @Override
+        public void setFirstLink(@NotNull U64Node2 self, U64Node2 node) {
+            self.first = node;
+        }
+
+        @Override
+        public U64Node2 getSecondLink(@NotNull U64Node2 self) {
+            return self.second;
+        }
+
+        @Override
+        public void setSecondLink(@NotNull U64Node2 self, U64Node2 node) {
+            self.second = node;
         }
     }
 }

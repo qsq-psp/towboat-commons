@@ -49,6 +49,10 @@ public class DnsRecordTransformer implements JsonContextTransformer<DnsRecord> {
                     break;
             }
         }
+        {
+            out.key("timeToLive");
+            out.numberValue(dnsRecord.timeToLive());
+        }
         out.closeObject();
     }
 }

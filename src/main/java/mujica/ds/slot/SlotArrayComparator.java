@@ -222,7 +222,7 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
         @Override
         CapacityPolicy getCapacityPolicy();
 
-        // no slotEquals()
+        // no slotEquals(), use compareSlot() instead
 
         int slotHash(@NotNull S slot);
 

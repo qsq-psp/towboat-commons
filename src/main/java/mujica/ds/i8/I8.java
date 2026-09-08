@@ -77,7 +77,14 @@ public class I8 implements I8Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/31")
     public static class I8NodeAllocator1 implements NodeAllocator1<I8Node1> {
 
+        private static final long serialVersionUID = 0xEF4D9063DC5FD941L;
+
         public static final I8NodeAllocator1 INSTANCE = new I8NodeAllocator1();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override
@@ -124,7 +131,14 @@ public class I8 implements I8Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/28")
     public static class I8NodeAllocator2 implements NodeAllocator2<I8Node2> {
 
+        private static final long serialVersionUID = 0x6293C0196157E893L;
+
         public static final I8NodeAllocator2 INSTANCE = new I8NodeAllocator2();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override
@@ -192,7 +206,14 @@ public class I8 implements I8Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/30")
     public static class I8NodeAllocator3 implements NodeAllocator3<I8Node3> {
 
+        private static final long serialVersionUID = 0xFDEC22A81B9F4515L;
+
         public static final I8NodeAllocator3 INSTANCE = new I8NodeAllocator3();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override

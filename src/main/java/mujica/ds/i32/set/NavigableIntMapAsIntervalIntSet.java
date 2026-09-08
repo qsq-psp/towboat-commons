@@ -1,6 +1,5 @@
 package mujica.ds.i32.set;
 
-import mujica.ds.common.InvariantException;
 import mujica.ds.i32.I32Slot;
 import mujica.ds.i32.S32;
 import mujica.ds.i32.map.I32Map;
@@ -210,50 +209,10 @@ public class NavigableIntMapAsIntervalIntSet extends IntervalIntSet {
         }
     }
 
-    @Override
-    public void ascendingForEach(@NotNull IntConsumer action) {
-        final Iterator<I32Map.Entry> i = map.ascendingIterator();
-        while (i.hasNext()) {
-            I32Map.Entry e = i.next();
-            int l = e.getI32Key();
-            int r = e.getI32Value();
-            while (l < r) {
-                action.accept(l++);
-            }
-            action.accept(r);
-        }
-    }
-
-    @Override
-    public void descendingForEach(@NotNull IntConsumer action) {
-        final Iterator<I32Map.Entry> i = map.descendingIterator();
-        while (i.hasNext()) {
-            I32Map.Entry e = i.next();
-            int l = e.getI32Key();
-            int r = e.getI32Value();
-            while (l < r) {
-                action.accept(r--);
-            }
-            action.accept(l);
-        }
-    }
-
     @NotNull
     @Override
     public Iterator<Integer> iterator() {
         return new AscendingIterator(map.iterator());
-    }
-
-    @NotNull
-    @Override
-    public Iterator<Integer> ascendingIterator() {
-        return new AscendingIterator(map.ascendingIterator());
-    }
-
-    @NotNull
-    @Override
-    public Iterator<Integer> descendingIterator() {
-        return new DescendingIterator(map.descendingIterator());
     }
 
     private static class AscendingIterator implements PrimitiveIterator.OfInt {

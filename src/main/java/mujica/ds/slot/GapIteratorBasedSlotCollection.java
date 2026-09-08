@@ -14,6 +14,8 @@ import java.util.function.Predicate;
 @CodeHistory(date = "2026/7/21")
 public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollection<S, A> {
 
+    private static final long serialVersionUID = 0x9F5A468FB48930B3L;
+
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     @NotNull
@@ -36,7 +38,17 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     protected abstract SlotArrayAllocator<S, A> getAllocator();
 
     @Override
-    public int size() {
+    public long sumOfDepth() {
+        return -1L; // unknown
+    }
+
+    @Override
+    public int maxDepth() {
+        return -1; // unknown
+    }
+
+    @Override
+    public int getSize() {
         int count = 0;
         final GapIterator<S> iterator = iterator(0);
         while (iterator.nextGap()) {
@@ -58,6 +70,24 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     @Override
     public boolean contains(@NotNull S in) {
         return firstIndexOf(in) != -1;
+    }
+
+    @Override
+    public int countItem(@NotNull S in) {
+        int sum = 0;
+        final GapIterator<S> iterator = iterator(0);
+        final S tempSlot = getAllocator().newSlot();
+        try {
+            while (iterator.nextGap()) {
+                iterator.getPrevious(tempSlot);
+                if (in.equals(tempSlot)) {
+                    sum++;
+                }
+            }
+            return sum;
+        } finally {
+            getAllocator().releaseSlot(tempSlot);
+        }
     }
 
     @Override
@@ -118,13 +148,13 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     }
 
     @Override
-    public void exchangeItemAt(int index, @NotNull S ioSlot) throws IndexOutOfBoundsException {
+    public void exchangeItemAt(int index, @NotNull S inOut) throws IndexOutOfBoundsException {
         final S tempSlot = getAllocator().newSlot();
         try {
             GapIterator<S> iterator = iterator(index);
             iterator.getNext(tempSlot);
-            iterator.setNext(ioSlot);
-            getAllocator().move(tempSlot, ioSlot);
+            iterator.setNext(inOut);
+            getAllocator().move(tempSlot, inOut);
         } catch (NoSuchElementException e) {
             throw new IndexOutOfBoundsException();
         } finally {
@@ -133,9 +163,9 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     }
 
     @Override
-    public void removeItemAt(int index, @Nullable S slot) throws IndexOutOfBoundsException {
+    public void removeItemAt(int index, @Nullable S out) throws IndexOutOfBoundsException {
         try {
-            iterator(index).removeNext(slot);
+            iterator(index).removeNext(out);
         } catch (NoSuchElementException e) {
             throw new IndexOutOfBoundsException();
         }
@@ -210,15 +240,14 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     }
 
     @Override
-    public boolean removeFirstEqualItem(@NotNull S slot) {
-        final SlotArrayAllocator<S, A> allocator = getAllocator();
+    public boolean removeFirstEqualItem(@NotNull S inOut) {
         final GapIterator<S> iterator = iterator(0);
-        final S scanSlot = allocator.newSlot();
+        final S scanSlot = getAllocator().newSlot();
         try {
             while (iterator.nextGap()) {
                 iterator.getPrevious(scanSlot);
-                if (slot.equals(scanSlot)) {
-                    iterator.removePrevious(slot);
+                if (inOut.equals(scanSlot)) {
+                    iterator.removePrevious(inOut);
                     return true;
                 }
             }
@@ -226,6 +255,48 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
             getAllocator().releaseSlot(scanSlot);
         }
         return false;
+    }
+
+    @Override
+    public boolean removeLastEqualItem(@NotNull S inOut) {
+        final GapIterator<S> iterator = iterator(-1);
+        final S scanSlot = getAllocator().newSlot();
+        try {
+            while (iterator.previousGap()) {
+                iterator.getNext(scanSlot);
+                if (inOut.equals(scanSlot)) {
+                    iterator.removeNext(inOut);
+                    return true;
+                }
+            }
+        } finally {
+            getAllocator().releaseSlot(scanSlot);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeOneEqualItem(@NotNull S inOut) {
+        return removeFirstEqualItem(inOut);
+    }
+
+    @Override
+    public int removeAllEqualItems(@NotNull S in) {
+        int count = 0;
+        final GapIterator<S> iterator = iterator(0);
+        final S scanSlot = getAllocator().newSlot();
+        try {
+            while (iterator.nextGap()) {
+                iterator.getPrevious(scanSlot);
+                if (in.equals(scanSlot)) {
+                    iterator.removePrevious(in);
+                    count++;
+                }
+            }
+        } finally {
+            getAllocator().releaseSlot(scanSlot);
+        }
+        return count;
     }
 
     @Override
@@ -301,7 +372,7 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     }
 
     @Override
-    public void truncate(int newEndIndex) throws IndexOutOfBoundsException {
+    public void setSize(int newEndIndex) throws IndexOutOfBoundsException {
         final GapIterator<S> iterator = iterator(newEndIndex);
         while (iterator.nextGap()) {
             iterator.removePrevious(null);
@@ -326,7 +397,7 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
             final GapIterator<S> iterator = iterator(-1);
             for (int index = 0; index < length; index++) {
                 allocator.load(tempArray, index, tempSlot);
-                iterator.setPrevious(tempSlot);
+                iterator.setPrevious(tempSlot); // blind
                 iterator.previousGap();
             }
         } finally {
@@ -337,12 +408,28 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
 
     @Override
     public void rotate(int distance) {
-        // todo
-    }
-
-    @Override
-    public void sort(boolean descending) {
-        throw new UnsupportedOperationException();
+        final int modulo = getSize();
+        if (modulo <= 1) {
+            return;
+        }
+        distance %= modulo;
+        if (distance == 0) {
+            return;
+        }
+        distance -= modulo; // ensure negative
+        final SlotArrayAllocator<S, A> allocator = getAllocator();
+        final S tempSlot = allocator.newSlot();
+        final A tempArray = rangeToArray(0, modulo);
+        try {
+            final GapIterator<S> iterator = iterator(0);
+            for (int index = 0; index < modulo; index++) {
+                allocator.load(tempArray, (index - distance) % modulo, tempSlot);
+                iterator.setNext(tempSlot); // blind
+                iterator.nextGap();
+            }
+        } finally {
+            getAllocator().releaseArray(tempArray);
+        }
     }
 
     @Override
@@ -434,13 +521,13 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
 
     @Override
     public void getAll(@NotNull A dst, int dstIndex) {
-        getRange(0, dst, dstIndex, size());
+        getRange(0, dst, dstIndex, getSize());
     }
 
     @NotNull
     @Override
     public A allToArray() {
-        return rangeToArray(0, size());
+        return rangeToArray(0, getSize());
     }
 
     @Override
@@ -538,20 +625,20 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     }
 
     @Override
-    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
+    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T consumedSlot) {
         final GapIterator<S> iterator = iterator(0);
         while (iterator.nextGap()) {
-            iterator.getPrevious(tempSlot);
-            consumer.accept(tempSlot);
+            iterator.getPrevious(consumedSlot);
+            consumer.accept(consumedSlot);
         }
     }
 
     @Override
-    public <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
+    public <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T consumedSlot) {
         final GapIterator<S> iterator = iterator(0);
         while (iterator.nextGap()) {
-            iterator.getPrevious(tempSlot);
-            if (predicate.test(tempSlot)) {
+            iterator.getPrevious(consumedSlot);
+            if (predicate.test(consumedSlot)) {
                 return true;
             }
         }
@@ -559,11 +646,11 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     }
 
     @Override
-    public <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
+    public <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T consumedSlot) {
         final GapIterator<S> iterator = iterator(0);
         while (iterator.nextGap()) {
-            iterator.getPrevious(tempSlot);
-            if (!predicate.test(tempSlot)) {
+            iterator.getPrevious(consumedSlot);
+            if (!predicate.test(consumedSlot)) {
                 return false;
             }
         }
@@ -571,21 +658,21 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     }
 
     @Override
-    public <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
+    public <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T consumedSlot) {
         final GapIterator<S> iterator = iterator(0);
         while (iterator.nextGap()) {
-            iterator.getPrevious(tempSlot);
-            consumer.accept(tempSlot);
-            iterator.setPrevious(tempSlot);
+            iterator.getPrevious(consumedSlot);
+            consumer.accept(consumedSlot);
+            iterator.setPrevious(consumedSlot);
         }
     }
 
     @Override
-    public <T extends S> void removeIf(@NotNull Predicate<T> filter, @NotNull T tempSlot) {
+    public <T extends S> void removeIf(@NotNull Predicate<T> filter, @NotNull T consumedSlot) {
         final GapIterator<S> iterator = iterator(0);
         while (iterator.nextGap()) {
-            iterator.getPrevious(tempSlot);
-            if (filter.test(tempSlot)) {
+            iterator.getPrevious(consumedSlot);
+            if (filter.test(consumedSlot)) {
                 iterator.removePrevious(null);
             }
         }
@@ -598,7 +685,7 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     @NotNull
     @Override
     public String summaryToString() {
-        return "size = " + size();
+        return "size = " + getSize();
     }
 
     @NotNull
@@ -606,19 +693,19 @@ public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollec
     public String detailToString() {
         final StringBuilder sb = new StringBuilder();
         final GapIterator<S> iterator = iterator(0);
-        final S tempSlot = getAllocator().newSlot();
+        final S stringifySlot = getAllocator().newSlot();
         try {
             boolean plural = false;
             while (iterator.nextGap()) {
                 if (plural) {
                     sb.append(", ");
                 }
-                iterator.getPrevious(tempSlot);
-                sb.append(tempSlot);
+                iterator.getPrevious(stringifySlot);
+                sb.append(stringifySlot);
                 plural = true;
             }
         } finally {
-            getAllocator().releaseSlot(tempSlot);
+            getAllocator().releaseSlot(stringifySlot);
         }
         return sb.toString();
     }

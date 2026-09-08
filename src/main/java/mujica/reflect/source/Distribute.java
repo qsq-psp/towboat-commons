@@ -37,8 +37,6 @@ public final class Distribute implements Runnable {
                 .includeDst("main\\java\\mujica\\math")
                 .includeDst("main\\java\\mujica\\slot")
                 .includeDst("main\\java\\mujica\\desktop")
-                .includeDst("main\\java\\mujica\\swing")
-                .includeDst("main\\java\\mujica\\gui")
                 .run();
         (new Distribute("D:\\Java\\MyGO\\src", "D:\\Java\\Mujica\\src"))
                 .excludeSrc("main\\java\\mujica\\geometry")

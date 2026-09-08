@@ -5,12 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
-/**
- * For phase split and word join.
- */
 @CodeHistory(date = "2022/8/14", project = "Ultramarine", name = "IdentifierFormat")
 @CodeHistory(date = "2025/3/6")
-public enum PhraseStyle {
+public enum PhraseStyle { // for phase split and word join
 
     AUTO, // auto split, not for join
     UNDERSCORE,

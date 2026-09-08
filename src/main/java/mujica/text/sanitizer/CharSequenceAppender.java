@@ -2,6 +2,7 @@ package mujica.text.sanitizer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.text.sequence.UnitCharSequence;
 import mujica.io.stream.OIO;
 import mujica.reflect.modifier.CodeHistory;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @CodeHistory(date = "2026/1/7")
+@DirectSubclass({ContainerAppender.class, EntityEscapeAppender.class})
 public class CharSequenceAppender {
 
     public boolean isApplicable(@NotNull CharSequence string) {

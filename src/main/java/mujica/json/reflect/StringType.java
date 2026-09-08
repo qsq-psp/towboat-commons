@@ -16,7 +16,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2021/12/31", project = "infrastructure", name = "JsonStringType")
 @CodeHistory(date = "2022/8/6", project = "Ultramarine", name = "JsonStringType")
 @CodeHistory(date = "2026/4/16")
-class StringType extends JsonType {
+class StringType extends VoidType {
 
     private static final long serialVersionUID = 0x00346E309F63DB4FL;
 

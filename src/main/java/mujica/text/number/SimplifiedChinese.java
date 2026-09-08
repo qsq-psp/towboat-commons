@@ -1,6 +1,7 @@
 package mujica.text.number;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -8,6 +9,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2021/10/26", project = "va")
 @CodeHistory(date = "2022/10/19", project = "Ultramarine")
 @CodeHistory(date = "2025/2/26")
+@Name(value = "简体中文数字", language = "zh")
 public class SimplifiedChinese extends TraditionalChinese {
 
     public static final SimplifiedChinese SIMPLIFIED = new SimplifiedChinese(

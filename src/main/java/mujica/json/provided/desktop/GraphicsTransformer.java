@@ -52,7 +52,7 @@ public class GraphicsTransformer implements JsonContextTransformer<Graphics> {
         {
             AffineTransform transform = graphics2D.getTransform();
             if (transform != null && !transform.isIdentity()) {
-                out.key("transform");
+                out.key(FontMetricsTransformer.TRANSFORM);
                 AffineTransformTransformer.INSTANCE.transform(transform, out, context);
             }
         }

@@ -26,20 +26,20 @@ public class S32AscendingShellSort implements Sort<int[]> {
             return 0L;
         }
         long operationCount = sort(array, startIndex, endIndex, step * 3 + 1);
-        for (int i = startIndex + step; i < endIndex; i++) {
-            int j = i;
-            int value = array[j];
+        for (int index0 = startIndex + step; index0 < endIndex; index0++) {
+            int index1 = index0;
+            int value = array[index1];
             while (true) {
-                int index2 = j - step;
+                int index2 = index1 - step;
                 if (index2 >= startIndex && array[index2] > value) {
-                    array[j] = array[j - step];
-                    j -= step;
+                    array[index1] = array[index2];
+                    index1 = index2;
                     operationCount++;
                 } else {
                     break;
                 }
             }
-            array[j] = value; // insertion
+            array[index1] = value; // insertion
         }
         return operationCount;
     }

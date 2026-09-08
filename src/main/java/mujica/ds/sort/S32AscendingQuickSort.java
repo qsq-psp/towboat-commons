@@ -69,16 +69,15 @@ public class S32AscendingQuickSort implements Sort<int[]> {
                 }
             }
             while (true) { // skip from end to start
-                int value = array[--endReadIndex];
+                int value = array[endReadIndex - 1];
                 if (value >= pivot) {
                     if (value > pivot) {
                         array[--endWriteIndex] = value;
                     }
-                    if (startReadIndex >= endReadIndex) {
+                    if (startReadIndex >= --endReadIndex) {
                         break LABEL;
                     }
                 } else {
-                    ++endReadIndex;
                     break;
                 }
             }
@@ -93,11 +92,11 @@ public class S32AscendingQuickSort implements Sort<int[]> {
             }
         }
         if (startWriteIndex == endIndex) {
-            throw new RuntimeException("too large pivot");
+            throw new AssertionError("too large pivot");
         }
         operationCount += sort(array, startIndex, startWriteIndex);
         if (startIndex == endWriteIndex) {
-            throw new RuntimeException("too small pivot");
+            throw new AssertionError("too small pivot");
         }
         operationCount += sort(array, endWriteIndex, endIndex);
         while (startWriteIndex < endWriteIndex) {

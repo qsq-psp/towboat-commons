@@ -1,6 +1,7 @@
 package mujica.text.collation;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.Name;
 
 @CodeHistory(date = "2026/3/6")
 public interface Latin1Brackets {
@@ -16,4 +17,7 @@ public interface Latin1Brackets {
     Bracket QUOTATION_MARK = new Bracket("\"");
 
     Bracket APOSTROPHE = new Bracket("'");
+
+    @Name(value = "backtick", language = "en")
+    Bracket GRAVE_ACCENT = new Bracket("`");
 }

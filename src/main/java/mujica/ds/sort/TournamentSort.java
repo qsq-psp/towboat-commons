@@ -29,4 +29,15 @@ public class TournamentSort<S, A> implements Sort<A> {
     public long sort(@NotNull A target) {
         return sort(target, 0, comparator.length(target));
     }
+
+    @NotNull
+    @Override
+    public String toString() {
+        final A auxiliaryArray = this.auxiliaryArray;
+        if (auxiliaryArray == null) {
+            return "TournamentSort[comparator = " + comparator + "]";
+        } else {
+            return "TournamentSort[comparator = " + comparator + ", auxiliaryArray = " + comparator.length(auxiliaryArray) + "]";
+        }
+    }
 }

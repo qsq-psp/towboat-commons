@@ -38,9 +38,9 @@ public class I32SlotCollectionTest {
         actual.checkHealth();
     }
 
-    private void size() {
-        operations.add("size");
-        Assert.assertEquals(expected.size(), actual.size());
+    private void getSize() {
+        operations.add("getSize");
+        Assert.assertEquals(expected.size(), actual.getSize());
     }
 
     private void contains() {
@@ -134,7 +134,7 @@ public class I32SlotCollectionTest {
     }
 
     private void getArbitraryItemNull() {
-        if (actual.size() > rc.nextInt(SMALL_COUNT)) {
+        if (actual.getSize() > rc.nextInt(SMALL_COUNT)) {
             operations.add("getArbitraryItemNull");
             actual.getArbitraryItem(slot, null);
             Assert.assertTrue(expected.contains(slot.getI32()));
@@ -144,7 +144,7 @@ public class I32SlotCollectionTest {
     }
 
     private void getArbitraryItemNotNull() {
-        if (actual.size() > rc.nextInt(SMALL_COUNT)) {
+        if (actual.getSize() > rc.nextInt(SMALL_COUNT)) {
             operations.add("getArbitraryItemNotNull");
             actual.getArbitraryItem(slot, rc);
             Assert.assertTrue(expected.contains(slot.getI32()));
@@ -164,7 +164,7 @@ public class I32SlotCollectionTest {
         operations.add("insertLast");
         final int[] array = rc.nextIntArray(rc.nextInt(SMALL_COUNT));
         {
-            ArrayList<Integer> list = new ArrayList<>();
+            ArrayList<Integer> list = new ArrayList<>(array.length);
             for (int value : array) {
                 list.add(value);
             }
@@ -174,12 +174,12 @@ public class I32SlotCollectionTest {
     }
 
     private void truncate() {
-        operations.add("truncate");
+        operations.add("setSize");
         final int oldSize = expected.size();
         if (oldSize > rc.nextInt(SMALL_COUNT)) {
             int newSize = rc.nextInt(oldSize);
             ((List<Integer>) expected).subList(newSize, oldSize).clear();
-            actual.truncate(newSize);
+            actual.setSize(newSize);
         } else {
             insertLastItem();
         }
@@ -229,7 +229,7 @@ public class I32SlotCollectionTest {
                 checkHealth();
                 break;
             case 2:
-                size();
+                getSize();
                 break;
             case 3:
                 contains();
@@ -301,25 +301,25 @@ public class I32SlotCollectionTest {
 
     private void checkList(@NotNull Supplier<Collection<Integer>> supplier) {
         expected = supplier.get();
-        actual = new CopyOnWriteSlotList<>(new SlotArrayAllocatorI32ForTest.WithHashI32(new HalfCapacityPolicy(0x3f4f5f6f)));
+        actual = new CopyOnWriteSlotList<>(new I32SlotArrayAllocatorForTest.I32HashSAA(new HalfCapacityPolicy(0x3f4f5f6f)));
         listLoop();
         expected = supplier.get();
-        actual = new CopyOnWriteSlotList<>(new SlotArrayAllocatorI32ForTest.WithHashI32(LookUpCapacityPolicy.PRIME_PAPER));
+        actual = new CopyOnWriteSlotList<>(new I32SlotArrayAllocatorForTest.I32HashSAA(LookUpCapacityPolicy.PRIME_PAPER));
         listLoop();
         expected = supplier.get();
-        actual = new CopyOnResizeSlotList<>(new SlotArrayAllocatorI32ForTest.WithHashI32(new HalfCapacityPolicy(0x3e4e5e6e)));
+        actual = new CopyOnResizeSlotList<>(new I32SlotArrayAllocatorForTest.I32HashSAA(new HalfCapacityPolicy(0x3e4e5e6e)));
         listLoop();
         expected = supplier.get();
-        actual = new CopyOnResizeSlotList<>(new SlotArrayAllocatorI32ForTest.WithHashI32(LookUpCapacityPolicy.PRIME_GOLDEN));
+        actual = new CopyOnResizeSlotList<>(new I32SlotArrayAllocatorForTest.I32HashSAA(LookUpCapacityPolicy.PRIME_GOLDEN));
         listLoop();
         expected = supplier.get();
-        actual = new CenterAlignedSlotList<>(new SlotArrayAllocatorI32ForTest.WithHashI32(new HalfCapacityPolicy(0x30405060)));
+        actual = new CenterAlignedSlotList<>(new I32SlotArrayAllocatorForTest.I32HashSAA(new HalfCapacityPolicy(0x30405060)));
         listLoop();
         expected = supplier.get();
-        actual = new CenterAlignedSlotList<>(new SlotArrayAllocatorI32ForTest.WithHashI32(LookUpCapacityPolicy.PRIME_FIBONACCI));
+        actual = new CenterAlignedSlotList<>(new I32SlotArrayAllocatorForTest.I32HashSAA(LookUpCapacityPolicy.PRIME_FIBONACCI));
         listLoop();
         expected = supplier.get();
-        actual = new LinkedSlotList<>(new SlotArrayAllocatorI32ForTest(), I32.I32NodeAllocator2.INSTANCE);
+        actual = new LinkedSlotList<>(new I32SlotArrayAllocatorForTest(), I32.I32NodeAllocator2.INSTANCE);
         listLoop();
     }
 
@@ -338,7 +338,7 @@ public class I32SlotCollectionTest {
                 checkHealth();
                 break;
             case 2:
-                size();
+                getSize();
                 break;
             case 3:
             case 4:
@@ -386,34 +386,34 @@ public class I32SlotCollectionTest {
 
     private void checkSet(@NotNull Supplier<Collection<Integer>> supplier) {
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Linear<>(new SlotArrayAllocatorI32ForTest.WithHashI32(ShiftCapacityPolicy.INSTANCE));
+        actual = new ClosedHashSlotSet.Linear<>(new I32SlotArrayAllocatorForTest.I32HashSAA(ShiftCapacityPolicy.INSTANCE));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Linear<>(new SlotArrayAllocatorI32ForTest.WithHashI32(TwiceCapacityPolicy.INSTANCE));
+        actual = new ClosedHashSlotSet.Linear<>(new I32SlotArrayAllocatorForTest.I32HashSAA(TwiceCapacityPolicy.INSTANCE));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Quadratic<>(new SlotArrayAllocatorI32ForTest.WithHashI32(ModuloLookUpCapacityPolicy.INSTANCE_59));
+        actual = new ClosedHashSlotSet.Quadratic<>(new I32SlotArrayAllocatorForTest.I32HashSAA(ModuloLookUpCapacityPolicy.INSTANCE_59));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Quadratic<>(new SlotArrayAllocatorI32ForTest.WithHashI32(ModuloLookUpCapacityPolicy.INSTANCE_67));
+        actual = new ClosedHashSlotSet.Quadratic<>(new I32SlotArrayAllocatorForTest.I32HashSAA(ModuloLookUpCapacityPolicy.INSTANCE_67));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Congruent<>(new SlotArrayAllocatorI32ForTest.WithHashI32(LookUpCapacityPolicy.PRIME_PAPER));
+        actual = new ClosedHashSlotSet.Congruent<>(new I32SlotArrayAllocatorForTest.I32HashSAA(LookUpCapacityPolicy.PRIME_PAPER));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Congruent<>(new SlotArrayAllocatorI32ForTest.WithHashI32(LookUpCapacityPolicy.PRIME_GOLDEN));
+        actual = new ClosedHashSlotSet.Congruent<>(new I32SlotArrayAllocatorForTest.I32HashSAA(LookUpCapacityPolicy.PRIME_GOLDEN));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Congruent<>(new SlotArrayAllocatorI32ForTest.WithHashI32(LookUpCapacityPolicy.PRIME_FIBONACCI));
+        actual = new ClosedHashSlotSet.Congruent<>(new I32SlotArrayAllocatorForTest.I32HashSAA(LookUpCapacityPolicy.PRIME_FIBONACCI));
         setLoop();
         expected = supplier.get();
-        actual = new OpenHashSlotSet.Link1<>(new SlotArrayAllocatorI32ForTest.WithHashI32(TwiceCapacityPolicy.INSTANCE), I32.I32NodeAllocator1.INSTANCE);
+        actual = new OpenHashSlotSet.Link1<>(new I32SlotArrayAllocatorForTest.I32HashSAA(TwiceCapacityPolicy.INSTANCE), I32.I32NodeAllocator1.INSTANCE);
         setLoop();
         expected = supplier.get();
-        actual = new OpenHashSlotSet.Link2<>(new SlotArrayAllocatorI32ForTest.WithHashI32(TwiceCapacityPolicy.INSTANCE), I32.I32NodeAllocator2.INSTANCE);
+        actual = new OpenHashSlotSet.Link2<>(new I32SlotArrayAllocatorForTest.I32HashSAA(TwiceCapacityPolicy.INSTANCE), I32.I32NodeAllocator2.INSTANCE);
         setLoop();
         expected = supplier.get();
-        actual = new OpenHashSlotSet.Link3<>(new SlotArrayAllocatorI32ForTest.WithHashI32(TwiceCapacityPolicy.INSTANCE), I32.I32NodeAllocator3.INSTANCE);
+        actual = new OpenHashSlotSet.Link3<>(new I32SlotArrayAllocatorForTest.I32HashSAA(TwiceCapacityPolicy.INSTANCE), I32.I32NodeAllocator3.INSTANCE);
         setLoop();
     }
 

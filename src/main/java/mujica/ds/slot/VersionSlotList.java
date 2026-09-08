@@ -19,12 +19,12 @@ public abstract class VersionSlotList<S, A> extends RandomAccessBasedSlotCollect
     transient int version;
 
     @Override
-    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
+    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T consumedSlot) {
         final int expectedVersion = version;
-        final int listSize = size();
+        final int listSize = getSize();
         for (int index = 0; index < listSize; index++) {
-            getItemAt(index, tempSlot);
-            consumer.accept(tempSlot);
+            getItemAt(index, consumedSlot);
+            consumer.accept(consumedSlot);
             if (version != expectedVersion) {
                 throw new ConcurrentModificationException();
             }
@@ -32,12 +32,12 @@ public abstract class VersionSlotList<S, A> extends RandomAccessBasedSlotCollect
     }
 
     @Override
-    public <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
+    public <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T consumedSlot) {
         final int expectedVersion = version;
-        final int listSize = size();
+        final int listSize = getSize();
         for (int index = 0; index < listSize; index++) {
-            getItemAt(index, tempSlot);
-            boolean predicateResult = predicate.test(tempSlot);
+            getItemAt(index, consumedSlot);
+            boolean predicateResult = predicate.test(consumedSlot);
             if (version != expectedVersion) {
                 throw new ConcurrentModificationException();
             }
@@ -49,12 +49,12 @@ public abstract class VersionSlotList<S, A> extends RandomAccessBasedSlotCollect
     }
 
     @Override
-    public <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
+    public <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T consumedSlot) {
         final int expectedVersion = version;
-        final int listSize = size();
+        final int listSize = getSize();
         for (int index = 0; index < listSize; index++) {
-            getItemAt(index, tempSlot);
-            boolean predicateResult = predicate.test(tempSlot);
+            getItemAt(index, consumedSlot);
+            boolean predicateResult = predicate.test(consumedSlot);
             if (version != expectedVersion) {
                 throw new ConcurrentModificationException();
             }
@@ -66,27 +66,27 @@ public abstract class VersionSlotList<S, A> extends RandomAccessBasedSlotCollect
     }
 
     @Override
-    public <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
+    public <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T consumedSlot) {
         final int expectedVersion = version;
-        final int listSize = size();
+        final int listSize = getSize();
         for (int index = 0; index < listSize; index++) {
-            getItemAt(index, tempSlot);
-            consumer.accept(tempSlot);
+            getItemAt(index, consumedSlot);
+            consumer.accept(consumedSlot);
             if (version != expectedVersion) {
                 throw new ConcurrentModificationException();
             }
-            setItemAt(index, tempSlot);
+            setItemAt(index, consumedSlot);
         }
     }
 
     @Override
-    public <T extends S> void removeIf(@NotNull Predicate<T> filter, @NotNull T tempSlot) {
+    public <T extends S> void removeIf(@NotNull Predicate<T> filter, @NotNull T consumedSlot) {
         int expectedVersion = version;
-        int listSize = size();
+        int listSize = getSize();
         int index = 0;
         while (index < listSize) {
-            getItemAt(index, tempSlot);
-            boolean filterResult = filter.test(tempSlot);
+            getItemAt(index, consumedSlot);
+            boolean filterResult = filter.test(consumedSlot);
             if (version != expectedVersion) {
                 throw new ConcurrentModificationException();
             }
@@ -103,7 +103,7 @@ public abstract class VersionSlotList<S, A> extends RandomAccessBasedSlotCollect
     @NotNull
     @Override
     public GapIterator<S> iterator(int startGapIndex) {
-        final int gapSize = size() + 1;
+        final int gapSize = getSize() + 1;
         final int nonNegativeGapIndex = startGapIndex < 0 ? gapSize + startGapIndex : startGapIndex;
         if (!(0 <= nonNegativeGapIndex && nonNegativeGapIndex < gapSize)) {
             throw new IndexOutOfBoundsException();
@@ -132,7 +132,7 @@ public abstract class VersionSlotList<S, A> extends RandomAccessBasedSlotCollect
                 if (version != expectedVersion) {
                     throw new ConcurrentModificationException();
                 }
-                if (gapIndex < size()) {
+                if (gapIndex < getSize()) {
                     gapIndex++;
                     return true;
                 } else {
@@ -241,6 +241,6 @@ public abstract class VersionSlotList<S, A> extends RandomAccessBasedSlotCollect
     @NotNull
     @Override
     public String summaryToString() {
-        return "size = " + size() + ", version = " + version;
+        return "size = " + getSize() + ", version = " + version;
     }
 }

@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
-/**
- * Created on 2026/2/21.
- */
 @CodeHistory(date = "2026/2/21")
 public abstract class BracketNode implements Comparable<BracketNode>, Serializable {
 

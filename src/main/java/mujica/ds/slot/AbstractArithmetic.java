@@ -1,14 +1,14 @@
 package mujica.ds.slot;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.RoundingMode;
 
 @CodeHistory(date = "2026/6/28")
+@DirectSubclass({PrimitiveArithmetic.class, CompoundArithmetic.class})
 public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
-
-    protected S slot0, slot1, slot2; // remove these
 
     protected AbstractArithmetic() {
         super();
@@ -16,15 +16,24 @@ public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
 
     @Override
     public void two(@NotNull S result) {
-        final S slot1 = newSlot();
-        one(slot1);
-        add(slot1, slot1, result);
+        final S slot = newSlot();
+        try {
+            one(slot);
+            add(slot, slot, result);
+        } finally {
+            releaseSlot(slot);
+        }
     }
 
     @Override
     public int sign(@NotNull S variable) {
-        zero(slot0);
-        return compareSlot(variable, slot0);
+        final S slot = newSlot();
+        try {
+            zero(slot);
+            return compareSlot(variable, slot);
+        } finally {
+            releaseSlot(slot);
+        }
     }
 
     @Override
@@ -58,20 +67,36 @@ public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
 
     @Override
     public void increase(@NotNull S variable, @NotNull S result) {
-        one(slot1);
-        add(variable, slot1, result);
+        final S slot = newSlot();
+        try {
+            one(slot);
+            add(variable, slot, result);
+        } finally {
+            releaseSlot(slot);
+        }
     }
 
     @Override
     public void decrease(@NotNull S variable, @NotNull S result) {
-        one(slot1);
-        subtract(variable, slot1, result);
+        final S slot = newSlot();
+        try {
+            one(slot);
+            subtract(variable, slot, result);
+        } finally {
+            releaseSlot(slot);
+        }
     }
 
     @Override
     public void subtract(@NotNull S left, @NotNull S right, @NotNull S result) {
-        negate(right, slot0);
-        add(left, slot0, result);
+        final S slot = newSlot();
+        try {
+            one(slot);
+            negate(right, slot);
+            add(left, slot, result);
+        } finally {
+            releaseSlot(slot);
+        }
     }
 
     @Override
@@ -81,10 +106,19 @@ public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
 
     @Override
     public void triangle(@NotNull S variable, @NotNull S result) {
-        increase(variable, slot1);
-        multiply(variable, slot1, slot0);
-        two(slot2);
-        divide(slot0, slot2, result, RoundingMode.UNNECESSARY);
+        final S increasedVariable = newSlot();
+        final S product = newSlot();
+        final S two = newSlot();
+        try {
+            increase(variable, increasedVariable);
+            multiply(variable, increasedVariable, product);
+            two(two);
+            divide(product, two, result, RoundingMode.UNNECESSARY);
+        } finally {
+            releaseSlot(increasedVariable);
+            releaseSlot(product);
+            releaseSlot(two);
+        }
     }
 
     @Override
@@ -102,30 +136,46 @@ public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
     }
 
     @Override
-    public void gcd(@NotNull S left, @NotNull S right, @NotNull S result) {
-        if (sign(left) <= 0 || sign(right) <= 0) {
+    public void gcd(@NotNull S leftIn, @NotNull S rightIn, @NotNull S result) {
+        if (sign(leftIn) <= 0 || sign(rightIn) <= 0) {
             throw new ArithmeticException();
         }
-        move(left, slot0);
-        left = slot0;
-        move(right, slot1);
-        right = slot1;
-        S remainder = slot2;
-        do {
-            divide(left, right, null, remainder);
-            S temp = left;
-            left = right;
-            right = remainder;
-            remainder = temp;
-        } while (sign(right) != 0);
-        move(left, result);
+        final S leftSlot = newSlot();
+        final S rightSlot = newSlot();
+        final S remainderSlot = newSlot();
+        try {
+            move(leftIn, leftSlot);
+            leftIn = leftSlot;
+            move(rightIn, rightSlot);
+            rightIn = rightSlot;
+            S remainder = remainderSlot;
+            do {
+                divide(leftIn, rightIn, null, remainder);
+                S temp = leftIn;
+                leftIn = rightIn;
+                rightIn = remainder;
+                remainder = temp;
+            } while (sign(rightIn) != 0);
+            move(leftIn, result);
+        } finally {
+            releaseSlot(leftSlot);
+            releaseSlot(rightSlot);
+            releaseSlot(remainderSlot);
+        }
     }
 
     @Override
     public void lcm(@NotNull S left, @NotNull S right, @NotNull S result) {
-        gcd(left, right, slot2);
-        multiply(left, right, slot1);
-        divide(slot1, slot2, result, RoundingMode.UNNECESSARY);
+        final S gcdSlot = newSlot();
+        final S productSlot = newSlot();
+        try {
+            gcd(left, right, gcdSlot);
+            multiply(left, right, productSlot);
+            divide(productSlot, gcdSlot, result, RoundingMode.UNNECESSARY);
+        } finally {
+            releaseSlot(gcdSlot);
+            releaseSlot(productSlot);
+        }
     }
 
     @Override

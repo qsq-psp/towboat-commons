@@ -79,9 +79,14 @@ public class S32DescendingBucketSort implements Sort<int[]> {
         for (CopyOnResizeI32SlotList bucket : buckets) {
             operationCount += bucket.sort(next);
             bucket.getAll(array, copyIndex);
-            copyIndex += bucket.size();
+            copyIndex += bucket.getSize();
         }
         return operationCount;
+    }
+
+    @Override
+    public long sort(@NotNull int[] target) {
+        return sort(target, 0, target.length);
     }
 
     @Override

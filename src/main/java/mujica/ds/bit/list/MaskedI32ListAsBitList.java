@@ -1,6 +1,5 @@
 package mujica.ds.bit.list;
 
-import mujica.ds.common.InvariantException;
 import mujica.ds.i32.list.IntList;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;

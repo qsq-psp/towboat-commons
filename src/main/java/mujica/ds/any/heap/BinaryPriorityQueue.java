@@ -1,6 +1,5 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.common.InvariantException;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
@@ -48,7 +47,7 @@ public class BinaryPriorityQueue<E> extends ListPriorityQueue<E> {
         for (int index = 1; index < size; index++) {
             int parent = (index - 1) >>> 1;
             if (comparator.compare(list.get(index), list.get(parent)) < 0) {
-                consumer.accept(new InvariantException("node at " + index + " smaller than parent"));
+                consumer.accept(new RuntimeException("node at " + index + " smaller than parent"));
             }
         }
     }

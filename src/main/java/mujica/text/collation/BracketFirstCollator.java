@@ -1,11 +1,11 @@
 package mujica.text.collation;
 
+import mujica.reflect.modifier.CodeHistory;
+
 import java.text.CollationKey;
 import java.text.Collator;
 
-/**
- * Created on 2026/2/22.
- */
+@CodeHistory(date = "2026/2/22")
 public class BracketFirstCollator extends Collator {
 
     @Override

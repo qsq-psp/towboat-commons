@@ -2,6 +2,7 @@ package mujica.io.fs;
 
 import mujica.io.function.IOConsumer;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.ReferenceCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -121,6 +122,37 @@ public final class Directories {
     public static void touchAllTimes(@NotNull Path path) throws IOException {
         final FileTime now = FileTime.from(Instant.now());
         setTimes(path, now, now, now);
+    }
+
+    @ReferenceCode(groupId = "com.google.guava", artifactId = "guava", version = "33.6.0-jre", fullyQualifiedName = "com.google.common.io.MoreFiles#touch")
+    public static void touchRegularFile(@NotNull Path path) throws IOException {
+        try {
+            if (Files.isDirectory(path)) {
+                throw new IOException("directory");
+            }
+            touchLastModifiedTime(path);
+        } catch (NoSuchFileException e) {
+            try {
+                Path parent = path.getParent();
+                if (parent != null) {
+                    Files.createDirectories(parent);
+                }
+                Files.createFile(path);
+            } catch (FileAlreadyExistsException ignore) {}
+        }
+    }
+
+    public static void touchDirectory(@NotNull Path path) throws IOException {
+        try {
+            if (Files.isRegularFile(path)) {
+                throw new IOException("regular file");
+            }
+            touchLastModifiedTime(path);
+        } catch (NoSuchFileException e) {
+            try {
+                Files.createDirectories(path);
+            } catch (FileAlreadyExistsException ignore) {}
+        }
     }
 
     public static void clear(@NotNull Path path) throws IOException {

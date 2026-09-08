@@ -6,6 +6,7 @@ import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
@@ -13,11 +14,15 @@ import java.util.function.Consumer;
 
 @CodeHistory(date = "2025/3/14", project = "Ultramarine", name = "BlockLinkedList")
 @CodeHistory(date = "2026/7/14")
-public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
+@Name(value = "分块链表", language = "zh")
+public class LinkedBlockSlotList<S, A> extends GapIteratorBasedSlotCollection<S, A> {
+
+    private static final long serialVersionUID = 0x88858DEC79595C74L;
 
     @CodeHistory(date = "2026/7/14")
-    @Name(value = "double linked list node", language = "en")
-    static class LinkedBlock<A> {
+    static class LinkedBlock<A> implements Serializable {
+
+        private static final long serialVersionUID = 0x03125776187421C3L;
 
         LinkedBlock<A> previous;
 
@@ -42,6 +47,9 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
     LinkedBlock<A> head;
 
     LinkedBlock<A> tail;
+
+    @Name(value = "modCount", language = "en")
+    transient int version;
 
     public LinkedBlockSlotList(@NotNull SlotArrayAllocator<S, A> allocator, int blockCapacity) {
         super();
@@ -117,7 +125,7 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         int sum = 0;
         LinkedBlock<A> block = head;
         while (block != null) {
@@ -221,14 +229,14 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
     }
 
     @Override
-    public void exchangeItemAt(int index, @NotNull S slot) throws IndexOutOfBoundsException {
+    public void exchangeItemAt(int index, @NotNull S inOut) throws IndexOutOfBoundsException {
         if (index < 0) {
             throw new IndexOutOfBoundsException();
         }
         LinkedBlock<A> block = head;
         while (block != null) {
             if (index < block.size) {
-                allocator.exchange(block.array, index, slot);
+                allocator.exchange(block.array, index, inOut);
                 return;
             }
             index -= block.size;
@@ -257,19 +265,19 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
     }
 
     @Override
-    public void removeItemAt(int index, @Nullable S slot) throws IndexOutOfBoundsException {
+    public void removeItemAt(int index, @Nullable S out) throws IndexOutOfBoundsException {
         if (index < 0) {
             throw new IndexOutOfBoundsException();
         }
         LinkedBlock<A> block = head;
         while (block != null) {
             if (index < block.size) {
-                if (slot != null) {
-                    allocator.load(block.array, index, slot);
+                if (out != null) {
+                    allocator.load(block.array, index, out);
                 }
                 int endLength = block.size - index - 1;
                 if (endLength > 0) {
-                    allocator.copySelf(block.array, index + 1, index, endLength);
+                    allocator.copyWithin(block.array, index + 1, index, endLength);
                 }
                 if (--block.size == 0) {
                     removeBlock(block);
@@ -316,7 +324,7 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
                 allocator.copy(block.array, 0, previous.array, 0, gapIndex);
                 previous.size = gapIndex;
                 if (gapIndex < blockCapacity) {
-                    allocator.copySelf(block.array, gapIndex, 0, blockCapacity - gapIndex);
+                    allocator.copyWithin(block.array, gapIndex, 0, blockCapacity - gapIndex);
                 }
                 allocator.releaseReference(block.array, blockCapacity - gapIndex);
                 block.size = blockCapacity - gapIndex;
@@ -324,7 +332,7 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
         }
         assert block.size < blockCapacity;
         if (gapIndex < block.size) {
-            allocator.copySelf(block.array, gapIndex, gapIndex + 1, block.size - gapIndex);
+            allocator.copyWithin(block.array, gapIndex, gapIndex + 1, block.size - gapIndex);
         }
         allocator.store(block.array, gapIndex, in);
         block.size++;
@@ -418,7 +426,7 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
         }
         final int endLength = head.size - 1;
         if (endLength > 0) {
-            allocator.copySelf(head.array, 1, 0, endLength);
+            allocator.copyWithin(head.array, 1, 0, endLength);
             head.size = endLength;
         } else {
             head.size = 0;
@@ -608,7 +616,7 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
                 }
                 final int endLength = previousBlock.size - previousIndex - 1;
                 if (endLength > 0) {
-                    allocator.copySelf(previousBlock.array, previousIndex + 1, previousIndex, endLength);
+                    allocator.copyWithin(previousBlock.array, previousIndex + 1, previousIndex, endLength);
                 }
                 if (previousBlock == nextBlock) {
                     nextIndex--;
@@ -651,7 +659,7 @@ public class LinkedBlockSlotList<S, A> extends VersionSlotList<S, A> {
                 }
                 final int endLength = nextBlock.size - nextIndex - 1;
                 if (endLength > 0) {
-                    allocator.copySelf(nextBlock.array, nextIndex + 1, nextIndex, endLength);
+                    allocator.copyWithin(nextBlock.array, nextIndex + 1, nextIndex, endLength);
                 }
                 if (--nextBlock.size == 0) {
                     removeBlock(nextBlock);

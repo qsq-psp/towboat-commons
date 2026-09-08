@@ -1,6 +1,6 @@
 package mujica.ds.f32;
 
-import mujica.ds.i32.SlotArrayAllocatorI32;
+import mujica.ds.i32.I32SlotArrayAllocator;
 import mujica.ds.slot.SlotArrayAllocator;
 import mujica.ds.slot.SlotArrayComparator;
 import mujica.reflect.modifier.CodeHistory;
@@ -34,7 +34,7 @@ public class SlotArrayAllocatorIndexedF32ForTest implements SlotArrayAllocator<I
             throw new IllegalArgumentException();
         }
         if (length == 0) {
-            return SlotArrayAllocatorI32.EMPTY_ARRAY;
+            return I32SlotArrayAllocator.EMPTY_ARRAY;
         }
         return new int[length << 1]; // length * 2
     }

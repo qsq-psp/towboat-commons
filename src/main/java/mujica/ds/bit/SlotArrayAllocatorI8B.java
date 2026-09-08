@@ -1,7 +1,7 @@
 package mujica.ds.bit;
 
 import mujica.ds.i32.list.CapacityPolicy;
-import mujica.ds.i8.SlotArrayAllocatorI8;
+import mujica.ds.i8.I8SlotArrayAllocator;
 import mujica.ds.slot.SlotArrayAllocator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +13,7 @@ public class SlotArrayAllocatorI8B implements SlotArrayAllocator<BitSlot, byte[]
 
     public static final SlotArrayAllocatorI8B INSTANCE = new SlotArrayAllocatorI8B();
 
-    public static final byte[] EMPTY_ARRAY = SlotArrayAllocatorI8.EMPTY_ARRAY;
+    public static final byte[] EMPTY_ARRAY = I8SlotArrayAllocator.EMPTY_ARRAY;
 
     public SlotArrayAllocatorI8B() {
         super();
@@ -37,8 +37,8 @@ public class SlotArrayAllocatorI8B implements SlotArrayAllocator<BitSlot, byte[]
     }
 
     @Override
-    public void exchange(@NotNull BitSlot a, @NotNull BitSlot b) {
-        a.setBit(b.updateBit(a.getBit()));
+    public void exchange(@NotNull BitSlot first, @NotNull BitSlot second) {
+        first.setBit(second.updateBit(first.getBit()));
     }
 
     @NotNull
@@ -104,7 +104,7 @@ public class SlotArrayAllocatorI8B implements SlotArrayAllocator<BitSlot, byte[]
     }
 
     @Override
-    public void copySelf(@NotNull byte[] array, int srcPosition, int dstPosition, int length) {
+    public void copyWithin(@NotNull byte[] array, int srcPosition, int dstPosition, int length) {
         final BitSlot tempSlot = newSlot();
         try {
             if (srcPosition < dstPosition) {

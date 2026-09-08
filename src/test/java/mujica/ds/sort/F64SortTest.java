@@ -1,9 +1,9 @@
 package mujica.ds.sort;
 
 import mujica.algebra.random.RandomContext;
-import mujica.ds.f64.ArithmeticF64;
+import mujica.ds.f64.F64Arithmetic;
 import mujica.ds.f64.F64;
-import mujica.ds.f64.SlotArrayAllocatorF64;
+import mujica.ds.f64.F64SlotArrayAllocator;
 import mujica.ds.slot.SlotArrayComparator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +24,8 @@ public class F64SortTest {
     private final RandomContext rc = new RandomContext();
 
     private void checkSortAll(@NotNull Sort<double[]> algorithm) {
-        double[] expected = SlotArrayAllocatorF64.EMPTY_ARRAY;
-        double[] actual = SlotArrayAllocatorF64.EMPTY_ARRAY;
+        double[] expected = F64SlotArrayAllocator.EMPTY_ARRAY;
+        double[] actual = F64SlotArrayAllocator.EMPTY_ARRAY;
         try {
             for (int repeatIndex = 0; repeatIndex < REPEAT_COUNT; repeatIndex++) {
                 expected = rc.nextDoubleArray(rc.nextInt(2, MAIN_LENGTH));
@@ -33,10 +33,10 @@ public class F64SortTest {
                 Arrays.sort(expected);
                 algorithm.sort(actual);
                 if (algorithm.isDescending()) {
-                    SlotArrayAllocatorF64.INSTANCE.reverse(expected);
-                    Assert.assertTrue(ArithmeticF64.INSTANCE.isDescending(actual));
+                    F64SlotArrayAllocator.INSTANCE.reverse(expected);
+                    Assert.assertTrue(F64Arithmetic.INSTANCE.isDescending(actual));
                 } else {
-                    Assert.assertTrue(ArithmeticF64.INSTANCE.isAscending(actual));
+                    Assert.assertTrue(F64Arithmetic.INSTANCE.isAscending(actual));
                 }
                 Assert.assertArrayEquals(expected, actual, 0.0);
             }
@@ -57,7 +57,7 @@ public class F64SortTest {
 
     @Test
     public void checkSortAll() {
-        final ArithmeticF64 arithmetic = ArithmeticF64.INSTANCE;
+        final F64Arithmetic arithmetic = F64Arithmetic.INSTANCE;
         checkSortAll(arithmetic);
     }
 }

@@ -648,4 +648,9 @@ public class GroupedBase2Appender implements IntegralAppender {
             return "0b" + value.toString(2);
         }
     }
+
+    @Override
+    public String toString() {
+        return "GroupedBase2Appender";
+    }
 }

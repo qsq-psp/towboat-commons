@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.BooleanSupplier;
 
 /**
- * Call accept(boolean) method sequentially, not necessarily consuming the {@code BitSequence} object
+ * call accept(boolean) method sequentially, not necessarily consuming the {@code BitSequence} object
  */
 @CodeHistory(date = "2025/4/10")
 public interface BitSequenceConsumer extends BooleanConsumer {

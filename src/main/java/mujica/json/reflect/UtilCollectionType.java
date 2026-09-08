@@ -158,7 +158,7 @@ class UtilCollectionType extends BuiltType {
 
     @Override
     boolean needGenericInfo() {
-        return componentType == JsonType.NOP;
+        return componentType == VoidType.NOP;
     }
 
     @NotNull

@@ -4,6 +4,7 @@ import mujica.ds.i32.list.CapacityPolicy;
 import mujica.ds.i32.list.CapacityPolicyProvider;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
+import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
@@ -91,8 +92,9 @@ public interface SlotArrayAllocator<S, A> extends SlotAllocator<S> {
         reverse(array, 0, length(array));
     }
 
+    @ReferencePage(title = "TypedArray.prototype.copyWithin()", href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray/copyWithin")
     @SuppressWarnings("SuspiciousSystemArraycopy")
-    default void copySelf(@NotNull A array, @Index(of = "array") int srcPosition, @Index(of = "array") int dstPosition, int length) {
+    default void copyWithin(@NotNull A array, @Index(of = "array") int srcPosition, @Index(of = "array") int dstPosition, int length) {
         System.arraycopy(array, srcPosition, array, dstPosition, length);
     }
 

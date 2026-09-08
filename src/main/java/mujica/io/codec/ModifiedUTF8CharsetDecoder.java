@@ -24,12 +24,12 @@ class ModifiedUTF8CharsetDecoder extends CharsetDecoder {
 
     @Override
     protected void implOnMalformedInput(CodingErrorAction newAction) {
-        LOGGER.info("set malformed action {}", newAction);
+        LOGGER.trace("set malformed action {}", newAction);
     }
 
     @Override
     protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
-        LOGGER.info("set unmappable action {}", newAction);
+        LOGGER.trace("set unmappable action {}", newAction);
     }
 
     @Override

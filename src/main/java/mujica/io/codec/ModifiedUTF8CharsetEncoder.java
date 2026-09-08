@@ -24,12 +24,12 @@ class ModifiedUTF8CharsetEncoder extends CharsetEncoder {
 
     @Override
     protected void implOnMalformedInput(CodingErrorAction newAction) {
-        LOGGER.info("set malformed action {}", newAction);
+        LOGGER.trace("set malformed action {}", newAction);
     }
 
     @Override
     protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
-        LOGGER.info("set unmappable action {}", newAction);
+        LOGGER.trace("set unmappable action {}", newAction);
     }
     @Override
     protected CoderResult encodeLoop(@NotNull CharBuffer in, @NotNull ByteBuffer out) {

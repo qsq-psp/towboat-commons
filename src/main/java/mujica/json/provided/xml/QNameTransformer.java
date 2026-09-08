@@ -4,6 +4,7 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import javax.xml.namespace.QName;
@@ -11,6 +12,7 @@ import javax.xml.namespace.QName;
 /**
  * Created on 2026/5/1.
  */
+@CodeHistory(date = "2026/5/1")
 public class QNameTransformer implements JsonContextTransformer<QName> {
 
     public static final QNameTransformer INSTANCE = new QNameTransformer();

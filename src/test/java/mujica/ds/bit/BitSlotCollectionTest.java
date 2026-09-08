@@ -37,9 +37,9 @@ public class BitSlotCollectionTest {
         actual.checkHealth();
     }
 
-    private void size() {
-        operations.add("size");
-        Assert.assertEquals(expected.size(), actual.size());
+    private void getSize() {
+        operations.add("getSize");
+        Assert.assertEquals(expected.size(), actual.getSize());
     }
 
     private void getFirstItem() {
@@ -119,7 +119,7 @@ public class BitSlotCollectionTest {
                 checkHealth();
                 break;
             case 2:
-                size();
+                getSize();
                 break;
             case 3:
                 getFirstItem();

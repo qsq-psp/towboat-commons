@@ -1,6 +1,5 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.common.ConsistencyException;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +37,7 @@ public class LeftListTree<E> extends BiasedPriorityQueue<E> {
             expectedSize = root.checkLeftListHealth(comparator, consumer);
         }
         if (expectedSize != size) {
-            consumer.accept(new ConsistencyException("size", expectedSize, size));
+            consumer.accept(new RuntimeException("expect size " + expectedSize + " actual " + size));
         }
     }
 

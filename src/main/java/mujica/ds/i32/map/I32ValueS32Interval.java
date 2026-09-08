@@ -1,6 +1,5 @@
 package mujica.ds.i32.map;
 
-import mujica.ds.common.InvariantException;
 import mujica.ds.i32.I32Slot;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;

@@ -1,6 +1,7 @@
 package mujica.geometry.g2d;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 
 /**
  * Created in existence on 2018/7/9, named Radian.
@@ -8,6 +9,7 @@ import mujica.reflect.modifier.CodeHistory;
  * Created on 2022/6/26.
  */
 @CodeHistory(date = "2025/3/2")
+@DirectSubclass({ClampedRadian.class})
 public class Radian extends Direction2 {
 
     private static final long serialVersionUID = 0x157626619ecce8c2L;

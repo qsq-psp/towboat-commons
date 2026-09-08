@@ -1,7 +1,6 @@
 package mujica.text.sequence;
 
 import mujica.reflect.modifier.CodeHistory;
-import mujica.text.sequence.TowboatCharSequence;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;

@@ -32,6 +32,7 @@ mujica.json.provided.base.NetworkInterfaceTransformer java.net.NetworkInterface
 mujica.json.provided.base.PathTransformer java.nio.file.Path jdk.internal.jrtfs.JrtPath sun.nio.fs.WindowsPath jdk.nio.zipfs.ZipPath
 mujica.json.provided.base.PatternTransformer java.util.regex.Pattern
 mujica.json.provided.base.PermissionTransformer java.security.Permission
+mujica.json.provided.base.PrincipalTransformer java.security.Principal
 mujica.json.provided.base.ProcessHandleInfoTransformer java.lang.ProcessHandle.Info
 mujica.json.provided.base.ProcessHandleTransformer java.lang.ProcessHandle
 mujica.json.provided.base.RuntimeTransformer java.lang.Runtime

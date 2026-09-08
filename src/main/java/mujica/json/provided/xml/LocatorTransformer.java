@@ -4,6 +4,7 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.Locator;
 import org.xml.sax.ext.Locator2;
@@ -11,6 +12,7 @@ import org.xml.sax.ext.Locator2;
 /**
  * Created on 2026/5/6.
  */
+@CodeHistory(date = "2026/5/6")
 public class LocatorTransformer implements JsonContextTransformer<Locator> {
 
     public static final LocatorTransformer INSTANCE = new LocatorTransformer();

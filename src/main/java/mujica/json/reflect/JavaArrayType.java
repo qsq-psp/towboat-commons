@@ -20,7 +20,7 @@ class JavaArrayType extends BuiltType {
     private static final long serialVersionUID = 0xffc61befdc9ace59L;
 
     @NotNull
-    JsonType componentType = JsonType.NOP;
+    JsonType componentType = VoidType.NOP;
 
     transient Object value;
 

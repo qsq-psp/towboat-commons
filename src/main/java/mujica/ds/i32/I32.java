@@ -79,6 +79,11 @@ public class I32 implements I32Slot, Cloneable, Serializable {
         public static final I32NodeAllocator1 INSTANCE = new I32NodeAllocator1();
 
         @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
+
+        @NotNull
         @Override
         public I32Node1 newNode() {
             return new I32Node1();
@@ -124,6 +129,11 @@ public class I32 implements I32Slot, Cloneable, Serializable {
     public static class I32NodeAllocator2 implements NodeAllocator2<I32Node2> {
 
         public static final I32NodeAllocator2 INSTANCE = new I32NodeAllocator2();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override
@@ -181,6 +191,11 @@ public class I32 implements I32Slot, Cloneable, Serializable {
     public static class I32NodeAllocator3 implements NodeAllocator3<I32Node3> {
 
         public static final I32NodeAllocator3 INSTANCE = new I32NodeAllocator3();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override

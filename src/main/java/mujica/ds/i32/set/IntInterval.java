@@ -1,7 +1,6 @@
 package mujica.ds.i32.set;
 
 import mujica.algebra.random.RandomContext;
-import mujica.ds.common.InvariantException;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

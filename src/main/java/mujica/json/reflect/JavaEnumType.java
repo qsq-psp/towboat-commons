@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 @CodeHistory(date = "2022/8/12", project = "Ultramarine", name = "JsonEnumType")
 @CodeHistory(date = "2026/4/11")
-class JavaEnumType extends JsonType {
+class JavaEnumType extends VoidType {
 
     private static final long serialVersionUID = 0x43e916a99d6cce1dL;
 

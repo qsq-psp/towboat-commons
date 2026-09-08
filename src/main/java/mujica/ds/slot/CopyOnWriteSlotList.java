@@ -54,7 +54,7 @@ public class CopyOnWriteSlotList<S, A> extends RandomAccessBasedSlotCollection<S
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         return allocator.length(array);
     }
 
@@ -73,16 +73,16 @@ public class CopyOnWriteSlotList<S, A> extends RandomAccessBasedSlotCollection<S
     }
 
     @Override
-    public void exchangeItemAt(int index, @NotNull S slot) throws IndexOutOfBoundsException {
+    public void exchangeItemAt(int index, @NotNull S inOut) throws IndexOutOfBoundsException {
         final A oldArray = array;
         final A newArray = allocator.cloneArray(oldArray);
-        allocator.exchange(newArray, index, slot);
+        allocator.exchange(newArray, index, inOut);
         array = newArray;
         allocator.releaseArray(oldArray);
     }
 
     @Override
-    public void removeItemAt(int index, @Nullable S slot) throws IndexOutOfBoundsException {
+    public void removeItemAt(int index, @Nullable S out) throws IndexOutOfBoundsException {
         final A oldArray = array;
         final int oldLength = allocator.length(oldArray);
         final int endLength = oldLength - index - 1;
@@ -93,8 +93,8 @@ public class CopyOnWriteSlotList<S, A> extends RandomAccessBasedSlotCollection<S
         if (index > 0) {
             allocator.copy(oldArray, 0, newArray, 0, index);
         }
-        if (slot != null) {
-            allocator.load(oldArray, index, slot);
+        if (out != null) {
+            allocator.load(oldArray, index, out);
         }
         if (endLength > 0) {
             allocator.copy(oldArray, index + 1, newArray, index, endLength);
@@ -123,8 +123,8 @@ public class CopyOnWriteSlotList<S, A> extends RandomAccessBasedSlotCollection<S
     }
 
     @Override
-    public void insertLast(@NotNull A thatArray, int startIndex, int endIndex) {
-        final int transferLength = Math.subtractExact(endIndex, startIndex);
+    public void insertLast(@NotNull A thatArray, int thatStartIndex, int thatEndIndex) {
+        final int transferLength = Math.subtractExact(thatEndIndex, thatStartIndex);
         if (transferLength <= 0) {
             if (transferLength == 0) {
                 return;
@@ -135,7 +135,7 @@ public class CopyOnWriteSlotList<S, A> extends RandomAccessBasedSlotCollection<S
         final int oldLength = allocator.length(oldArray);
         final A newArray = allocator.newArray(Math.addExact(oldLength, transferLength));
         allocator.copy(oldArray, 0, newArray, 0, oldLength);
-        allocator.copy(thatArray, startIndex, newArray, oldLength, transferLength);
+        allocator.copy(thatArray, thatStartIndex, newArray, oldLength, transferLength);
         array = newArray;
         allocator.releaseArray(oldArray);
     }
@@ -172,7 +172,7 @@ public class CopyOnWriteSlotList<S, A> extends RandomAccessBasedSlotCollection<S
     }
 
     @Override
-    public void truncate(int newLength) throws IndexOutOfBoundsException {
+    public void setSize(int newLength) throws IndexOutOfBoundsException {
         final A oldArray = array;
         final int oldLength = allocator.length(oldArray);
         if (!(0 <= newLength && newLength <= oldLength)) {
@@ -239,12 +239,12 @@ public class CopyOnWriteSlotList<S, A> extends RandomAccessBasedSlotCollection<S
     }
 
     @Override
-    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
+    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T consumedSlot) {
         final A array = this.array;
         final int arrayLength = allocator.length(array);
         for (int index = 0; index < arrayLength; index++) {
-            allocator.load(array, index, tempSlot);
-            consumer.accept(tempSlot);
+            allocator.load(array, index, consumedSlot);
+            consumer.accept(consumedSlot);
         }
     }
 }

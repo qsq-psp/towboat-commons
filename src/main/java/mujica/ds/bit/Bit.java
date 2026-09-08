@@ -1,5 +1,6 @@
 package mujica.ds.bit;
 
+import mujica.ds.slot.NodeAllocator1;
 import mujica.ds.slot.NodeAllocator2;
 import mujica.ds.slot.NodeAllocator3;
 import mujica.reflect.modifier.CodeHistory;
@@ -70,6 +71,50 @@ public class Bit implements BitSlot, Cloneable, Serializable {
         int tag;
     }
 
+    @CodeHistory(date = "2026/8/7")
+    public static class BitNodeAllocator1 implements NodeAllocator1<BitNode1> {
+
+        private static final long serialVersionUID = 0x14A52A300300C76DL;
+
+        public static final BitNodeAllocator1 INSTANCE = new BitNodeAllocator1();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
+
+        @NotNull
+        @Override
+        public BitNode1 newNode() {
+            return new BitNode1();
+        }
+
+        @Override
+        public BitNode1[] newNodeArray(int length) {
+            return new BitNode1[length];
+        }
+
+        @Override
+        public int getTag(@NotNull BitNode1 self) {
+            return self.tag;
+        }
+
+        @Override
+        public void setTag(@NotNull BitNode1 self, int newTag) {
+            self.tag = newTag;
+        }
+
+        @Override
+        public BitNode1 getFirstLink(@NotNull BitNode1 self) {
+            return self.first;
+        }
+
+        @Override
+        public void setFirstLink(@NotNull BitNode1 self, BitNode1 node) {
+            self.first = node;
+        }
+    }
+
     @CodeHistory(date = "2026/7/21")
     public static class BitNode2 extends Bit {
 
@@ -83,7 +128,14 @@ public class Bit implements BitSlot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/28")
     public static class BitNodeAllocator2 implements NodeAllocator2<BitNode2> {
 
+        private static final long serialVersionUID = 0xE2D42D70C6B2452AL;
+
         public static final BitNodeAllocator2 INSTANCE = new BitNodeAllocator2();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override
@@ -150,6 +202,15 @@ public class Bit implements BitSlot, Cloneable, Serializable {
 
     @CodeHistory(date = "2026/7/23")
     public static class BitNodeAllocator3 implements NodeAllocator3<BitNode3> {
+
+        private static final long serialVersionUID = 0xDEBF4B1C2CCAF682L;
+
+        public static final BitNodeAllocator3 INSTANCE = new BitNodeAllocator3();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
         
         @NotNull
         @Override

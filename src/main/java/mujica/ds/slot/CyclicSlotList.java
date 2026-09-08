@@ -52,7 +52,7 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         if (empty) {
             return 0;
         }
@@ -135,7 +135,7 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
     }
 
     @Override
-    public void exchangeItemAt(int index, @NotNull S slot) throws IndexOutOfBoundsException {
+    public void exchangeItemAt(int index, @NotNull S inOut) throws IndexOutOfBoundsException {
         if (empty || index < 0) {
             throw new IndexOutOfBoundsException();
         }
@@ -145,7 +145,7 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
             if (index >= endIndex) {
                 throw new IndexOutOfBoundsException();
             }
-            allocator.exchange(array, index, slot);
+            allocator.exchange(array, index, inOut);
             return;
         }
         final int capacity = allocator.length(array);
@@ -157,11 +157,11 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
         if (index >= capacity) {
             index -= capacity;
         }
-        allocator.exchange(array, index, slot);
+        allocator.exchange(array, index, inOut);
     }
 
     @Override
-    public void removeItemAt(int thisIndex, @Nullable S slot) throws IndexOutOfBoundsException {
+    public void removeItemAt(int thisIndex, @Nullable S out) throws IndexOutOfBoundsException {
         if (empty || thisIndex < 0) {
             throw new IndexOutOfBoundsException();
         }
@@ -171,17 +171,17 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
             if (endLength < 0) {
                 throw new IndexOutOfBoundsException();
             }
-            if (slot != null) {
-                allocator.load(array, arrayIndex, slot);
+            if (out != null) {
+                allocator.load(array, arrayIndex, out);
             }
             if (thisIndex < endLength) {
                 if (thisIndex > 0) {
-                    allocator.copySelf(array, startIndex, startIndex + 1, thisIndex);
+                    allocator.copyWithin(array, startIndex, startIndex + 1, thisIndex);
                 }
                 allocator.releaseReference(array, startIndex++);
             } else {
                 if (endLength > 0) {
-                    allocator.copySelf(array, arrayIndex + 1, arrayIndex, endLength);
+                    allocator.copyWithin(array, arrayIndex + 1, arrayIndex, endLength);
                 }
                 allocator.releaseReference(array, --endIndex);
                 if (thisIndex == 0) {
@@ -191,11 +191,11 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
         } else {
             int capacity = allocator.length(array);
             if (arrayIndex < capacity) {
-                if (slot != null) {
-                    allocator.load(array, arrayIndex, slot);
+                if (out != null) {
+                    allocator.load(array, arrayIndex, out);
                 }
                 if (thisIndex > 0) {
-                    allocator.copySelf(array, startIndex, startIndex + 1, thisIndex);
+                    allocator.copyWithin(array, startIndex, startIndex + 1, thisIndex);
                 }
                 allocator.releaseReference(array, startIndex);
                 startIndex++;
@@ -208,11 +208,11 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
             } else {
                 arrayIndex -= capacity;
                 if (arrayIndex < endIndex) {
-                    if (slot != null) {
-                        allocator.load(array, arrayIndex, slot);
+                    if (out != null) {
+                        allocator.load(array, arrayIndex, out);
                     }
                     if (arrayIndex + 1 < endIndex) {
-                        allocator.copySelf(array, arrayIndex + 1, arrayIndex, endIndex - (arrayIndex + 1));
+                        allocator.copyWithin(array, arrayIndex + 1, arrayIndex, endIndex - (arrayIndex + 1));
                     }
                     if (endIndex == 0) {
                         endIndex = capacity - 1;
@@ -282,13 +282,13 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
             }
             if (gapIndex < endLength && startIndex > 0) {
                 if (gapIndex > 0) {
-                    allocator.copySelf(array, startIndex, startIndex - 1, gapIndex);
+                    allocator.copyWithin(array, startIndex, startIndex - 1, gapIndex);
                 }
                 startIndex--;
                 allocator.store(array, arrayIndex - 1, in);
             } else {
                 if (endLength > 0) {
-                    allocator.copySelf(array, arrayIndex, arrayIndex + 1, endLength);
+                    allocator.copyWithin(array, arrayIndex, arrayIndex + 1, endLength);
                 }
                 endIndex++;
                 if (endIndex == capacity) {
@@ -301,7 +301,7 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
         } else if (endIndex < startIndex) {
             if (arrayIndex < capacity) {
                 if (gapIndex > 0) {
-                    allocator.copySelf(array, startIndex, startIndex - 1, gapIndex);
+                    allocator.copyWithin(array, startIndex, startIndex - 1, gapIndex);
                 }
                 startIndex--;
                 assert startIndex >= 0;
@@ -309,7 +309,7 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
             } else {
                 arrayIndex -= capacity;
                 if (arrayIndex < endIndex) {
-                    allocator.copySelf(array, arrayIndex, arrayIndex + 1, endIndex - arrayIndex);
+                    allocator.copyWithin(array, arrayIndex, arrayIndex + 1, endIndex - arrayIndex);
                 }
                 endIndex++;
                 assert endIndex < capacity;
@@ -323,7 +323,7 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
             throw new IndexOutOfBoundsException();
         }
         if (gapIndex < endIndex) {
-            allocator.copySelf(array, gapIndex, gapIndex + 1, endIndex - gapIndex);
+            allocator.copyWithin(array, gapIndex, gapIndex + 1, endIndex - gapIndex);
         }
         allocator.store(array, gapIndex, in);
         endIndex++;
@@ -339,7 +339,16 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
 
     @Override
     public void insertLastItem(@NotNull S in) {
-        insertItemBefore(size(), in);
+        insertItemBefore(getSize(), in);
+    }
+
+    @Override
+    public void insertLast(@NotNull A thatArray, int thatStartIndex, int thatEndIndex) {
+        final S tempSlot = allocator.newSlot();
+        for (int index = thatStartIndex; index < thatEndIndex; index++) {
+            allocator.load(thatArray, index, tempSlot);
+            insertLastItem(tempSlot);
+        }
     }
 
     @Override
@@ -363,6 +372,6 @@ public class CyclicSlotList<S, A> extends CenterAlignedSlotList<S, A> {
     @NotNull
     @Override
     public String summaryToString() {
-        return "size = " + size() + ", start = " + startIndex + ", end = " + endIndex + ", modulo = " + allocator.length(array) + ", version = " + version;
+        return "size = " + getSize() + ", start = " + startIndex + ", end = " + endIndex + ", modulo = " + allocator.length(array) + ", version = " + version;
     }
 }

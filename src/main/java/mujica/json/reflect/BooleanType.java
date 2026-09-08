@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2026/1/2")
-class BooleanType extends JsonType implements BitSlot {
+class BooleanType extends VoidType implements BitSlot {
 
     protected static final CollectionConstant FALSE = CollectionConstant.REMOVED;
 

@@ -53,7 +53,7 @@ public class S32DescendingQuickSort implements Sort<int[]> {
         int startReadIndex = startWriteIndex;
         int endReadIndex = endWriteIndex;
         long operationCount = 0L;
-        LABEL:
+        EXCHANGE:
         while (true) {
             while (true) { // skip from start to end
                 int value = array[startReadIndex];
@@ -62,7 +62,7 @@ public class S32DescendingQuickSort implements Sort<int[]> {
                         array[startWriteIndex++] = value;
                     }
                     if (++startReadIndex >= endReadIndex) {
-                        break LABEL;
+                        break EXCHANGE;
                     }
                 } else {
                     break;
@@ -75,7 +75,7 @@ public class S32DescendingQuickSort implements Sort<int[]> {
                         array[--endWriteIndex] = value;
                     }
                     if (startReadIndex >= endReadIndex) {
-                        break LABEL;
+                        break EXCHANGE;
                     }
                 } else {
                     ++endReadIndex;
@@ -100,7 +100,7 @@ public class S32DescendingQuickSort implements Sort<int[]> {
             throw new RuntimeException("too large pivot");
         }
         operationCount += sort(array, endWriteIndex, endIndex);
-        while (startWriteIndex < endWriteIndex) {
+        while (startWriteIndex < endWriteIndex) { // fill between
             array[startWriteIndex++] = pivot;
         }
         return operationCount;

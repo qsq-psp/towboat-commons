@@ -1,9 +1,7 @@
 package mujica.ds.i32.set;
 
-import mujica.ds.any.list.MonotonicityDirection;
 import mujica.ds.any.set.CollectionConstant;
 import mujica.ds.i32.list.CapacityPolicy;
-import mujica.ds.i32.list.CopyOnResizeIntList;
 import mujica.ds.i32.list.QuadraticProbingList;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -54,28 +52,14 @@ public class QuadraticClosedHashIntSet extends AbstractHashIntSet {
 
     @Override
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
-        final CopyOnResizeIntList list = new CopyOnResizeIntList(null);
+        final HashSet<Integer> set = new HashSet<>();
         for (int v : this) {
-            list.offerLast(v);
-        }
-        list.sort(MonotonicityDirection.ASCENDING);
-        int n = list.intLength();
-        int v0 = list.getInt(0);
-        for (int i = 1; i < n; i++) {
-            int v1 = list.getInt(i);
-            if (v0 >= v1) {
-                consumer.accept(new RuntimeException(v0 + " >= " + v1));
+            if (!set.add(v)) {
+                consumer.accept(new RuntimeException("duplicate element " + v));
             }
-            v0 = v1;
         }
-        if (containsEmptyMark) {
-            n++;
-        }
-        if (containsRemovedMark) {
-            n++;
-        }
-        if (n != size) {
-            consumer.accept(new RuntimeException(n + " != " + size));
+        if (set.size() != size) {
+            consumer.accept(new RuntimeException("wrong size"));
         }
     }
 

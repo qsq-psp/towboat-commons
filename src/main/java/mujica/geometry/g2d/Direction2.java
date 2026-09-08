@@ -4,6 +4,7 @@ import mujica.geometry.Geometry;
 import mujica.geometry.GeometryOperationResult;
 import mujica.algebra.random.RandomContext;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -13,6 +14,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2020/2/27", project = "coo", name = "Angle")
 @CodeHistory(date = "2022/6/26", project = "Ultramarine")
 @CodeHistory(date = "2025/3/2")
+@DirectSubclass({Radian.class, Tangent.class})
 public abstract class Direction2 extends Geometry { // all directions are mutable
 
     private static final long serialVersionUID = 0x2e052c1d0ecbb94bL;

@@ -24,10 +24,10 @@ public interface SlotAllocator<S> extends Serializable {
         return copy;
     }
 
-    default void exchange(@NotNull S a, @NotNull S b) {
-        final S temp = newSlot();
-        move(a, temp);
-        move(b, a);
-        move(temp, b);
+    default void exchange(@NotNull S first, @NotNull S second) {
+        final S third = newSlot();
+        move(first, third);
+        move(second, first);
+        move(third, second);
     }
 }

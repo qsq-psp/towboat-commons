@@ -1,6 +1,6 @@
 package mujica.ds.f32;
 
-import mujica.ds.i32.SlotArrayAllocatorI32ForTest;
+import mujica.ds.i32.I32SlotArrayAllocatorForTest;
 import mujica.ds.slot.SlotArrayAllocator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2026/7/15")
 public class SlotArrayAllocatorF32ForTest implements SlotArrayAllocator<F32Slot, float[]> {
 
-    public static final float CANARY = Float.intBitsToFloat(SlotArrayAllocatorI32ForTest.CANARY);
+    public static final float CANARY = Float.intBitsToFloat(I32SlotArrayAllocatorForTest.CANARY);
 
     public SlotArrayAllocatorF32ForTest() {
         super();
@@ -39,8 +39,8 @@ public class SlotArrayAllocatorF32ForTest implements SlotArrayAllocator<F32Slot,
     }
 
     @Override
-    public void exchange(@NotNull F32Slot a, @NotNull F32Slot b) {
-        a.setF32(b.updateF32(a.getF32()));
+    public void exchange(@NotNull F32Slot first, @NotNull F32Slot second) {
+        first.setF32(second.updateF32(first.getF32()));
     }
 
     @NotNull

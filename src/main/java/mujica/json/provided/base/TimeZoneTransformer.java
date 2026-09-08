@@ -22,8 +22,6 @@ public class TimeZoneTransformer implements JsonContextTransformer<TimeZone>, Js
 
     static final FastString ZONE_ID = new FastString("zoneId");
 
-    static final FastString DISPLAY_NAME = new FastString("displayName");
-
     static final FastString DST_SAVINGS = new FastString("dstSavings");
 
     static final FastString USE_DAYLIGHT = new FastString("useDaylight");
@@ -38,7 +36,7 @@ public class TimeZoneTransformer implements JsonContextTransformer<TimeZone>, Js
             out.stringValue(zone.getID());
             out.key(ZONE_ID);
             ZoneIdTransformer.INSTANCE.transform(zone.toZoneId(), out, context);
-            out.key(DISPLAY_NAME);
+            out.key(LocaleTransformer.DISPLAY_NAME);
             out.stringValue(zone.getDisplayName());
             out.key(DST_SAVINGS);
             out.numberValue(zone.getDSTSavings());

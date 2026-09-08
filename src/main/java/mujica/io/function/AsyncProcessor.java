@@ -6,17 +6,17 @@ import mujica.reflect.modifier.CodeHistory;
 public interface AsyncProcessor<R> {
 
     /**
-     * Clear all initial state, erasing any sensitive data from memory.
+     * clear all initial state, erasing any sensitive data from memory.
      */
     void clear();
 
     /**
-     * Reset the internal state to initial state, ready to accept input. Sensitive data may not be erased.
+     * reset the internal state to initial state, ready to accept input. Sensitive data may not be erased.
      */
     void start();
 
     /**
-     * The inputs ended and return the result. Or get result by calling other get method.
+     * the inputs ended and return the result. Or get result by calling other get method.
      */
     R finish();
 }

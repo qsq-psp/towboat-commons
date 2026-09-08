@@ -14,7 +14,7 @@ import java.math.BigInteger;
 
 @CodeHistory(date = "2026/4/12", name = "LongType")
 @CodeHistory(date = "2026/6/16")
-class I64Type extends JsonType implements I64Slot {
+class I64Type extends VoidType implements I64Slot {
 
     private static final long serialVersionUID = 0x203531829aa1ba76L;
 

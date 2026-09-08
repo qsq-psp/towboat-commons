@@ -17,23 +17,28 @@ public class S8AscendingCountSort implements Sort<byte[]> {
     }
 
     @Override
-    public long sort(@NotNull byte[] array, int startIndex, int endIndex) {
+    public boolean isDescending() {
+        return false;
+    }
+
+    @Override
+    public long sort(@NotNull byte[] dataArray, int startIndex, int endIndex) {
         final int length = endIndex - startIndex;
         if (length < 2) {
             return 0L;
         }
         Arrays.fill(countArray, 0);
         for (int index = startIndex; index < endIndex; index++) {
-            countArray[0xff & array[index]]++;
+            countArray[0xff & dataArray[index]]++;
         }
         for (int index = 0xff & Byte.MIN_VALUE; index < (1 << Byte.SIZE); index++) {
             for (int remain = countArray[index]; remain > 0; remain--) {
-                array[startIndex++] = (byte) index;
+                dataArray[startIndex++] = (byte) index;
             }
         }
-        for (int index = 0; index < Byte.MAX_VALUE; index++) {
+        for (int index = 0; index <= Byte.MAX_VALUE; index++) {
             for (int remain = countArray[index]; remain > 0; remain--) {
-                array[startIndex++] = (byte) index;
+                dataArray[startIndex++] = (byte) index;
             }
         }
         assert startIndex == endIndex;

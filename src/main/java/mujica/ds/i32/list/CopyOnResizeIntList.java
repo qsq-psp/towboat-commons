@@ -1,8 +1,5 @@
 package mujica.ds.i32.list;
 
-import mujica.ds.any.list.SortingAlgorithm;
-import mujica.ds.any.list.MonotonicityDirection;
-import mujica.ds.i32.S32;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
@@ -345,47 +342,6 @@ public class CopyOnResizeIntList extends AbstractIntList {
             System.arraycopy(array, 0, array, d, n - d);
             System.arraycopy(dArray, 0, array, 0, d);
         }
-    }
-
-    @Override
-    public void sort(@NotNull MonotonicityDirection direction) {
-        Arrays.sort(array, 0, endIndex);
-        if (direction == MonotonicityDirection.ASCENDING) {
-            modCount++;
-        } else if (direction == MonotonicityDirection.DESCENDING) {
-            reverse(); // modCount included
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    @Override
-    public long sort(@NotNull SortingAlgorithm<int[]> algorithm) {
-        return algorithm.sort(array, 0, endIndex);
-    }
-
-    @Override
-    public long sortPart(@NotNull SortingAlgorithm<int[]> algorithm, int m) {
-        if (!(0 <= m && m <= endIndex)) {
-            throw new IndexOutOfBoundsException();
-        }
-        if (m == 0) {
-            clear();
-            return 0L;
-        }
-        final long r = algorithm.sortPart(array, 0, m, endIndex);
-        endIndex = m;
-        modCount++;
-        return r;
-    }
-
-    @Override
-    public long sortUnique(@NotNull SortingAlgorithm<int[]> algorithm) {
-        final S32 slot = new S32(endIndex);
-        final long r = algorithm.sortUnique(array, 0, slot);
-        endIndex = slot.getI32();
-        modCount++;
-        return r;
     }
 
     @NotNull

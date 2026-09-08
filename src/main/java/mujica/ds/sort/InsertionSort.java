@@ -56,4 +56,10 @@ public class InsertionSort<S, A> implements Sort<A> {
     public long sort(@NotNull A target) {
         return sort(target, 0, comparator.length(target));
     }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "InsertionSort[comparator = " + comparator + "]";
+    }
 }

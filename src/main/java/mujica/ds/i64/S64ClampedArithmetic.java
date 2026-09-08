@@ -1,6 +1,5 @@
 package mujica.ds.i64;
 
-import mujica.ds.slot.Arithmetic;
 import mujica.ds.slot.PrimitiveArithmetic;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +33,7 @@ public class S64ClampedArithmetic extends PrimitiveArithmetic<S64, long[]> {
     @Override
     public long[] newArray(int length) {
         if (length == 0) {
-            return SlotArrayAllocatorI64.EMPTY_ARRAY;
+            return I64SlotArrayAllocator.EMPTY_ARRAY;
         }
         return new long[length];
     }
@@ -42,7 +41,7 @@ public class S64ClampedArithmetic extends PrimitiveArithmetic<S64, long[]> {
     @Override
     public long[] cloneArray(@NotNull long[] original) {
         if (original.length == 0) {
-            return SlotArrayAllocatorI64.EMPTY_ARRAY;
+            return I64SlotArrayAllocator.EMPTY_ARRAY;
         }
         return original.clone();
     }
@@ -113,8 +112,8 @@ public class S64ClampedArithmetic extends PrimitiveArithmetic<S64, long[]> {
     }
 
     @Override
-    public void exchange(@NotNull S64 a, @NotNull S64 b) {
-        a.setI64(b.updateI64(a.getI64()));
+    public void exchange(@NotNull S64 first, @NotNull S64 second) {
+        first.setI64(second.updateI64(first.getI64()));
     }
 
     @Override

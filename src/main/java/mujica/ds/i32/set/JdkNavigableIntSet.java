@@ -155,18 +155,6 @@ public class JdkNavigableIntSet extends NavigableIntSet {
         }
     }
 
-    @NotNull
-    @Override
-    public Iterator<Integer> ascendingIterator() {
-        return set.iterator();
-    }
-
-    @NotNull
-    @Override
-    public Iterator<Integer> descendingIterator() {
-        return set.descendingIterator();
-    }
-
     @Override
     public int hashCode() {
         return set.hashCode();

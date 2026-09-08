@@ -20,9 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-/**
- * Created on 2026/6/7.
- */
 @CodeHistory(date = "2026/6/7")
 public class ProvidedNettyTest {
 
@@ -31,7 +28,6 @@ public class ProvidedNettyTest {
     @BeforeClass
     public static void initContext() {
         CONTEXT.loadProvidedNetty().loadBasic();
-        // which module ...?
     }
 
     private void caseObject(@NotNull String name, @NotNull Object object) throws IOException {

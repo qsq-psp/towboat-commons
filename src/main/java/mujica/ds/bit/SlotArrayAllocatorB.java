@@ -36,8 +36,8 @@ public class SlotArrayAllocatorB implements SlotArrayAllocator<BitSlot, boolean[
     }
 
     @Override
-    public void exchange(@NotNull BitSlot a, @NotNull BitSlot b) {
-        a.setBit(b.updateBit(a.getBit()));
+    public void exchange(@NotNull BitSlot first, @NotNull BitSlot second) {
+        first.setBit(second.updateBit(first.getBit()));
     }
 
     @NotNull

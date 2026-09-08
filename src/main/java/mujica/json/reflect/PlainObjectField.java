@@ -21,7 +21,7 @@ abstract class PlainObjectField implements Serializable {
     private static final long serialVersionUID = 0xf952640a6a05d352L;
 
     @NotNull
-    JsonType declaredType = JsonType.NOP;
+    JsonType declaredType = VoidType.NOP;
 
     @NotNull
     Getter getter = Getter.NOP;
@@ -154,7 +154,7 @@ abstract class PlainObjectField implements Serializable {
     }
 
     boolean collectDeclaredType(@NotNull Class<?> clazz, @NotNull JsonContext context) {
-        if (declaredType == JsonType.NOP) {
+        if (declaredType == VoidType.NOP) {
             declaredType = context.forClass(clazz);
         }
         return declaredType.needGenericInfo();

@@ -2,7 +2,8 @@ package mujica.json.handler;
 
 import mujica.ds.i32.I32;
 import mujica.ds.i32.I32Slot;
-import mujica.ds.i32.SlotArrayAllocatorI32;
+import mujica.ds.i32.I32SlotArrayAllocator;
+import mujica.ds.i32.list.TwiceCapacityPolicy;
 import mujica.ds.slot.CopyOnResizeSlotList;
 import mujica.json.container.FastString;
 import mujica.json.io.JsonWriter;
@@ -19,7 +20,9 @@ public class StructureCheckAdapter<H extends JsonHandler> extends JsonHandlerAda
     public static final int STATE_OBJECT = JsonWriter.STATE_OBJECT;
     public static final int STATE_KEY = JsonWriter.STATE_KEY;
 
-    protected final CopyOnResizeSlotList<I32Slot, int[]> stack = new CopyOnResizeSlotList<>(SlotArrayAllocatorI32.WithHashI32.TWICE);
+    static final I32SlotArrayAllocator.I32HashSAA HASH_SAA = new I32SlotArrayAllocator.I32HashSAA(TwiceCapacityPolicy.INSTANCE);
+
+    protected final CopyOnResizeSlotList<I32Slot, int[]> stack = new CopyOnResizeSlotList<>(HASH_SAA);
 
     protected final I32Slot slot = new I32();
 

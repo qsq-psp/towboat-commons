@@ -1,18 +1,13 @@
 package mujica.ds.i32.set;
 
-import mujica.ds.common.InvariantException;
-import mujica.ds.any.list.MonotonicityDirection;
-import mujica.ds.i32.IntCollection;
 import mujica.algebra.random.RandomContext;
+import mujica.ds.i32.IntCollection;
 import mujica.ds.i32.list.CopyOnResizeIntList;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
@@ -32,19 +27,11 @@ public abstract class IntSet implements IntCollection {
 
     @Override
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
-        final CopyOnResizeIntList intList = new CopyOnResizeIntList(null);
+        final HashSet<Integer> set = new HashSet<>();
         for (int v : this) {
-            intList.offerLast(v);
-        }
-        intList.sort(MonotonicityDirection.ASCENDING);
-        final int n = intList.intLength();
-        int v0 = intList.getInt(0);
-        for (int i = 1; i < n; i++) {
-            int v1 = intList.getInt(i);
-            if (v0 >= v1) {
-                consumer.accept(new RuntimeException(v0 + " >= " + v1));
+            if (!set.add(v)) {
+                consumer.accept(new RuntimeException("duplicate element " + v));
             }
-            v0 = v1;
         }
     }
 

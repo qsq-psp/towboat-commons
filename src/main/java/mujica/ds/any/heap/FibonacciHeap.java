@@ -1,6 +1,5 @@
 package mujica.ds.any.heap;
 
-import mujica.ds.common.ConsistencyException;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +39,7 @@ public class FibonacciHeap<E> extends SisterPriorityQueue<E> {
             expectedSize = root.checkFibonacciHeapHealth(comparator, consumer);
         }
         if (expectedSize != size) {
-            consumer.accept(new ConsistencyException("size", expectedSize, size));
+            consumer.accept(new RuntimeException("size expect " + expectedSize + " actual " + size));
         }
     }
 

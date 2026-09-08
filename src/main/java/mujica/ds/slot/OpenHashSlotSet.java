@@ -1,5 +1,6 @@
 package mujica.ds.slot;
 
+import mujica.ds.sort.Sort;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferenceCode;
@@ -34,6 +35,14 @@ public abstract class OpenHashSlotSet<S, A, N extends S> extends HashSlotSet<S, 
     public abstract void checkHealth(@NotNull Consumer<RuntimeException> consumer);
 
     @Override
+    public abstract boolean contains(@NotNull S in);
+
+    @Override
+    public int countItem(@NotNull S in) {
+        return contains(in) ? 1 : 0;
+    }
+
+    @Override
     public int firstIndexOf(@NotNull S in) {
         throw new UnsupportedOperationException();
     }
@@ -58,13 +67,37 @@ public abstract class OpenHashSlotSet<S, A, N extends S> extends HashSlotSet<S, 
         // pass
     }
 
+    protected boolean removeEqualItem(@NotNull S slot, boolean moveOut) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean removeFirstEqualItem(@NotNull S inOut) {
+        return removeEqualItem(inOut, true);
+    }
+
+    @Override
+    public boolean removeLastEqualItem(@NotNull S inOut) {
+        return removeEqualItem(inOut, true);
+    }
+
+    @Override
+    public boolean removeOneEqualItem(@NotNull S inOut) {
+        return removeEqualItem(inOut, true);
+    }
+
+    @Override
+    public int removeAllEqualItems(@NotNull S in) {
+        return removeEqualItem(in, false) ? 1 : 0;
+    }
+
     @Override
     public void removeRange(int startIndex, int endIndex) throws IndexOutOfBoundsException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void truncate(int newEndIndex) throws IndexOutOfBoundsException {
+    public void setSize(int newEndIndex) throws IndexOutOfBoundsException {
         throw new UnsupportedOperationException();
     }
 
@@ -72,6 +105,26 @@ public abstract class OpenHashSlotSet<S, A, N extends S> extends HashSlotSet<S, 
     public void clear() {
         size = 0;
         version++;
+    }
+
+    @Override
+    public void rotate(int distance) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public long sort(@NotNull Sort<A> sort) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public long sortPart(@NotNull Sort<A> sort, int newEndIndex) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public long sortUnique(@NotNull Sort<A> sort) {
+        throw new UnsupportedOperationException();
     }
 
     @CodeHistory(date = "2026/7/28")
@@ -158,14 +211,16 @@ public abstract class OpenHashSlotSet<S, A, N extends S> extends HashSlotSet<S, 
         }
 
         @Override
-        public boolean removeFirstEqualItem(@NotNull S slot) {
+        protected boolean removeEqualItem(@NotNull S slot, boolean moveOut) {
             final int hash = hashFunction.slotHash(slot);
             final int index = (hash & Integer.MAX_VALUE) % hashTable.length;
             N previous = null;
             N current = hashTable[index];
             while (current != null) {
                 if (hash == nodeAllocator.getTag(current) && hashFunction.slotEquals(slot, current)) {
-                    hashFunction.move(current, slot);
+                    if (moveOut) {
+                        hashFunction.move(current, slot);
+                    }
                     if (previous == null) {
                         hashTable[index] = nodeAllocator.getFirstLink(current); // head = current.next;
                     } else {
@@ -565,7 +620,7 @@ public abstract class OpenHashSlotSet<S, A, N extends S> extends HashSlotSet<S, 
         }
 
         @Override
-        public boolean removeFirstEqualItem(@NotNull S slot) {
+        protected boolean removeEqualItem(@NotNull S slot, boolean moveOut) {
             final int hash = hashFunction.slotHash(slot);
             final N dummy = hashTable[(hash & Integer.MAX_VALUE) % hashTable.length];
             N current = dummy;
@@ -575,6 +630,9 @@ public abstract class OpenHashSlotSet<S, A, N extends S> extends HashSlotSet<S, 
                     return false;
                 }
                 if (hash == nodeAllocator.getTag(current) && hashFunction.slotEquals(slot, current)) {
+                    if (moveOut) {
+                        hashFunction.move(current, slot);
+                    }
                     N next = nodeAllocator.getFirstLink(current);
                     N previous = nodeAllocator.getSecondLink(current);
                     nodeAllocator.setFirstLink(Objects.requireNonNullElse(previous, dummy), next);
@@ -1035,14 +1093,16 @@ public abstract class OpenHashSlotSet<S, A, N extends S> extends HashSlotSet<S, 
         }
 
         @Override
-        public boolean removeFirstEqualItem(@NotNull S slot) {
+        protected boolean removeEqualItem(@NotNull S slot, boolean moveOut) {
             final int hash = hashFunction.slotHash(slot);
             final int index = (hash & Integer.MAX_VALUE) % hashTable.length;
             N previous = null;
             N current = hashTable[index];
             while (current != null) {
                 if (hash == nodeAllocator.getTag(current) && hashFunction.slotEquals(slot, current)) {
-                    hashFunction.move(current, slot);
+                    if (moveOut) {
+                        hashFunction.move(current, slot);
+                    }
                     if (previous == null) {
                         hashTable[index] = nodeAllocator.getThirdLink(current); // head = current.next;
                     } else {

@@ -96,7 +96,7 @@ public class LinkedSlotList<S, A, N extends S> extends GapIteratorBasedSlotColle
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         int count = 0;
         N node = head;
         while (node != null) {
@@ -180,14 +180,14 @@ public class LinkedSlotList<S, A, N extends S> extends GapIteratorBasedSlotColle
     }
 
     @Override
-    public void exchangeItemAt(int index, @NotNull S slot) throws IndexOutOfBoundsException {
+    public void exchangeItemAt(int index, @NotNull S inOut) throws IndexOutOfBoundsException {
         if (index < 0) {
             throw new IndexOutOfBoundsException();
         }
         N node = head;
         while (node != null) {
             if (index == 0) {
-                arrayAllocator.exchange(node, slot);
+                arrayAllocator.exchange(node, inOut);
                 return;
             }
             index--;
@@ -415,6 +415,6 @@ public class LinkedSlotList<S, A, N extends S> extends GapIteratorBasedSlotColle
     @NotNull
     @Override
     public String summaryToString() {
-        return "size = " + size() + ", version = " + version;
+        return "size = " + getSize() + ", version = " + version;
     }
 }

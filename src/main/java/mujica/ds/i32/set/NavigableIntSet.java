@@ -1,16 +1,11 @@
 package mujica.ds.i32.set;
 
-import mujica.ds.any.list.MonotonicityDirection;
 import mujica.ds.i32.I32Slot;
 import mujica.ds.i32.S32;
-import mujica.ds.i32.list.CopyOnResizeIntList;
-import mujica.ds.i32.list.IntList;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
 import java.util.OptionalInt;
-import java.util.function.IntConsumer;
 
 @CodeHistory(date = "2026/1/17")
 public abstract class NavigableIntSet extends IntSet {
@@ -191,43 +186,5 @@ public abstract class NavigableIntSet extends IntSet {
         } else {
             return OptionalInt.empty();
         }
-    }
-
-    public void ascendingForEach(@NotNull IntConsumer action) {
-        final IntList list = new CopyOnResizeIntList(null);
-        for (int key : this) {
-            list.offerLast(key);
-        }
-        list.sort(MonotonicityDirection.ASCENDING);
-        list.forEach(action);
-    }
-
-    public void descendingForEach(@NotNull IntConsumer action) {
-        final IntList list = new CopyOnResizeIntList(null);
-        for (int key : this) {
-            list.offerLast(key);
-        }
-        list.sort(MonotonicityDirection.DESCENDING);
-        list.forEach(action);
-    }
-
-    @NotNull
-    public Iterator<Integer> ascendingIterator() {
-        final IntList list = new CopyOnResizeIntList(null);
-        for (int key : this) {
-            list.offerLast(key);
-        }
-        list.sort(MonotonicityDirection.ASCENDING);
-        return list.iterator();
-    }
-
-    @NotNull
-    public Iterator<Integer> descendingIterator() {
-        final IntList list = new CopyOnResizeIntList(null);
-        for (int key : this) {
-            list.offerLast(key);
-        }
-        list.sort(MonotonicityDirection.DESCENDING);
-        return list.iterator();
     }
 }

@@ -3,12 +3,14 @@ package mujica.text.number;
 import io.netty.buffer.ByteBuf;
 import mujica.algebra.discrete.BigConstants;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 @CodeHistory(date = "2025/2/26")
+@Name(value = "序数", language = "zh")
 public class Ordinal extends IntegralAdapter {
 
     private static final long serialVersionUID = 0x7F194AFD4E00D24DL;

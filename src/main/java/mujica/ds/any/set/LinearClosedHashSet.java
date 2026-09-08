@@ -1,7 +1,5 @@
 package mujica.ds.any.set;
 
-import mujica.ds.common.ConsistencyException;
-import mujica.ds.common.InvariantException;
 import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -53,17 +51,17 @@ public class LinearClosedHashSet<E> extends ClosedHashSet<E> {
                 continue;
             }
             if (!set.add(item)) {
-                consumer.accept(new InvariantException("identical item " + item));
+                consumer.accept(new RuntimeException("identical item " + item));
             }
             int i0 = arrayIndex(item, modulo);
             for (int i = i0; i != k; i = (i + 1) % modulo) {
                 if (array[i] == CollectionConstant.EMPTY) {
-                    consumer.accept(new InvariantException("empty interval from " + i0 + " to " + k + " at " + i));
+                    consumer.accept(new RuntimeException("empty interval from " + i0 + " to " + k + " at " + i));
                 }
             }
         }
         if (set.size() != size) {
-            consumer.accept(new ConsistencyException("size", set.size(), size));
+            consumer.accept(new RuntimeException("size expect " + set.size() + " actual " + size));
         }
     }
 

@@ -35,9 +35,9 @@ public class I64SlotCollectionTest {
         actual.checkHealth();
     }
 
-    private void size() {
-        operations.add("size");
-        Assert.assertEquals(expected.size(), actual.size());
+    private void getSize() {
+        operations.add("getSize");
+        Assert.assertEquals(expected.size(), actual.getSize());
     }
 
     private void contains() {
@@ -100,7 +100,7 @@ public class I64SlotCollectionTest {
     }
 
     private void getArbitraryItemNull() {
-        if (actual.size() > rc.nextInt(SMALL_COUNT)) {
+        if (actual.getSize() > rc.nextInt(SMALL_COUNT)) {
             operations.add("getArbitraryItemNull");
             actual.getArbitraryItem(slot, null);
             Assert.assertTrue(expected.contains(slot.getI64()));
@@ -110,7 +110,7 @@ public class I64SlotCollectionTest {
     }
 
     private void getArbitraryItemNotNull() {
-        if (actual.size() > rc.nextInt(SMALL_COUNT)) {
+        if (actual.getSize() > rc.nextInt(SMALL_COUNT)) {
             operations.add("getArbitraryItemNotNull");
             actual.getArbitraryItem(slot, rc);
             Assert.assertTrue(expected.contains(slot.getI64()));
@@ -120,7 +120,7 @@ public class I64SlotCollectionTest {
     }
 
     private void removeArbitraryItem() {
-        if (actual.size() > rc.nextInt(SMALL_COUNT)) {
+        if (actual.getSize() > rc.nextInt(SMALL_COUNT)) {
             operations.add("removeArbitraryItem");
             actual.removeArbitraryItem(slot, rc);
             Assert.assertTrue(expected.remove(slot.getI64())); // only for set
@@ -249,7 +249,7 @@ public class I64SlotCollectionTest {
                 checkHealth();
                 break;
             case 1:
-                size();
+                getSize();
                 break;
             case 2:
                 contains();
@@ -318,16 +318,16 @@ public class I64SlotCollectionTest {
 
     private void checkList(@NotNull Supplier<Collection<Long>> supplier) {
         expected = supplier.get();
-        actual = new CopyOnWriteSlotList<>(new SlotArrayAllocatorI64ForTest.WithHashI64(new TwiceCapacityPolicy(12)));
+        actual = new CopyOnWriteSlotList<>(new I64SlotArrayAllocatorForTest.I64HashSAA(new TwiceCapacityPolicy(12)));
         listLoop();
         expected = supplier.get();
-        actual = new CopyOnResizeSlotList<>(new SlotArrayAllocatorI64ForTest.WithHashI64(new TwiceCapacityPolicy(13)));
+        actual = new CopyOnResizeSlotList<>(new I64SlotArrayAllocatorForTest.I64HashSAA(new TwiceCapacityPolicy(13)));
         listLoop();
         expected = supplier.get();
-        actual = new CenterAlignedSlotList<>(new SlotArrayAllocatorI64ForTest.WithHashI64(new TwiceCapacityPolicy(14)));
+        actual = new CenterAlignedSlotList<>(new I64SlotArrayAllocatorForTest.I64HashSAA(new TwiceCapacityPolicy(14)));
         listLoop();
         expected = supplier.get();
-        actual = new LinkedSlotList<>(new SlotArrayAllocatorI64ForTest(), I64.I64NodeAllocator2.INSTANCE);
+        actual = new LinkedSlotList<>(new I64SlotArrayAllocatorForTest(), I64.I64NodeAllocator2.INSTANCE);
         listLoop();
     }
 
@@ -343,7 +343,7 @@ public class I64SlotCollectionTest {
                 checkHealth();
                 break;
             case 1:
-                size();
+                getSize();
                 break;
             case 2:
             case 3:
@@ -397,22 +397,22 @@ public class I64SlotCollectionTest {
 
     private void checkSet(@NotNull Supplier<Collection<Long>> supplier) {
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Linear<>(new SlotArrayAllocatorI64ForTest.WithHashI64(new TwiceCapacityPolicy(17)));
+        actual = new ClosedHashSlotSet.Linear<>(new I64SlotArrayAllocatorForTest.I64HashSAA(new TwiceCapacityPolicy(17)));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Quadratic<>(new SlotArrayAllocatorI64ForTest.WithHashI64(ModuloLookUpCapacityPolicy.INSTANCE_59));
+        actual = new ClosedHashSlotSet.Quadratic<>(new I64SlotArrayAllocatorForTest.I64HashSAA(ModuloLookUpCapacityPolicy.INSTANCE_59));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Congruent<>(new SlotArrayAllocatorI64ForTest.WithHashI64(LookUpCapacityPolicy.PRIME_GOLDEN));
+        actual = new ClosedHashSlotSet.Congruent<>(new I64SlotArrayAllocatorForTest.I64HashSAA(LookUpCapacityPolicy.PRIME_GOLDEN));
         setLoop();
         expected = supplier.get();
-        actual = new OpenHashSlotSet.Link1<>(new SlotArrayAllocatorI64ForTest.WithHashI64(TwiceCapacityPolicy.INSTANCE), I64.I64NodeAllocator1.INSTANCE);
+        actual = new OpenHashSlotSet.Link1<>(new I64SlotArrayAllocatorForTest.I64HashSAA(TwiceCapacityPolicy.INSTANCE), I64.I64NodeAllocator1.INSTANCE);
         setLoop();
         expected = supplier.get();
-        actual = new OpenHashSlotSet.Link2<>(new SlotArrayAllocatorI64ForTest.WithHashI64(TwiceCapacityPolicy.INSTANCE), I64.I64NodeAllocator2.INSTANCE);
+        actual = new OpenHashSlotSet.Link2<>(new I64SlotArrayAllocatorForTest.I64HashSAA(TwiceCapacityPolicy.INSTANCE), I64.I64NodeAllocator2.INSTANCE);
         setLoop();
         expected = supplier.get();
-        actual = new OpenHashSlotSet.Link3<>(new SlotArrayAllocatorI64ForTest.WithHashI64(TwiceCapacityPolicy.INSTANCE), I64.I64NodeAllocator3.INSTANCE);
+        actual = new OpenHashSlotSet.Link3<>(new I64SlotArrayAllocatorForTest.I64HashSAA(TwiceCapacityPolicy.INSTANCE), I64.I64NodeAllocator3.INSTANCE);
         setLoop();
     }
 

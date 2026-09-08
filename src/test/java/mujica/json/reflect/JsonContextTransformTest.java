@@ -40,7 +40,7 @@ public class JsonContextTransformTest {
     }
 
     @Test
-    public void case2() {
+    public void caseArray() {
         Assert.assertEquals("[true,false]", CONTEXT.stringify(new boolean[] {true, false}));
         Assert.assertEquals("[true,false,false]", CONTEXT.stringify(new Boolean[] {true, false, false}));
         Assert.assertEquals("[9,0]", CONTEXT.stringify(new int[] {9, 0}));

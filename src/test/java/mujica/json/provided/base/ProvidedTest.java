@@ -1,7 +1,6 @@
 package mujica.json.provided.base;
 
 import mujica.json.io.JsonCharStreamWriter;
-import mujica.json.provided.base.*;
 import mujica.json.reflect.JsonContext;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +8,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.math.MathContext;
@@ -132,6 +132,16 @@ public class ProvidedTest {
     }
 
     @Test
+    public void caseFileTime() throws IOException {
+        caseObject(Files.getLastModifiedTime(Path.of(System.getProperty("java.io.tmpdir"))));
+    }
+
+    @Test
+    public void caseFile() throws IOException {
+        caseObject(new File(System.getenv("TEMP")));
+    }
+
+    @Test
     public void caseInstant() throws IOException {
         caseObject(InstantTransformer.INSTANCE);
     }
@@ -167,7 +177,7 @@ public class ProvidedTest {
 
     @Test
     public void casePath() throws IOException {
-        caseObject(Path.of("").toAbsolutePath());
+        caseObject(Path.of(".").toAbsolutePath());
     }
 
     @Test

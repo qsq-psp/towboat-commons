@@ -96,17 +96,17 @@ public class JsonContext extends ReflectConfig {
         final Class<?> superClass = clazz.getSuperclass();
         if (superClass != null) {
             type = forClass(superClass);
-            if (type != JsonType.NOP) {
+            if (type != VoidType.NOP) {
                 return type;
             }
         }
         for (Class<?> superInterface : clazz.getInterfaces()) {
             type = forClass(superInterface);
-            if (type != JsonType.NOP) {
+            if (type != VoidType.NOP) {
                 return type;
             }
         }
-        return JsonType.NOP;
+        return VoidType.NOP;
     }
     
     private void put(@NotNull Class<?> clazz, @NotNull JsonType type) {
@@ -180,7 +180,7 @@ public class JsonContext extends ReflectConfig {
 
     @NotNull
     public JsonContext loadBasic() {
-        put(Object.class, JsonType.NOP);
+        put(Object.class, VoidType.NOP);
         final long flags = this.flags & ~(JsonHint.UNSIGNED | JsonHint.DERIVED);
         put(boolean.class, new BooleanType(flags & ~JsonHint.NULLABLE));
         put(Boolean.class, new BooleanType(flags));

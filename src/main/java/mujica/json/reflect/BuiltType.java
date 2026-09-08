@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 
 @CodeHistory(date = "2022/7/23", project = "Ultramarine", name = "JsonObjectType")
 @CodeHistory(date = "2026/4/10")
-abstract class BuiltType extends JsonType {
+abstract class BuiltType extends VoidType {
 
     private static final long serialVersionUID = 0xb0b855e077ad6f57L;
 

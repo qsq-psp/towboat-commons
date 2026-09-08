@@ -11,9 +11,6 @@ import org.xml.sax.InputSource;
 import java.io.InputStream;
 import java.io.Reader;
 
-/**
- * Created on 2026/5/7.
- */
 @CodeHistory(date = "2026/5/7")
 public class InputSourceTransformer implements JsonContextTransformer<InputSource> {
 

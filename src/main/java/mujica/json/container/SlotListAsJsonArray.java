@@ -25,7 +25,7 @@ class SlotListAsJsonArray extends JsonArray {
 
     @Override
     public int size() {
-        return list.size();
+        return list.getSize();
     }
 
     @Override

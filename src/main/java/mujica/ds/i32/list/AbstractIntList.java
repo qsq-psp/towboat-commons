@@ -1,9 +1,6 @@
 package mujica.ds.i32.list;
 
 import mujica.algebra.discrete.Bit32CombinationList;
-import mujica.ds.any.list.SortingAlgorithm;
-import mujica.ds.any.list.MonotonicityDirection;
-import mujica.ds.i32.S32;
 import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
@@ -422,7 +419,7 @@ public abstract class AbstractIntList implements IntList {
     }
 
     @Override
-    public void rotate(int d) { // todo: test it
+    public void rotate(int d) {
         final int n = intLength();
         if (n <= 1) {
             return;
@@ -454,62 +451,6 @@ public abstract class AbstractIntList implements IntList {
                 setInt(i, array[i - d]);
             }
         }
-    }
-
-    @Override
-    public void sort(@NotNull MonotonicityDirection direction) {
-        final int[] a = toIntArray();
-        Arrays.sort(a);
-        if (direction == MonotonicityDirection.ASCENDING) {
-            int i = 0;
-            for (int j = a.length - 1; j >= 0; j--) {
-                setInt(i++, a[j]);
-            }
-        } else if (direction == MonotonicityDirection.DESCENDING) {
-            for (int i = a.length - 1; i >= 0; i--) {
-                setInt(i, a[i]);
-            }
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    @Override
-    public long sort(@NotNull SortingAlgorithm<int[]> algorithm) {
-        final int[] a = toIntArray();
-        final int n = a.length;
-        final long r = algorithm.sort(a, 0, n);
-        for (int i = 0; i < n; i++) {
-            setInt(i, a[i]);
-        }
-        return r;
-    }
-
-    @Override
-    public long sortPart(@NotNull SortingAlgorithm<int[]> algorithm, int m) {
-        final int[] a = toIntArray();
-        final int n = a.length;
-        if (!(0 <= m && m <= n)) {
-            throw new IndexOutOfBoundsException();
-        }
-        final long r = algorithm.sortPart(a, 0, m, n);
-        for (int i = 0; i < m; i++) {
-            setInt(i, a[i]);
-        }
-        removeRange(m, n);
-        return r;
-    }
-
-    @Override
-    public long sortUnique(@NotNull SortingAlgorithm<int[]> algorithm) {
-        final int[] a = toIntArray();
-        final S32 slot = new S32(a.length);
-        final long r = algorithm.sortUnique(a, 0, slot);
-        for (int i = slot.getI32() - 1; i >= 0; i--) {
-            setInt(i, a[i]);
-        }
-        removeRange(slot.getI32(), a.length);
-        return r;
     }
 
     @Override

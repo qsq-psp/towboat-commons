@@ -4,9 +4,6 @@ import mujica.reflect.modifier.CodeHistory;
 
 import java.nio.ByteOrder;
 
-/**
- * Created on 2025/5/14.
- */
 @CodeHistory(date = "2025/5/14")
 public enum ByteFillPolicy {
 

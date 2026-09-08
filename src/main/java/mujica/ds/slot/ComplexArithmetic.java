@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.math.RoundingMode;
 
 @CodeHistory(date = "2026/6/17")
-public class ComplexArithmetic<S extends Real> extends AbstractArithmetic<Complex<S>> {
+public class ComplexArithmetic<S extends Real> extends CompoundArithmetic<Complex<S>> {
 
     @NotNull
     protected final Arithmetic<S> arithmetic;
@@ -43,6 +43,12 @@ public class ComplexArithmetic<S extends Real> extends AbstractArithmetic<Comple
     public void one(@NotNull Complex<S> result) {
         arithmetic.one(result.a);
         arithmetic.zero(result.b);
+    }
+
+    @Override
+    public void two(@NotNull Complex<S> result) {
+        arithmetic.two(result.a);
+        arithmetic.two(result.b);
     }
 
     @Override

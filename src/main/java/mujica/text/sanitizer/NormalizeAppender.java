@@ -10,9 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.List;
 
-/**
- * Created on 2026/5/4.
- */
 @CodeHistory(date = "2026/5/4")
 public class NormalizeAppender extends CharSequenceAppender {
 

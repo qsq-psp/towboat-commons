@@ -16,14 +16,9 @@ import java.math.BigInteger;
 
 @CodeHistory(date = "2022/6/5", project = "Ultramarine")
 @CodeHistory(date = "2025/12/22")
-class JsonType extends ReflectConfig implements TypePreference, JsonContextTransformer<Object> {
+abstract class JsonType extends ReflectConfig implements TypePreference, JsonContextTransformer<Object> {
 
     private static final long serialVersionUID = 0x41cda8faed8e4d97L;
-
-    static final JsonType NOP = new JsonType();
-
-    @NotNull
-    protected transient CollectionConstant state = CollectionConstant.UNDEFINED;
 
     JsonType() {
         super();
@@ -103,29 +98,15 @@ class JsonType extends ReflectConfig implements TypePreference, JsonContextTrans
     }
 
     void to(@NotNull Setter setter, @Nullable Object self) throws Throwable {
-        if (state == CollectionConstant.PRESENT) {
-            state = CollectionConstant.UNDEFINED;
-        } else {
-            throw new IllegalStateException();
-        }
+        // pass
     }
 
     void to(@NotNull JsonHandler out, @NotNull JsonContext context) {
-        if (state == CollectionConstant.PRESENT) {
-            state = CollectionConstant.UNDEFINED;
-            out.skippedValue();
-        } else {
-            throw new IllegalStateException();
-        }
+        // pass
     }
 
     Object toObject(@NotNull JsonContext context) {
-        if (state == CollectionConstant.PRESENT) {
-            state = CollectionConstant.UNDEFINED;
-            return CollectionConstant.UNDEFINED;
-        } else {
-            throw new IllegalStateException();
-        }
+        return CollectionConstant.UNDEFINED;
     }
 
     @NotNull

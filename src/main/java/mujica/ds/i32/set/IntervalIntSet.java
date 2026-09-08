@@ -4,8 +4,6 @@ import mujica.reflect.modifier.CodeHistory;
 import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
@@ -90,52 +88,6 @@ public abstract class IntervalIntSet extends NavigableIntSet {
             flip(key);
         }
         flip(right);
-    }
-
-    @NotNull
-    public Iterator<IntInterval> ascendingIntervalIterator() {
-        final Iterator<Integer> iterator = ascendingIterator();
-        final ArrayList<IntInterval> list = new ArrayList<>();
-        PrivateIntInterval interval = null;
-        while (iterator.hasNext()) {
-            int key = iterator.next();
-            if (interval != null) {
-                if (interval.getRight() + 1 == key) {
-                    interval.setRight(interval.getRight() + 1);
-                    continue;
-                } else {
-                    list.add(interval);
-                }
-            }
-            interval = new PrivateIntInterval(key, key);
-        }
-        if (interval != null) {
-            list.add(interval);
-        }
-        return list.iterator();
-    }
-
-    @NotNull
-    public Iterator<IntInterval> descendingIntervalIterator() {
-        final Iterator<Integer> iterator = descendingIterator();
-        final ArrayList<IntInterval> list = new ArrayList<>();
-        PrivateIntInterval interval = null;
-        while (iterator.hasNext()) {
-            int key = iterator.next();
-            if (interval != null) {
-                if (interval.getLeft() - 1 == key) {
-                    interval.setLeft(interval.getLeft() - 1);
-                    continue;
-                } else {
-                    list.add(interval);
-                }
-            }
-            interval = new PrivateIntInterval(key, key);
-        }
-        if (interval != null) {
-            list.add(interval);
-        }
-        return list.iterator();
     }
 
     @NotNull

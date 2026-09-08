@@ -337,7 +337,14 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
     @CodeHistory(date = "2026/8/1")
     public static class S32NodeAllocator1 implements NodeAllocator1<S32Node1> {
 
+        private static final long serialVersionUID = 0x70DABD7C25E1B893L;
+
         public static final S32NodeAllocator1 INSTANCE = new S32NodeAllocator1();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override
@@ -384,7 +391,14 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
     @CodeHistory(date = "2026/8/4")
     public static class S32NodeAllocator2 implements NodeAllocator2<S32Node2> {
 
+        private static final long serialVersionUID = 0xFE752163463EDA84L;
+
         public static final S32NodeAllocator2 INSTANCE = new S32NodeAllocator2();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override
@@ -440,6 +454,15 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
 
     @CodeHistory(date = "2026/8/4")
     public static class S32NodeAllocator3 implements NodeAllocator3<S32Node3> {
+
+        private static final long serialVersionUID = 0xD49D5CAB2E0DCC51L;
+
+        public static final S32NodeAllocator3 INSTANCE = new S32NodeAllocator3();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override

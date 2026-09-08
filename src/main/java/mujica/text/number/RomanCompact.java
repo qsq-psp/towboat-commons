@@ -1,11 +1,13 @@
 package mujica.text.number;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2021/10/26", project = "va")
 @CodeHistory(date = "2022/10/19", project = "Ultramarine")
 @CodeHistory(date = "2025/2/28")
+@Name(value = "紧凑罗马数字", language = "zh")
 public class RomanCompact extends IntegralAdapter {
 
     public static final RomanCompact UPPER = new RomanCompact(

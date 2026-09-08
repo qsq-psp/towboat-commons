@@ -40,6 +40,7 @@ public class WordJoin implements Serializable {
         return out.toString();
     }
 
+    @CodeHistory(date = "2025/3/7")
     public static class ByChar extends WordJoin {
 
         private static final long serialVersionUID = 0xf027349cf64689f1L;
@@ -72,6 +73,7 @@ public class WordJoin implements Serializable {
         }
     }
 
+    @CodeHistory(date = "2025/3/7")
     public static class CaseByChar extends ByChar {
 
         private static final long serialVersionUID = 0x68e519c96bea2d1aL;
@@ -104,6 +106,7 @@ public class WordJoin implements Serializable {
         }
     }
 
+    @CodeHistory(date = "2025/3/7")
     public static class ByCharSequence extends WordJoin {
 
         private static final long serialVersionUID = 0x8baf21f03f41f37aL;
@@ -167,6 +170,7 @@ public class WordJoin implements Serializable {
         }
     }
 
+    @CodeHistory(date = "2025/3/7")
     public static class Abbreviation extends WordJoin {
 
         private static final long serialVersionUID = 0x2a4c124d92ae4690L;

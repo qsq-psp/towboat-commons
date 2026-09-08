@@ -15,7 +15,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2022/8/8", project = "Ultramarine", name = "JsonByteType")
 @CodeHistory(date = "2026/4/9", name = "ByteType")
 @CodeHistory(date = "2026/6/12")
-class I8Type extends JsonType implements I8Slot {
+class I8Type extends VoidType implements I8Slot {
 
     private static final long serialVersionUID = 0x9312fa58b4a856d8L;
 

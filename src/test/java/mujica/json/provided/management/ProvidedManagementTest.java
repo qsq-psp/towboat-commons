@@ -9,8 +9,12 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.management.JMX;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.management.BufferPoolMXBean;
 import java.lang.management.ManagementFactory;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -47,6 +51,18 @@ public class ProvidedManagementTest {
     }
 
     @Test
+    public void caseBeanServer() throws IOException {
+        caseObject(ManagementFactory.getPlatformMBeanServer());
+    }
+
+    @Test
+    public void caseBufferPool() throws Exception {
+        final MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer();
+        caseObject("BufferPoolMXBean direct", JMX.newMBeanProxy(beanServer, new ObjectName("java.nio:name=direct,type=BufferPool"), BufferPoolMXBean.class, false));
+        caseObject("BufferPoolMXBean mapped", JMX.newMBeanProxy(beanServer, new ObjectName("java.nio:name=mapped,type=BufferPool"), BufferPoolMXBean.class, false));
+    }
+
+    @Test
     public void caseClassLoading() throws IOException {
         caseObject(ManagementFactory.getClassLoadingMXBean());
     }
@@ -78,16 +94,16 @@ public class ProvidedManagementTest {
 
     @Test
     public void caseMemoryPool() throws IOException {
-        caseObject(ManagementFactory.getMemoryPoolMXBeans()); // ArrayList
+        caseObject("ArrayList MemoryPoolMXBean", ManagementFactory.getMemoryPoolMXBeans());
     }
 
     @Test
     public void caseMemoryManager() throws IOException {
-        caseObject(ManagementFactory.getMemoryManagerMXBeans()); // ArrayList
+        caseObject("ArrayList MemoryManagerMXBean", ManagementFactory.getMemoryManagerMXBeans());
     }
 
     @Test
     public void caseGarbageCollector() throws IOException {
-        caseObject(ManagementFactory.getGarbageCollectorMXBeans()); // ArrayList
+        caseObject("ArrayList GarbageCollectorMXBean", ManagementFactory.getGarbageCollectorMXBeans());
     }
 }

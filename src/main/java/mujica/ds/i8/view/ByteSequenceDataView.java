@@ -4,13 +4,12 @@ import mujica.ds.i8.ReadOnlyI8Array;
 import mujica.io.codec.Base16Case;
 import mujica.algebra.discrete.ClampedMath;
 import mujica.algebra.discrete.IntegralMath;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteOrder;
 
-/**
- * Created on 2025/4/16.
- */
+@CodeHistory(date = "2025/4/16")
 public class ByteSequenceDataView implements DataView {
 
     @NotNull

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.math.BigInteger;
 
 @CodeHistory(date = "2026/4/15")
-class FastNumberType extends JsonType {
+class FastNumberType extends VoidType {
 
     transient FastNumber value;
 

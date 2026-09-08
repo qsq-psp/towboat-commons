@@ -80,4 +80,24 @@ public class S64 extends Base2I64Slot implements Comparable<S64> {
     public String toString() {
         return "(" + value + ")";
     }
+
+    @CodeHistory(date = "2026/8/16")
+    public static class S64Node1 extends S64 {
+
+        private static final long serialVersionUID = 0x85688C9132725AA8L;
+
+        S64Node1 first;
+
+        int tag;
+    }
+
+    @CodeHistory(date = "2026/9/7")
+    public static class S64Node2 extends S64 {
+
+        private static final long serialVersionUID = 0x03774927D91BDC7AL;
+
+        S64Node2 first, second;
+
+        int tag;
+    }
 }

@@ -1,9 +1,11 @@
 package mujica.ds.sort;
 
 import mujica.algebra.random.FuzzyContext;
+import mujica.ds.i32.I32SlotArrayAllocator;
+import mujica.ds.i32.S32Arithmetic;
 import mujica.ds.i8.S8;
-import mujica.ds.i8.SlotArrayAllocatorI8;
-import mujica.ds.i8.SlotArrayComparatorS8;
+import mujica.ds.i8.I8SlotArrayAllocator;
+import mujica.ds.i8.S8SlotArrayComparator;
 import mujica.ds.slot.SlotArrayComparator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +26,8 @@ public class S8SortTest {
     private final FuzzyContext fc = new FuzzyContext();
 
     private void fuzzSortAll(@NotNull Sort<byte[]> algorithm) {
-        byte[] expected = SlotArrayAllocatorI8.EMPTY_ARRAY;
-        byte[] actual = SlotArrayAllocatorI8.EMPTY_ARRAY;
+        byte[] expected = I8SlotArrayAllocator.EMPTY_ARRAY;
+        byte[] actual = I8SlotArrayAllocator.EMPTY_ARRAY;
         try {
             for (int repeatIndex = 0; repeatIndex < REPEAT_COUNT; repeatIndex++) {
                 expected = fc.nextByteArray(fc.nextInt(2, MAIN_LENGTH));
@@ -33,10 +35,10 @@ public class S8SortTest {
                 Arrays.sort(expected);
                 algorithm.sort(actual);
                 if (algorithm.isDescending()) {
-                    SlotArrayAllocatorI8.INSTANCE.reverse(expected);
-                    Assert.assertTrue(SlotArrayComparatorS8.INSTANCE.isDescending(actual));
+                    I8SlotArrayAllocator.INSTANCE.reverse(expected);
+                    Assert.assertTrue(S8SlotArrayComparator.INSTANCE.isDescending(actual));
                 } else {
-                    Assert.assertTrue(SlotArrayComparatorS8.INSTANCE.isAscending(actual));
+                    Assert.assertTrue(S8SlotArrayComparator.INSTANCE.isAscending(actual));
                 }
                 Assert.assertArrayEquals(expected, actual);
             }
@@ -51,8 +53,10 @@ public class S8SortTest {
         fuzzSortAll(new BubbleSort<>(comparator));
         fuzzSortAll(new SelectionSort<>(comparator));
         fuzzSortAll(new InsertionSort<>(comparator));
-        fuzzSortAll(new MergeSort<>(comparator, false));
+        fuzzSortAll(new ShellSort<>(comparator));
+        fuzzSortAll(new HeapSort<>(comparator));
         fuzzSortAll(new MergeSort<>(comparator, true));
+        fuzzSortAll(new MergeSort<>(comparator, false));
         // fuzzSortAll(new QuickSort<>(comparator, new SelectFirstAsPivot<>(comparator)));
         // fuzzSortAll(new QuickSort<>(comparator, new SelectThreeMedianAsPivot<>(comparator)));
         // fuzzSortAll(new QuickSort<>(comparator, new SelectMedianOfMedianAsPivot<>(comparator)));
@@ -62,12 +66,52 @@ public class S8SortTest {
     @Test
     public void fuzzSortAll() {
         fuzzSortAll(new S8AscendingCountSort());
-        fuzzSortAll(SlotArrayComparatorS8.INSTANCE);
+        fuzzSortAll(new S8DescendingCountSort());
+        fuzzSortAll(S8SlotArrayComparator.INSTANCE);
+    }
+
+    private void fuzzSortRange(@NotNull Sort<byte[]> algorithm) {
+        byte[] expected = I8SlotArrayAllocator.EMPTY_ARRAY;
+        byte[] actual = I8SlotArrayAllocator.EMPTY_ARRAY;
+        try {
+            for (int repeatIndex = 0; repeatIndex < REPEAT_COUNT; repeatIndex++) {
+                int mainLength = fc.nextInt(2, MAIN_LENGTH);
+                int leftLength = fc.nextInt(ASIDE_LENGTH);
+                int rightLength = fc.nextInt(ASIDE_LENGTH);
+                expected = fc.nextByteArray(leftLength + mainLength + rightLength);
+                actual = expected.clone();
+                Arrays.sort(expected, leftLength, leftLength + mainLength);
+                algorithm.sort(actual, leftLength, leftLength + mainLength);
+                if (algorithm.isDescending()) {
+                    I8SlotArrayAllocator.INSTANCE.reverse(expected, leftLength, leftLength + mainLength);
+                    Assert.assertTrue(S8SlotArrayComparator.INSTANCE.isDescending(actual, leftLength, leftLength + mainLength));
+                } else {
+                    Assert.assertTrue(S8SlotArrayComparator.INSTANCE.isAscending(actual, leftLength, leftLength + mainLength));
+                }
+                Assert.assertArrayEquals(expected, actual);
+            }
+        } catch (AssertionError e) {
+            System.out.println("expected " + Arrays.toString(expected));
+            System.out.println("actual " + Arrays.toString(actual));
+            throw e;
+        }
+    }
+
+    private void fuzzSortRange(@NotNull SlotArrayComparator<S8, byte[]> comparator) {
+        fuzzSortRange(new BubbleSort<>(comparator));
+        fuzzSortRange(new SelectionSort<>(comparator));
+        fuzzSortRange(new InsertionSort<>(comparator));
+        fuzzSortRange(new ShellSort<>(comparator));
+        fuzzSortRange(new HeapSort<>(comparator));
+        fuzzSortRange(new MergeSort<>(comparator, true));
+        fuzzSortRange(new MergeSort<>(comparator, false));
     }
 
     @Test
     public void fuzzSortRange() {
-        //
+        fuzzSortRange(new S8AscendingCountSort());
+        fuzzSortRange(new S8DescendingCountSort());
+        fuzzSortRange(S8SlotArrayComparator.INSTANCE);
     }
 
     @Test

@@ -1,9 +1,9 @@
 package mujica.ds.sort;
 
 import mujica.algebra.random.FuzzyContext;
-import mujica.ds.i64.ArithmeticS64;
+import mujica.ds.i64.S64Arithmetic;
 import mujica.ds.i64.S64;
-import mujica.ds.i64.SlotArrayAllocatorI64;
+import mujica.ds.i64.I64SlotArrayAllocator;
 import mujica.ds.slot.SlotArrayComparator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +24,8 @@ public class S64SortTest {
     private final FuzzyContext fc = new FuzzyContext();
 
     private void fuzzSortAll(@NotNull Sort<long[]> algorithm) {
-        long[] expected = SlotArrayAllocatorI64.EMPTY_ARRAY;
-        long[] actual = SlotArrayAllocatorI64.EMPTY_ARRAY;
+        long[] expected = I64SlotArrayAllocator.EMPTY_ARRAY;
+        long[] actual = I64SlotArrayAllocator.EMPTY_ARRAY;
         try {
             for (int repeatIndex = 0; repeatIndex < REPEAT_COUNT; repeatIndex++) {
                 expected = fc.nextLongArray(fc.nextInt(2, MAIN_LENGTH));
@@ -33,10 +33,10 @@ public class S64SortTest {
                 Arrays.sort(expected);
                 algorithm.sort(actual);
                 if (algorithm.isDescending()) {
-                    SlotArrayAllocatorI64.INSTANCE.reverse(expected);
-                    Assert.assertTrue(ArithmeticS64.INSTANCE.isDescending(actual));
+                    I64SlotArrayAllocator.INSTANCE.reverse(expected);
+                    Assert.assertTrue(S64Arithmetic.INSTANCE.isDescending(actual));
                 } else {
-                    Assert.assertTrue(ArithmeticS64.INSTANCE.isAscending(actual));
+                    Assert.assertTrue(S64Arithmetic.INSTANCE.isAscending(actual));
                 }
                 Assert.assertArrayEquals(expected, actual);
             }
@@ -57,7 +57,7 @@ public class S64SortTest {
 
     @Test
     public void fuzzSortAll() {
-        final ArithmeticS64 arithmetic = ArithmeticS64.INSTANCE;
+        final S64Arithmetic arithmetic = S64Arithmetic.INSTANCE;
         fuzzSortAll(arithmetic);
     }
 }

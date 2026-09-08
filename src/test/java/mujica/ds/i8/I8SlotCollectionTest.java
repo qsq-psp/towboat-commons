@@ -54,9 +54,9 @@ public class I8SlotCollectionTest {
         actual.checkHealth();
     }
 
-    private void size() {
-        operations.add("size");
-        Assert.assertEquals(expected.size(), actual.size());
+    private void getSize() {
+        operations.add("getSize");
+        Assert.assertEquals(expected.size(), actual.getSize());
     }
 
     private void contains() {
@@ -189,6 +189,19 @@ public class I8SlotCollectionTest {
         actual.insertLastItem(slot);
     }
 
+    private void insertLast() {
+        operations.add("insertLast");
+        final byte[] array = rc.nextByteArray(rc.nextInt(SMALL_COUNT));
+        {
+            ArrayList<Byte> list = new ArrayList<>(array.length);
+            for (byte value : array) {
+                list.add(value);
+            }
+            expected.addAll(list);
+        }
+        actual.insertLast(array);
+    }
+
     private void clear() {
         operations.add("clear");
         expected.clear();
@@ -210,7 +223,7 @@ public class I8SlotCollectionTest {
                 checkHealth();
                 break;
             case 4:
-                size();
+                getSize();
                 break;
             case 5:
                 contains();
@@ -247,6 +260,7 @@ public class I8SlotCollectionTest {
     private void listLoop() {
         operations.clear();
         try {
+            insertLast();
             for (int repeatIndex = 0; repeatIndex < REPEAT_COUNT; repeatIndex++) {
                 listSwitch();
             }
@@ -260,31 +274,31 @@ public class I8SlotCollectionTest {
 
     private void checkList(@NotNull Supplier<Collection<Byte>> supplier) {
         expected = supplier.get();
-        actual = new CopyOnWriteSlotList<>(new SlotArrayAllocatorI8.WithHashI8(new HalfCapacityPolicy(0x3f4f5f6f)));
+        actual = new CopyOnWriteSlotList<>(new I8SlotArrayAllocator.I8HashSAA(new HalfCapacityPolicy(0x3f4f5f6f)));
         listLoop();
         expected = supplier.get();
-        actual = new CopyOnWriteSlotList<>(new SlotArrayAllocatorI8.WithHashI8(LookUpCapacityPolicy.PAPER));
+        actual = new CopyOnWriteSlotList<>(new I8SlotArrayAllocator.I8HashSAA(LookUpCapacityPolicy.PAPER));
         listLoop();
         expected = supplier.get();
-        actual = new CopyOnResizeSlotList<>(new SlotArrayAllocatorI8.WithHashI8(new HalfCapacityPolicy(0x3e4e5e6e)));
+        actual = new CopyOnResizeSlotList<>(new I8SlotArrayAllocator.I8HashSAA(new HalfCapacityPolicy(0x3e4e5e6e)));
         listLoop();
         expected = supplier.get();
-        actual = new CopyOnResizeSlotList<>(new SlotArrayAllocatorI8.WithHashI8(LookUpCapacityPolicy.GOLDEN));
+        actual = new CopyOnResizeSlotList<>(new I8SlotArrayAllocator.I8HashSAA(LookUpCapacityPolicy.GOLDEN));
         listLoop();
         expected = supplier.get();
-        actual = new CenterAlignedSlotList<>(new SlotArrayAllocatorI8.WithHashI8(new HalfCapacityPolicy(0x30405060)));
+        actual = new CenterAlignedSlotList<>(new I8SlotArrayAllocator.I8HashSAA(new HalfCapacityPolicy(0x30405060)));
         listLoop();
         expected = supplier.get();
-        actual = new CenterAlignedSlotList<>(new SlotArrayAllocatorI8.WithHashI8(LookUpCapacityPolicy.NATURAL));
+        actual = new CenterAlignedSlotList<>(new I8SlotArrayAllocator.I8HashSAA(LookUpCapacityPolicy.NATURAL));
         listLoop();
         expected = supplier.get();
-        actual = new CyclicSlotList<>(new SlotArrayAllocatorI8.WithHashI8(new HalfCapacityPolicy(0x31415161)));
+        actual = new CyclicSlotList<>(new I8SlotArrayAllocator.I8HashSAA(new HalfCapacityPolicy(0x31415161)));
         listLoop();
         expected = supplier.get();
-        actual = new CyclicSlotList<>(new SlotArrayAllocatorI8.WithHashI8(TwiceCapacityPolicy.INSTANCE));
+        actual = new CyclicSlotList<>(new I8SlotArrayAllocator.I8HashSAA(TwiceCapacityPolicy.INSTANCE));
         listLoop();
         expected = supplier.get();
-        actual = new LinkedSlotList<>(SlotArrayAllocatorI8.INSTANCE, I8.I8NodeAllocator2.INSTANCE);
+        actual = new LinkedSlotList<>(I8SlotArrayAllocator.INSTANCE, I8.I8NodeAllocator2.INSTANCE);
         listLoop();
     }
 
@@ -309,7 +323,7 @@ public class I8SlotCollectionTest {
                 checkHealth();
                 break;
             case 4:
-                size();
+                getSize();
                 break;
             case 5:
                 contains();
@@ -347,6 +361,7 @@ public class I8SlotCollectionTest {
     private void dequeLoop() {
         operations.clear();
         try {
+            insertLast();
             for (int repeatIndex = 0; repeatIndex < REPEAT_COUNT; repeatIndex++) {
                 dequeSwitch();
             }
@@ -360,31 +375,31 @@ public class I8SlotCollectionTest {
 
     private void checkDeque(@NotNull Supplier<Collection<Byte>> supplier) {
         expected = supplier.get();
-        actual = new CopyOnWriteSlotList<>(new SlotArrayAllocatorI8.WithHashI8(TwiceCapacityPolicy.INSTANCE));
+        actual = new CopyOnWriteSlotList<>(new I8SlotArrayAllocator.I8HashSAA(TwiceCapacityPolicy.INSTANCE));
         dequeLoop();
         expected = supplier.get();
-        actual = new CopyOnWriteSlotList<>(new SlotArrayAllocatorI8.WithHashI8(new LinearCapacityPolicy(rc)));
+        actual = new CopyOnWriteSlotList<>(new I8SlotArrayAllocator.I8HashSAA(new LinearCapacityPolicy(rc)));
         dequeLoop();
         expected = supplier.get();
-        actual = new CopyOnResizeSlotList<>(new SlotArrayAllocatorI8.WithHashI8(TwiceCapacityPolicy.INSTANCE));
+        actual = new CopyOnResizeSlotList<>(new I8SlotArrayAllocator.I8HashSAA(TwiceCapacityPolicy.INSTANCE));
         dequeLoop();
         expected = supplier.get();
-        actual = new CopyOnResizeSlotList<>(new SlotArrayAllocatorI8.WithHashI8(ModuloLookUpCapacityPolicy.INSTANCE_59));
+        actual = new CopyOnResizeSlotList<>(new I8SlotArrayAllocator.I8HashSAA(ModuloLookUpCapacityPolicy.INSTANCE_59));
         dequeLoop();
         expected = supplier.get();
-        actual = new CenterAlignedSlotList<>(new SlotArrayAllocatorI8.WithHashI8(TwiceCapacityPolicy.INSTANCE));
+        actual = new CenterAlignedSlotList<>(new I8SlotArrayAllocator.I8HashSAA(TwiceCapacityPolicy.INSTANCE));
         dequeLoop();
         expected = supplier.get();
-        actual = new CenterAlignedSlotList<>(new SlotArrayAllocatorI8.WithHashI8(ModuloLookUpCapacityPolicy.INSTANCE_67));
+        actual = new CenterAlignedSlotList<>(new I8SlotArrayAllocator.I8HashSAA(ModuloLookUpCapacityPolicy.INSTANCE_67));
         dequeLoop();
         expected = supplier.get();
-        actual = new CyclicSlotList<>(new SlotArrayAllocatorI8.WithHashI8(new LinearCapacityPolicy(rc)));
+        actual = new CyclicSlotList<>(new I8SlotArrayAllocator.I8HashSAA(new LinearCapacityPolicy(rc)));
         dequeLoop();
         expected = supplier.get();
-        actual = new CyclicSlotList<>(new SlotArrayAllocatorI8.WithHashI8(TwiceCapacityPolicy.INSTANCE));
+        actual = new CyclicSlotList<>(new I8SlotArrayAllocator.I8HashSAA(TwiceCapacityPolicy.INSTANCE));
         dequeLoop();
         expected = supplier.get();
-        actual = new LinkedSlotList<>(SlotArrayAllocatorI8.INSTANCE, I8.I8NodeAllocator2.INSTANCE);
+        actual = new LinkedSlotList<>(I8SlotArrayAllocator.INSTANCE, I8.I8NodeAllocator2.INSTANCE);
         dequeLoop();
     }
 
@@ -410,7 +425,7 @@ public class I8SlotCollectionTest {
                 break;
             case 4:
             case 5:
-                size();
+                getSize();
                 break;
             case 6:
             case 7:
@@ -436,6 +451,7 @@ public class I8SlotCollectionTest {
     private void setLoop() {
         operations.clear();
         try {
+            insertLast();
             for (int repeatIndex = 0; repeatIndex < REPEAT_COUNT; repeatIndex++) {
                 setSwitch();
             }
@@ -449,34 +465,34 @@ public class I8SlotCollectionTest {
 
     private void checkSet(@NotNull Supplier<Collection<Byte>> supplier) {
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Linear<>(new SlotArrayAllocatorI8.WithHashI8(ShiftCapacityPolicy.INSTANCE));
+        actual = new ClosedHashSlotSet.Linear<>(new I8SlotArrayAllocator.I8HashSAA(ShiftCapacityPolicy.INSTANCE));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Linear<>(new SlotArrayAllocatorI8.WithHashI8(TwiceCapacityPolicy.INSTANCE));
+        actual = new ClosedHashSlotSet.Linear<>(new I8SlotArrayAllocator.I8HashSAA(TwiceCapacityPolicy.INSTANCE));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Quadratic<>(new SlotArrayAllocatorI8.WithHashI8(ModuloLookUpCapacityPolicy.INSTANCE_59));
+        actual = new ClosedHashSlotSet.Quadratic<>(new I8SlotArrayAllocator.I8HashSAA(ModuloLookUpCapacityPolicy.INSTANCE_59));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Quadratic<>(new SlotArrayAllocatorI8.WithHashI8(ModuloLookUpCapacityPolicy.INSTANCE_67));
+        actual = new ClosedHashSlotSet.Quadratic<>(new I8SlotArrayAllocator.I8HashSAA(ModuloLookUpCapacityPolicy.INSTANCE_67));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Congruent<>(new SlotArrayAllocatorI8.WithHashI8(LookUpCapacityPolicy.PRIME_PAPER));
+        actual = new ClosedHashSlotSet.Congruent<>(new I8SlotArrayAllocator.I8HashSAA(LookUpCapacityPolicy.PRIME_PAPER));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Congruent<>(new SlotArrayAllocatorI8.WithHashI8(LookUpCapacityPolicy.PRIME_GOLDEN));
+        actual = new ClosedHashSlotSet.Congruent<>(new I8SlotArrayAllocator.I8HashSAA(LookUpCapacityPolicy.PRIME_GOLDEN));
         setLoop();
         expected = supplier.get();
-        actual = new ClosedHashSlotSet.Congruent<>(new SlotArrayAllocatorI8.WithHashI8(LookUpCapacityPolicy.PRIME_FIBONACCI));
+        actual = new ClosedHashSlotSet.Congruent<>(new I8SlotArrayAllocator.I8HashSAA(LookUpCapacityPolicy.PRIME_FIBONACCI));
         setLoop();
         expected = supplier.get();
-        actual = new OpenHashSlotSet.Link1<>(new SlotArrayAllocatorI8.WithHashI8(TwiceCapacityPolicy.INSTANCE), I8.I8NodeAllocator1.INSTANCE);
+        actual = new OpenHashSlotSet.Link1<>(new I8SlotArrayAllocator.I8HashSAA(TwiceCapacityPolicy.INSTANCE), I8.I8NodeAllocator1.INSTANCE);
         setLoop();
         expected = supplier.get();
-        actual = new OpenHashSlotSet.Link2<>(new SlotArrayAllocatorI8.WithHashI8(TwiceCapacityPolicy.INSTANCE), I8.I8NodeAllocator2.INSTANCE);
+        actual = new OpenHashSlotSet.Link2<>(new I8SlotArrayAllocator.I8HashSAA(TwiceCapacityPolicy.INSTANCE), I8.I8NodeAllocator2.INSTANCE);
         setLoop();
         expected = supplier.get();
-        actual = new OpenHashSlotSet.Link3<>(new SlotArrayAllocatorI8.WithHashI8(TwiceCapacityPolicy.INSTANCE), I8.I8NodeAllocator3.INSTANCE);
+        actual = new OpenHashSlotSet.Link3<>(new I8SlotArrayAllocator.I8HashSAA(TwiceCapacityPolicy.INSTANCE), I8.I8NodeAllocator3.INSTANCE);
         setLoop();
     }
 

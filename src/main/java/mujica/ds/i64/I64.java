@@ -1,6 +1,5 @@
 package mujica.ds.i64;
 
-import mujica.ds.i32.I32;
 import mujica.ds.slot.NodeAllocator1;
 import mujica.ds.slot.NodeAllocator2;
 import mujica.ds.slot.NodeAllocator3;
@@ -85,6 +84,11 @@ public class I64 implements I64Slot, Cloneable, Serializable {
         public static final I64NodeAllocator1 INSTANCE = new I64NodeAllocator1();
 
         @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
+
+        @NotNull
         @Override
         public I64Node1 newNode() {
             return new I64Node1();
@@ -129,7 +133,14 @@ public class I64 implements I64Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/23")
     public static class I64NodeAllocator2 implements NodeAllocator2<I64Node2> {
 
+        private static final long serialVersionUID = 0x278778012BCFE8C9L;
+
         public static final I64NodeAllocator2 INSTANCE = new I64NodeAllocator2();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override
@@ -187,6 +198,11 @@ public class I64 implements I64Slot, Cloneable, Serializable {
     public static class I64NodeAllocator3 implements NodeAllocator3<I64Node3> {
 
         public static final I64NodeAllocator3 INSTANCE = new I64NodeAllocator3();
+
+        @NotNull
+        private Object readResolve() {
+            return INSTANCE;
+        }
 
         @NotNull
         @Override

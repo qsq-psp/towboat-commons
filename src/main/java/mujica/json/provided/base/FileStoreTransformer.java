@@ -16,8 +16,6 @@ public class FileStoreTransformer implements JsonContextTransformer<FileStore> {
 
     public static final FileStoreTransformer INSTANCE = new FileStoreTransformer();
 
-    static final FastString TYPE = new FastString("type");
-
     static final FastString READ_ONLY = new FastString("readOnly");
 
     static final FastString TOTAL = new FastString("total");
@@ -34,7 +32,7 @@ public class FileStoreTransformer implements JsonContextTransformer<FileStore> {
         {
             out.key(ClassLoaderTransformer.NAME);
             out.stringValue(fileStore.name());
-            out.key(TYPE);
+            out.key(TypeTransformer.TYPE);
             out.stringValue(fileStore.type());
             out.key(READ_ONLY);
             out.booleanValue(fileStore.isReadOnly());

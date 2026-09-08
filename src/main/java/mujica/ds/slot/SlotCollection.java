@@ -17,25 +17,31 @@ import java.util.function.Predicate;
 public interface SlotCollection<S, A> extends DataStructure {
 
     @NotNull
-    SlotCollection<S, A> clone();
-
-    @NotNull
     SlotCollection<S, A> duplicateNew();
 
     @Override
     @NotNull
     SlotCollection<S, A> duplicate();
 
+    @NotNull
+    SlotCollection<S, A> clone();
+
     @Override
     void checkHealth(@NotNull Consumer<RuntimeException> consumer);
 
-    int size();
+    long sumOfDepth();
+
+    int maxDepth();
+
+    int getSize();
 
     boolean isEmpty();
 
     boolean isFull();
 
-    boolean contains(@NotNull S in); // bring your own buffer design
+    boolean contains(@NotNull S in);
+
+    int countItem(@NotNull S in);
 
     @Name(value = "indexOf", language = "en")
     int firstIndexOf(@NotNull S in);
@@ -49,10 +55,10 @@ public interface SlotCollection<S, A> extends DataStructure {
     void setItemAt(int index, @NotNull S in) throws IndexOutOfBoundsException;
 
     @Name(value = "swap", language = "en")
-    void exchangeItemAt(int index, @NotNull S slot) throws IndexOutOfBoundsException;
+    void exchangeItemAt(int index, @NotNull S inOut) throws IndexOutOfBoundsException;
 
     @Name(value = "remove", language = "en")
-    void removeItemAt(int index, @Nullable S slot) throws IndexOutOfBoundsException;
+    void removeItemAt(int index, @Nullable S out) throws IndexOutOfBoundsException;
 
     @Name(value = "add", language = "en")
     @Name(value = "insert", language = "en")
@@ -74,7 +80,13 @@ public interface SlotCollection<S, A> extends DataStructure {
     @ReferencePage(title = "set.pop()", href = "https://docs.python.org/3/library/stdtypes.html#frozenset.pop")
     void removeArbitraryItem(@NotNull S out, @Nullable RandomContext rc) throws NoSuchElementException;
 
-    boolean removeFirstEqualItem(@NotNull S slot);
+    boolean removeFirstEqualItem(@NotNull S inOut);
+
+    boolean removeLastEqualItem(@NotNull S inOut);
+
+    boolean removeOneEqualItem(@NotNull S inOut);
+
+    int removeAllEqualItems(@NotNull S in);
 
     boolean internItem(@NotNull S slot);
 
@@ -98,7 +110,9 @@ public interface SlotCollection<S, A> extends DataStructure {
 
     void removeRange(@Index(of = "this") int startIndex, @Index(of = "this", inclusive = false) int endIndex) throws IndexOutOfBoundsException;
 
-    void truncate(int newEndIndex) throws IndexOutOfBoundsException;
+    @Name(value = "truncate", language = "en")
+    @Name(value = "trimTail", language = "en")
+    void setSize(int newSize) throws IndexOutOfBoundsException;
 
     @Name(value = "removeAll", language = "en")
     void clear();
@@ -106,8 +120,6 @@ public interface SlotCollection<S, A> extends DataStructure {
     void reverse();
 
     void rotate(int distance);
-
-    void sort(boolean descending);
 
     long sort(@NotNull Sort<A> sort);
 
@@ -140,15 +152,15 @@ public interface SlotCollection<S, A> extends DataStructure {
 
     boolean tryInternItem(@NotNull S slot);
 
-    <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T tempSlot);
+    <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T consumedSlot);
 
-    <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T tempSlot);
+    <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T consumedSlot);
 
-    <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T tempSlot);
+    <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T consumedSlot);
 
-    <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T tempSlot);
+    <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T consumedSlot);
 
-    <T extends S> void removeIf(@NotNull Predicate<T> filter, @NotNull T tempSlot);
+    <T extends S> void removeIf(@NotNull Predicate<T> filter, @NotNull T consumedSlot);
 
     @CodeHistory(date = "2026/7/8")
     interface GapIterator<S> {

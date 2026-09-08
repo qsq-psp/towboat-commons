@@ -264,28 +264,6 @@ public class TruncateList<E> extends ArrayList<E> implements DataStructure {
         }
     }
 
-    public void sort(@NotNull Comparator<E> comparator, @NotNull MonotonicityDirection direction) {
-        sort(comparator);
-        if (direction == MonotonicityDirection.DESCENDING) {
-            reverse();
-        }
-    }
-
-    public long sort(@NotNull SortingAlgorithm<List<E>> algorithm) {
-        return algorithm.sort(this);
-    }
-
-    public long sortPart(@NotNull SortingAlgorithm<List<E>> algorithm, int m) {
-        return algorithm.sortPart(this, 0, m, size());
-    }
-
-    public long sortUnique(@NotNull SortingAlgorithm<List<E>> algorithm) {
-        final S32 slot = new S32(size());
-        final long r = algorithm.sortUnique(this, 0, slot);
-        truncate(slot.getI32());
-        return r;
-    }
-
     public void map(@NotNull UnaryOperator<E> operator) {
         final int size = size();
         for (int index = 0; index < size; index++) {

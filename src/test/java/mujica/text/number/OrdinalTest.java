@@ -8,7 +8,6 @@ import org.junit.Test;
 @CodeHistory(date = "2025/3/1")
 public class OrdinalTest {
 
-    //*
     @Test
     public void caseInt() {
         final Ordinal instance = Ordinal.INSTANCE;
@@ -54,5 +53,4 @@ public class OrdinalTest {
         Assert.assertEquals("1234567890024th", instance.stringify(1234567890024L));
         Assert.assertEquals("9223372036854775807th", instance.stringify(Long.MAX_VALUE));
     }
-    //*/
 }

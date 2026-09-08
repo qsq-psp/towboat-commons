@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2026/5/29")
-class AnyType extends JsonType {
+class AnyType extends VoidType {
 
     private static final long serialVersionUID = 0xD0ACA59DD0AA6B18L;
 

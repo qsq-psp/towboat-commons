@@ -4,12 +4,11 @@ import mujica.json.container.FastString;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Attr;
 
-/**
- * Created on 2026/5/2.
- */
+@CodeHistory(date = "2026/5/2")
 public class AttrTransformer implements JsonContextTransformer<Attr> {
 
     public static final AttrTransformer INSTANCE = new AttrTransformer();

@@ -309,6 +309,6 @@ public class Base16Appender extends DefaultNumberAppender implements Base16Case 
 
     @Override
     public String toString() {
-        return "HexadecimalAppender[" + start + "]";
+        return "Base16Appender[" + start + "]";
     }
 }

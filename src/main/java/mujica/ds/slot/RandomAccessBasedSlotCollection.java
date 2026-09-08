@@ -17,6 +17,8 @@ import java.util.function.Predicate;
 @DirectSubclass({VersionSlotList.class, CopyOnWriteSlotList.class})
 public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotCollection<S, A> {
 
+    private static final long serialVersionUID = 0x73CE895DCF958639L;
+
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     @NotNull
@@ -39,11 +41,21 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     protected abstract SlotArrayAllocator<S, A> getAllocator();
 
     @Override
-    public abstract int size();
+    public long sumOfDepth() {
+        return getSize();
+    }
+
+    @Override
+    public int maxDepth() {
+        return 1;
+    }
+
+    @Override
+    public abstract int getSize();
 
     @Override
     public boolean isEmpty() {
-        return size() == 0;
+        return getSize() == 0;
     }
 
     @Override
@@ -57,8 +69,26 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     }
 
     @Override
+    public int countItem(@NotNull S in) {
+        int sum = 0;
+        final int listSize = getSize();
+        final S scanSlot = getAllocator().newSlot();
+        try {
+            for (int index = 0; index < listSize; index++) {
+                getItemAt(index, scanSlot);
+                if (in.equals(scanSlot)) {
+                    sum++;
+                }
+            }
+            return sum;
+        } finally {
+            getAllocator().releaseSlot(scanSlot);
+        }
+    }
+
+    @Override
     public int firstIndexOf(@NotNull S in) {
-        final int listSize = size();
+        final int listSize = getSize();
         final S scanSlot = getAllocator().newSlot();
         try {
             for (int index = 0; index < listSize; index++) {
@@ -77,7 +107,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     public int lastIndexOf(@NotNull S in) {
         final S scanSlot = getAllocator().newSlot();
         try {
-            for (int index = size() - 1; index >= 0; index--) {
+            for (int index = getSize() - 1; index >= 0; index--) {
                 getItemAt(index, scanSlot);
                 if (in.equals(scanSlot)) {
                     return index;
@@ -98,15 +128,15 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     }
 
     @Override
-    public void exchangeItemAt(int index, @NotNull S slot) throws IndexOutOfBoundsException {
+    public void exchangeItemAt(int index, @NotNull S inOut) throws IndexOutOfBoundsException {
         final S tempSlot = getAllocator().newSlot();
         getItemAt(index, tempSlot);
-        setItemAt(index, slot);
-        getAllocator().move(tempSlot, slot);
+        setItemAt(index, inOut);
+        getAllocator().move(tempSlot, inOut);
     }
 
     @Override
-    public void removeItemAt(int index, @Nullable S slot) throws IndexOutOfBoundsException {
+    public void removeItemAt(int index, @Nullable S out) throws IndexOutOfBoundsException {
         throw new UnsupportedOperationException();
     }
 
@@ -127,7 +157,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     @Override
     public void getLastItem(@NotNull S out) throws NoSuchElementException {
         try {
-            getItemAt(size() - 1, out);
+            getItemAt(getSize() - 1, out);
         } catch (IndexOutOfBoundsException e) {
             throw new NoSuchElementException();
         }
@@ -137,7 +167,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     public void getArbitraryItem(@NotNull S out, @Nullable RandomContext rc) throws NoSuchElementException {
         if (rc != null) {
             try {
-                getItemAt(rc.nextInt(size()), out);
+                getItemAt(rc.nextInt(getSize()), out);
             } catch (ArithmeticException e) {
                 throw new NoSuchElementException();
             }
@@ -158,7 +188,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     @Override
     public void removeLastItem(@Nullable S out) throws NoSuchElementException {
         try {
-            removeItemAt(size() - 1, out);
+            removeItemAt(getSize() - 1, out);
         } catch (IndexOutOfBoundsException e) {
             throw new NoSuchElementException();
         }
@@ -168,7 +198,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     public void removeArbitraryItem(@NotNull S out, @Nullable RandomContext rc) throws NoSuchElementException {
         if (rc != null) {
             try {
-                removeItemAt(rc.nextInt(size()), out);
+                removeItemAt(rc.nextInt(getSize()), out);
             } catch (ArithmeticException e) {
                 throw new NoSuchElementException();
             }
@@ -178,13 +208,50 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     }
 
     @Override
-    public boolean removeFirstEqualItem(@NotNull S slot) {
-        final int index = firstIndexOf(slot);
+    public boolean removeFirstEqualItem(@NotNull S inOut) {
+        final int index = firstIndexOf(inOut);
         if (index == -1) {
             return false;
         }
-        removeItemAt(index, slot);
+        removeItemAt(index, inOut);
         return true;
+    }
+
+    @Override
+    public boolean removeLastEqualItem(@NotNull S inOut) {
+        final int index = lastIndexOf(inOut);
+        if (index == -1) {
+            return false;
+        }
+        removeItemAt(index, inOut);
+        return true;
+    }
+
+    @Override
+    public boolean removeOneEqualItem(@NotNull S inOut) {
+        return removeFirstEqualItem(inOut);
+    }
+
+    @Override
+    public int removeAllEqualItems(@NotNull S in) {
+        int count = 0;
+        final S scanSlot = getAllocator().newSlot();
+        try {
+            int thisSize = getSize();
+            int index = 0;
+            while (index < thisSize) {
+                if (in.equals(scanSlot)) {
+                    removeItemAt(index, null);
+                    thisSize = getSize();
+                    count++;
+                } else {
+                    index++;
+                }
+            }
+            return count;
+        } finally {
+            getAllocator().releaseSlot(scanSlot);
+        }
     }
 
     @Override
@@ -205,7 +272,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
 
     @Override
     public void insertLastItem(@NotNull S in) {
-        insertItemBefore(size(), in);
+        insertItemBefore(getSize(), in);
     }
 
     @Override
@@ -214,10 +281,10 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     }
 
     @Override
-    public void insertLast(@NotNull A thatArray, int startIndex, int endIndex) {
+    public void insertLast(@NotNull A thatArray, int thatStartIndex, int thatEndIndex) {
         final SlotArrayAllocator<S, A> allocator = getAllocator();
         final S tempSlot = allocator.newSlot();
-        for (int index = startIndex; index < endIndex; index++) {
+        for (int index = thatStartIndex; index < thatEndIndex; index++) {
             allocator.load(thatArray, index, tempSlot);
             insertLastItem(tempSlot);
         }
@@ -239,7 +306,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
 
     @Override
     public void removeRange(int startIndex, int endIndex) throws IndexOutOfBoundsException {
-        if (!(0 <= startIndex && startIndex <= endIndex && endIndex <= size())) {
+        if (!(0 <= startIndex && startIndex <= endIndex && endIndex <= getSize())) {
             throw new IndexOutOfBoundsException();
         }
         while (startIndex < endIndex) {
@@ -249,17 +316,17 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     }
 
     @Override
-    public void truncate(int newEndIndex) throws IndexOutOfBoundsException {
-        final int listSize = size();
-        if (!(0 <= newEndIndex && newEndIndex <= listSize)) {
+    public void setSize(int newSize) throws IndexOutOfBoundsException {
+        final int oldSize = getSize();
+        if (!(0 <= newSize && newSize <= oldSize)) {
             throw new IndexOutOfBoundsException();
         }
-        removeRange(newEndIndex, listSize);
+        removeRange(newSize, oldSize);
     }
 
     @Override
     public void clear() {
-        truncate(0);
+        setSize(0);
     }
 
     @Override
@@ -267,7 +334,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
         final S lowSlot = getAllocator().newSlot();
         final S highSlot = getAllocator().newSlot();
         int lowIndex = 0;
-        int highIndex = size() - 1;
+        int highIndex = getSize() - 1;
         while (lowIndex < highIndex) {
             getItemAt(lowIndex, lowSlot);
             getItemAt(highIndex, highSlot);
@@ -280,12 +347,59 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
 
     @Override
     public void rotate(int distance) {
-        // todo
-    }
-
-    @Override
-    public void sort(boolean descending) {
-        throw new UnsupportedOperationException();
+        final int modulo = getSize();
+        if (modulo <= 1) {
+            return;
+        }
+        distance %= modulo;
+        if (distance == 0) {
+            return;
+        }
+        if (distance < 0) {
+            distance += modulo;
+        }
+        if (distance == 1) {
+            S getSlot = getAllocator().newSlot();
+            S setSlot = getAllocator().newSlot();
+            try {
+                getItemAt(modulo - 1, getSlot);
+                for (int index = 0; index < modulo; index++) {
+                    S tempSlot = getSlot;
+                    getSlot = setSlot;
+                    setSlot = tempSlot;
+                    getItemAt(index, getSlot);
+                    setItemAt(index, setSlot);
+                }
+            } finally {
+                getAllocator().releaseSlot(getSlot);
+                getAllocator().releaseSlot(setSlot);
+            }
+        } else if (distance == modulo - 1) {
+            S getSlot = getAllocator().newSlot();
+            S setSlot = getAllocator().newSlot();
+            try {
+                getItemAt(0, getSlot);
+                for (int index = modulo - 1; index >= 0; index--) {
+                    S tempSlot = getSlot;
+                    getSlot = setSlot;
+                    setSlot = tempSlot;
+                    getItemAt(index, getSlot);
+                    setItemAt(index, setSlot);
+                }
+            } finally {
+                getAllocator().releaseSlot(getSlot);
+                getAllocator().releaseSlot(setSlot);
+            }
+        } else {
+            A tempArray = allToArray();
+            try {
+                clear();
+                insertLast(tempArray, modulo - distance, modulo);
+                insertLast(tempArray, 0, modulo - distance);
+            } finally {
+                getAllocator().releaseArray(tempArray);
+            }
+        }
     }
 
     @Override
@@ -322,7 +436,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
                 allocator.load(tempArray, index, tempSlot);
                 setItemAt(index, tempSlot);
             }
-            truncate(newEndIndex);
+            setSize(newEndIndex);
             return operationCount;
         } finally {
             allocator.releaseSlot(tempSlot);
@@ -344,7 +458,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
                 allocator.load(tempArray, index, tempSlot);
                 setItemAt(index, tempSlot);
             }
-            truncate(thisSize);
+            setSize(thisSize);
             return operationCount;
         } finally {
             allocator.releaseSlot(tempSlot);
@@ -378,13 +492,13 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
 
     @Override
     public void getAll(@NotNull A dst, int dstIndex) {
-        getRange(0, dst, dstIndex, size());
+        getRange(0, dst, dstIndex, getSize());
     }
 
     @NotNull
     @Override
     public A allToArray() {
-        final int length = size();
+        final int length = getSize();
         final A newArray = getAllocator().newArray(length);
         getRange(0, newArray, 0, length);
         return newArray;
@@ -409,7 +523,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
             return false;
         }
         try {
-            getItemAt(size() - 1, out);
+            getItemAt(getSize() - 1, out);
             return true;
         } catch (IndexOutOfBoundsException e) {
             return false;
@@ -435,7 +549,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
             return false;
         }
         try {
-            removeItemAt(size() - 1, out);
+            removeItemAt(getSize() - 1, out);
             return true;
         } catch (IndexOutOfBoundsException e) {
             return false;
@@ -449,7 +563,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
         }
         if (rc != null) {
             try {
-                getItemAt(rc.nextInt(size()), out);
+                getItemAt(rc.nextInt(getSize()), out);
                 return true;
             } catch (ArithmeticException e) {
                 return false;
@@ -471,7 +585,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
         }
         if (rc != null) {
             try {
-                removeItemAt(rc.nextInt(size()), out);
+                removeItemAt(rc.nextInt(getSize()), out);
                 return true;
             } catch (ArithmeticException e) {
                 return false;
@@ -497,20 +611,20 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     }
 
     @Override
-    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
-        final int listSize = size();
+    public <T extends S> void forEach(@NotNull Consumer<T> consumer, @NotNull T consumedSlot) {
+        final int listSize = getSize();
         for (int index = 0; index < listSize; index++) {
-            getItemAt(index, tempSlot);
-            consumer.accept(tempSlot);
+            getItemAt(index, consumedSlot);
+            consumer.accept(consumedSlot);
         }
     }
 
     @Override
-    public <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
-        final int listSize = size();
+    public <T extends S> boolean some(@NotNull Predicate<T> predicate, @NotNull T consumedSlot) {
+        final int listSize = getSize();
         for (int index = 0; index < listSize; index++) {
-            getItemAt(index, tempSlot);
-            if (predicate.test(tempSlot)) {
+            getItemAt(index, consumedSlot);
+            if (predicate.test(consumedSlot)) {
                 return true;
             }
         }
@@ -518,11 +632,11 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     }
 
     @Override
-    public <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T tempSlot) {
-        final int listSize = size();
+    public <T extends S> boolean every(@NotNull Predicate<T> predicate, @NotNull T consumedSlot) {
+        final int listSize = getSize();
         for (int index = 0; index < listSize; index++) {
-            getItemAt(index, tempSlot);
-            if (!predicate.test(tempSlot)) {
+            getItemAt(index, consumedSlot);
+            if (!predicate.test(consumedSlot)) {
                 return false;
             }
         }
@@ -530,22 +644,22 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     }
 
     @Override
-    public <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T tempSlot) {
-        final int listSize = size();
+    public <T extends S> void map(@NotNull Consumer<T> consumer, @NotNull T consumedSlot) {
+        final int listSize = getSize();
         for (int index = 0; index < listSize; index++) {
-            getItemAt(index, tempSlot);
-            consumer.accept(tempSlot);
-            setItemAt(index, tempSlot);
+            getItemAt(index, consumedSlot);
+            consumer.accept(consumedSlot);
+            setItemAt(index, consumedSlot);
         }
     }
 
     @Override
-    public <T extends S> void removeIf(@NotNull Predicate<T> filter, @NotNull T tempSlot) {
-        int listSize = size();
+    public <T extends S> void removeIf(@NotNull Predicate<T> filter, @NotNull T consumedSlot) {
+        int listSize = getSize();
         int index = 0;
         while (index < listSize) {
-            getItemAt(index, tempSlot);
-            if (filter.test(tempSlot)) {
+            getItemAt(index, consumedSlot);
+            if (filter.test(consumedSlot)) {
                 removeItemAt(index, null);
                 listSize--;
             } else {
@@ -557,7 +671,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     @NotNull
     @Override
     public GapIterator<S> iterator(int startGapIndex) {
-        final int gapSize = size() + 1;
+        final int gapSize = getSize() + 1;
         final int nonNegativeGapIndex = startGapIndex < 0 ? gapSize + startGapIndex : startGapIndex;
         if (!(0 <= nonNegativeGapIndex && nonNegativeGapIndex < gapSize)) {
             throw new IndexOutOfBoundsException();
@@ -578,7 +692,7 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
 
             @Override
             public boolean nextGap() {
-                if (gapIndex < size()) {
+                if (gapIndex < getSize()) {
                     gapIndex++;
                     return true;
                 } else {
@@ -657,14 +771,14 @@ public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotColle
     @NotNull
     @Override
     public String summaryToString() {
-        return "size = " + size();
+        return "size = " + getSize();
     }
 
     @NotNull
     @Override
     public String detailToString() {
         final StringBuilder sb = new StringBuilder();
-        final int listSize = size();
+        final int listSize = getSize();
         final S tempSlot = getAllocator().newSlot();
         try {
             for (int index = 0; index < listSize; index++) {

@@ -18,12 +18,6 @@ public class RepeatCharIndentWriter extends IndentWriter {
 
     int indent;
 
-    /**
-     * Create a new filtered writer.
-     *
-     * @param out a Writer object to provide the underlying stream.
-     * @throws NullPointerException if <code>out</code> is <code>null</code>
-     */
     public RepeatCharIndentWriter(@NotNull Writer out, char ch, int count) {
         super(out);
         Arrays.fill(template, ch);
