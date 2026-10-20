@@ -71,7 +71,7 @@ public class I64 implements I64Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/21")
     public static class I64Node1 extends I64 {
 
-        private static final long serialVersionUID = 0x211F9396194DF282L;
+        private static final long serialVersionUID = 0x211f9396194df282L;
 
         I64Node1 first;
 
@@ -123,7 +123,7 @@ public class I64 implements I64Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/21")
     public static class I64Node2 extends I64 {
 
-        private static final long serialVersionUID = 0x99FD2C85026CEED6L;
+        private static final long serialVersionUID = 0x99fd2c85026ceed6L;
 
         I64Node2 first, second;
 
@@ -133,7 +133,7 @@ public class I64 implements I64Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/23")
     public static class I64NodeAllocator2 implements NodeAllocator2<I64Node2> {
 
-        private static final long serialVersionUID = 0x278778012BCFE8C9L;
+        private static final long serialVersionUID = 0x278778012bcfe8c9L;
 
         public static final I64NodeAllocator2 INSTANCE = new I64NodeAllocator2();
 
@@ -187,7 +187,7 @@ public class I64 implements I64Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/21")
     public static class I64Node3 extends I64 {
 
-        private static final long serialVersionUID = 0x409C3CA230790E6EL;
+        private static final long serialVersionUID = 0x409c3ca230790e6eL;
 
         I64Node3 first, second, third;
 

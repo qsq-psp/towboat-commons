@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/2/21")
 public class EpsilonBracketNode extends BracketNode {
 
-    private static final long serialVersionUID = 0x755CC452ECA28F82L;
+    private static final long serialVersionUID = 0x755cc452eca28f82L;
 
     @Override
     public int pairCount() {

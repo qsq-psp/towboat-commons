@@ -17,7 +17,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2026/6/8")
 class F64Type extends VoidType implements F64Slot {
 
-    private static final long serialVersionUID = 0x79D5392531C49BB6L;
+    private static final long serialVersionUID = 0x79d5392531c49bb6L;
 
     transient double value;
 

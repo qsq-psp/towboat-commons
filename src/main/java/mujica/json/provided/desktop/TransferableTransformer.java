@@ -13,6 +13,8 @@ import java.awt.datatransfer.Transferable;
 @CodeHistory(date = "2026/7/2")
 public class TransferableTransformer implements JsonContextTransformer<Transferable> {
 
+    public static final TransferableTransformer INSTANCE = new TransferableTransformer();
+
     @Override
     public void transform(@NotNull Transferable transferable, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();

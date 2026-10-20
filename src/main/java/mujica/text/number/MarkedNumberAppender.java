@@ -9,7 +9,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2026/4/16")
 public class MarkedNumberAppender extends DefaultNumberAppender {
 
-    private static final long serialVersionUID = 0x1F2AC87A4C3FC5C4L;
+    private static final long serialVersionUID = 0x1f2ac87a4c3fc5c4L;
 
     public static final MarkedNumberAppender INSTANCE = new MarkedNumberAppender(DefaultNumberAppender.INSTANCE);
 

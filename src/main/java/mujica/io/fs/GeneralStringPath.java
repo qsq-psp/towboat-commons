@@ -56,7 +56,7 @@ public abstract class GeneralStringPath implements HealthAware, Path, Serializab
             checkSegmentHealth(currentSeparatorIndex, nextSeparatorIndex);
             currentSeparatorIndex = nextSeparatorIndex + separator.length();
         }
-        // string == "" or string == separator is not permitted
+        // string equals "" or string equals separator is not permitted
         checkSegmentHealth(currentSeparatorIndex, string.length());
         // string ending with separator is not permitted
     }

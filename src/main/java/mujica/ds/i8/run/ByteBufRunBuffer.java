@@ -2,6 +2,7 @@ package mujica.ds.i8.run;
 
 import io.netty.buffer.*;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,7 @@ import java.util.Objects;
 
 @CodeHistory(date = "2025/11/17", name = "ByteBufLookBackMemory")
 @CodeHistory(date = "2025/11/29")
+@DirectSubclass({StrictByteBufRunBuffer.class})
 public class ByteBufRunBuffer extends RunBuffer implements ByteBufHolder {
 
     @NotNull

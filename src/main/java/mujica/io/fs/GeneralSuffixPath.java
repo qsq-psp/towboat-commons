@@ -34,7 +34,7 @@ public abstract class GeneralSuffixPath<P extends GeneralSuffixPath<P>> implemen
 
     @Override
     public void checkHealth(@NotNull Consumer<RuntimeException> consumer) {
-        // Floyd loop algorithm
+        // Floyd loop algorithm (add link)
         GeneralSuffixPath<P> slow = this;
         GeneralSuffixPath<P> fast = this.child;
         while (slow != fast) {
@@ -136,8 +136,8 @@ public abstract class GeneralSuffixPath<P extends GeneralSuffixPath<P>> implemen
 
     @NotNull
     @Override
-    public Path toRealPath(@NotNull LinkOption... options) throws IOException {
-        return null;
+    public Path toRealPath(@NotNull LinkOption... options) {
+        return this;
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2026/8/11")
 public class F32SlotArrayAllocator implements SlotArrayAllocator<F32Slot, float[]> {
 
-    private static final long serialVersionUID = 0x8F4B233BB897FEBBL;
+    private static final long serialVersionUID = 0x8f4b233bb897febbL;
 
     public static final float[] EMPTY_ARRAY = new float[0];
 
@@ -108,14 +108,14 @@ public class F32SlotArrayAllocator implements SlotArrayAllocator<F32Slot, float[
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = f32, slotType = F32Slot, arrayType = float[]]";
+        return "[dataType = f32, slotType = F32Slot, arrayType = float[]]";
     }
 
     @CodeHistory(date = "2026/7/26", name = "WithHashF32")
     @CodeHistory(date = "2026/8/11")
     public static class F32HashSAA extends F32SlotArrayAllocator implements HashSAA<F32Slot, float[]> {
 
-        private static final long serialVersionUID = 0x41412F6D04D2F798L;
+        private static final long serialVersionUID = 0x41412f6d04d2f798L;
 
         @NotNull
         final CapacityPolicy capacityPolicy;
@@ -154,7 +154,7 @@ public class F32SlotArrayAllocator implements SlotArrayAllocator<F32Slot, float[
         @Override
         @NotNull
         public String toString() {
-            return "SlotTool[dataType = f32, slotType = F32Slot, arrayType = float[], capacityPolicy = " + capacityPolicy + "]";
+            return "[dataType = f32, slotType = F32Slot, arrayType = float[], capacityPolicy = " + capacityPolicy + "]";
         }
     }
 }

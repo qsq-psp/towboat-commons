@@ -1,16 +1,14 @@
 package mujica.ds.sort;
 
 import mujica.ds.slot.SlotArrayComparator;
-import mujica.reflect.modifier.CodeHistory;
-import mujica.reflect.modifier.Index;
-import mujica.reflect.modifier.Name;
-import mujica.reflect.modifier.ReferencePage;
+import mujica.reflect.modifier.*;
 import org.jetbrains.annotations.NotNull;
 
 @CodeHistory(date = "2026/2/22", name = "ListMergeSort")
 @CodeHistory(date = "2026/7/21")
 @Name(value = "归并排序", language = "zh")
 @ReferencePage(title = "归并排序", href = "https://oi-wiki.org/basic/merge-sort/")
+@DirectSubclass({GallopMergeSort.class})
 public class MergeSort<S, A> implements Sort<A> {
 
     @NotNull
@@ -93,7 +91,7 @@ public class MergeSort<S, A> implements Sort<A> {
     public long sort(@NotNull A target, int startIndex, int endIndex) {
         final int length = endIndex - startIndex;
         if (length < 2) {
-            return 0L;
+            return 0L; // do not create auxiliary array
         }
         return sort(target, startIndex, getAuxiliaryArray(length), 0, length);
     }
@@ -106,11 +104,12 @@ public class MergeSort<S, A> implements Sort<A> {
     @NotNull
     @Override
     public String toString() {
+        final String name = getClass().getSimpleName();
         final A auxiliaryArray = this.auxiliaryArray;
         if (auxiliaryArray == null) {
-            return "MergeSort[comparator = " + comparator + "]";
+            return name + "[comparator = " + comparator + "]";
         } else {
-            return "MergeSort[comparator = " + comparator + ", auxiliaryArray = " + comparator.length(auxiliaryArray) + "]";
+            return name + "[comparator = " + comparator + ", auxiliaryArray = " + comparator.length(auxiliaryArray) + "]";
         }
     }
 }

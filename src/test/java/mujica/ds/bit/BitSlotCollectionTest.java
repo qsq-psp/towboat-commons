@@ -161,22 +161,22 @@ public class BitSlotCollectionTest {
 
     private void checkDeque(@NotNull Supplier<Collection<Boolean>> supplier) {
         expected = supplier.get();
-        actual = new LinkedSlotList<>(SlotArrayAllocatorB.INSTANCE, Bit.BitNodeAllocator2.INSTANCE);
+        actual = new LinkedSlotList<>(BitSlotArrayAllocator.INSTANCE, Bit.BitNodeAllocator2.INSTANCE);
         dequeLoop();
         expected = supplier.get();
-        actual = new LinkedSlotList<>(SlotArrayAllocatorI8B.INSTANCE, Bit.BitNodeAllocator2.INSTANCE);
+        actual = new LinkedSlotList<>(I8BitSlotArrayAllocator.INSTANCE, Bit.BitNodeAllocator2.INSTANCE);
         dequeLoop();
         expected = supplier.get();
-        actual = new LinkedSlotList<>(SlotArrayAllocatorI32B.INSTANCE, Bit.BitNodeAllocator2.INSTANCE);
+        actual = new LinkedSlotList<>(I32BitSlotArrayAllocator.INSTANCE, Bit.BitNodeAllocator2.INSTANCE);
         dequeLoop();
         expected = supplier.get();
-        actual = new LinkedBlockSlotList<>(SlotArrayAllocatorB.INSTANCE, rc.nextInt(20, 30));
+        actual = new LinkedBlockSlotList<>(BitSlotArrayAllocator.INSTANCE, rc.nextInt(20, 30));
         dequeLoop();
         expected = supplier.get();
-        actual = new LinkedBlockSlotList<>(SlotArrayAllocatorI8B.INSTANCE, rc.nextInt(80, 100));
+        actual = new LinkedBlockSlotList<>(I8BitSlotArrayAllocator.INSTANCE, rc.nextInt(80, 100));
         dequeLoop();
         expected = supplier.get();
-        actual = new LinkedBlockSlotList<>(SlotArrayAllocatorI32B.INSTANCE, rc.nextInt(400, 500));
+        actual = new LinkedBlockSlotList<>(I32BitSlotArrayAllocator.INSTANCE, rc.nextInt(400, 500));
         dequeLoop();
     }
 

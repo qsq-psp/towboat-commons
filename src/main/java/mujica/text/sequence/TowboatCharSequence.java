@@ -205,7 +205,7 @@ public abstract class TowboatCharSequence implements CharSequence, Serializable 
         return (editDistance(a, b) + lengthDistance(lengthA, lengthB)) / (lengthA + lengthB + 1);
     }
 
-    private static final long serialVersionUID = 0x0390169F208201A6L;
+    private static final long serialVersionUID = 0x0390169f208201a6L;
 
     protected TowboatCharSequence() {
         super();

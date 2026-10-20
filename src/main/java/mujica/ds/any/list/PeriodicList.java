@@ -12,7 +12,7 @@ import java.util.AbstractList;
 @DirectSubclass({ElementRepeatList.class, SequenceRepeatList.class})
 public abstract class PeriodicList<E> extends AbstractList<E> implements Serializable {
 
-    private static final long serialVersionUID = 0x38B47C5A2714302CL;
+    private static final long serialVersionUID = 0x38b47c5a2714302cL;
 
     protected int size;
 

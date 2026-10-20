@@ -1,6 +1,5 @@
 package mujica.algebra.discrete;
 
-
 import mujica.ds.common.LeftRightIteratorState;
 import mujica.ds.i32.list.IntList;
 import mujica.ds.i32.list.IntListHandle;
@@ -14,9 +13,6 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-/**
- * Created on 2025/3/13.
- */
 @CodeHistory(date = "2025/3/13")
 public class CombinationList extends AbstractList<IntList> {
 

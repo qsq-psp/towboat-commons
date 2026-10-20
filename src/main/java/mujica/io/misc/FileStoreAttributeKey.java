@@ -11,5 +11,5 @@ public enum FileStoreAttributeKey {
     UNALLOCATED_SPACE,
     USED_SPACE;
 
-    private static final long serialVersionUID = 0xC3740CAFFAF067FEL;
+    private static final long serialVersionUID = 0xc3740caffaf067feL;
 }

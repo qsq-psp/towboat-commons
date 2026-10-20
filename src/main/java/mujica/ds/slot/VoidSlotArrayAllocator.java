@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/8/14")
 public class VoidSlotArrayAllocator implements SlotArrayAllocator<VoidSlot, VoidArray> {
 
-    private static final long serialVersionUID = 0x8CF50620D723CAB4L;
+    private static final long serialVersionUID = 0x8cf50620d723cab4L;
 
     public static final VoidSlotArrayAllocator INSTANCE = new VoidSlotArrayAllocator();
 

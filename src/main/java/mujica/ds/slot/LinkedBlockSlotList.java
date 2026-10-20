@@ -17,12 +17,12 @@ import java.util.function.Consumer;
 @Name(value = "分块链表", language = "zh")
 public class LinkedBlockSlotList<S, A> extends GapIteratorBasedSlotCollection<S, A> {
 
-    private static final long serialVersionUID = 0x88858DEC79595C74L;
+    private static final long serialVersionUID = 0x88858dec79595c74L;
 
     @CodeHistory(date = "2026/7/14")
     static class LinkedBlock<A> implements Serializable {
 
-        private static final long serialVersionUID = 0x03125776187421C3L;
+        private static final long serialVersionUID = 0x03125776187421c3L;
 
         LinkedBlock<A> previous;
 

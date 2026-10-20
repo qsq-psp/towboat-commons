@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Attr;
 
 @CodeHistory(date = "2026/5/2")
@@ -20,17 +21,17 @@ public class AttrTransformer implements JsonContextTransformer<Attr> {
     static final FastString IS_ID = new FastString("ID");
 
     @Override
-    public void transform(Attr in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Attr attrNode, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(NAME);
-            out.stringValue(in.getName());
+            out.stringValue(attrNode.getName());
             out.key(SPECIFIED);
-            out.booleanValue(in.getSpecified());
+            out.booleanValue(attrNode.getSpecified());
             out.key(AttributesTransformer.VALUE);
-            out.stringValue(in.getValue());
+            out.stringValue(attrNode.getValue());
             out.key(IS_ID);
-            out.booleanValue(in.isId());
+            out.booleanValue(attrNode.isId());
         }
         out.closeObject();
     }

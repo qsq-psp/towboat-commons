@@ -75,7 +75,7 @@ public class F32 implements F32Slot, Comparable<F32>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/7/22")
     public static class F32Node1 extends F32 {
 
-        private static final long serialVersionUID = 0xE211473CC5F17AD6L;
+        private static final long serialVersionUID = 0xe211473cc5f17ad6L;
 
         F32Node1 first;
 
@@ -85,7 +85,7 @@ public class F32 implements F32Slot, Comparable<F32>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/8/15")
     public static class F32NodeAllocator1 implements NodeAllocator1<F32Node1> {
 
-        private static final long serialVersionUID = 0x46DC3A3BF8882FACL;
+        private static final long serialVersionUID = 0x46dc3a3bf8882facL;
 
         public static final F32NodeAllocator1 INSTANCE = new F32NodeAllocator1();
 
@@ -129,7 +129,7 @@ public class F32 implements F32Slot, Comparable<F32>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/7/22")
     public static class F32Node2 extends F32 {
 
-        private static final long serialVersionUID = 0x43E5E2B6415B19B5L;
+        private static final long serialVersionUID = 0x43e5e2b6415b19b5L;
 
         F32Node2 first, second;
 
@@ -139,7 +139,7 @@ public class F32 implements F32Slot, Comparable<F32>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/8/20")
     public static class F32NodeAllocator2 implements NodeAllocator2<F32Node2> {
 
-        private static final long serialVersionUID = 0x30D8BBF792C7A7A1L;
+        private static final long serialVersionUID = 0x30d8bbf792c7a7a1L;
 
         public static final F32NodeAllocator2 INSTANCE = new F32NodeAllocator2();
 
@@ -193,7 +193,7 @@ public class F32 implements F32Slot, Comparable<F32>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/7/22")
     public static class F32Node3 extends F32 {
 
-        private static final long serialVersionUID = 0x26D2187A3A10C20AL;
+        private static final long serialVersionUID = 0x26d2187a3a10c20aL;
 
         F32Node3 first, second, third;
 
@@ -203,7 +203,7 @@ public class F32 implements F32Slot, Comparable<F32>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/8/21")
     public static class F32NodeAllocator3 implements NodeAllocator3<F32Node3> {
 
-        private static final long serialVersionUID = 0x77937A1CF213A077L;
+        private static final long serialVersionUID = 0x77937a1cf213a077L;
 
         public static final F32NodeAllocator3 INSTANCE = new F32NodeAllocator3();
 

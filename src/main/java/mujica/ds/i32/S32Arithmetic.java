@@ -13,6 +13,8 @@ import java.util.Arrays;
 @CodeHistory(date = "2026/6/29", name = "ArithmeticS32")
 @CodeHistory(date = "2026/8/7")
 public class S32Arithmetic extends PrimitiveArithmetic<S32, int[]> {
+
+    private static final long serialVersionUID = 0xF017537B325B68A0L;
     
     public static final S32Arithmetic INSTANCE = new S32Arithmetic();
 
@@ -70,18 +72,18 @@ public class S32Arithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public void zero(@NotNull S32 result) {
-        result.value = 0;
+    public void zero(@NotNull S32 out) {
+        out.value = 0;
     }
 
     @Override
-    public void one(@NotNull S32 result) {
-        result.value = 1;
+    public void one(@NotNull S32 out) {
+        out.value = 1;
     }
 
     @Override
-    public void two(@NotNull S32 result) {
-        result.value = 2;
+    public void two(@NotNull S32 out) {
+        out.value = 2;
     }
 
     @Override
@@ -105,18 +107,18 @@ public class S32Arithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public int compareSlot(@NotNull S32 a, @NotNull S32 b) {
-        return Integer.compare(a.value, b.value);
+    public int compareSlot(@NotNull S32 left, @NotNull S32 right) {
+        return Integer.compare(left.value, right.value);
     }
 
     @Override
-    public int sign(@NotNull S32 variable) {
-        return Integer.signum(variable.value);
+    public int sign(@NotNull S32 in) {
+        return Integer.signum(in.value);
     }
 
     @Override
-    public void move(@NotNull S32 src, @NotNull S32 dst) {
-        dst.value = src.value;
+    public void move(@NotNull S32 in, @NotNull S32 out) {
+        out.value = in.value;
     }
 
     @Override
@@ -125,16 +127,16 @@ public class S32Arithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public void negate(@NotNull S32 variable, @NotNull S32 result) {
-        result.value = Math.negateExact(variable.value);
+    public void negate(@NotNull S32 in, @NotNull S32 out) {
+        out.value = Math.negateExact(in.value);
     }
 
     @Override
-    public void absolute(@NotNull S32 variable, @NotNull S32 result) {
-        if (variable.value >= 0) {
-            result.value = variable.value;
-        } else if (variable.value != Integer.MIN_VALUE) {
-            result.value = -variable.value;
+    public void absolute(@NotNull S32 in, @NotNull S32 out) {
+        if (in.value >= 0) {
+            out.value = in.value;
+        } else if (in.value != Integer.MIN_VALUE) {
+            out.value = -in.value;
         } else {
             throw new ArithmeticException();
         }
@@ -146,149 +148,147 @@ public class S32Arithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public void invert(@NotNull S32 variable, @NotNull S32 result) {
-        if (isInvertible(variable)) {
+    public void invert(@NotNull S32 in, @NotNull S32 out) {
+        if (isInvertible(in)) {
             // same as move
-            result.value = variable.value;
+            out.value = in.value;
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void increase(@NotNull S32 variable, @NotNull S32 result) {
-        result.setI32(Math.incrementExact(variable.getI32()));
+    public void increase(@NotNull S32 in, @NotNull S32 out) {
+        out.setI32(Math.incrementExact(in.getI32()));
     }
 
     @Override
-    public void decrease(@NotNull S32 variable, @NotNull S32 result) {
-        result.setI32(Math.decrementExact(variable.getI32()));
+    public void decrease(@NotNull S32 in, @NotNull S32 out) {
+        out.setI32(Math.decrementExact(in.getI32()));
     }
 
     @Override
-    public void add(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
-        result.setI32(Math.addExact(left.getI32(), right.getI32()));
+    public void add(@NotNull S32 left, @NotNull S32 right, @NotNull S32 out) {
+        out.setI32(Math.addExact(left.getI32(), right.getI32()));
     }
 
     @Override
-    public void subtract(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
-        result.setI32(Math.subtractExact(left.getI32(), right.getI32()));
+    public void subtract(@NotNull S32 left, @NotNull S32 right, @NotNull S32 out) {
+        out.setI32(Math.subtractExact(left.getI32(), right.getI32()));
     }
 
     @Override
-    public void multiply(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
-        result.setI32(Math.multiplyExact(left.getI32(), right.getI32()));
+    public void multiply(@NotNull S32 left, @NotNull S32 right, @NotNull S32 out) {
+        out.setI32(Math.multiplyExact(left.getI32(), right.getI32()));
     }
 
     @Override
-    public void square(@NotNull S32 variable, @NotNull S32 result) {
+    public void square(@NotNull S32 in, @NotNull S32 out) {
         // 46340**2 = 2147395600 < 2147483647 = Integer.MAX_VALUE
         // 46341**2 = 2147488281 < 2147483647 = Integer.MAX_VALUE
-        if (variable.value < -46340 || variable.value > 46340) {
+        if (in.value < -46340 || in.value > 46340) {
             throw new ArithmeticException();
         }
-        result.value = variable.value * variable.value;
+        out.value = in.value * in.value;
     }
 
     @Override
-    public void triangle(@NotNull S32 variable, @NotNull S32 result) {
+    public void triangle(@NotNull S32 in, @NotNull S32 out) {
         // 65535 * (65535 + 1) / 2 = 2147450880 < 2147483647 = Integer.MAX_VALUE
         // 65536 * (65536 + 1) / 2 = 2147516416 > 2147483647 = Integer.MAX_VALUE
-        if (variable.value < -65536 || variable.value > 65535) {
+        if (in.value < -65536 || in.value > 65535) {
             throw new ArithmeticException();
         }
-        int leftValue = variable.value;
+        int leftValue = in.value;
         int rightValue = Math.incrementExact(leftValue);
         if ((leftValue & 1) == 0) {
             leftValue >>= 1;
         } else {
             rightValue >>= 1;
         }
-        result.value = leftValue * rightValue;
+        out.value = leftValue * rightValue;
     }
 
     @Override
     public void divide(@NotNull S32 left, @NotNull S32 right, @NotNull S32 quotient, @NotNull RoundingMode mode) {
-        final int left32 = left.getI32();
-        final int right32 = right.getI32();
-        int quotient32 = left32 / right32;
-        int product32 = right32 * quotient32;
-        if (left32 != product32) {
-            switch (mode) {
-                case UP:
-                    if ((left32 ^ right32) >= 0) {
-                        assert quotient32 >= 0;
-                        assert quotient32 < Integer.MAX_VALUE;
-                        quotient32++;
-                    } else {
-                        assert quotient32 < 0;
-                        assert quotient32 > Integer.MIN_VALUE;
-                        quotient32--;
-                    }
-                    break;
-                case DOWN:
-                    break;
-                case CEILING:
-                    if ((left32 ^ right32) >= 0) {
-                        assert quotient32 >= 0;
-                        assert quotient32 < Integer.MAX_VALUE;
-                        quotient32++;
-                    }
-                    break;
-                case FLOOR:
-                    if ((left32 ^ right32) < 0) {
-                        assert quotient32 < 0;
-                        assert quotient32 > Integer.MIN_VALUE;
-                        quotient32--;
-                    }
-                    break;
-                case UNNECESSARY:
-                    throw new ArithmeticException("can not divide exact");
-            }
+        quotient.value = left.value / right.value;
+        final int productValue = right.value * quotient.value;
+        if (left.value == productValue) {
+            return;
         }
-        quotient.setI32(quotient32);
+        switch (mode) {
+            case UP:
+                if ((left.value ^ right.value) >= 0) {
+                    assert quotient.value >= 0;
+                    assert quotient.value < Integer.MAX_VALUE;
+                    quotient.value++;
+                } else {
+                    assert quotient.value < 0;
+                    assert quotient.value > Integer.MIN_VALUE;
+                    quotient.value--;
+                }
+                break;
+            case DOWN:
+                break;
+            case CEILING:
+                if ((left.value ^ right.value) >= 0) {
+                    assert quotient.value >= 0;
+                    assert quotient.value < Integer.MAX_VALUE;
+                    quotient.value++;
+                }
+                break;
+            case FLOOR:
+                if ((left.value ^ right.value) < 0) {
+                    assert quotient.value < 0;
+                    assert quotient.value > Integer.MIN_VALUE;
+                    quotient.value--;
+                }
+                break;
+            case UNNECESSARY:
+                throw new ArithmeticException("can not divide exact");
+        }
     }
 
     @Override
     public void divide(@NotNull S32 left, @NotNull S32 right, @Nullable S32 quotient, @Nullable S32 remainder) {
-        final int leftValue = left.getI32();
-        final int rightValue = right.getI32();
         if (quotient != null) {
-            quotient.setI32(leftValue / rightValue);
+            quotient.value = left.value / right.value;
         }
         if (remainder != null) {
-            remainder.setI32(leftValue % rightValue);
+            remainder.value = left.value % right.value;
         }
     }
 
     @Override
     public void mean(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result, @NotNull RoundingMode mode) {
-        long sum33 = ((long) left.value) + right.value;
+        long sum = ((long) left.value) + right.value;
         switch (mode) {
             case UP:
-                if (sum33 >= 0L) {
-                    sum33++;
+                if (sum >= 0L) {
+                    sum++;
                 } else {
-                    sum33--;
+                    sum--;
                 }
                 // no break here
             case DOWN:
-                sum33 >>= 1;
+                sum >>= 1;
                 break;
             case CEILING:
-                if (sum33 >= 0L) {
-                    sum33++;
+                if (sum >= 0L) {
+                    sum++;
                 }
-                sum33 >>= 1;
+                sum >>= 1;
                 break;
             case FLOOR:
-                if (sum33 < 0L) {
-                    sum33--;
+                if (sum < 0L) {
+                    sum--;
                 }
-                sum33 >>= 1;
+                sum >>= 1;
                 break;
+            default:
+                throw new IllegalArgumentException();
         }
-        result.value = (int) sum33;
+        result.value = (int) sum;
     }
 
     @Override

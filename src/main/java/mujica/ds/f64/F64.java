@@ -79,7 +79,7 @@ public class F64 implements F64Slot, Comparable<F64>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/8/6")
     public static class F64Node1 extends F64 {
 
-        private static final long serialVersionUID = 0x0DC9FC278A91663BL;
+        private static final long serialVersionUID = 0x0dc9fc278a91663bL;
 
         F64Node1 first;
 
@@ -89,7 +89,7 @@ public class F64 implements F64Slot, Comparable<F64>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/8/6")
     public static class F64NodeAllocator1 implements NodeAllocator1<F64Node1> {
 
-        private static final long serialVersionUID = 0xE88BC4876380EF42L;
+        private static final long serialVersionUID = 0xe88bc4876380ef42L;
 
         public static final F64NodeAllocator1 INSTANCE = new F64NodeAllocator1();
 
@@ -133,7 +133,7 @@ public class F64 implements F64Slot, Comparable<F64>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/8/16")
     public static class F64Node2 extends F64 {
 
-        private static final long serialVersionUID = 0x9E0E18410889A660L;
+        private static final long serialVersionUID = 0x9e0e18410889a660L;
 
         F64Node2 first, second;
 
@@ -143,7 +143,7 @@ public class F64 implements F64Slot, Comparable<F64>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/8/17")
     public static class F64NodeAllocator2 implements NodeAllocator2<F64Node2> {
 
-        private static final long serialVersionUID = 0x960BBBC5594035D6L;
+        private static final long serialVersionUID = 0x960bbbc5594035d6L;
 
         public static final F64NodeAllocator2 INSTANCE = new F64NodeAllocator2();
 
@@ -197,7 +197,7 @@ public class F64 implements F64Slot, Comparable<F64>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/8/18")
     public static class F64Node3 extends F64 {
 
-        private static final long serialVersionUID = 0x1F9FF63A6AB9E49AL;
+        private static final long serialVersionUID = 0x1f9ff63a6ab9e49aL;
 
         F64Node3 first, second, third;
 
@@ -207,7 +207,7 @@ public class F64 implements F64Slot, Comparable<F64>, Base2Float, Cloneable, Ser
     @CodeHistory(date = "2026/8/19")
     public static class F64NodeAllocator3 implements NodeAllocator3<F64Node3> {
 
-        private static final long serialVersionUID = 0xC94924DB88B99B72L;
+        private static final long serialVersionUID = 0xc94924db88b99b72L;
 
         public static final F64NodeAllocator3 INSTANCE = new F64NodeAllocator3();
 

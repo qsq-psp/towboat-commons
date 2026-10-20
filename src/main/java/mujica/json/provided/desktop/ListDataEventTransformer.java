@@ -14,7 +14,7 @@ public class ListDataEventTransformer implements JsonContextTransformer<ListData
     public static final ListDataEventTransformer INSTANCE = new ListDataEventTransformer();
 
     @Override
-    public void transform(ListDataEvent event, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ListDataEvent event, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();
         {
             int type = event.getType();

@@ -5,6 +5,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
@@ -14,7 +15,7 @@ public class PathTransformer implements JsonContextTransformer<Path> {
     public static final PathTransformer INSTANCE = new PathTransformer();
 
     @Override
-    public void transform(Path in, @NotNull JsonHandler out, JsonContext context) {
-        out.stringValue(in.toString());
+    public void transform(Path path, @NotNull JsonHandler out, @Nullable JsonContext context) {
+        out.stringValue(path.toString());
     }
 }

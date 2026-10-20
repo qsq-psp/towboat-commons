@@ -8,46 +8,43 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Created on 2026/6/8.
- */
 @CodeHistory(date = "2026/6/8")
 public class PoolArenaMetricTransformer implements JsonContextTransformer<PoolArenaMetric> {
 
     public static final PoolArenaMetricTransformer INSTANCE = new PoolArenaMetricTransformer();
 
     @Override
-    public void transform(@NotNull PoolArenaMetric in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull PoolArenaMetric metric, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("threadCache");
-            out.numberValue(in.numThreadCaches());
+            out.numberValue(metric.numThreadCaches());
             out.key("allocation");
-            out.numberValue(in.numAllocations());
+            out.numberValue(metric.numAllocations());
             out.key("smallAllocation");
-            out.numberValue(in.numSmallAllocations());
+            out.numberValue(metric.numSmallAllocations());
             out.key("normalAllocation");
-            out.numberValue(in.numNormalAllocations());
+            out.numberValue(metric.numNormalAllocations());
             out.key("hugeAllocation");
-            out.numberValue(in.numHugeAllocations());
+            out.numberValue(metric.numHugeAllocations());
             out.key("deallocation");
-            out.numberValue(in.numDeallocations());
+            out.numberValue(metric.numDeallocations());
             out.key("smallDeallocation");
-            out.numberValue(in.numSmallDeallocations());
+            out.numberValue(metric.numSmallDeallocations());
             out.key("normalDeallocation");
-            out.numberValue(in.numNormalDeallocations());
+            out.numberValue(metric.numNormalDeallocations());
             out.key("hugeDeallocation");
-            out.numberValue(in.numHugeDeallocations());
+            out.numberValue(metric.numHugeDeallocations());
             out.key("activeAllocation");
-            out.numberValue(in.numActiveAllocations());
+            out.numberValue(metric.numActiveAllocations());
             out.key("activeSmallAllocation");
-            out.numberValue(in.numActiveSmallAllocations());
+            out.numberValue(metric.numActiveSmallAllocations());
             out.key("activeNormalAllocation");
-            out.numberValue(in.numActiveNormalAllocations());
+            out.numberValue(metric.numActiveNormalAllocations());
             out.key("activeHugeAllocation");
-            out.numberValue(in.numActiveHugeAllocations());
+            out.numberValue(metric.numActiveHugeAllocations());
             out.key("activeByte");
-            out.numberValue(in.numActiveBytes());
+            out.numberValue(metric.numActiveBytes());
         }
         out.closeObject();
     }

@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2026/7/23")
 public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
 
-    private static final long serialVersionUID = 0x7AD47FCF06E07CFDL;
+    private static final long serialVersionUID = 0x7ad47fcf06e07cfdL;
 
     static final int SPECIAL_EMPTY = -1;
 
@@ -519,7 +519,7 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
     @CodeHistory(date = "2026/7/25")
     public static class Linear<S, A> extends ClosedHashSlotSet<S, A> {
 
-        private static final long serialVersionUID = 0x4C6495BEB2B3A570L;
+        private static final long serialVersionUID = 0x4c6495beb2b3a570L;
 
         private transient int limit, tableIndex;
 
@@ -575,7 +575,7 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
     @CodeHistory(date = "2026/7/25")
     public static class Quadratic<S, A> extends ClosedHashSlotSet<S, A> {
 
-        private static final long serialVersionUID = 0x047C13EC8B1668F5L;
+        private static final long serialVersionUID = 0x047c13ec8b1668f5L;
 
         private transient int base, countingIndex;
 
@@ -639,7 +639,7 @@ public abstract class ClosedHashSlotSet<S, A> extends HashSlotSet<S, A> {
     @CodeHistory(date = "2026/7/25")
     public static class Congruent<S, A> extends ClosedHashSlotSet<S, A> {
 
-        private static final long serialVersionUID = 0x158032AD8C029262L;
+        private static final long serialVersionUID = 0x158032ad8c029262L;
 
         private transient int addend, tableIndex, countingIndex;
 

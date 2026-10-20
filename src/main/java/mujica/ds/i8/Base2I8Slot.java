@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/7/5")
 public abstract class Base2I8Slot extends I8 implements Base2Integer {
 
-    private static final long serialVersionUID = 0xD0FA74259AB54D38L;
+    private static final long serialVersionUID = 0xd0fa74259ab54d38L;
 
     protected Base2I8Slot() {
         super();

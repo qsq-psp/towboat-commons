@@ -11,6 +11,8 @@ import java.security.Principal;
 @CodeHistory(date = "2026/8/31")
 public class PrincipalTransformer implements JsonContextTransformer<Principal> {
 
+    public static final PrincipalTransformer INSTANCE = new PrincipalTransformer();
+
     @Override
     public void transform(Principal in, @NotNull JsonHandler out, JsonContext context) {
         out.openObject();

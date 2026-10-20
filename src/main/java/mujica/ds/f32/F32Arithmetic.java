@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 @CodeHistory(date = "2026/7/16", name = "ArithmeticF32")
 @CodeHistory(date = "2026/8/9")
-public class F32Arithmetic extends PrimitiveArithmetic<F32Slot, float[]> {
+public class F32Arithmetic extends PrimitiveArithmetic<F32, float[]> {
 
     public static final F32Arithmetic INSTANCE = new F32Arithmetic();
 
@@ -20,13 +20,13 @@ public class F32Arithmetic extends PrimitiveArithmetic<F32Slot, float[]> {
 
     @NotNull
     @Override
-    public F32Slot newSlot() {
+    public F32 newSlot() {
         return new F32();
     }
 
     @NotNull
     @Override
-    public F32Slot cloneSlot(@NotNull F32Slot original) {
+    public F32 cloneSlot(@NotNull F32 original) {
         return new F32(original.getF32());
     }
 
@@ -58,135 +58,136 @@ public class F32Arithmetic extends PrimitiveArithmetic<F32Slot, float[]> {
     }
 
     @Override
-    public void load(@NotNull float[] array, int index, @NotNull F32Slot slot) {
-        slot.setF32(array[index]);
+    public void load(@NotNull float[] array, int index, @NotNull F32 slot) {
+        slot.value = array[index];
     }
 
     @Override
-    public void store(@NotNull float[] array, int index, @NotNull F32Slot slot) {
-        array[index] = slot.getF32();
+    public void store(@NotNull float[] array, int index, @NotNull F32 slot) {
+        array[index] = slot.value;
     }
 
     @Override
-    public void zero(@NotNull F32Slot result) {
-        result.setF32(0.0f);
+    public void zero(@NotNull F32 out) {
+        out.value = 0.0f;
     }
 
     @Override
-    public void one(@NotNull F32Slot result) {
-        result.setF32(1.0f);
+    public void one(@NotNull F32 out) {
+        out.value = 1.0f;
     }
 
     @Override
-    public void two(@NotNull F32Slot result) {
-        result.setF32(2.0f);
+    public void two(@NotNull F32 out) {
+        out.value = 2.0f;
     }
 
     @Override
-    public void min(@NotNull F32Slot result) {
-        result.setF32(Float.NEGATIVE_INFINITY);
+    public void min(@NotNull F32 result) {
+        result.value = Float.NEGATIVE_INFINITY;
     }
 
     @Override
-    public void max(@NotNull F32Slot result) {
-        result.setF32(Float.POSITIVE_INFINITY);
+    public void max(@NotNull F32 result) {
+        result.value = Float.POSITIVE_INFINITY;
     }
 
     @Override
-    public void min(@NotNull F32Slot left, @NotNull F32Slot right, @NotNull F32Slot result) {
-        result.setF32(Math.min(left.getF32(), right.getF32()));
+    public void min(@NotNull F32 left, @NotNull F32 right, @NotNull F32 result) {
+        result.value = Math.min(left.value, right.value);
     }
 
     @Override
-    public void max(@NotNull F32Slot left, @NotNull F32Slot right, @NotNull F32Slot result) {
-        result.setF32(Math.max(left.getF32(), right.getF32()));
+    public void max(@NotNull F32 left, @NotNull F32 right, @NotNull F32 result) {
+        result.value = Math.max(left.value, right.value);
     }
 
     @Override
-    public int compareSlot(@NotNull F32Slot a, @NotNull F32Slot b) {
-        return Float.compare(a.getF32(), b.getF32());
+    public int compareSlot(@NotNull F32 left, @NotNull F32 right) {
+        return Float.compare(left.value, right.value);
     }
 
     @Override
-    public int sign(@NotNull F32Slot variable) {
-        return Float.compare(variable.getF32(), 0.0f);
+    public int sign(@NotNull F32 in) {
+        return Float.compare(in.value, 0.0f);
     }
 
     @Override
-    public void move(@NotNull F32Slot src, @NotNull F32Slot dst) {
-        dst.setF32(src.getF32());
+    public void move(@NotNull F32 in, @NotNull F32 out) {
+        out.value = in.value;
     }
 
     @Override
-    public void exchange(@NotNull F32Slot first, @NotNull F32Slot second) {
-        first.setF32(second.updateF32(first.getF32()));
+    public void exchange(@NotNull F32 first, @NotNull F32 second) {
+        final float temp = first.value;
+        first.value = second.value;
+        second.value = temp;
     }
 
     @Override
-    public void negate(@NotNull F32Slot variable, @NotNull F32Slot result) {
-        result.setF32(-variable.getF32());
+    public void negate(@NotNull F32 in, @NotNull F32 out) {
+        out.value = -in.value;
     }
 
     @Override
-    public void absolute(@NotNull F32Slot variable, @NotNull F32Slot result) {
-        result.setF32(Math.abs(variable.getF32()));
+    public void absolute(@NotNull F32 in, @NotNull F32 out) {
+        out.value = Math.abs(in.value);
     }
 
     @Override
-    public boolean isInvertible(@NotNull F32Slot variable) {
-        final float value = variable.getF32();
-        return value == value && value != 0.0f;
+    public boolean isInvertible(@NotNull F32 variable) {
+        return variable.value == variable.value && variable.value != 0.0f;
     }
 
     @Override
-    public void invert(@NotNull F32Slot variable, @NotNull F32Slot result) {
-        result.setF32(1.0f / variable.getF32());
+    public void invert(@NotNull F32 in, @NotNull F32 out) {
+        out.value = 1.0f / in.value;
     }
 
     @Override
-    public void increase(@NotNull F32Slot variable, @NotNull F32Slot result) {
-        result.setF32(Math.nextUp(variable.getF32()));
+    public void increase(@NotNull F32 in, @NotNull F32 out) {
+        out.setF32(Math.nextUp(in.getF32()));
     }
 
     @Override
-    public void decrease(@NotNull F32Slot variable, @NotNull F32Slot result) {
-        result.setF32(Math.nextDown(variable.getF32()));
+    public void decrease(@NotNull F32 in, @NotNull F32 out) {
+        out.setF32(Math.nextDown(in.getF32()));
     }
 
     @Override
-    public void add(@NotNull F32Slot left, @NotNull F32Slot right, @NotNull F32Slot result) {
-        result.setF32(left.getF32() + right.getF32());
+    public void add(@NotNull F32 left, @NotNull F32 right, @NotNull F32 out) {
+        out.setF32(left.getF32() + right.getF32());
     }
 
     @Override
-    public void subtract(@NotNull F32Slot left, @NotNull F32Slot right, @NotNull F32Slot result) {
-        result.setF32(left.getF32() - right.getF32());
+    public void subtract(@NotNull F32 left, @NotNull F32 right, @NotNull F32 out) {
+        out.setF32(left.getF32() - right.getF32());
     }
 
     @Override
-    public void multiply(@NotNull F32Slot left, @NotNull F32Slot right, @NotNull F32Slot result) {
-        result.setF32(left.getF32() * right.getF32());
+    public void multiply(@NotNull F32 left, @NotNull F32 right, @NotNull F32 out) {
+        out.setF32(left.getF32() * right.getF32());
     }
 
     @Override
-    public void square(@NotNull F32Slot variable, @NotNull F32Slot result) {
-        final float value = variable.getF32();
-        result.setF32(value * value);
+    public void square(@NotNull F32 in, @NotNull F32 out) {
+        final float value = in.getF32();
+        out.setF32(value * value);
     }
 
     @Override
-    public void triangle(@NotNull F32Slot variable, @NotNull F32Slot result) {
-        final float value = variable.getF32();
-        result.setF32(0.5f * value * (value + 1.0f));
+    public void triangle(@NotNull F32 in, @NotNull F32 out) {
+        final float value = in.getF32();
+        out.setF32(0.5f * value * (value + 1.0f));
     }
 
     @Override
-    public void divide(@NotNull F32Slot left, @NotNull F32Slot right, @NotNull F32Slot result, @NotNull RoundingMode mode) {
+    public void divide(@NotNull F32 left, @NotNull F32 right, @NotNull F32 result, @NotNull RoundingMode mode) {
         result.setF32(left.getF32() / right.getF32());
     }
 
     @Override
-    public void divide(@NotNull F32Slot left, @NotNull F32Slot right, @Nullable F32Slot quotient, @Nullable F32Slot remainder) {
+    public void divide(@NotNull F32 left, @NotNull F32 right, @Nullable F32 quotient, @Nullable F32 remainder) {
         final float leftValue = left.getF32();
         final float rightValue = right.getF32();
         final float remainderValue = leftValue % rightValue;

@@ -10,38 +10,40 @@ import java.math.RoundingMode;
 @DirectSubclass({PrimitiveArithmetic.class, CompoundArithmetic.class})
 public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
 
+    private static final long serialVersionUID = 0xF6DA8D9CAA9EB68EL;
+
     protected AbstractArithmetic() {
         super();
     }
 
     @Override
-    public void two(@NotNull S result) {
+    public void two(@NotNull S out) {
         final S slot = newSlot();
         try {
             one(slot);
-            add(slot, slot, result);
+            add(slot, slot, out);
         } finally {
             releaseSlot(slot);
         }
     }
 
     @Override
-    public int sign(@NotNull S variable) {
+    public int sign(@NotNull S in) {
         final S slot = newSlot();
         try {
             zero(slot);
-            return compareSlot(variable, slot);
+            return compareSlot(in, slot);
         } finally {
             releaseSlot(slot);
         }
     }
 
     @Override
-    public void absolute(@NotNull S variable, @NotNull S result) {
-        if (sign(variable) >= 0) {
-            move(variable, result);
+    public void absolute(@NotNull S in, @NotNull S out) {
+        if (sign(in) >= 0) {
+            move(in, out);
         } else {
-            negate(variable, result);
+            negate(in, out);
         }
     }
 
@@ -56,8 +58,8 @@ public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
     }
 
     @Override
-    public void conjugateTranspose(@NotNull S variable, @NotNull S result) {
-        move(variable, result);
+    public void conjugateTranspose(@NotNull S in, @NotNull S out) {
+        move(in, out);
     }
 
     @Override
@@ -66,54 +68,59 @@ public abstract class AbstractArithmetic<S> implements Arithmetic<S> {
     }
 
     @Override
-    public void increase(@NotNull S variable, @NotNull S result) {
+    public int rank(@NotNull S in) {
+        return isInvertible(in) ? 1 : 0;
+    }
+
+    @Override
+    public void increase(@NotNull S in, @NotNull S out) {
         final S slot = newSlot();
         try {
             one(slot);
-            add(variable, slot, result);
+            add(in, slot, out);
         } finally {
             releaseSlot(slot);
         }
     }
 
     @Override
-    public void decrease(@NotNull S variable, @NotNull S result) {
+    public void decrease(@NotNull S in, @NotNull S out) {
         final S slot = newSlot();
         try {
             one(slot);
-            subtract(variable, slot, result);
+            subtract(in, slot, out);
         } finally {
             releaseSlot(slot);
         }
     }
 
     @Override
-    public void subtract(@NotNull S left, @NotNull S right, @NotNull S result) {
+    public void subtract(@NotNull S left, @NotNull S right, @NotNull S out) {
         final S slot = newSlot();
         try {
             one(slot);
             negate(right, slot);
-            add(left, slot, result);
+            add(left, slot, out);
         } finally {
             releaseSlot(slot);
         }
     }
 
     @Override
-    public void square(@NotNull S variable, @NotNull S result) {
-        multiply(variable, variable, result);
+    public void square(@NotNull S in, @NotNull S out) {
+        multiply(in, in, out);
     }
 
     @Override
-    public void triangle(@NotNull S variable, @NotNull S result) {
+    public void triangle(@NotNull S in, @NotNull S out) {
         final S increasedVariable = newSlot();
         final S product = newSlot();
         final S two = newSlot();
         try {
-            increase(variable, increasedVariable);
-            multiply(variable, increasedVariable, product);
+            increase(in, increasedVariable);
+            multiply(in, increasedVariable, product);
             two(two);
-            divide(product, two, result, RoundingMode.UNNECESSARY);
+            divide(product, two, out, RoundingMode.UNNECESSARY);
         } finally {
             releaseSlot(increasedVariable);
             releaseSlot(product);

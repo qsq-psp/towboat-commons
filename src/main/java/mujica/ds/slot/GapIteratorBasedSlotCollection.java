@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 @CodeHistory(date = "2026/7/21")
 public abstract class GapIteratorBasedSlotCollection<S, A> implements SlotCollection<S, A> {
 
-    private static final long serialVersionUID = 0x9F5A468FB48930B3L;
+    private static final long serialVersionUID = 0x9f5a468fb48930b3L;
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override

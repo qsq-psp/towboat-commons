@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 @Name(value = "序数", language = "zh")
 public class Ordinal extends IntegralAdapter {
 
-    private static final long serialVersionUID = 0x7F194AFD4E00D24DL;
+    private static final long serialVersionUID = 0x7f194afd4e00d24dL;
 
     public static final Ordinal INSTANCE = new Ordinal();
 

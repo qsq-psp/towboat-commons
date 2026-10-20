@@ -67,18 +67,18 @@ public class S32ModuloArithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public void zero(@NotNull S32 result) {
-        result.value = 0;
+    public void zero(@NotNull S32 out) {
+        out.value = 0;
     }
 
     @Override
-    public void one(@NotNull S32 result) {
-        result.value = 1;
+    public void one(@NotNull S32 out) {
+        out.value = 1;
     }
 
     @Override
-    public void two(@NotNull S32 result) {
-        result.value = 2;
+    public void two(@NotNull S32 out) {
+        out.value = 2;
     }
 
     @Override
@@ -102,18 +102,18 @@ public class S32ModuloArithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public int compareSlot(@NotNull S32 a, @NotNull S32 b) {
-        return Integer.compare(a.value, b.value);
+    public int compareSlot(@NotNull S32 left, @NotNull S32 right) {
+        return Integer.compare(left.value, right.value);
     }
 
     @Override
-    public int sign(@NotNull S32 variable) {
-        return Integer.signum(variable.value);
+    public int sign(@NotNull S32 in) {
+        return Integer.signum(in.value);
     }
 
     @Override
-    public void move(@NotNull S32 src, @NotNull S32 dst) {
-        dst.value = src.value;
+    public void move(@NotNull S32 in, @NotNull S32 out) {
+        out.value = in.value;
     }
 
     @Override
@@ -122,13 +122,13 @@ public class S32ModuloArithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public void negate(@NotNull S32 variable, @NotNull S32 result) {
-        result.value = -variable.value;
+    public void negate(@NotNull S32 in, @NotNull S32 out) {
+        out.value = -in.value;
     }
 
     @Override
-    public void absolute(@NotNull S32 variable, @NotNull S32 result) {
-        result.value = Math.abs(variable.value);
+    public void absolute(@NotNull S32 in, @NotNull S32 out) {
+        out.value = Math.abs(in.value);
     }
 
     @Override
@@ -137,50 +137,50 @@ public class S32ModuloArithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public void invert(@NotNull S32 variable, @NotNull S32 result) {
+    public void invert(@NotNull S32 in, @NotNull S32 out) {
         // todo
     }
 
     @Override
-    public void increase(@NotNull S32 variable, @NotNull S32 result) {
-        result.value = variable.value + 1;
+    public void increase(@NotNull S32 in, @NotNull S32 out) {
+        out.value = in.value + 1;
     }
 
     @Override
-    public void decrease(@NotNull S32 variable, @NotNull S32 result) {
-        result.value = variable.value - 1;
+    public void decrease(@NotNull S32 in, @NotNull S32 out) {
+        out.value = in.value - 1;
     }
 
     @Override
-    public void add(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
-        result.value = left.value + right.value;
+    public void add(@NotNull S32 left, @NotNull S32 right, @NotNull S32 out) {
+        out.value = left.value + right.value;
     }
 
     @Override
-    public void subtract(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
-        result.value = left.value - right.value;
+    public void subtract(@NotNull S32 left, @NotNull S32 right, @NotNull S32 out) {
+        out.value = left.value - right.value;
     }
 
     @Override
-    public void multiply(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
-        result.value = left.value * right.value;
+    public void multiply(@NotNull S32 left, @NotNull S32 right, @NotNull S32 out) {
+        out.value = left.value * right.value;
     }
 
     @Override
-    public void square(@NotNull S32 variable, @NotNull S32 result) {
-        result.value = variable.value * variable.value;
+    public void square(@NotNull S32 in, @NotNull S32 out) {
+        out.value = in.value * in.value;
     }
 
     @Override
-    public void triangle(@NotNull S32 variable, @NotNull S32 result) {
-        int leftValue = variable.value;
+    public void triangle(@NotNull S32 in, @NotNull S32 out) {
+        int leftValue = in.value;
         int rightValue = leftValue + 1;
         if ((leftValue & 1) == 0) {
             leftValue >>= 1;
         } else {
             rightValue >>= 1;
         }
-        result.value = leftValue * rightValue;
+        out.value = leftValue * rightValue;
     }
 
     @Override

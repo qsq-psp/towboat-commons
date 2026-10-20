@@ -46,6 +46,6 @@ public class AtomicI32SlotArrayAllocator implements SlotArrayAllocator<AtomicInt
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = i32, slotType = AtomicInteger, arrayType = AtomicIntegerArray]";
+        return "[dataType = i32, slotType = AtomicInteger, arrayType = AtomicIntegerArray]";
     }
 }

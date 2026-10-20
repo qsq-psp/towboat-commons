@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 @CodeHistory(date = "2026/5/7")
 public class UnsignedBase10Appender extends SignedBase10Appender {
 
-    private static final long serialVersionUID = 0xAA1A0277D25B2120L;
+    private static final long serialVersionUID = 0xaa1a0277d25b2120L;
 
     public static final UnsignedBase10Appender INSTANCE = new UnsignedBase10Appender();
 

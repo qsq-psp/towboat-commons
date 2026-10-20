@@ -10,7 +10,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2026/4/27")
 public class Base16Appender extends DefaultNumberAppender implements Base16Case {
 
-    private static final long serialVersionUID = 0xE3B5B7095A05C245L;
+    private static final long serialVersionUID = 0xe3b5b7095a05c245L;
 
     private static final char[] UPPER_TABLE = new char[0x10];
 

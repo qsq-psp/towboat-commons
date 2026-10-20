@@ -22,7 +22,7 @@ public class SpringTransformer implements JsonContextTransformer<Spring> {
             out.numberValue(spring.getPreferredValue());
             out.key("maximum");
             out.numberValue(spring.getMaximumValue());
-            out.key("value");
+            out.key(IIOMetadataNodeTransformer.VALUE);
             out.numberValue(spring.getValue());
         }
         out.closeObject();

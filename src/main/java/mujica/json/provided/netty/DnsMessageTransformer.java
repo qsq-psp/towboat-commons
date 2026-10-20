@@ -6,12 +6,14 @@ import io.netty.handler.codec.dns.DnsSection;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Created on 2026/7/2.
  */
+@CodeHistory(date = "2026/7/2")
 public class DnsMessageTransformer implements JsonContextTransformer<DnsMessage> {
 
     public static final DnsMessageTransformer INSTANCE = new DnsMessageTransformer();

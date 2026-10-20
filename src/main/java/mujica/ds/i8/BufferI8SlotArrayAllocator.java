@@ -48,10 +48,10 @@ public class BufferI8SlotArrayAllocator implements SlotArrayAllocator<I8Slot, By
     }
 
     @Override
-    public void exchange(@NotNull ByteBuffer buffer, int i, int j) {
-        final byte temp = buffer.get(i);
-        buffer.put(i, buffer.get(j));
-        buffer.put(j, temp);
+    public void exchange(@NotNull ByteBuffer buffer, int firstIndex, int secondIndex) {
+        final byte temp = buffer.get(firstIndex);
+        buffer.put(firstIndex, buffer.get(secondIndex));
+        buffer.put(secondIndex, temp);
     }
 
     @Override

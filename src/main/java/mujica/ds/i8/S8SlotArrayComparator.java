@@ -118,6 +118,6 @@ public class S8SlotArrayComparator implements SlotArrayComparator<S8, byte[]> {
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = s8, slotType = S8Slot, arrayType = byte[]]";
+        return "[dataType = s8, slotType = S8Slot, arrayType = byte[]]";
     }
 }

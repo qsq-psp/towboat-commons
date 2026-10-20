@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 
 @CodeHistory(date = "2026/6/16", name = "ArithmeticU64")
 @CodeHistory(date = "2026/8/8")
-public class U64Arithmetic extends PrimitiveArithmetic<I64Slot, long[]> {
+public class U64Arithmetic extends PrimitiveArithmetic<U64, long[]> {
 
     public static final U64Arithmetic INSTANCE = new U64Arithmetic();
 
@@ -19,13 +19,13 @@ public class U64Arithmetic extends PrimitiveArithmetic<I64Slot, long[]> {
 
     @NotNull
     @Override
-    public I64Slot newSlot() {
+    public U64 newSlot() {
         return new U64();
     }
 
     @NotNull
     @Override
-    public I64Slot cloneSlot(@NotNull I64Slot original) {
+    public U64 cloneSlot(@NotNull U64 original) {
         return new U64(original.getI64());
     }
 
@@ -52,139 +52,141 @@ public class U64Arithmetic extends PrimitiveArithmetic<I64Slot, long[]> {
     }
 
     @Override
-    public void load(@NotNull long[] array, int index, @NotNull I64Slot slot) {
-        slot.setI64(array[index]);
+    public void load(@NotNull long[] array, int index, @NotNull U64 slot) {
+        slot.value = array[index];
     }
 
     @Override
-    public void store(@NotNull long[] array, int index, @NotNull I64Slot slot) {
-        array[index] = slot.getI64();
+    public void store(@NotNull long[] array, int index, @NotNull U64 slot) {
+        array[index] = slot.value;
     }
 
     @Override
-    public void zero(@NotNull I64Slot result) {
-        result.setI64(0L);
+    public void zero(@NotNull U64 out) {
+        out.value = 0L;
     }
 
     @Override
-    public void one(@NotNull I64Slot result) {
-        result.setI64(1L);
+    public void one(@NotNull U64 out) {
+        out.value = 1L;
     }
 
     @Override
-    public void two(@NotNull I64Slot result) {
-        result.setI64(2L);
+    public void two(@NotNull U64 out) {
+        out.value = 2L;
     }
 
     @Override
-    public void min(@NotNull I64Slot result) {
-        result.setI64(0L);
+    public void min(@NotNull U64 result) {
+        result.value = 0L;
     }
 
     @Override
-    public void max(@NotNull I64Slot result) {
-        result.setI64(-1L);
+    public void max(@NotNull U64 result) {
+        result.value = -1L;
     }
 
     @Override
-    public void min(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
-        result.setI64(Math.min(left.getI64() + Long.MIN_VALUE, right.getI64() + Long.MIN_VALUE) - Long.MIN_VALUE);
+    public void min(@NotNull U64 left, @NotNull U64 right, @NotNull U64 result) {
+        result.value = Math.min(left.value + Long.MIN_VALUE, right.value + Long.MIN_VALUE) - Long.MIN_VALUE;
     }
 
     @Override
-    public void max(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
-        result.setI64(Math.max(left.getI64() + Long.MIN_VALUE, right.getI64() + Long.MIN_VALUE) - Long.MIN_VALUE);
+    public void max(@NotNull U64 left, @NotNull U64 right, @NotNull U64 result) {
+        result.value = Math.max(left.value + Long.MIN_VALUE, right.value + Long.MIN_VALUE) - Long.MIN_VALUE;
     }
 
     @Override
-    public int compareSlot(@NotNull I64Slot a, @NotNull I64Slot b) {
-        return Long.compareUnsigned(a.getI64(), b.getI64());
+    public int compareSlot(@NotNull U64 left, @NotNull U64 right) {
+        return Long.compareUnsigned(left.value, right.value);
     }
 
     @Override
-    public int sign(@NotNull I64Slot variable) {
-        return variable.getI64() == 0L ? 0 : 1;
+    public int sign(@NotNull U64 in) {
+        return in.value == 0L ? 0 : 1;
     }
 
     @Override
-    public void move(@NotNull I64Slot src, @NotNull I64Slot dst) {
-        dst.setI64(src.getI64());
+    public void move(@NotNull U64 in, @NotNull U64 out) {
+        out.value = in.value;
     }
 
     @Override
-    public void exchange(@NotNull I64Slot first, @NotNull I64Slot second) {
-        first.setI64(second.updateI64(first.getI64()));
+    public void exchange(@NotNull U64 first, @NotNull U64 second) {
+        final long temp = first.value;
+        first.value = second.value;
+        second.value = temp;
     }
 
     @Override
-    public void negate(@NotNull I64Slot variable, @NotNull I64Slot result) {
-        if (variable.getI64() == 0L) {
-            result.setI64(0L);
+    public void negate(@NotNull U64 in, @NotNull U64 out) {
+        if (in.value == 0L) {
+            out.value = 0L;
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void absolute(@NotNull I64Slot src, @NotNull I64Slot dst) {
+    public void absolute(@NotNull U64 in, @NotNull U64 out) {
         // same as move
-        dst.setI64(src.getI64());
+        out.value = in.value;
     }
 
     @Override
-    public boolean isInvertible(@NotNull I64Slot variable) {
+    public boolean isInvertible(@NotNull U64 variable) {
         return variable.getI64() == 1L;
     }
 
     @Override
-    public void invert(@NotNull I64Slot variable, @NotNull I64Slot result) {
-        if (variable.getI64() == 1L) {
-            result.setI64(1L);
+    public void invert(@NotNull U64 in, @NotNull U64 out) {
+        if (in.getI64() == 1L) {
+            out.setI64(1L);
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void increase(@NotNull I64Slot variable, @NotNull I64Slot result) {
-        final long value = variable.getI64();
+    public void increase(@NotNull U64 in, @NotNull U64 out) {
+        final long value = in.getI64();
         if (value == -1L) {
             throw new ArithmeticException();
         }
-        result.setI64(value + 1L);
+        out.setI64(value + 1L);
     }
 
     @Override
-    public void decrease(@NotNull I64Slot variable, @NotNull I64Slot result) {
-        final long value = variable.getI64();
+    public void decrease(@NotNull U64 in, @NotNull U64 out) {
+        final long value = in.getI64();
         if (value == 0L) {
             throw new ArithmeticException();
         }
-        result.setI64(value - 1L);
+        out.setI64(value - 1L);
     }
 
     @Override
-    public void add(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
+    public void add(@NotNull U64 left, @NotNull U64 right, @NotNull U64 out) {
         // todo
     }
 
     @Override
-    public void subtract(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
+    public void subtract(@NotNull U64 left, @NotNull U64 right, @NotNull U64 out) {
         // todo
     }
 
     @Override
-    public void multiply(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result) {
+    public void multiply(@NotNull U64 left, @NotNull U64 right, @NotNull U64 out) {
         // todo
     }
 
     @Override
-    public void divide(@NotNull I64Slot left, @NotNull I64Slot right, @NotNull I64Slot result, @NotNull RoundingMode mode) {
+    public void divide(@NotNull U64 left, @NotNull U64 right, @NotNull U64 result, @NotNull RoundingMode mode) {
         // todo
     }
 
     @Override
-    public void divide(@NotNull I64Slot left, @NotNull I64Slot right, @Nullable I64Slot quotient, @Nullable I64Slot remainder) {
+    public void divide(@NotNull U64 left, @NotNull U64 right, @Nullable U64 quotient, @Nullable U64 remainder) {
         // todo
     }
 }

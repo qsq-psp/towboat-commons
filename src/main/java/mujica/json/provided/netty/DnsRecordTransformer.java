@@ -4,11 +4,13 @@ import io.netty.handler.codec.dns.DnsRecord;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created on 2026/7/3.
  */
+@CodeHistory(date = "2026/7/3")
 public class DnsRecordTransformer implements JsonContextTransformer<DnsRecord> {
 
     public static final DnsRecordTransformer INSTANCE = new DnsRecordTransformer();

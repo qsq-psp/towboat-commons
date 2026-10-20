@@ -20,13 +20,13 @@ public class DurationTransformer implements JsonContextTransformer<Duration> {
     static final FastString NANO = new FastString("nano");
 
     @Override
-    public void transform(Duration in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(Duration duration, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(SECONDS);
-            out.numberValue(in.getSeconds());
+            out.numberValue(duration.getSeconds());
             out.key(NANO);
-            out.numberValue(in.getNano());
+            out.numberValue(duration.getNano());
         }
         out.closeObject();
     }

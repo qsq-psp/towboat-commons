@@ -10,7 +10,7 @@ import java.util.OptionalInt;
 @CodeHistory(date = "2026/1/17")
 public abstract class NavigableIntSet extends IntSet {
 
-    private static final long serialVersionUID = 0x09DAE57FDA577EDEL;
+    private static final long serialVersionUID = 0x09dae57fda577edeL;
 
     protected NavigableIntSet() {
         super();

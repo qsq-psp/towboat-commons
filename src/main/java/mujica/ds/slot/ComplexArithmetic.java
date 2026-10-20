@@ -34,43 +34,43 @@ public class ComplexArithmetic<S extends Real> extends CompoundArithmetic<Comple
     }
 
     @Override
-    public void zero(@NotNull Complex<S> result) {
-        arithmetic.zero(result.a);
-        arithmetic.zero(result.b);
+    public void zero(@NotNull Complex<S> out) {
+        arithmetic.zero(out.a);
+        arithmetic.zero(out.b);
     }
 
     @Override
-    public void one(@NotNull Complex<S> result) {
-        arithmetic.one(result.a);
-        arithmetic.zero(result.b);
+    public void one(@NotNull Complex<S> out) {
+        arithmetic.one(out.a);
+        arithmetic.zero(out.b);
     }
 
     @Override
-    public void two(@NotNull Complex<S> result) {
-        arithmetic.two(result.a);
-        arithmetic.two(result.b);
+    public void two(@NotNull Complex<S> out) {
+        arithmetic.two(out.a);
+        arithmetic.two(out.b);
     }
 
     @Override
-    public int compareSlot(@NotNull Complex<S> a, @NotNull Complex<S> b) {
+    public int compareSlot(@NotNull Complex<S> left, @NotNull Complex<S> right) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int sign(@NotNull Complex<S> variable) {
+    public int sign(@NotNull Complex<S> in) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void move(@NotNull Complex<S> src, @NotNull Complex<S> dst) {
-        arithmetic.move(src.a, dst.a);
-        arithmetic.move(src.b, dst.b);
+    public void move(@NotNull Complex<S> in, @NotNull Complex<S> out) {
+        arithmetic.move(in.a, out.a);
+        arithmetic.move(in.b, out.b);
     }
 
     @Override
-    public void negate(@NotNull Complex<S> variable, @NotNull Complex<S> result) {
-        arithmetic.negate(variable.a, result.a);
-        arithmetic.negate(variable.b, result.b);
+    public void negate(@NotNull Complex<S> in, @NotNull Complex<S> out) {
+        arithmetic.negate(in.a, out.a);
+        arithmetic.negate(in.b, out.b);
     }
 
     @Override
@@ -80,10 +80,10 @@ public class ComplexArithmetic<S extends Real> extends CompoundArithmetic<Comple
     }
 
     @Override
-    public void conjugateTranspose(@NotNull Complex<S> variable, @NotNull Complex<S> result) {
-        arithmetic.conjugateTranspose(variable.a, result.a);
-        arithmetic.conjugateTranspose(variable.b, slot4);
-        arithmetic.negate(slot4, result.b);
+    public void conjugateTranspose(@NotNull Complex<S> in, @NotNull Complex<S> out) {
+        arithmetic.conjugateTranspose(in.a, out.a);
+        arithmetic.conjugateTranspose(in.b, slot4);
+        arithmetic.negate(slot4, out.b);
     }
 
     @Override
@@ -92,59 +92,59 @@ public class ComplexArithmetic<S extends Real> extends CompoundArithmetic<Comple
     }
 
     @Override
-    public void invert(@NotNull Complex<S> variable, @NotNull Complex<S> result) {
-        arithmetic.square(variable.a, slot3);
-        arithmetic.square(variable.b, slot4);
+    public void invert(@NotNull Complex<S> in, @NotNull Complex<S> out) {
+        arithmetic.square(in.a, slot3);
+        arithmetic.square(in.b, slot4);
         arithmetic.add(slot3, slot4, slot5);
-        arithmetic.divide(variable.a, slot5, result.a, RoundingMode.UNNECESSARY);
-        arithmetic.negate(variable.b, slot4);
-        arithmetic.divide(slot4, slot5, result.b, RoundingMode.UNNECESSARY);
+        arithmetic.divide(in.a, slot5, out.a, RoundingMode.UNNECESSARY);
+        arithmetic.negate(in.b, slot4);
+        arithmetic.divide(slot4, slot5, out.b, RoundingMode.UNNECESSARY);
     }
 
     @Override
-    public void increase(@NotNull Complex<S> variable, @NotNull Complex<S> result) {
+    public void increase(@NotNull Complex<S> in, @NotNull Complex<S> out) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void decrease(@NotNull Complex<S> variable, @NotNull Complex<S> result) {
+    public void decrease(@NotNull Complex<S> in, @NotNull Complex<S> out) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(@NotNull Complex<S> left, @NotNull Complex<S> right, @NotNull Complex<S> result) {
-        arithmetic.add(left.a, right.a, result.a);
-        arithmetic.add(left.b, right.b, result.b);
+    public void add(@NotNull Complex<S> left, @NotNull Complex<S> right, @NotNull Complex<S> out) {
+        arithmetic.add(left.a, right.a, out.a);
+        arithmetic.add(left.b, right.b, out.b);
     }
 
     @Override
-    public void subtract(@NotNull Complex<S> left, @NotNull Complex<S> right, @NotNull Complex<S> result) {
-        arithmetic.subtract(left.a, right.a, result.a);
-        arithmetic.subtract(left.b, right.b, result.b);
+    public void subtract(@NotNull Complex<S> left, @NotNull Complex<S> right, @NotNull Complex<S> out) {
+        arithmetic.subtract(left.a, right.a, out.a);
+        arithmetic.subtract(left.b, right.b, out.b);
     }
 
     @Override
-    public void multiply(@NotNull Complex<S> left, @NotNull Complex<S> right, @NotNull Complex<S> result) {
+    public void multiply(@NotNull Complex<S> left, @NotNull Complex<S> right, @NotNull Complex<S> out) {
         arithmetic.multiply(left.a, right.a, slot3);
         arithmetic.multiply(left.b, right.b, slot4);
-        arithmetic.subtract(slot3, slot4, result.a);
+        arithmetic.subtract(slot3, slot4, out.a);
         arithmetic.multiply(left.a, right.b, slot3);
         arithmetic.multiply(left.b, right.a, slot4);
-        arithmetic.add(slot3, slot4, result.b);
+        arithmetic.add(slot3, slot4, out.b);
     }
 
     @Override
-    public void square(@NotNull Complex<S> variable, @NotNull Complex<S> result) {
-        arithmetic.square(variable.a, slot3);
-        arithmetic.square(variable.b, slot4);
-        arithmetic.subtract(slot3, slot4, result.a);
-        arithmetic.multiply(variable.a, variable.b, slot3);
-        arithmetic.multiply(variable.b, variable.a, slot4);
-        arithmetic.add(slot3, slot4, result.b);
+    public void square(@NotNull Complex<S> in, @NotNull Complex<S> out) {
+        arithmetic.square(in.a, slot3);
+        arithmetic.square(in.b, slot4);
+        arithmetic.subtract(slot3, slot4, out.a);
+        arithmetic.multiply(in.a, in.b, slot3);
+        arithmetic.multiply(in.b, in.a, slot4);
+        arithmetic.add(slot3, slot4, out.b);
     }
 
     @Override
-    public void triangle(@NotNull Complex<S> variable, @NotNull Complex<S> result) {
+    public void triangle(@NotNull Complex<S> in, @NotNull Complex<S> out) {
         throw new UnsupportedOperationException();
     }
 

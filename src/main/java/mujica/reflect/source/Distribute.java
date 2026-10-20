@@ -2,10 +2,7 @@ package mujica.reflect.source;
 
 import mujica.ds.bit.Bit;
 import mujica.ds.bit.BitSlot;
-import mujica.ds.bit.SlotArrayAllocatorB;
-import mujica.ds.bit.list.BitList;
-import mujica.ds.bit.list.CopyOnResizeBitList;
-import mujica.ds.slot.CopyOnResizeSlotList;
+import mujica.ds.bit.BitSlotArrayAllocator;
 import mujica.ds.slot.LinkedSlotList;
 import mujica.ds.slot.SlotCollection;
 import mujica.reflect.modifier.*;
@@ -159,7 +156,7 @@ public final class Distribute implements Runnable {
         @NotNull
         final ArrayList<Path> toDelete = new ArrayList<>();
 
-        final SlotCollection<BitSlot, ?> isDirectoryEmptyStack = new LinkedSlotList<>(SlotArrayAllocatorB.INSTANCE, Bit.BitNodeAllocator2.INSTANCE);
+        final SlotCollection<BitSlot, ?> isDirectoryEmptyStack = new LinkedSlotList<>(BitSlotArrayAllocator.INSTANCE, Bit.BitNodeAllocator2.INSTANCE);
 
         final Bit isDirectoryEmpty = new Bit();
 

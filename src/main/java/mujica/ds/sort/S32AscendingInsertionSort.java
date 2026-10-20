@@ -30,7 +30,7 @@ public class S32AscendingInsertionSort implements Sort<int[]> {
     @Override
     public long sort(@NotNull int[] array, int startIndex, int endIndex) {
         long operationCount = 0L;
-        int readIndex = startIndex;
+        int readIndex = startIndex + 1;
         while (readIndex < endIndex) {
             int key = array[readIndex];
             int writeIndex = readIndex - 1;

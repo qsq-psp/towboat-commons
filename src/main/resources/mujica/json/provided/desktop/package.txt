@@ -22,11 +22,16 @@ mujica.json.provided.desktop.GradientPaintTransformer java.awt.GradientPaint
 mujica.json.provided.desktop.GraphicsConfigurationTransformer java.awt.GraphicsConfiguration
 mujica.json.provided.desktop.GraphicsDeviceTransformer java.awt.GraphicsDevice
 mujica.json.provided.desktop.GraphicsTransformer java.awt.Graphics java.awt.Graphics2D
+mujica.json.provided.desktop.IIOMetadataNodeTransformer javax.imageio.metadata.IIOMetadataNode
+mujica.json.provided.desktop.IIOMetadataTransformer javax.imageio.metadata.IIOMetadata
+mujica.json.provided.desktop.ImageCapabilitiesTransformer java.awt.ImageCapabilities
 mujica.json.provided.desktop.InputEventTransformer java.awt.event.InputEvent
 mujica.json.provided.desktop.InsetsTransformer java.awt.Insets javax.swing.plaf.InsetsUIResource
 mujica.json.provided.desktop.KernelTransformer java.awt.image.Kernel
 mujica.json.provided.desktop.KeyEventTransformer java.awt.event.KeyEvent
 mujica.json.provided.desktop.KeyStrokeTransformer javax.swing.KeyStroke
+mujica.json.provided.desktop.LineMetricsTransformer java.awt.font.LineMetrics
+mujica.json.provided.desktop.ListDataEventTransformer javax.swing.event.ListDataEvent
 mujica.json.provided.desktop.MidiChannelTransformer javax.sound.midi.MidiChannel
 mujica.json.provided.desktop.MidiDeviceTransformer javax.sound.midi.MidiDevice
 mujica.json.provided.desktop.MouseEventTransformer java.awt.event.MouseEvent java.awt.event.MouseWheelEvent
@@ -40,5 +45,8 @@ mujica.json.provided.desktop.SoundbankTransformer javax.sound.midi.Soundbank
 mujica.json.provided.desktop.SpringTransformer javax.swing.Spring
 mujica.json.provided.desktop.SynthesizerTransformer javax.sound.midi.Synthesizer com.sun.media.sound.AudioSynthesizer com.sun.media.sound.SoftSynthesizer
 mujica.json.provided.desktop.ToolkitTransformer java.awt.Toolkit sun.awt.SunToolkit sun.awt.HeadlessToolkit sun.awt.windows.WToolkit
+mujica.json.provided.desktop.TransferableTransformer java.awt.datatransfer.Transferable
+mujica.json.provided.desktop.TrayIconTransformer java.awt.TrayIcon
 mujica.json.provided.desktop.UIDefaultsTransformer javax.swing.UIDefaults
+mujica.json.provided.desktop.UndoableEditTransformer javax.swing.undo.UndoableEdit
 mujica.json.provided.desktop.VoiceStatusTransformer javax.sound.midi.VoiceStatus com.sun.media.sound.SoftVoice

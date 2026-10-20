@@ -31,7 +31,7 @@ class NopFrame extends JsonHandler { // frames are short-lived small objects
 
         ARRAY, OBJECT;
 
-        private static final long serialVersionUID = 0x96632A2729DFE59BL;
+        private static final long serialVersionUID = 0x96632a2729dfe59bL;
     }
 
     StructureShape shape;

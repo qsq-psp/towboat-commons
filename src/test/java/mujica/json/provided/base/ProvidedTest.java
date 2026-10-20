@@ -108,6 +108,11 @@ public class ProvidedTest {
     }
 
     @Test
+    public void caseCurrency() throws IOException {
+        caseObject(CurrencyTransformer.INSTANCE);
+    }
+
+    @Test
     public void caseDecimalFormat() throws IOException {
         caseObject(new DecimalFormat("##0.##E0"));
     }

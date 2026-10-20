@@ -1,8 +1,8 @@
 package mujica.io.fs.stat;
 
-/**
- * Created on 2026/5/5.
- */
+import mujica.reflect.modifier.CodeHistory;
+
+@CodeHistory(date = "2026/5/5")
 class ArchiveInfo extends TypedFileInfo {
 
     private int itemCount;

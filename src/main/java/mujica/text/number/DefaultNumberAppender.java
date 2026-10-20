@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.*;
 @CodeHistory(date = "2026/4/16")
 public class DefaultNumberAppender implements IntegralAppender, DecimalAppender {
 
-    private static final long serialVersionUID = 0xC95C30F85F93964BL;
+    private static final long serialVersionUID = 0xc95c30f85f93964bL;
 
     public static final DefaultNumberAppender INSTANCE = new DefaultNumberAppender();
 

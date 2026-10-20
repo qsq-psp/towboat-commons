@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 @Name(value = "左偏树", language = "zh")
 public class LeftListSlotTree<S, A, N extends S> extends SlotTree2<S, A, N> {
 
-    private static final long serialVersionUID = 0xF90573CB1382C780L;
+    private static final long serialVersionUID = 0xf90573cb1382c780L;
 
     public LeftListSlotTree(@NotNull SlotArrayComparator<S, A> comparator, @NotNull NodeAllocator2<N> nodeAllocator) {
         super(comparator, nodeAllocator);

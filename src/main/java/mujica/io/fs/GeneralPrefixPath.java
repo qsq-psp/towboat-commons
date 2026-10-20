@@ -149,12 +149,12 @@ public abstract class GeneralPrefixPath<P extends GeneralPrefixPath<P>> implemen
 
     @NotNull
     @Override
-    public Path toRealPath(@NotNull LinkOption... options) throws IOException {
-        return null;
+    public Path toRealPath(@NotNull LinkOption... options) {
+        return this;
     }
 
     @Override
-    public WatchKey register(WatchService watcher, WatchEvent.Kind<?>[] events, WatchEvent.Modifier... modifiers) throws IOException {
+    public WatchKey register(@NotNull WatchService watcher, WatchEvent.Kind<?>[] events, WatchEvent.Modifier... modifiers) throws IOException {
         return null;
     }
 

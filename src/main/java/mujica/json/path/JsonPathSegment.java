@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/4/4")
 public abstract class JsonPathSegment implements JsonPath {
 
-    private static final long serialVersionUID = 0x366D0A83001BB5BBL;
+    private static final long serialVersionUID = 0x366d0a83001bb5bbL;
 
     @Override
     public int length() {

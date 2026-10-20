@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 @DirectSubclass({SlicedCharSequence.class, CharReversedCharSequence.class, CodePointReversedCharSequence.class})
 public abstract class FilteredCharSequence extends TowboatCharSequence {
 
-    private static final long serialVersionUID = 0x0F6535B784955850L;
+    private static final long serialVersionUID = 0x0f6535b784955850L;
 
     @NotNull
     protected final CharSequence original;

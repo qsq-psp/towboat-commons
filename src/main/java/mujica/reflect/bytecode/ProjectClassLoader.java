@@ -2,7 +2,6 @@ package mujica.reflect.bytecode;
 
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;

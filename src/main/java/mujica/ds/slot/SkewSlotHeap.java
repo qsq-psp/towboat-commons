@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 @Name(value = "斜堆", language = "zh")
 public class SkewSlotHeap<S, A, N extends S> extends SlotTree2<S, A, N> {
 
-    private static final long serialVersionUID = 0xE1387A097306033CL;
+    private static final long serialVersionUID = 0xe1387a097306033cL;
 
     public SkewSlotHeap(@NotNull SlotArrayComparator<S, A> comparator, @NotNull NodeAllocator2<N> nodeAllocator) {
         super(comparator, nodeAllocator);

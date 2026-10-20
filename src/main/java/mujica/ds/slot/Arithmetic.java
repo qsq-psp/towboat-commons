@@ -17,24 +17,24 @@ public interface Arithmetic<S> extends SlotAllocator<S> {
     S newSlot();
 
     @Name(value = "零元", language = "zh")
-    void zero(@NotNull S result);
+    void zero(@NotNull S out);
 
     @Name(value = "幺元", language = "zh")
-    void one(@NotNull S result);
+    void one(@NotNull S out);
 
-    void two(@NotNull S result);
+    void two(@NotNull S out);
 
-    int compareSlot(@NotNull S a, @NotNull S b);
+    int compareSlot(@NotNull S left, @NotNull S right);
 
-    int sign(@NotNull S variable);
+    int sign(@NotNull S in);
 
     @Override
-    void move(@NotNull S src, @NotNull S dst);
+    void move(@NotNull S in, @NotNull S out);
 
-    void negate(@NotNull S variable, @NotNull S result);
+    void negate(@NotNull S in, @NotNull S out);
 
     @Name(value = "绝对值", language = "zh")
-    void absolute(@NotNull S variable, @NotNull S result);
+    void absolute(@NotNull S in, @NotNull S out);
 
     @Name(value = "共轭", language = "zh")
     void conjugate(@NotNull S variable, @NotNull S result);
@@ -43,28 +43,38 @@ public interface Arithmetic<S> extends SlotAllocator<S> {
     void transpose(@NotNull S variable, @NotNull S result);
 
     @Name(value = "共轭转置", language = "zh")
-    void conjugateTranspose(@NotNull S variable, @NotNull S result);
+    void conjugateTranspose(@NotNull S in, @NotNull S out);
 
     @Name(value = "可逆", language = "zh")
     boolean isInvertible(@NotNull S variable);
 
-    void invert(@NotNull S variable, @NotNull S result);
+    @Name(value = "乘法逆元", language = "zh")
+    void invert(@NotNull S in, @NotNull S out);
 
-    void increase(@NotNull S variable, @NotNull S result);
+    @Name(value = "秩", language = "zh")
+    int rank(@NotNull S in);
 
-    void decrease(@NotNull S variable, @NotNull S result);
+    /**
+     * in < out and do not exist a number mid where in < mid < out, if out do not exist, an Exception is thrown
+     */
+    void increase(@NotNull S in, @NotNull S out);
 
-    void add(@NotNull S left, @NotNull S right, @NotNull S result);
+    /**
+     * out < in and do not exist a number mid where out < mid < in, if out do not exist, an Exception is thrown
+     */
+    void decrease(@NotNull S in, @NotNull S out);
 
-    void subtract(@NotNull S left, @NotNull S right, @NotNull S result);
+    void add(@NotNull S left, @NotNull S right, @NotNull S out);
 
-    void multiply(@NotNull S left, @NotNull S right, @NotNull S result);
+    void subtract(@NotNull S left, @NotNull S right, @NotNull S out);
+
+    void multiply(@NotNull S left, @NotNull S right, @NotNull S out);
 
     @Name(value = "平方", language = "zh")
-    void square(@NotNull S variable, @NotNull S result);
+    void square(@NotNull S in, @NotNull S out);
 
     @Name(value = "三角数列", language = "zh")
-    void triangle(@NotNull S variable, @NotNull S result);
+    void triangle(@NotNull S in, @NotNull S out);
 
     void divide(@NotNull S left, @NotNull S right, @NotNull S result, @NotNull RoundingMode mode);
 

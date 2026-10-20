@@ -13,7 +13,7 @@ import java.util.function.LongSupplier;
 @CodeHistory(date = "2025/4/27")
 public class GeneralLongSizedCRC extends EachBitStreamHash implements LongSupplier, Serializable {
 
-    private static final long serialVersionUID = 0xFA1BF111EB5AB0B9L;
+    private static final long serialVersionUID = 0xfa1bf111eb5ab0b9L;
 
     @NotNull
     public final CrcSpec spec;

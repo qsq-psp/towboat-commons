@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/3/15")
 public class ArrayRepeatCharSequence extends TowboatCharSequence {
 
-    private static final long serialVersionUID = 0xAF12376993E2D7E5L;
+    private static final long serialVersionUID = 0xaf12376993e2d7e5L;
 
     @NotNull
     private final char[] array;

@@ -8,7 +8,7 @@ import java.io.Serializable;
 @CodeHistory(date = "2026/2/21")
 public abstract class BracketNode implements Comparable<BracketNode>, Serializable {
 
-    private static final long serialVersionUID = 0x184582CD8E3353D6L;
+    private static final long serialVersionUID = 0x184582cd8e3353d6L;
 
     public abstract int pairCount();
 

@@ -24,75 +24,75 @@ public class DerivativeArithmetic<S extends Real> extends CompoundArithmetic<Der
     }
 
     @Override
-    public void zero(@NotNull Derivative<S> result) {
-        arithmetic.zero(result.x);
-        arithmetic.zero(result.d);
+    public void zero(@NotNull Derivative<S> out) {
+        arithmetic.zero(out.x);
+        arithmetic.zero(out.d);
     }
 
     @Override
-    public void one(@NotNull Derivative<S> result) {
-        arithmetic.one(result.x);
-        arithmetic.zero(result.d);
+    public void one(@NotNull Derivative<S> out) {
+        arithmetic.one(out.x);
+        arithmetic.zero(out.d);
     }
 
     @Override
-    public void two(@NotNull Derivative<S> result) {
-        arithmetic.two(result.x);
-        arithmetic.two(result.d);
+    public void two(@NotNull Derivative<S> out) {
+        arithmetic.two(out.x);
+        arithmetic.two(out.d);
     }
 
     @Override
-    public int compareSlot(@NotNull Derivative<S> a, @NotNull Derivative<S> b) {
-        return arithmetic.compareSlot(a.x, b.x);
+    public int compareSlot(@NotNull Derivative<S> left, @NotNull Derivative<S> right) {
+        return arithmetic.compareSlot(left.x, right.x);
     }
 
     @Override
-    public int sign(@NotNull Derivative<S> variable) {
-        return arithmetic.sign(variable.x);
+    public int sign(@NotNull Derivative<S> in) {
+        return arithmetic.sign(in.x);
     }
 
     @Override
-    public void move(@NotNull Derivative<S> src, @NotNull Derivative<S> dst) {
-        arithmetic.move(src.x, dst.x);
-        arithmetic.move(src.d, dst.d);
+    public void move(@NotNull Derivative<S> in, @NotNull Derivative<S> out) {
+        arithmetic.move(in.x, out.x);
+        arithmetic.move(in.d, out.d);
     }
 
     @Override
-    public void negate(@NotNull Derivative<S> variable, @NotNull Derivative<S> result) {
-        arithmetic.negate(variable.x, result.x);
-        arithmetic.negate(variable.d, result.d);
+    public void negate(@NotNull Derivative<S> in, @NotNull Derivative<S> out) {
+        arithmetic.negate(in.x, out.x);
+        arithmetic.negate(in.d, out.d);
     }
 
     @Override
-    public void invert(@NotNull Derivative<S> variable, @NotNull Derivative<S> result) {
+    public void invert(@NotNull Derivative<S> in, @NotNull Derivative<S> out) {
 
     }
 
     @Override
-    public void increase(@NotNull Derivative<S> variable, @NotNull Derivative<S> result) {
+    public void increase(@NotNull Derivative<S> in, @NotNull Derivative<S> out) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void decrease(@NotNull Derivative<S> variable, @NotNull Derivative<S> result) {
+    public void decrease(@NotNull Derivative<S> in, @NotNull Derivative<S> out) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(@NotNull Derivative<S> left, @NotNull Derivative<S> right, @NotNull Derivative<S> result) {
-        arithmetic.add(left.x, right.x, result.x);
-        arithmetic.add(left.d, right.d, result.d);
+    public void add(@NotNull Derivative<S> left, @NotNull Derivative<S> right, @NotNull Derivative<S> out) {
+        arithmetic.add(left.x, right.x, out.x);
+        arithmetic.add(left.d, right.d, out.d);
     }
 
     @Override
-    public void subtract(@NotNull Derivative<S> left, @NotNull Derivative<S> right, @NotNull Derivative<S> result) {
-        arithmetic.subtract(left.x, right.x, result.x);
-        arithmetic.subtract(left.d, right.d, result.d);
+    public void subtract(@NotNull Derivative<S> left, @NotNull Derivative<S> right, @NotNull Derivative<S> out) {
+        arithmetic.subtract(left.x, right.x, out.x);
+        arithmetic.subtract(left.d, right.d, out.d);
     }
 
     @Override
-    public void multiply(@NotNull Derivative<S> left, @NotNull Derivative<S> right, @NotNull Derivative<S> result) {
-        arithmetic.multiply(left.x, right.x, result.x);
+    public void multiply(@NotNull Derivative<S> left, @NotNull Derivative<S> right, @NotNull Derivative<S> out) {
+        arithmetic.multiply(left.x, right.x, out.x);
     }
 
     @Override

@@ -46,6 +46,6 @@ public class AtomicI64SlotArrayAllocator implements SlotArrayAllocator<AtomicLon
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = i64, slotType = AtomicLong, arrayType = AtomicLongArray]";
+        return "[dataType = i64, slotType = AtomicLong, arrayType = AtomicLongArray]";
     }
 }

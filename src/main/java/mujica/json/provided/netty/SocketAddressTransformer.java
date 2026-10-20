@@ -11,9 +11,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.*;
 
-/**
- * Created on 2026/6/9.
- */
 @CodeHistory(date = "2026/6/9")
 public class SocketAddressTransformer implements JsonContextTransformer<SocketAddress> {
 
@@ -24,23 +21,29 @@ public class SocketAddressTransformer implements JsonContextTransformer<SocketAd
         jh.openObject();
         if (socketAddress instanceof InetSocketAddress) {
             InetSocketAddress inetSocketAddress = (InetSocketAddress) socketAddress;
-            InetAddress inetAddress = inetSocketAddress.getAddress();
-            jh.key("type");
-            if (inetAddress instanceof Inet4Address) {
-                jh.stringValue("inet4");
-            } else if (inetAddress instanceof Inet6Address) {
-                jh.stringValue("inet6");
-            } else {
-                jh.stringValue("inet");
+            {
+                InetAddress inetAddress = inetSocketAddress.getAddress();
+                jh.key("type");
+                if (inetAddress instanceof Inet4Address) {
+                    jh.stringValue("inet4");
+                } else if (inetAddress instanceof Inet6Address) {
+                    jh.stringValue("inet6");
+                } else {
+                    jh.stringValue("inet");
+                }
+                jh.key("address");
+                jh.stringValue(inetAddress.toString());
             }
-            jh.key("port");
-            jh.numberValue(inetSocketAddress.getPort());
-            jh.key("address");
-            jh.stringValue(inetAddress.toString());
-            String name = inetSocketAddress.getHostName();
-            if (name != null) {
-                jh.key("name");
-                jh.stringValue(name);
+            {
+                jh.key("port");
+                jh.numberValue(inetSocketAddress.getPort());
+            }
+            {
+                String name = inetSocketAddress.getHostName();
+                if (name != null) {
+                    jh.key("name");
+                    jh.stringValue(name);
+                }
             }
         } else if (socketAddress instanceof DomainSocketAddress) {
             jh.key("type");

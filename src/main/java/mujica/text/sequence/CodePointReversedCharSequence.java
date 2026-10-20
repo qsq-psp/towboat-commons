@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/1/9")
 public class CodePointReversedCharSequence extends FilteredCharSequence {
 
-    private static final long serialVersionUID = 0x49570B66ADD19DFAL;
+    private static final long serialVersionUID = 0x49570b66add19dfaL;
 
     public CodePointReversedCharSequence(@NotNull CharSequence original) {
         super(original);

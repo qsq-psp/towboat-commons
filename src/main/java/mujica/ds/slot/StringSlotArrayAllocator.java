@@ -4,6 +4,8 @@ import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.ToIntFunction;
+
 @CodeHistory(date = "2026/7/29")
 public class StringSlotArrayAllocator implements SlotArrayComparator<StringSlot, String[]> {
 
@@ -72,7 +74,7 @@ public class StringSlotArrayAllocator implements SlotArrayComparator<StringSlot,
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = String, slotType = StringSlot, arrayType = String[]]";
+        return "[dataType = String, slotType = StringSlot, arrayType = String[]]";
     }
 
     @CodeHistory(date = "2026/7/29")
@@ -81,9 +83,17 @@ public class StringSlotArrayAllocator implements SlotArrayComparator<StringSlot,
         @NotNull
         final CapacityPolicy capacityPolicy;
 
-        public StringWithHash(@NotNull CapacityPolicy capacityPolicy) {
+        @NotNull
+        final ToIntFunction<? super String> hashFunction;
+
+        public StringWithHash(@NotNull CapacityPolicy capacityPolicy, @NotNull ToIntFunction<String> hashFunction) {
             super();
             this.capacityPolicy = capacityPolicy;
+            this.hashFunction = hashFunction;
+        }
+
+        public StringWithHash(@NotNull CapacityPolicy capacityPolicy) {
+            this(capacityPolicy, String::hashCode);
         }
 
         @NotNull
@@ -105,7 +115,7 @@ public class StringSlotArrayAllocator implements SlotArrayComparator<StringSlot,
         @Override
         @NotNull
         public String toString() {
-            return "SlotTool[dataType = String, slotType = StringSlot, arrayType = String[], capacityPolicy = " + capacityPolicy + "]";
+            return "[dataType = String, slotType = StringSlot, arrayType = String[], capacityPolicy = " + capacityPolicy + "]";
         }
     }
 }

@@ -12,6 +12,8 @@ import java.awt.*;
 @CodeHistory(date = "2026/6/30")
 public class ImageCapabilitiesTransformer implements JsonContextTransformer<ImageCapabilities> {
 
+    public static final ImageCapabilitiesTransformer INSTANCE = new ImageCapabilitiesTransformer();
+
     @Override
     public void transform(@NotNull ImageCapabilities imageCapabilities, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();

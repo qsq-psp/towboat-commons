@@ -18,6 +18,9 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.text.DateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -587,6 +590,72 @@ public class AppenderToStringBuilder implements Function<Object, String>, BiCons
         final AppenderToStringBuilder instance = new AppenderToStringBuilder();
         instance.config().use(instance.newArrayStyle(), Object.class);
         return instance;
+    }
+
+    @CodeHistory(date = "2026/3/18")
+    @CodeHistory(date = "2026/8/15", project = "coo")
+    @CodeHistory(date = "2026/9/11")
+    public class LoggerInvocationHandler implements InvocationHandler {
+
+        @NotNull
+        final StringBuilder sb = new StringBuilder();
+
+        @NotNull
+        final Logger logger;
+
+        @NotNull
+        final String id;
+
+        @Nullable
+        final Object target;
+
+        public LoggerInvocationHandler(@NotNull Logger logger, @Nullable String id, @Nullable Object target) {
+            super();
+            this.logger = logger;
+            if (id == null) {
+                if (target == null) {
+                    id = "";
+                } else {
+                    id = target.getClass().getName();
+                }
+            }
+            this.id = id;
+            this.target = target;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if (logger.isInfoEnabled()) {
+                sb.delete(0, sb.length());
+                accept(args, sb);
+                String argsString = sb.toString();
+                if (target != null) {
+                    try {
+                        Object returnValue = method.invoke(target, args);
+                        if (method.getReturnType() == void.class) {
+                            logger.info("{}.{}{}", id, method.getName(), argsString);
+                        } else {
+                            sb.delete(0, sb.length());
+                            accept(returnValue, sb);
+                            logger.info("{}.{}{} = {}", id, method.getName(), argsString, sb.toString());
+                        }
+                        return returnValue;
+                    } catch (Throwable t) {
+                        logger.info("{}.{}{} throws {}", id, method.getName(), argsString, t.getClass().getSimpleName(), t);
+                        throw t;
+                    }
+                } else {
+                    logger.info("{}.{}{}", id, method.getName(), argsString);
+                }
+            } else if (target != null) {
+                return method.invoke(target, args);
+            }
+            return null;
+        }
+    }
+
+    public Object newLogProxyInstance(@NotNull Logger logger, @NotNull String id, @Nullable ClassLoader classLoader, @NotNull Class<?>... interfaces) {
+        return Proxy.newProxyInstance(classLoader, interfaces, new LoggerInvocationHandler(logger, id, null));
     }
 
     @CodeHistory(date = "2026/3/8")

@@ -36,16 +36,32 @@ public abstract class ExtensionFileTypeDetector extends FileTypeDetector {
     @CodeHistory(date = "2026/3/14")
     public static class Cached extends ExtensionFileTypeDetector {
 
-        private WeakReference<FullMap> fullMap;
+        private transient WeakReference<FullMap> fullMap;
 
         public Cached() {
             super();
         }
 
+        @NotNull
+        public FullMap getMap() {
+            WeakReference<FullMap> outerMap = fullMap;
+            FullMap innerMap;
+            if (outerMap != null) {
+                innerMap = outerMap.get();
+                if (innerMap != null) {
+                    return innerMap;
+                }
+            }
+            innerMap = new FullMap();
+            outerMap = new WeakReference<>(innerMap);
+            fullMap = outerMap;
+            return innerMap;
+        }
+
         @Nullable
         @Override
         public String getContentType(@NotNull String extension) {
-            return null;
+            return getMap().getContentType(extension);
         }
     }
 

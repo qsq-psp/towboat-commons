@@ -28,7 +28,7 @@ public class AdjustableTransformer implements JsonContextTransformer<Adjustable>
             out.numberValue(adjustable.getBlockIncrement());
             out.key("visible");
             out.numberValue(adjustable.getVisibleAmount());
-            out.key("value");
+            out.key(IIOMetadataNodeTransformer.VALUE);
             out.numberValue(adjustable.getValue());
         }
         out.closeObject();

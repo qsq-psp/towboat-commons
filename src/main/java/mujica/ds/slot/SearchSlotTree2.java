@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 @Name(value = "二叉搜索树", language = "zh")
 public class SearchSlotTree2<S, A, N extends S> extends SlotTree2<S, A, N> {
 
-    private static final long serialVersionUID = 0x4330FCAE5F8942EAL;
+    private static final long serialVersionUID = 0x4330fcae5f8942eaL;
 
     public SearchSlotTree2(@NotNull SlotArrayComparator<S, A> comparator, @NotNull NodeAllocator2<N> nodeAllocator) {
         super(comparator, nodeAllocator);

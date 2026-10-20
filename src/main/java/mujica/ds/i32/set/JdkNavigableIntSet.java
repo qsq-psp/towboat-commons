@@ -15,7 +15,7 @@ import java.util.function.IntPredicate;
 @CodeHistory(date = "2026/1/18")
 public class JdkNavigableIntSet extends NavigableIntSet {
 
-    private static final long serialVersionUID = 0x25E91AE0E8513718L;
+    private static final long serialVersionUID = 0x25e91ae0e8513718L;
 
     @NotNull
     final NavigableSet<Integer> set;

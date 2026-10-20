@@ -173,6 +173,28 @@ public final class Directories {
         // todo
     }
 
+    public static void delete(@NotNull Path path) throws IOException {
+        if (Files.isDirectory(path)) {
+            clearDirectory(path);
+        }
+        Files.delete(path);
+    }
+
+    public static void deleteIfExists(@NotNull Path path) throws IOException {
+        if (Files.isDirectory(path)) { // exists and is directory
+            clearDirectory(path);
+        }
+        Files.deleteIfExists(path);
+    }
+
+    public static void move(@NotNull Path src, @NotNull Path dst, @NotNull DirectoryStream.Filter<Path> filter, CopyOption... options) throws IOException {
+        // todo
+    }
+
+    public static void copy(@NotNull Path src, @NotNull Path dst, @NotNull DirectoryStream.Filter<Path> filter, CopyOption... options) throws IOException {
+        // todo
+    }
+
     @NotNull
     public static List<Path> directoryAsList(@NotNull Path path) throws IOException {
         final List<Path> list = new ArrayList<>();

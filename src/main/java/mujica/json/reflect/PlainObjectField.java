@@ -79,7 +79,7 @@ abstract class PlainObjectField implements Serializable {
     @CodeHistory(date = "2026/4/3")
     static class StringNamed extends PlainObjectField {
 
-        private static final long serialVersionUID = 0x96974058A092C2EDL;
+        private static final long serialVersionUID = 0x96974058a092c2edL;
 
         @NotNull
         final String stringName;
@@ -104,7 +104,7 @@ abstract class PlainObjectField implements Serializable {
     @CodeHistory(date = "2026/4/3")
     static class FastNamed extends PlainObjectField {
 
-        private static final long serialVersionUID = 0x9E5702A3CA0288E2L;
+        private static final long serialVersionUID = 0x9e5702a3ca0288e2L;
 
         @NotNull
         final FastString fastName;

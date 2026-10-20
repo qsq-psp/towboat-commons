@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2026/3/16")
 public class IntSetAsBitList extends AbstractBitList {
 
-    private static final long serialVersionUID = 0x6112F206434BB066L;
+    private static final long serialVersionUID = 0x6112f206434bb066L;
 
     @NotNull
     IntSet intSet;

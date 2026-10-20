@@ -8,7 +8,7 @@ import java.io.Serializable;
 @CodeHistory(date = "2026/8/14")
 public class VoidSlot implements Serializable {
 
-    private static final long serialVersionUID = 0x483A9EFD70C577D5L;
+    private static final long serialVersionUID = 0x483a9efd70c577d5L;
 
     public static final VoidSlot INSTANCE = new VoidSlot();
 

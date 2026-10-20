@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/7/16")
 public class IndexedI32ForTest extends I32 {
 
-    private static final long serialVersionUID = 0x797C68F73DF9E2BDL;
+    private static final long serialVersionUID = 0x797c68f73df9e2bdL;
 
     int index;
 

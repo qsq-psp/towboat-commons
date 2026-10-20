@@ -16,53 +16,53 @@ public class Base2IntegerArithmetic<S extends Base2Integer> extends AbstractArit
     }
 
     @Override
-    public void zero(@NotNull S result) {
-        final Base2Iterator iterator = result.magnitude();
+    public void zero(@NotNull S out) {
+        final Base2Iterator iterator = out.magnitude();
         while (iterator.next()) {
             iterator.setBit(false);
         }
-        result.signBit().setBit(false);
+        out.signBit().setBit(false);
     }
 
     @Override
-    public void one(@NotNull S result) {
-        final Base2Iterator iterator = result.magnitude();
+    public void one(@NotNull S out) {
+        final Base2Iterator iterator = out.magnitude();
         if (iterator.next()) {
             iterator.setBit(true);
         }
         while (iterator.next()) {
             iterator.setBit(false);
         }
-        result.signBit().setBit(false);
+        out.signBit().setBit(false);
     }
 
     @Override
-    public int compareSlot(@NotNull S a, @NotNull S b) {
+    public int compareSlot(@NotNull S left, @NotNull S right) {
         return 0;
     }
 
     @Override
-    public void move(@NotNull S src, @NotNull S dst) {
+    public void move(@NotNull S in, @NotNull S out) {
 
     }
 
     @Override
-    public void negate(@NotNull S variable, @NotNull S result) {
+    public void negate(@NotNull S in, @NotNull S out) {
 
     }
 
     @Override
-    public void invert(@NotNull S variable, @NotNull S result) {
+    public void invert(@NotNull S in, @NotNull S out) {
 
     }
 
     @Override
-    public void add(@NotNull S left, @NotNull S right, @NotNull S result) {
+    public void add(@NotNull S left, @NotNull S right, @NotNull S out) {
 
     }
 
     @Override
-    public void multiply(@NotNull S left, @NotNull S right, @NotNull S result) {
+    public void multiply(@NotNull S left, @NotNull S right, @NotNull S out) {
 
     }
 

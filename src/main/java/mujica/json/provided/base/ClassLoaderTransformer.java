@@ -22,6 +22,10 @@ public class ClassLoaderTransformer implements JsonContextTransformer<ClassLoade
 
     static final FastString PARENT = new FastString("parent");
 
+    static final FastString UNNAMED_MODULE = new FastString("unnamedModule");
+
+    static final FastString PACKAGES = new FastString("packages");
+
     @Override
     public void transform(@NotNull ClassLoader classLoader, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
@@ -30,16 +34,33 @@ public class ClassLoaderTransformer implements JsonContextTransformer<ClassLoade
             out.stringValue(classLoader.getClass().getName());
             out.key(PARALLEL);
             out.booleanValue(classLoader.isRegisteredAsParallelCapable());
+        }
+        {
             String name = classLoader.getName();
             if (name != null) {
                 out.key(NAME);
                 out.stringValue(name);
             }
+        }
+        {
             ClassLoader parent = classLoader.getParent();
             if (parent != null) {
                 out.key(PARENT);
                 transform(parent, out, context);
             }
+        }
+        {
+            out.key(UNNAMED_MODULE);
+            ModuleTransformer.INSTANCE.transform(classLoader.getUnnamedModule(), out, context); // too long; consider remove it
+        }
+        {
+            Package[] packages = classLoader.getDefinedPackages();
+            out.key(PACKAGES);
+            out.openArray();
+            for (Package item : packages) {
+                PackageTransformer.INSTANCE.transform(item, out, context);
+            }
+            out.closeArray();
         }
         out.closeObject();
     }

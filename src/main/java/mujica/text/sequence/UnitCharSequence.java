@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/3/7")
 public class UnitCharSequence extends TowboatCharSequence {
 
-    private static final long serialVersionUID = 0x8ABBFFDCB78EB24CL;
+    private static final long serialVersionUID = 0x8abbffdcb78eb24cL;
 
     public char ch;
 

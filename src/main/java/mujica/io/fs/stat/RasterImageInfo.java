@@ -1,8 +1,8 @@
 package mujica.io.fs.stat;
 
-/**
- * Created on 2026/4/20.
- */
+import mujica.reflect.modifier.CodeHistory;
+
+@CodeHistory(date = "2026/4/20")
 class RasterImageInfo extends TypedFileInfo {
 
     private int width = -1;

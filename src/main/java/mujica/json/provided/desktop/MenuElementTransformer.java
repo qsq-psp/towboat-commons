@@ -5,6 +5,7 @@ import mujica.json.modifier.JsonEmpty;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.json.reflect.ReflectConfig;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -13,7 +14,10 @@ import java.awt.*;
 /**
  * Created on 2026/9/4.
  */
+@CodeHistory(date = "2026/9/4")
 public class MenuElementTransformer implements JsonContextTransformer<MenuElement> {
+
+    public static final MenuElementTransformer INSTANCE = new MenuElementTransformer();
 
     @Override
     public void transform(MenuElement in, @NotNull JsonHandler out, JsonContext context) {

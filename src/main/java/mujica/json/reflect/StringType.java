@@ -18,7 +18,7 @@ import java.math.BigInteger;
 @CodeHistory(date = "2026/4/16")
 class StringType extends VoidType {
 
-    private static final long serialVersionUID = 0x00346E309F63DB4FL;
+    private static final long serialVersionUID = 0x00346e309f63db4fL;
 
     int maxLength = Integer.MAX_VALUE;
 

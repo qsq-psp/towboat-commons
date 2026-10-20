@@ -10,7 +10,7 @@ import java.util.*;
 @CodeHistory(date = "2026/1/24")
 public class ConcatList<E> extends AbstractList<E> implements Serializable {
 
-    private static final long serialVersionUID = 0xE74F4D31FFED0C4EL;
+    private static final long serialVersionUID = 0xe74f4d31ffed0c4eL;
 
     @NotNull
     final List<List<E>> segments;

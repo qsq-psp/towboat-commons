@@ -68,18 +68,18 @@ public class S32ClampedArithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public void zero(@NotNull S32 result) {
-        result.value = 0;
+    public void zero(@NotNull S32 out) {
+        out.value = 0;
     }
 
     @Override
-    public void one(@NotNull S32 result) {
-        result.value = 1;
+    public void one(@NotNull S32 out) {
+        out.value = 1;
     }
 
     @Override
-    public void two(@NotNull S32 result) {
-        result.value = 2;
+    public void two(@NotNull S32 out) {
+        out.value = 2;
     }
 
     @Override
@@ -103,18 +103,18 @@ public class S32ClampedArithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public int compareSlot(@NotNull S32 a, @NotNull S32 b) {
-        return Integer.compare(a.value, b.value);
+    public int compareSlot(@NotNull S32 left, @NotNull S32 right) {
+        return Integer.compare(left.value, right.value);
     }
 
     @Override
-    public int sign(@NotNull S32 variable) {
-        return Integer.signum(variable.value);
+    public int sign(@NotNull S32 in) {
+        return Integer.signum(in.value);
     }
 
     @Override
-    public void move(@NotNull S32 src, @NotNull S32 dst) {
-        dst.value = src.value;
+    public void move(@NotNull S32 in, @NotNull S32 out) {
+        out.value = in.value;
     }
 
     @Override
@@ -123,22 +123,22 @@ public class S32ClampedArithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public void negate(@NotNull S32 variable, @NotNull S32 result) {
-        if (variable.value == Integer.MIN_VALUE) {
-            result.value = Integer.MAX_VALUE;
+    public void negate(@NotNull S32 in, @NotNull S32 out) {
+        if (in.value == Integer.MIN_VALUE) {
+            out.value = Integer.MAX_VALUE;
         } else {
-            result.value = -variable.value;
+            out.value = -in.value;
         }
     }
 
     @Override
-    public void absolute(@NotNull S32 variable, @NotNull S32 result) {
-        if (variable.value >= 0) {
-            result.value = variable.value;
-        } else if (variable.value == Integer.MIN_VALUE) {
-            result.value = Integer.MAX_VALUE;
+    public void absolute(@NotNull S32 in, @NotNull S32 out) {
+        if (in.value >= 0) {
+            out.value = in.value;
+        } else if (in.value == Integer.MIN_VALUE) {
+            out.value = Integer.MAX_VALUE;
         } else {
-            result.value = -variable.value;
+            out.value = -in.value;
         }
     }
 
@@ -148,96 +148,96 @@ public class S32ClampedArithmetic extends PrimitiveArithmetic<S32, int[]> {
     }
 
     @Override
-    public void invert(@NotNull S32 variable, @NotNull S32 result) {
-        if (isInvertible(variable)) {
+    public void invert(@NotNull S32 in, @NotNull S32 out) {
+        if (isInvertible(in)) {
             // same as move
-            result.value = variable.value;
+            out.value = in.value;
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void increase(@NotNull S32 variable, @NotNull S32 result) {
-        if (variable.value == Integer.MAX_VALUE) {
-            result.value = Integer.MAX_VALUE;
+    public void increase(@NotNull S32 in, @NotNull S32 out) {
+        if (in.value == Integer.MAX_VALUE) {
+            out.value = Integer.MAX_VALUE;
         } else {
-            result.value = variable.value + 1;
+            out.value = in.value + 1;
         }
     }
 
     @Override
-    public void decrease(@NotNull S32 variable, @NotNull S32 result) {
-        if (variable.value == Integer.MIN_VALUE) {
-            result.value = Integer.MIN_VALUE;
+    public void decrease(@NotNull S32 in, @NotNull S32 out) {
+        if (in.value == Integer.MIN_VALUE) {
+            out.value = Integer.MIN_VALUE;
         } else {
-            result.value = variable.value - 1;
+            out.value = in.value - 1;
         }
     }
 
     @Override
-    public void add(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
-        result.value = left.value + right.value;
-        if (((left.value ^ result.value) & (right.value ^ result.value)) < 0) {
+    public void add(@NotNull S32 left, @NotNull S32 right, @NotNull S32 out) {
+        out.value = left.value + right.value;
+        if (((left.value ^ out.value) & (right.value ^ out.value)) < 0) {
             if (left.value < 0) {
-                result.value = Integer.MIN_VALUE;
+                out.value = Integer.MIN_VALUE;
             } else {
-                result.value = Integer.MAX_VALUE;
+                out.value = Integer.MAX_VALUE;
             }
         }
     }
 
     @Override
-    public void subtract(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
-        result.value = left.value - right.value;
-        if (((left.value ^ right.value) & (left.value ^ result.value)) < 0) {
+    public void subtract(@NotNull S32 left, @NotNull S32 right, @NotNull S32 out) {
+        out.value = left.value - right.value;
+        if (((left.value ^ right.value) & (left.value ^ out.value)) < 0) {
             if (left.value < 0) {
-                result.value = Integer.MIN_VALUE;
+                out.value = Integer.MIN_VALUE;
             } else {
-                result.value = Integer.MAX_VALUE;
+                out.value = Integer.MAX_VALUE;
             }
         }
     }
 
     @Override
-    public void multiply(@NotNull S32 left, @NotNull S32 right, @NotNull S32 result) {
+    public void multiply(@NotNull S32 left, @NotNull S32 right, @NotNull S32 out) {
         final long resultValue = ((long) left.value) * right.value;
-        result.value = (int) resultValue;
-        if (result.value != resultValue) {
+        out.value = (int) resultValue;
+        if (out.value != resultValue) {
             if (resultValue < 0) {
-                result.value = Integer.MIN_VALUE;
+                out.value = Integer.MIN_VALUE;
             } else {
-                result.value = Integer.MAX_VALUE;
+                out.value = Integer.MAX_VALUE;
             }
         }
     }
 
     @Override
-    public void square(@NotNull S32 variable, @NotNull S32 result) {
+    public void square(@NotNull S32 in, @NotNull S32 out) {
         // 46340**2 = 2147395600 < 2147483647 = Integer.MAX_VALUE
         // 46341**2 = 2147488281 < 2147483647 = Integer.MAX_VALUE
-        if (variable.value < -46340 || variable.value > 46340) {
-            result.value = Integer.MAX_VALUE;
+        if (in.value < -46340 || in.value > 46340) {
+            out.value = Integer.MAX_VALUE;
         } else {
-            result.value = variable.value * variable.value;
+            out.value = in.value * in.value;
         }
     }
 
     @Override
-    public void triangle(@NotNull S32 variable, @NotNull S32 result) {
+    public void triangle(@NotNull S32 in, @NotNull S32 out) {
         // 65535 * (65535 + 1) / 2 = 2147450880 < 2147483647 = Integer.MAX_VALUE
         // 65536 * (65536 + 1) / 2 = 2147516416 > 2147483647 = Integer.MAX_VALUE
-        if (variable.value < -65536 || variable.value > 65535) {
-            result.value = Integer.MAX_VALUE;
+        if (in.value < -65536 || in.value > 65535) {
+            out.value = Integer.MAX_VALUE;
         } else {
-            int leftValue = variable.value;
+            int leftValue = in.value;
             int rightValue = Math.incrementExact(leftValue);
             if ((leftValue & 1) == 0) {
                 leftValue >>= 1;
             } else {
                 rightValue >>= 1;
             }
-            result.value = leftValue * rightValue;
+            out.value = leftValue * rightValue;
         }
     }
 

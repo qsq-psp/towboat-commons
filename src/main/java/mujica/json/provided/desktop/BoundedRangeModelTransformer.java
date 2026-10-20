@@ -22,7 +22,7 @@ public class BoundedRangeModelTransformer implements JsonContextTransformer<Boun
             out.numberValue(model.getMinimum());
             out.key("max");
             out.numberValue(model.getMaximum());
-            out.key("value");
+            out.key(IIOMetadataNodeTransformer.VALUE);
             out.numberValue(model.getValue());
             out.key("adjusting");
             out.booleanValue(model.getValueIsAdjusting());

@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2026/7/21")
 public abstract class HashSlotSet<S, A> extends GapIteratorBasedSlotCollection<S, A> {
 
-    private static final long serialVersionUID = 0xBA83386C30B6A735L;
+    private static final long serialVersionUID = 0xba83386c30b6a735L;
 
     @NotNull
     final SlotArrayAllocator.HashSAA<S, A> hashFunction;

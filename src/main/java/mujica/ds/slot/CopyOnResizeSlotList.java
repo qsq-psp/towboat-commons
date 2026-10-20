@@ -3,6 +3,7 @@ package mujica.ds.slot;
 import mujica.ds.i32.I32;
 import mujica.ds.sort.Sort;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.Index;
 import mujica.reflect.modifier.Name;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @CodeHistory(date = "2026/7/9")
+@DirectSubclass({CenterAlignedSlotList.class, AutoDiscardSlotList.class})
 public class CopyOnResizeSlotList<S, A> extends VersionSlotList<S, A> {
 
     @NotNull

@@ -63,6 +63,6 @@ public class IndexedI32SlotArrayAllocatorForTest implements SlotArrayAllocator<I
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = (i32, i32), slotType = IndexedI32ForTest, arrayType = int[]]";
+        return "[dataType = (i32, i32), slotType = IndexedI32ForTest, arrayType = int[]]";
     }
 }

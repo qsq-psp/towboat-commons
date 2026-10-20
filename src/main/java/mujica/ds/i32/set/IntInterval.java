@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2025/3/9")
 public abstract class IntInterval extends IntervalIntSet {
 
-    private static final long serialVersionUID = 0x0110FF0793B7AA3AL;
+    private static final long serialVersionUID = 0x0110ff0793b7aa3aL;
 
     protected IntInterval() {
         super();

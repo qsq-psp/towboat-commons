@@ -34,6 +34,18 @@ public class CrcSpec implements Serializable {
         this.reflectOut = reflectOut;
     }
 
+    public static final CrcSpec CRC16ANSI = new CrcSpec(
+            16, 0xa001, 0xffffffffL, 0xffffffffL, true, true
+    );
+
+    public static final CrcSpec CRC16CCITT = new CrcSpec(
+            16, 0x8408, 0xffffffffL, 0xffffffffL, true, true
+    );
+
+    public static final CrcSpec CRC16DNP = new CrcSpec(
+            16, 0xa6bc, 0xffffffffL, 0xffffffffL, true, true
+    );
+
     public static final CrcSpec CRC32 = new CrcSpec(
             32, 0x04c11db7, 0xffffffffL, 0xffffffffL, true, true
     );

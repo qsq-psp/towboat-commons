@@ -13,7 +13,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2026/6/25")
 public class I8 implements I8Slot, Cloneable, Serializable {
 
-    private static final long serialVersionUID = 0xEC429A7C188F0D47L;
+    private static final long serialVersionUID = 0xec429a7c188f0d47L;
 
     byte value;
 
@@ -67,7 +67,7 @@ public class I8 implements I8Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/31")
     public static class I8Node1 extends I8 {
 
-        private static final long serialVersionUID = 0x411F8CE3DC4F09D7L;
+        private static final long serialVersionUID = 0x411f8ce3dc4f09d7L;
 
         I8Node1 first;
 
@@ -77,7 +77,7 @@ public class I8 implements I8Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/31")
     public static class I8NodeAllocator1 implements NodeAllocator1<I8Node1> {
 
-        private static final long serialVersionUID = 0xEF4D9063DC5FD941L;
+        private static final long serialVersionUID = 0xef4d9063dc5fd941L;
 
         public static final I8NodeAllocator1 INSTANCE = new I8NodeAllocator1();
 
@@ -121,7 +121,7 @@ public class I8 implements I8Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/28")
     public static class I8Node2 extends I8 {
 
-        private static final long serialVersionUID = 0x3151C65DC5731C74L;
+        private static final long serialVersionUID = 0x3151c65dc5731c74L;
 
         I8Node2 first, second;
 
@@ -131,7 +131,7 @@ public class I8 implements I8Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/28")
     public static class I8NodeAllocator2 implements NodeAllocator2<I8Node2> {
 
-        private static final long serialVersionUID = 0x6293C0196157E893L;
+        private static final long serialVersionUID = 0x6293c0196157e893L;
 
         public static final I8NodeAllocator2 INSTANCE = new I8NodeAllocator2();
 
@@ -196,7 +196,7 @@ public class I8 implements I8Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/30")
     public static class I8Node3 extends I8 {
 
-        private static final long serialVersionUID = 0xF9EA8A549C9F9BACL;
+        private static final long serialVersionUID = 0xf9ea8a549c9f9bacL;
 
         I8Node3 first, second, third;
 
@@ -206,7 +206,7 @@ public class I8 implements I8Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/30")
     public static class I8NodeAllocator3 implements NodeAllocator3<I8Node3> {
 
-        private static final long serialVersionUID = 0xFDEC22A81B9F4515L;
+        private static final long serialVersionUID = 0xfdec22a81b9f4515L;
 
         public static final I8NodeAllocator3 INSTANCE = new I8NodeAllocator3();
 

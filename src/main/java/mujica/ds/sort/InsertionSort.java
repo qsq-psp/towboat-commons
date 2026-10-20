@@ -2,6 +2,7 @@ package mujica.ds.sort;
 
 import mujica.ds.slot.SlotArrayComparator;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.Name;
 import mujica.reflect.modifier.ReferencePage;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/7/20")
 @Name(value = "插入排序", language = "zh")
 @ReferencePage(title = "插入排序", href = "https://oi-wiki.org/basic/insertion-sort/")
+@DirectSubclass({BinaryInsertionSort.class})
 public class InsertionSort<S, A> implements Sort<A> {
 
     @NotNull
@@ -18,11 +20,15 @@ public class InsertionSort<S, A> implements Sort<A> {
     @NotNull
     final S keySlot, scanSlot;
 
-    public InsertionSort(@NotNull SlotArrayComparator<S, A> comparator) {
+    InsertionSort(@NotNull SlotArrayComparator<S, A> comparator, @NotNull S keySlot, @NotNull S scanSlot) {
         super();
         this.comparator = comparator;
-        this.keySlot = comparator.newSlot();
-        this.scanSlot = comparator.newSlot();
+        this.keySlot = keySlot;
+        this.scanSlot = scanSlot;
+    }
+
+    public InsertionSort(@NotNull SlotArrayComparator<S, A> comparator) {
+        this(comparator, comparator.newSlot(), comparator.newSlot());
     }
 
     @Override
@@ -33,7 +39,7 @@ public class InsertionSort<S, A> implements Sort<A> {
     @Override
     public long sort(@NotNull A target, int startIndex, int endIndex) {
         long operationCount = 0L;
-        int readIndex = startIndex;
+        int readIndex = startIndex + 1;
         while (readIndex < endIndex) {
             comparator.load(target, readIndex, keySlot);
             int writeIndex = readIndex - 1;
@@ -60,6 +66,6 @@ public class InsertionSort<S, A> implements Sort<A> {
     @NotNull
     @Override
     public String toString() {
-        return "InsertionSort[comparator = " + comparator + "]";
+        return getClass().getSimpleName() + "[comparator = " + comparator + "]";
     }
 }

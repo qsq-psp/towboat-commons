@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 @Name(value = "计数二叉搜索树", language = "zh")
 public class CountSlotTree2<S, A, N extends S> extends SearchSlotTree2<S, A, N> {
 
-    private static final long serialVersionUID = 0x98FEA61BD7B2F883L;
+    private static final long serialVersionUID = 0x98fea61bd7b2f883L;
 
     long itemCount;
 

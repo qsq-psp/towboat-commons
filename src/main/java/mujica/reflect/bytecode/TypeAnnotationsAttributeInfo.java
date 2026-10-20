@@ -24,7 +24,7 @@ class TypeAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
     @CodeHistory(date = "2025/12/6")
     static class EmptyTarget extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0x10E3141060CE9E8BL;
+        private static final long serialVersionUID = 0x10e3141060ce9e8bL;
 
         @NotNull
         static EmptyTarget createByTag(@DataType("u8") int tag) {
@@ -105,7 +105,7 @@ class TypeAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
     @CodeHistory(date = "2025/12/6")
     static class TypeOrFormalParameterTarget extends EmptyTarget {
 
-        private static final long serialVersionUID = 0xEC2E5BC104D97905L;
+        private static final long serialVersionUID = 0xec2e5bc104d97905L;
 
         @DataType("u8")
         int typeParameterIndex;
@@ -147,7 +147,7 @@ class TypeAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
     @CodeHistory(date = "2025/12/7")
     static class TypeParameterBoundTarget extends EmptyTarget {
 
-        private static final long serialVersionUID = 0xE4BB03FBC84FFAE4L;
+        private static final long serialVersionUID = 0xe4bb03fbc84ffae4L;
 
         @DataType("u8")
         int typeParameterIndex;
@@ -199,7 +199,7 @@ class TypeAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
     @CodeHistory(date = "2025/12/7")
     static class ThrowsOrCatchTarget extends EmptyTarget {
 
-        private static final long serialVersionUID = 0xF75B1A63A4231925L;
+        private static final long serialVersionUID = 0xf75b1a63a4231925L;
 
         @DataType("u16")
         int throwsTypeIndex;
@@ -240,7 +240,7 @@ class TypeAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
     @CodeHistory(date = "2025/12/8")
     static class LocalVariableItem extends ClassFileNodeAdapter implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0x7A696ACB7E81CC2EL;
+        private static final long serialVersionUID = 0x7a696acb7e81cc2eL;
 
         @DataType("u16")
         int startPC;
@@ -296,7 +296,7 @@ class TypeAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
     @CodeHistory(date = "2025/12/8")
     static class LocalVariableTarget extends EmptyTarget {
 
-        private static final long serialVersionUID = 0xF8677B5501402D9CL;
+        private static final long serialVersionUID = 0xf8677b5501402d9cL;
 
         LocalVariableItem[] table;
 
@@ -356,7 +356,7 @@ class TypeAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
     @CodeHistory(date = "2025/12/9")
     static class OffsetTarget extends EmptyTarget {
 
-        private static final long serialVersionUID = 0x5B6A9759687B65EDL;
+        private static final long serialVersionUID = 0x5b6a9759687b65edL;
 
         @DataType("u16")
         int offset;
@@ -400,7 +400,7 @@ class TypeAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
     @CodeHistory(date = "2025/12/9")
     static class TypeArgumentTarget extends OffsetTarget {
 
-        private static final long serialVersionUID = 0x3D86E905782DC69CL;
+        private static final long serialVersionUID = 0x3d86e905782dc69cL;
 
         @DataType("u8")
         int typeArgumentIndex;
@@ -482,7 +482,7 @@ class TypeAnnotationsAttributeInfo extends AnnotationsAttributeInfo {
     @CodeHistory(date = "2025/11/3")
     static class TypeAnnotation implements ClassFileNode.Independent {
 
-        private static final long serialVersionUID = 0x0C746CCFE0F6B2D9L;
+        private static final long serialVersionUID = 0x0c746ccfe0f6b2d9L;
 
         EmptyTarget targetInfo;
 

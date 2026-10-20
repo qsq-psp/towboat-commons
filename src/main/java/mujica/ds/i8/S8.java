@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 @CodeHistory(date = "2026/7/5")
 public class S8 extends Base2I8Slot implements Comparable<S8> {
 
-    private static final long serialVersionUID = 0x91C68966F8780F38L;
+    private static final long serialVersionUID = 0x91c68966f8780f38L;
 
     public S8() {
         super();

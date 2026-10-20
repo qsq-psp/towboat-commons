@@ -142,7 +142,7 @@ public abstract class SelectiveAppender extends ContainerAppender {
     @CodeHistory(date = "2026/1/31")
     static class NotApplicableException extends RuntimeException {
 
-        private static final long serialVersionUID = 0xA4683DDFDF3DAF66L;
+        private static final long serialVersionUID = 0xa4683ddfdf3daf66L;
 
         NotApplicableException() {
             super();

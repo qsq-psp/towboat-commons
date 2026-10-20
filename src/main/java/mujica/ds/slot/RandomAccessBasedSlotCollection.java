@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 @DirectSubclass({VersionSlotList.class, CopyOnWriteSlotList.class})
 public abstract class RandomAccessBasedSlotCollection<S, A> implements SlotCollection<S, A> {
 
-    private static final long serialVersionUID = 0x73CE895DCF958639L;
+    private static final long serialVersionUID = 0x73ce895dcf958639L;
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override

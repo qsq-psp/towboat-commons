@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.font.LineMetrics;
 
@@ -27,31 +28,31 @@ public class LineMetricsTransformer implements JsonContextTransformer<LineMetric
     static final FastString UNDERLINE_THICKNESS = new FastString("underlineThickness");
 
     @Override
-    public void transform(LineMetrics in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(LineMetrics lineMetrics, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(CHAR_COUNT);
-            out.numberValue(in.getNumChars());
+            out.numberValue(lineMetrics.getNumChars());
             out.key(FontMetricsTransformer.ASCENT);
-            out.numberValue(in.getAscent());
+            out.numberValue(lineMetrics.getAscent());
             out.key(FontMetricsTransformer.DESCENT);
-            out.numberValue(in.getDescent());
+            out.numberValue(lineMetrics.getDescent());
             out.key(FontMetricsTransformer.LEADING);
-            out.numberValue(in.getLeading());
+            out.numberValue(lineMetrics.getLeading());
             out.key(FontMetricsTransformer.HEIGHT);
-            out.numberValue(in.getHeight());
+            out.numberValue(lineMetrics.getHeight());
             out.key(BASELINE_INDEX);
-            out.numberValue(in.getBaselineIndex());
+            out.numberValue(lineMetrics.getBaselineIndex());
             out.key(BASELINE_OFFSETS);
-            out.arrayValue(in.getBaselineOffsets());
+            out.arrayValue(lineMetrics.getBaselineOffsets());
             out.key(STRIKE_THROUGH_OFFSET);
-            out.numberValue(in.getStrikethroughOffset());
+            out.numberValue(lineMetrics.getStrikethroughOffset());
             out.key(STRIKE_THROUGH_THICKNESS);
-            out.numberValue(in.getStrikethroughThickness());
+            out.numberValue(lineMetrics.getStrikethroughThickness());
             out.key(UNDERLINE_OFFSET);
-            out.numberValue(in.getUnderlineOffset());
+            out.numberValue(lineMetrics.getUnderlineOffset());
             out.key(UNDERLINE_THICKNESS);
-            out.numberValue(in.getUnderlineThickness());
+            out.numberValue(lineMetrics.getUnderlineThickness());
         }
         out.closeObject();
     }

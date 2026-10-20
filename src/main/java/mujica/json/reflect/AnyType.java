@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 @CodeHistory(date = "2026/5/29")
 class AnyType extends VoidType {
 
-    private static final long serialVersionUID = 0xD0ACA59DD0AA6B18L;
+    private static final long serialVersionUID = 0xd0aca59dd0aa6b18L;
 
     static final AnyType ANY = new AnyType();
 

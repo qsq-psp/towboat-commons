@@ -11,7 +11,7 @@ import java.util.*;
 @CodeHistory(date = "2026/1/4")
 public abstract class JsonObject extends JsonContainer<String> {
 
-    private static final long serialVersionUID = 0x409C22961ED20306L;
+    private static final long serialVersionUID = 0x409c22961ed20306L;
 
     @NotNull
     public static JsonObject newHashMap() {

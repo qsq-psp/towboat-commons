@@ -47,6 +47,7 @@ public class Explorer {
             {
                 JButton button = new JButton("Open");
                 button.setName("submitButton");
+                button.addActionListener(actionEvent -> {});
                 bottom.add(button, BorderLayout.EAST);
             }
             page.add(bottom, BorderLayout.SOUTH);

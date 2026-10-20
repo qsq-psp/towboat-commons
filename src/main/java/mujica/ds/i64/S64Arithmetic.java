@@ -63,18 +63,18 @@ public class S64Arithmetic extends PrimitiveArithmetic<S64, long[]> {
     }
 
     @Override
-    public void zero(@NotNull S64 result) {
-        result.value = 0L;
+    public void zero(@NotNull S64 out) {
+        out.value = 0L;
     }
 
     @Override
-    public void one(@NotNull S64 result) {
-        result.value = 1L;
+    public void one(@NotNull S64 out) {
+        out.value = 1L;
     }
 
     @Override
-    public void two(@NotNull S64 result) {
-        result.value = 2L;
+    public void two(@NotNull S64 out) {
+        out.value = 2L;
     }
 
     @Override
@@ -103,13 +103,13 @@ public class S64Arithmetic extends PrimitiveArithmetic<S64, long[]> {
     }
 
     @Override
-    public int sign(@NotNull S64 variable) {
-        return Long.signum(variable.value);
+    public int sign(@NotNull S64 in) {
+        return Long.signum(in.value);
     }
 
     @Override
-    public void move(@NotNull S64 src, @NotNull S64 dst) {
-        dst.value = src.value;
+    public void move(@NotNull S64 in, @NotNull S64 out) {
+        out.value = in.value;
     }
 
     @Override
@@ -118,19 +118,18 @@ public class S64Arithmetic extends PrimitiveArithmetic<S64, long[]> {
     }
 
     @Override
-    public void negate(@NotNull S64 variable, @NotNull S64 result) {
-        result.setI64(Math.negateExact(variable.getI64()));
+    public void negate(@NotNull S64 in, @NotNull S64 out) {
+        out.value = Math.negateExact(in.value);
     }
 
     @Override
-    public void absolute(@NotNull S64 variable, @NotNull S64 result) {
-        final long value = variable.getI64();
-        if (value >= 0L) {
-            result.setI64(value);
-        } else if (value != Long.MIN_VALUE) {
-            result.setI64(-value);
-        } else {
+    public void absolute(@NotNull S64 in, @NotNull S64 out) {
+        if (in.value >= 0L) {
+            out.value = in.value;
+        } else if (in.value == Long.MIN_VALUE) {
             throw new ArithmeticException();
+        } else {
+            out.value = -in.value;
         }
     }
 
@@ -140,76 +139,180 @@ public class S64Arithmetic extends PrimitiveArithmetic<S64, long[]> {
     }
 
     @Override
-    public void invert(@NotNull S64 variable, @NotNull S64 result) {
-        if (isInvertible(variable)) {
+    public void invert(@NotNull S64 in, @NotNull S64 out) {
+        if (isInvertible(in)) {
             // same as move
-            result.value = variable.value;
+            out.value = in.value;
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void increase(@NotNull S64 variable, @NotNull S64 result) {
-        result.setI64(Math.incrementExact(variable.getI64()));
-    }
-
-    @Override
-    public void decrease(@NotNull S64 variable, @NotNull S64 result) {
-        result.setI64(Math.decrementExact(variable.getI64()));
-    }
-
-    @Override
-    public void add(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
-        result.setI64(Math.addExact(left.getI64(), right.getI64()));
-    }
-
-    @Override
-    public void subtract(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
-        result.setI64(Math.subtractExact(left.getI64(), right.getI64()));
-    }
-
-    @Override
-    public void multiply(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
-        result.value = Math.multiplyExact(left.value, right.value);
-    }
-
-    @Override
-    public void square(@NotNull S64 variable, @NotNull S64 result) {
-        final long value = variable.getI64();
-        result.setI64(Math.multiplyExact(value, value));
-    }
-
-    @Override
-    public void triangle(@NotNull S64 variable, @NotNull S64 result) {
-        long left = variable.getI64();
-        long right = Math.incrementExact(left);
-        if ((left & 1L) == 0) {
-            left >>= 1;
+    public void increase(@NotNull S64 in, @NotNull S64 out) {
+        if (in.value == Long.MAX_VALUE) {
+            throw new ArithmeticException();
         } else {
-            right >>= 1;
+            out.value = in.value + 1L;
         }
-        result.setI64(Math.multiplyExact(left, right));
     }
 
     @Override
-    public void divide(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result, @NotNull RoundingMode mode) {
-        final long resultValue = left.value / right.value;
-        if (left.value == right.value * resultValue) {
-            result.value = resultValue;
+    public void decrease(@NotNull S64 in, @NotNull S64 out) {
+        if (in.value == Long.MIN_VALUE) {
+            throw new ArithmeticException();
         } else {
-            throw new ArithmeticException("can not divide exact");
+            out.value = in.value - 1L;
+        }
+    }
+
+    @Override
+    public void add(@NotNull S64 left, @NotNull S64 right, @NotNull S64 out) {
+        out.value = Math.addExact(left.value, right.value);
+    }
+
+    @Override
+    public void subtract(@NotNull S64 left, @NotNull S64 right, @NotNull S64 out) {
+        out.value = Math.subtractExact(left.value, right.value);
+    }
+
+    @Override
+    public void multiply(@NotNull S64 left, @NotNull S64 right, @NotNull S64 out) {
+        out.value = Math.multiplyExact(left.value, right.value);
+    }
+
+    @Override
+    public void square(@NotNull S64 in, @NotNull S64 out) {
+        // 3037000499**2 = 9223372030926249001 < 9223372036854775807 = Long.MAX_VALUE
+        // 3037000500**2 = 9223372037000250000 > 9223372036854775807 = Long.MAX_VALUE
+        if (in.value < -3037000499L || in.value > 3037000499L) {
+            throw new ArithmeticException();
+        } else {
+            out.value = in.value * in.value;
+        }
+    }
+
+    @Override
+    public void triangle(@NotNull S64 in, @NotNull S64 out) {
+        // 4294967295 * (4294967295 + 1) / 2 = 9223372034707292160 < 9223372036854775807 = Long.MAX_VALUE
+        // 4294967296 * (4294967296 + 1) / 2 = 9223372039002259456 > 9223372036854775807 = Long.MAX_VALUE
+        if (in.value < -4294967295L || in.value > 4294967295L) {
+            throw new ArithmeticException();
+        } else {
+            long leftValue = in.value;
+            long rightValue = Math.incrementExact(leftValue);
+            if ((leftValue & 1L) == 0L) {
+                leftValue >>= 1;
+            } else {
+                rightValue >>= 1;
+            }
+            out.value = leftValue * rightValue;
+        }
+    }
+
+    @Override
+    public void divide(@NotNull S64 left, @NotNull S64 right, @NotNull S64 quotient, @NotNull RoundingMode mode) {
+        quotient.value = left.value / right.value;
+        final long productValue = right.value * quotient.value;
+        if (left.value == productValue) {
+            return;
+        }
+        switch (mode) {
+            case UP:
+                if ((left.value ^ right.value) >= 0L) {
+                    assert quotient.value >= 0L;
+                    assert quotient.value < Long.MAX_VALUE;
+                    quotient.value++;
+                } else {
+                    assert quotient.value < 0L;
+                    assert quotient.value > Long.MIN_VALUE;
+                    quotient.value--;
+                }
+                break;
+            case DOWN:
+                break;
+            case CEILING:
+                if ((left.value ^ right.value) >= 0L) {
+                    assert quotient.value >= 0L;
+                    assert quotient.value < Long.MAX_VALUE;
+                    quotient.value++;
+                }
+                break;
+            case FLOOR:
+                if ((left.value ^ right.value) < 0L) {
+                    assert quotient.value < 0L;
+                    assert quotient.value > Long.MIN_VALUE;
+                    quotient.value--;
+                }
+                break;
+            case UNNECESSARY:
+                throw new ArithmeticException("can not divide exact");
         }
     }
 
     @Override
     public void divide(@NotNull S64 left, @NotNull S64 right, @Nullable S64 quotient, @Nullable S64 remainder) {
         if (quotient != null) {
-            quotient.setI64(left.value / right.value);
+            quotient.value = left.value / right.value;
         }
         if (remainder != null) {
-            remainder.setI64(left.value % right.value);
+            remainder.value = left.value % right.value;
         }
+    }
+
+    @Override
+    public void mean(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result, @NotNull RoundingMode mode) {
+        long sum = left.value + right.value;
+        boolean sign;
+        if (left.value < 0L) {
+            if (right.value < 0L) {
+                sign = true; // negative
+            } else {
+                sign = sum < 0L;
+            }
+        } else {
+            if (right.value < 0L) {
+                sign = sum < 0L;
+            } else {
+                sign = false; // positive
+            }
+        }
+        switch (mode) {
+            case UP:
+                if (sign) {
+                    sum--;
+                } else {
+                    sum++;
+                }
+                // no break here
+            case DOWN:
+                sum >>>= 1;
+                if (sign) {
+                    sum |= Long.MIN_VALUE;
+                }
+                break;
+            case CEILING:
+                if (sign) {
+                    sum >>>= 1;
+                    sum |= Long.MIN_VALUE;
+                } else {
+                    sum++;
+                    sum >>>= 1;
+                }
+                break;
+            case FLOOR:
+                if (sign) {
+                    sum--;
+                    sum >>>= 1;
+                    sum |= Long.MIN_VALUE;
+                } else {
+                    sum >>>= 1;
+                }
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
+        result.value = sum;
     }
 
     @Override

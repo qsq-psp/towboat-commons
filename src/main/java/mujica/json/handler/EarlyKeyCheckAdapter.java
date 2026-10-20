@@ -36,6 +36,36 @@ public class EarlyKeyCheckAdapter<H extends JsonHandler> extends JsonHandlerAdap
         return true;
     }
 
+    @Override
+    public void openArray() {
+        stack.add(null);
+        super.openArray();
+    }
+
+    @Override
+    public void closeArray() {
+        super.closeArray();
+        final HashSet<String> set = stack.removeLast();
+        if (set != null) {
+            throw new IllegalStateException("not array");
+        }
+    }
+
+    @Override
+    public void openObject() {
+        stack.add(new HashSet<>());
+        super.openObject();
+    }
+
+    @Override
+    public void closeObject() {
+        super.closeObject();
+        final HashSet<String> set = stack.removeLast();
+        if (set == null) {
+            throw new IllegalStateException("not object");
+        }
+    }
+
     public void checkKey(@NotNull String keyString) {
         if (!predicate.test(keyString)) {
             throw new IllegalArgumentException("denied key " + AppenderToStringBuilder.Json.get().apply(keyString));

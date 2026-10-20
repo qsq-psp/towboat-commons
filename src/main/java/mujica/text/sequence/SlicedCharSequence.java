@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/1/9")
 public class SlicedCharSequence extends FilteredCharSequence {
 
-    private static final long serialVersionUID = 0x4C8D91836250D3D4L;
+    private static final long serialVersionUID = 0x4c8d91836250d3d4L;
 
     @Index(of = "original")
     protected final int startIndex;

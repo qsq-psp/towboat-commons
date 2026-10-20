@@ -27,7 +27,7 @@ public class ContainerConfig {
 
         NEW, CLEAR, APPEND, COVER;
 
-        private static final long serialVersionUID = 0xFB1D8004BA4F5337L;
+        private static final long serialVersionUID = 0xfb1d8004ba4f5337L;
     }
 
     @NotNull
@@ -59,7 +59,7 @@ public class ContainerConfig {
 
         PUT, PUT_IF_ABSENT, PUT_IF_PRESENT, PUT_IF_NULL, PUT_IF_NOT_NULL;
 
-        private static final long serialVersionUID = 0xC1238CA96BB9D7E1L;
+        private static final long serialVersionUID = 0xc1238ca96bb9d7e1L;
     }
 
     @NotNull

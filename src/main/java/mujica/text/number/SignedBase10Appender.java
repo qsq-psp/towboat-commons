@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 @DirectSubclass(UnsignedBase10Appender.class)
 public class SignedBase10Appender implements IntegralAppender {
 
-    private static final long serialVersionUID = 0x182EB541A46919F2L;
+    private static final long serialVersionUID = 0x182eb541a46919f2L;
 
     public static final SignedBase10Appender INSTANCE = new SignedBase10Appender();
 

@@ -9,7 +9,7 @@ import java.util.List;
 @CodeHistory(date = "2026/2/21")
 public class ConcatenationBracketNode extends BracketNode {
 
-    private static final long serialVersionUID = 0x53719944F24691B9L;
+    private static final long serialVersionUID = 0x53719944f24691b9L;
 
     @NotNull
     final List<BracketNode> list;

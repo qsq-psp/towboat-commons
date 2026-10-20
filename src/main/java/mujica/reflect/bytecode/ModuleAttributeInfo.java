@@ -317,7 +317,7 @@ class ModuleAttributeInfo extends AttributeInfo {
     @CodeHistory(date = "2025/12/12")
     private static class Use extends ConstantReferenceNodeAdapter {
 
-        private static final long serialVersionUID = 0x19F3CD1C0DEC0366L;
+        private static final long serialVersionUID = 0x19f3cd1c0dec0366L;
 
         Use(int index) {
             super(index);

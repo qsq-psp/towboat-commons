@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2026/8/6")
 class SlotListAsJsonArray extends JsonArray {
 
-    private static final long serialVersionUID = 0x230B3FC6045736E7L;
+    private static final long serialVersionUID = 0x230b3fc6045736e7L;
 
     @NotNull
     SlotCollection<PlainObjectSlot, Object[]> list;

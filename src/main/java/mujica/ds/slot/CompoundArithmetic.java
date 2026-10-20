@@ -17,23 +17,23 @@ public abstract class CompoundArithmetic<S> extends AbstractArithmetic<S> {
     }
 
     @Override
-    public void two(@NotNull S result) {
+    public void two(@NotNull S out) {
         one(slot1);
-        add(slot1, slot1, result);
+        add(slot1, slot1, out);
     }
 
     @Override
-    public int sign(@NotNull S variable) {
+    public int sign(@NotNull S in) {
         zero(slot0);
-        return compareSlot(variable, slot0);
+        return compareSlot(in, slot0);
     }
 
     @Override
-    public void absolute(@NotNull S variable, @NotNull S result) {
-        if (sign(variable) >= 0) {
-            move(variable, result);
+    public void absolute(@NotNull S in, @NotNull S out) {
+        if (sign(in) >= 0) {
+            move(in, out);
         } else {
-            negate(variable, result);
+            negate(in, out);
         }
     }
 
@@ -48,8 +48,8 @@ public abstract class CompoundArithmetic<S> extends AbstractArithmetic<S> {
     }
 
     @Override
-    public void conjugateTranspose(@NotNull S variable, @NotNull S result) {
-        move(variable, result);
+    public void conjugateTranspose(@NotNull S in, @NotNull S out) {
+        move(in, out);
     }
 
     @Override
@@ -58,34 +58,34 @@ public abstract class CompoundArithmetic<S> extends AbstractArithmetic<S> {
     }
 
     @Override
-    public void increase(@NotNull S variable, @NotNull S result) {
+    public void increase(@NotNull S in, @NotNull S out) {
         one(slot1);
-        add(variable, slot1, result);
+        add(in, slot1, out);
     }
 
     @Override
-    public void decrease(@NotNull S variable, @NotNull S result) {
+    public void decrease(@NotNull S in, @NotNull S out) {
         one(slot1);
-        subtract(variable, slot1, result);
+        subtract(in, slot1, out);
     }
 
     @Override
-    public void subtract(@NotNull S left, @NotNull S right, @NotNull S result) {
+    public void subtract(@NotNull S left, @NotNull S right, @NotNull S out) {
         negate(right, slot0);
-        add(left, slot0, result);
+        add(left, slot0, out);
     }
 
     @Override
-    public void square(@NotNull S variable, @NotNull S result) {
-        multiply(variable, variable, result);
+    public void square(@NotNull S in, @NotNull S out) {
+        multiply(in, in, out);
     }
 
     @Override
-    public void triangle(@NotNull S variable, @NotNull S result) {
-        increase(variable, slot1);
-        multiply(variable, slot1, slot0);
+    public void triangle(@NotNull S in, @NotNull S out) {
+        increase(in, slot1);
+        multiply(in, slot1, slot0);
         two(slot2);
-        divide(slot0, slot2, result, RoundingMode.UNNECESSARY);
+        divide(slot0, slot2, out, RoundingMode.UNNECESSARY);
     }
 
     @Override

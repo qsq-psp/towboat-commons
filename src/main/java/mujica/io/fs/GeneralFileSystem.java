@@ -6,9 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
 
-/**
- * Created on 2026/3/26.
- */
 @CodeHistory(date = "2026/3/26")
 public abstract class GeneralFileSystem extends FileSystem {
 

@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.xml.sax.InputSource;
 
 import java.io.InputStream;
@@ -27,7 +28,7 @@ public class InputSourceTransformer implements JsonContextTransformer<InputSourc
     static final FastString CHARACTER_STREAM = new FastString("characterStream");
 
     @Override
-    public void transform(InputSource source, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull InputSource source, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             String str = source.getPublicId();

@@ -5,8 +5,10 @@ import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2022/9/22", project = "Ultramarine", name = "ClassUtility")
@@ -14,6 +16,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2025/3/6")
 public final class ClassUtil {
 
+    @NotNull
     public static String removeCommonPrefix(@NotNull Class<?> targetClass, @NotNull Class<?> referenceClass) {
         final String targetName = targetClass.getName();
         final String referenceName = referenceClass.getName();
@@ -123,5 +126,94 @@ public final class ClassUtil {
                 clazz = clazz.getSuperclass(); // iterative
             }
         }
+    }
+
+    public static boolean isOuterClassField(@NotNull Field field) {
+        return "this$0".equals(field.getName());
+    }
+
+    public static boolean isUtility(@NotNull Class<?> clazz) {
+        if (clazz.isArray()) {
+            return false;
+        }
+        if (!clazz.isInterface()) {
+            if ((clazz.getModifiers() & Modifier.ABSTRACT) != 0) {
+                return false;
+            }
+            for (Field field : clazz.getDeclaredFields()) {
+                if ((field.getModifiers() & Modifier.STATIC) == 0) {
+                    return false;
+                }
+            }
+        }
+        for (Method method : clazz.getDeclaredMethods()) {
+            if ((method.getModifiers() & Modifier.STATIC) == 0) {
+                return false;
+            }
+        }
+        {
+            Class<?> superClass = clazz.getSuperclass();
+            if (!(Object.class.equals(superClass) || isUtility(superClass))) {
+                return false;
+            }
+        }
+        for (Class<?> superClass : clazz.getInterfaces()) {
+            if (!isUtility(superClass)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isStrictUtility(@NotNull Class<?> clazz) {
+        if (clazz.isEnum() || clazz.isArray() || clazz.isAnnotation()) {
+            return false;
+        }
+        if (clazz.isInterface()) {
+            if ((clazz.getModifiers() & Modifier.PUBLIC) != 0) {
+                return false;
+            }
+        } else {
+            if ((clazz.getModifiers() & (Modifier.PUBLIC | Modifier.ABSTRACT | Modifier.FINAL)) != (Modifier.PUBLIC | Modifier.FINAL)) {
+                return false;
+            }
+            for (Field field : clazz.getDeclaredFields()) {
+                if ((field.getModifiers() & Modifier.STATIC) == 0) {
+                    return false;
+                }
+                if (clazz.equals(field.getType())) {
+                    return false;
+                }
+            }
+            for (Constructor<?> constructor : clazz.getConstructors()) {
+                if ((constructor.getModifiers() & Modifier.PRIVATE) == 0) {
+                    return false;
+                }
+                if (constructor.getParameterCount() != 0) {
+                    return false;
+                }
+            }
+        }
+        for (Method method : clazz.getDeclaredMethods()) {
+            if ((method.getModifiers() & Modifier.STATIC) == 0) {
+                return false;
+            }
+        }
+        {
+            Class<?> superClass = clazz.getSuperclass();
+            if (!(Object.class.equals(superClass) || isStrictUtility(superClass))) {
+                return false;
+            }
+        }
+        for (Class<?> superClass : clazz.getInterfaces()) {
+            if (!isStrictUtility(superClass)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private ClassUtil() {
+        super();
     }
 }

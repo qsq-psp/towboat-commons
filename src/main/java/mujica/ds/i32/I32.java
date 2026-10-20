@@ -12,7 +12,7 @@ import java.io.Serializable;
 @CodeHistory(date = "2026/6/15")
 public class I32 implements I32Slot, Cloneable, Serializable {
 
-    private static final long serialVersionUID = 0x7A8D4E595E0C9E2EL;
+    private static final long serialVersionUID = 0x7a8d4e595e0c9e2eL;
 
     int value;
 
@@ -66,7 +66,7 @@ public class I32 implements I32Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/19")
     public static class I32Node1 extends I32 {
 
-        private static final long serialVersionUID = 0xCAE10142A563E541L;
+        private static final long serialVersionUID = 0xcae10142a563e541L;
 
         I32Node1 first;
 
@@ -118,7 +118,7 @@ public class I32 implements I32Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/18")
     public static class I32Node2 extends I32 {
 
-        private static final long serialVersionUID = 0x70E331E9B515D4CCL;
+        private static final long serialVersionUID = 0x70e331e9b515d4ccL;
 
         I32Node2 first, second;
 
@@ -180,7 +180,7 @@ public class I32 implements I32Slot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/19")
     public static class I32Node3 extends I32 {
 
-        private static final long serialVersionUID = 0xD430272C312D9681L;
+        private static final long serialVersionUID = 0xd430272c312d9681L;
 
         I32Node3 first, second, third;
 

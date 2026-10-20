@@ -12,7 +12,7 @@ import java.util.Objects;
 @CodeHistory(date = "2026/4/6")
 class ProvidedReadOnlyType extends JsonType {
 
-    private static final long serialVersionUID = 0x1BB94FD0B2BE09CDL;
+    private static final long serialVersionUID = 0x1bb94fd0b2be09cdL;
 
     @NotNull
     final String transformerName;

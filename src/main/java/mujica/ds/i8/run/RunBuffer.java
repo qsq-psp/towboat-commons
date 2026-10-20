@@ -1,6 +1,7 @@
 package mujica.ds.i8.run;
 
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 import mujica.reflect.modifier.Index;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,6 +12,8 @@ import java.io.OutputStream;
 
 @CodeHistory(date = "2025/10/31", name = "LookBackMemory")
 @CodeHistory(date = "2025/11/26")
+@DirectSubclass({ArrayRunBuffer.class, BlockRunBuffer.class, ByteBufRunBuffer.class})
+@Deprecated
 public abstract class RunBuffer {
 
     protected int maxDistance;

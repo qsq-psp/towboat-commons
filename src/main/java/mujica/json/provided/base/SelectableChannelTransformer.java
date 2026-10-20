@@ -3,7 +3,9 @@ package mujica.json.provided.base;
 import mujica.json.handler.JsonHandler;
 import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
+import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
@@ -11,6 +13,7 @@ import java.nio.channels.SelectionKey;
 /**
  * Created on 2026/8/22.
  */
+@CodeHistory(date = "2026/8/22")
 public class SelectableChannelTransformer implements JsonContextTransformer<SelectableChannel> {
 
     public static final SelectableChannelTransformer INSTANCE = new SelectableChannelTransformer();
@@ -33,18 +36,18 @@ public class SelectableChannelTransformer implements JsonContextTransformer<Sele
     }
 
     @Override
-    public void transform(SelectableChannel in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull SelectableChannel channel, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("open");
-            out.booleanValue(in.isOpen());
+            out.booleanValue(channel.isOpen());
             out.key("registered");
-            out.booleanValue(in.isRegistered());
+            out.booleanValue(channel.isRegistered());
             out.key("blocking");
-            out.booleanValue(in.isBlocking());
+            out.booleanValue(channel.isBlocking());
         }
         {
-            int flags = in.validOps();
+            int flags = channel.validOps();
             if (flags != 0) {
                 out.key("supportedOperations");
                 transformFlags(flags, out);

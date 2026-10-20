@@ -7,6 +7,7 @@ module CRYCHIC {
     requires java.base;
     requires java.compiler;
     requires java.desktop;
+    requires java.datatransfer;
     requires java.management;
 
     requires annotations;
@@ -64,6 +65,7 @@ module CRYCHIC {
     exports mujica.json.reflect;
     exports mujica.netty.concurrent;
     exports mujica.netty.mysql;
+    exports mujica.desktop;
 
     provides java.nio.charset.spi.CharsetProvider with TowboatCharsetProvider;
     provides java.nio.file.spi.FileTypeDetector with ExtensionFileTypeDetector.Cached;

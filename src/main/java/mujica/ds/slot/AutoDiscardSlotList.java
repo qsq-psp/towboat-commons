@@ -45,6 +45,31 @@ public class AutoDiscardSlotList<S, A> extends CopyOnResizeSlotList<S, A> {
         this.reservedSize = reservedSize;
     }
 
+    @Override
+    public boolean isFull() {
+        return false;
+    }
+
+    @Override
+    public void insertItemBefore(int gapIndex, @NotNull S in) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void insertFirstItem(@NotNull S in) {
+        //
+    }
+
+    @Override
+    public void insertLastItem(@NotNull S in) {
+        //
+    }
+
+    @Override
+    public void insertLast(@NotNull A thatArray, int thatStartIndex, int thatEndIndex) {
+        //
+    }
+
     @NotNull
     @Override
     public String summaryToString() {

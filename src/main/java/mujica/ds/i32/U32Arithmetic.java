@@ -1,6 +1,8 @@
 package mujica.ds.i32;
 
+import mujica.ds.i32.list.CapacityPolicy;
 import mujica.ds.slot.PrimitiveArithmetic;
+import mujica.ds.slot.SlotArrayComparator;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,7 +12,9 @@ import java.util.Arrays;
 
 @CodeHistory(date = "2026/6/29", name = "ArithmeticU32")
 @CodeHistory(date = "2026/8/7")
-public class U32Arithmetic extends PrimitiveArithmetic<I32Slot, int[]> {
+public class U32Arithmetic extends PrimitiveArithmetic<U32, int[]> {
+
+    private static final long serialVersionUID = 0xC6F6D6F8785AE47CL;
 
     public U32Arithmetic() {
         super();
@@ -18,14 +22,14 @@ public class U32Arithmetic extends PrimitiveArithmetic<I32Slot, int[]> {
 
     @NotNull
     @Override
-    public I32Slot newSlot() {
-        return new S32();
+    public U32 newSlot() {
+        return new U32();
     }
 
     @NotNull
     @Override
-    public I32Slot cloneSlot(@NotNull I32Slot original) {
-        return new I32(original.getI32());
+    public U32 cloneSlot(@NotNull U32 original) {
+        return new U32(original.value);
     }
 
     @NotNull
@@ -56,139 +60,176 @@ public class U32Arithmetic extends PrimitiveArithmetic<I32Slot, int[]> {
     }
 
     @Override
-    public void load(@NotNull int[] array, int index, @NotNull I32Slot slot) {
-        slot.setI32(array[index]);
+    public void load(@NotNull int[] array, int index, @NotNull U32 slot) {
+        slot.value = array[index];
     }
 
     @Override
-    public void store(@NotNull int[] array, int index, @NotNull I32Slot slot) {
-        array[index] = slot.getI32();
+    public void store(@NotNull int[] array, int index, @NotNull U32 slot) {
+        array[index] = slot.value;
     }
 
     @Override
-    public void zero(@NotNull I32Slot result) {
-        result.setI32(0);
+    public void zero(@NotNull U32 out) {
+        out.value = 0;
     }
 
     @Override
-    public void one(@NotNull I32Slot result) {
-        result.setI32(1);
+    public void one(@NotNull U32 out) {
+        out.value = 1;
     }
 
     @Override
-    public void two(@NotNull I32Slot result) {
-        result.setI32(2);
+    public void two(@NotNull U32 out) {
+        out.value = 2;
     }
 
     @Override
-    public void min(@NotNull I32Slot result) {
-        result.setI32(0);
+    public void min(@NotNull U32 result) {
+        result.value = 0;
     }
 
     @Override
-    public void max(@NotNull I32Slot result) {
-        result.setI32(-1);
+    public void max(@NotNull U32 result) {
+        result.value = -1;
     }
 
     @Override
-    public void min(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void min(@NotNull U32 left, @NotNull U32 right, @NotNull U32 result) {
         result.setI32(Math.min(left.getI32() + Integer.MIN_VALUE, right.getI32() + Integer.MIN_VALUE) - Integer.MIN_VALUE);
     }
 
     @Override
-    public void max(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void max(@NotNull U32 left, @NotNull U32 right, @NotNull U32 result) {
         result.setI32(Math.max(left.getI32() + Integer.MIN_VALUE, right.getI32() + Integer.MIN_VALUE) - Integer.MIN_VALUE);
     }
 
     @Override
-    public int compareSlot(@NotNull I32Slot a, @NotNull I32Slot b) {
-        return Integer.compareUnsigned(a.getI32(), b.getI32());
+    public int compareSlot(@NotNull U32 left, @NotNull U32 right) {
+        return Integer.compareUnsigned(left.value, right.value);
     }
 
     @Override
-    public int sign(@NotNull I32Slot variable) {
-        return variable.getI32() == 0 ? 0 : 1;
+    public int sign(@NotNull U32 in) {
+        return in.getI32() == 0 ? 0 : 1;
     }
 
     @Override
-    public void move(@NotNull I32Slot src, @NotNull I32Slot dst) {
-        dst.setI32(src.getI32());
+    public void move(@NotNull U32 in, @NotNull U32 out) {
+        out.setI32(in.getI32());
     }
 
     @Override
-    public void exchange(@NotNull I32Slot first, @NotNull I32Slot second) {
+    public void exchange(@NotNull U32 first, @NotNull U32 second) {
         first.setI32(second.updateI32(first.getI32()));
     }
 
     @Override
-    public void negate(@NotNull I32Slot variable, @NotNull I32Slot result) {
-        if (variable.getI32() == 0) {
-            result.setI32(0);
+    public void negate(@NotNull U32 in, @NotNull U32 out) {
+        if (in.getI32() == 0) {
+            out.setI32(0);
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void absolute(@NotNull I32Slot variable, @NotNull I32Slot result) {
+    public void absolute(@NotNull U32 in, @NotNull U32 out) {
         // same as move
-        result.setI32(variable);
+        out.setI32(in);
     }
 
     @Override
-    public boolean isInvertible(@NotNull I32Slot variable) {
+    public boolean isInvertible(@NotNull U32 variable) {
         return variable.getI32() == 1;
     }
 
     @Override
-    public void invert(@NotNull I32Slot variable, @NotNull I32Slot result) {
-        if (variable.getI32() == 1) {
-            result.setI32(1);
+    public void invert(@NotNull U32 in, @NotNull U32 out) {
+        if (in.getI32() == 1) {
+            out.setI32(1);
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void increase(@NotNull I32Slot variable, @NotNull I32Slot result) {
-        final int value = variable.getI32();
+    public void increase(@NotNull U32 in, @NotNull U32 out) {
+        final int value = in.getI32();
         if (value == -1) {
             throw new ArithmeticException();
         }
-        result.setI32(value + 1);
+        out.setI32(value + 1);
     }
 
     @Override
-    public void decrease(@NotNull I32Slot variable, @NotNull I32Slot result) {
-        final int value = variable.getI32();
+    public void decrease(@NotNull U32 in, @NotNull U32 out) {
+        final int value = in.getI32();
         if (value == 0) {
             throw new ArithmeticException();
         }
-        result.setI32(value - 1);
+        out.setI32(value - 1);
     }
 
     @Override
-    public void add(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void add(@NotNull U32 left, @NotNull U32 right, @NotNull U32 out) {
+        final long resultValue = (0xffffffffL & left.value) + (0xffffffffL & right.value);
+        if (resultValue > 0xffffffffL) {
+            throw new ArithmeticException();
+        }
+        out.value = (int) resultValue;
+    }
+
+    @Override
+    public void subtract(@NotNull U32 left, @NotNull U32 right, @NotNull U32 out) {
+        final long resultValue = (0xffffffffL & left.value) - (0xffffffffL & right.value);
+        if (resultValue < 0L) {
+            throw new ArithmeticException();
+        }
+        out.value = (int) resultValue;
+    }
+
+    @Override
+    public void multiply(@NotNull U32 left, @NotNull U32 right, @NotNull U32 out) {
+        final long resultValue = (0xffffffffL & left.value) * (0xffffffffL & right.value);
+        if (resultValue < 0L || resultValue > 0xffffffffL) {
+            throw new ArithmeticException();
+        }
+        out.value = (int) resultValue;
+    }
+
+    @Override
+    public void divide(@NotNull U32 left, @NotNull U32 right, @NotNull U32 result, @NotNull RoundingMode mode) {
         // todo
     }
 
     @Override
-    public void subtract(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
+    public void divide(@NotNull U32 left, @NotNull U32 right, @Nullable U32 quotient, @Nullable U32 remainder) {
         // todo
     }
 
-    @Override
-    public void multiply(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result) {
-        // todo
-    }
+    @CodeHistory(date = "2026/9/12")
+    public static class U32HashSAC extends U32Arithmetic implements SlotArrayComparator.HashSAC<U32, int[]> {
 
-    @Override
-    public void divide(@NotNull I32Slot left, @NotNull I32Slot right, @NotNull I32Slot result, @NotNull RoundingMode mode) {
-        // todo
-    }
+        private static final long serialVersionUID = 0xA04F9F574E32C1D9L;
 
-    @Override
-    public void divide(@NotNull I32Slot left, @NotNull I32Slot right, @Nullable I32Slot quotient, @Nullable I32Slot remainder) {
-        // todo
+        @NotNull
+        final CapacityPolicy capacityPolicy;
+
+        public U32HashSAC(@NotNull CapacityPolicy capacityPolicy) {
+            super();
+            this.capacityPolicy = capacityPolicy;
+        }
+
+        @NotNull
+        @Override
+        public CapacityPolicy getCapacityPolicy() {
+            return capacityPolicy;
+        }
+
+        @Override
+        public int slotHash(@NotNull U32 slot) {
+            return slot.value;
+        }
     }
 }

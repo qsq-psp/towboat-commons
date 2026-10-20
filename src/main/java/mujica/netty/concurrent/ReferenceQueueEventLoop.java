@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 
 @CodeHistory(date = "2022/7/28", project = "infrastructure")
 @CodeHistory(date = "2025/12/26")
-public class ReferenceQueueEventLoop<T> extends SingleThreadEventLoop {
+public class ReferenceQueueEventLoop<T> extends SingleThreadEventLoop { // EventExecutor, not EventLoop
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceQueueEventLoop.class);
 

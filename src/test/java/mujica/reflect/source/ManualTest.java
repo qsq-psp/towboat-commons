@@ -1,7 +1,7 @@
 package mujica.reflect.source;
 
-/**
- * Created on 2025/11/21.
- */
+import mujica.reflect.modifier.CodeHistory;
+
+@CodeHistory(date = "2025/11/21")
 public class ManualTest {
 }

@@ -62,18 +62,18 @@ public class S64ClampedArithmetic extends PrimitiveArithmetic<S64, long[]> {
     }
 
     @Override
-    public void zero(@NotNull S64 result) {
-        result.value = 0L;
+    public void zero(@NotNull S64 out) {
+        out.value = 0L;
     }
 
     @Override
-    public void one(@NotNull S64 result) {
-        result.value = 1L;
+    public void one(@NotNull S64 out) {
+        out.value = 1L;
     }
 
     @Override
-    public void two(@NotNull S64 result) {
-        result.value = 2L;
+    public void two(@NotNull S64 out) {
+        out.value = 2L;
     }
 
     @Override
@@ -102,13 +102,13 @@ public class S64ClampedArithmetic extends PrimitiveArithmetic<S64, long[]> {
     }
 
     @Override
-    public int sign(@NotNull S64 variable) {
-        return Long.signum(variable.value);
+    public int sign(@NotNull S64 in) {
+        return Long.signum(in.value);
     }
 
     @Override
-    public void move(@NotNull S64 src, @NotNull S64 dst) {
-        dst.value = src.value;
+    public void move(@NotNull S64 in, @NotNull S64 out) {
+        out.value = in.value;
     }
 
     @Override
@@ -117,22 +117,22 @@ public class S64ClampedArithmetic extends PrimitiveArithmetic<S64, long[]> {
     }
 
     @Override
-    public void negate(@NotNull S64 variable, @NotNull S64 result) {
-        if (variable.value == Long.MIN_VALUE) {
-            result.value = Long.MAX_VALUE;
+    public void negate(@NotNull S64 in, @NotNull S64 out) {
+        if (in.value == Long.MIN_VALUE) {
+            out.value = Long.MAX_VALUE;
         } else {
-            result.value = -variable.value;
+            out.value = -in.value;
         }
     }
 
     @Override
-    public void absolute(@NotNull S64 variable, @NotNull S64 result) {
-        if (variable.value >= 0) {
-            result.value = variable.value;
-        } else if (variable.value == Long.MIN_VALUE) {
-            result.value = Long.MAX_VALUE;
+    public void absolute(@NotNull S64 in, @NotNull S64 out) {
+        if (in.value >= 0L) {
+            out.value = in.value;
+        } else if (in.value == Long.MIN_VALUE) {
+            out.value = Long.MAX_VALUE;
         } else {
-            result.value = -variable.value;
+            out.value = -in.value;
         }
     }
 
@@ -142,67 +142,96 @@ public class S64ClampedArithmetic extends PrimitiveArithmetic<S64, long[]> {
     }
 
     @Override
-    public void invert(@NotNull S64 variable, @NotNull S64 result) {
-        if (isInvertible(variable)) {
+    public void invert(@NotNull S64 in, @NotNull S64 out) {
+        if (isInvertible(in)) {
             // same as move
-            result.value = variable.value;
+            out.value = in.value;
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void increase(@NotNull S64 variable, @NotNull S64 result) {
-        if (variable.value == Long.MAX_VALUE) {
-            result.value = Long.MAX_VALUE;
+    public void increase(@NotNull S64 in, @NotNull S64 out) {
+        if (in.value == Long.MAX_VALUE) {
+            out.value = Long.MAX_VALUE;
         } else {
-            result.value = variable.value + 1L;
+            out.value = in.value + 1L;
         }
     }
 
     @Override
-    public void decrease(@NotNull S64 variable, @NotNull S64 result) {
-        if (variable.value == Long.MIN_VALUE) {
-            result.value = Long.MIN_VALUE;
+    public void decrease(@NotNull S64 in, @NotNull S64 out) {
+        if (in.value == Long.MIN_VALUE) {
+            out.value = Long.MIN_VALUE;
         } else {
-            result.value = variable.value - 1L;
+            out.value = in.value - 1L;
         }
     }
 
     @Override
-    public void add(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
-        result.value = left.value + right.value;
-        if (((left.value ^ result.value) & (right.value ^ result.value)) < 0) {
+    public void add(@NotNull S64 left, @NotNull S64 right, @NotNull S64 out) {
+        out.value = left.value + right.value;
+        if (((left.value ^ out.value) & (right.value ^ out.value)) < 0) {
             if (left.value < 0) {
-                result.value = Long.MIN_VALUE;
+                out.value = Long.MIN_VALUE;
             } else {
-                result.value = Long.MAX_VALUE;
+                out.value = Long.MAX_VALUE;
             }
         }
     }
 
     @Override
-    public void subtract(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
-        result.value = left.value - right.value;
-        if (((left.value ^ right.value) & (left.value ^ result.value)) < 0) {
+    public void subtract(@NotNull S64 left, @NotNull S64 right, @NotNull S64 out) {
+        out.value = left.value - right.value;
+        if (((left.value ^ right.value) & (left.value ^ out.value)) < 0) {
             if (left.value < 0) {
-                result.value = Long.MIN_VALUE;
+                out.value = Long.MIN_VALUE;
             } else {
-                result.value = Long.MAX_VALUE;
+                out.value = Long.MAX_VALUE;
             }
         }
     }
 
     @Override
-    public void multiply(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
+    public void multiply(@NotNull S64 left, @NotNull S64 right, @NotNull S64 out) {
         try {
-            result.value = Math.multiplyExact(left.value, right.value);
+            out.value = Math.multiplyExact(left.value, right.value);
         } catch (ArithmeticException e) {
             if ((left.value ^ right.value) < 0L) {
-                result.value = Long.MIN_VALUE;
+                out.value = Long.MIN_VALUE;
             } else {
-                result.value = Long.MAX_VALUE;
+                out.value = Long.MAX_VALUE;
             }
+        }
+    }
+
+    @Override
+    public void square(@NotNull S64 in, @NotNull S64 out) {
+        // 3037000499**2 = 9223372030926249001 < 9223372036854775807 = Long.MAX_VALUE
+        // 3037000500**2 = 9223372037000250000 > 9223372036854775807 = Long.MAX_VALUE
+        if (in.value < -3037000499L || in.value > 3037000499L) {
+            out.value = Long.MAX_VALUE;
+        } else {
+            out.value = in.value * in.value;
+        }
+    }
+
+    @Override
+    public void triangle(@NotNull S64 in, @NotNull S64 out) {
+        // 4294967295 * (4294967295 + 1) / 2 = 9223372034707292160 < 9223372036854775807 = Long.MAX_VALUE
+        // 4294967296 * (4294967296 + 1) / 2 = 9223372039002259456 > 9223372036854775807 = Long.MAX_VALUE
+        if (in.value < -4294967295L || in.value > 4294967295L) {
+            out.value = Long.MAX_VALUE;
+        } else {
+            long leftValue = in.value;
+            long rightValue = Math.incrementExact(leftValue);
+            if ((leftValue & 1L) == 0L) {
+                leftValue >>= 1;
+            } else {
+                rightValue >>= 1;
+            }
+            out.value = leftValue * rightValue;
         }
     }
 

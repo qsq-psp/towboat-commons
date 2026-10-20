@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 @CodeHistory(date = "2026/4/26")
 public class GroupedBase2Appender implements IntegralAppender {
 
-    private static final long serialVersionUID = 0x2CC9A7B00AAB4E91L;
+    private static final long serialVersionUID = 0x2cc9a7b00aab4e91L;
 
     @CodeHistory(date = "2026/3/10")
     private interface BitAppender {

@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.ext.Attributes2;
 
@@ -28,7 +29,7 @@ public class AttributesTransformer implements JsonContextTransformer<Attributes>
     static final FastString SPECIFIED = new FastString("specified");
 
     @Override
-    public void transform(@NotNull Attributes attributes, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Attributes attributes, @NotNull JsonHandler out, @Nullable JsonContext context) {
         final int length = attributes.getLength();
         if (length == 0) {
             out.emptyArrayValue();

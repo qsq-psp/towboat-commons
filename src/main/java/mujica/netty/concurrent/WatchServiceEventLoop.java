@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @CodeHistory(date = "2026/2/12")
-public class WatchServiceEventLoop extends SingleThreadEventLoop {
+public class WatchServiceEventLoop extends SingleThreadEventLoop { // EventExecutor, not EventLoop
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WatchServiceEventLoop.class);
 

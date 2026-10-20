@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2026/6/24")
 public abstract class AbstractBitList implements BitList {
 
-    private static final long serialVersionUID = 0xA07A3F46493F7F8DL;
+    private static final long serialVersionUID = 0xa07a3f46493f7f8dL;
 
     protected AbstractBitList() {
         super();

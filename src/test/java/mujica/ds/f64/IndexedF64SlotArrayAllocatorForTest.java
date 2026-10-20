@@ -54,6 +54,6 @@ public class IndexedF64SlotArrayAllocatorForTest implements SlotArrayAllocator<I
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = (f64, i32), slotType = IndexedF64ForTest, arrayType = IndexedF64ForTest[]]";
+        return "[dataType = (f64, i32), slotType = IndexedF64ForTest, arrayType = IndexedF64ForTest[]]";
     }
 }

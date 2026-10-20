@@ -83,9 +83,9 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
             for (int index = 0; index < minLength; index++) {
                 load(left, index, leftSlot);
                 load(right, index, rightSlot);
-                int result = compareSlot(leftSlot, rightSlot);
-                if (result != 0) {
-                    return result;
+                int sign = compareSlot(leftSlot, rightSlot);
+                if (sign != 0) {
+                    return sign;
                 }
             }
         }
@@ -107,10 +107,10 @@ public interface SlotArrayComparator<S, A> extends SlotArrayAllocator<S, A> {
             int flags = 0;
             for (int index = startIndex + 1; index < endIndex; index++) {
                 load(array, index, currentSlot);
-                int result = compareSlot(previousSlot, currentSlot);
-                if (result < 0) {
+                int sign = compareSlot(previousSlot, currentSlot);
+                if (sign < 0) {
                     flags |= FLAG_ASCENDING;
-                } else if (result > 0) {
+                } else if (sign > 0) {
                     flags |= FLAG_DESCENDING;
                 } else {
                     flags |= FLAG_EQUAL;

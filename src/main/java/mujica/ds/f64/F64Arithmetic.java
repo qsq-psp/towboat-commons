@@ -53,37 +53,37 @@ public class F64Arithmetic extends PrimitiveArithmetic<F64, double[]> {
 
     @Override
     public void load(@NotNull double[] array, int index, @NotNull F64 slot) {
-        slot.setF64(array[index]);
+        slot.value = array[index];
     }
 
     @Override
     public void store(@NotNull double[] array, int index, @NotNull F64 slot) {
-        array[index] = slot.getF64();
+        array[index] = slot.value;
     }
 
     @Override
-    public void zero(@NotNull F64 result) {
-        result.setF64(0.0);
+    public void zero(@NotNull F64 out) {
+        out.value = 0.0;
     }
 
     @Override
-    public void one(@NotNull F64 result) {
-        result.setF64(1.0);
+    public void one(@NotNull F64 out) {
+        out.value = 1.0;
     }
 
     @Override
-    public void two(@NotNull F64 result) {
-        result.setF64(2.0);
+    public void two(@NotNull F64 out) {
+        out.value = 2.0;
     }
 
     @Override
     public void min(@NotNull F64 result) {
-        result.setF64(Double.NEGATIVE_INFINITY);
+        result.value = Double.NEGATIVE_INFINITY;
     }
 
     @Override
     public void max(@NotNull F64 result) {
-        result.setF64(Double.POSITIVE_INFINITY);
+        result.value = Double.POSITIVE_INFINITY;
     }
 
     @Override
@@ -97,18 +97,18 @@ public class F64Arithmetic extends PrimitiveArithmetic<F64, double[]> {
     }
 
     @Override
-    public int compareSlot(@NotNull F64 a, @NotNull F64 b) {
-        return Double.compare(a.getF64(), b.getF64());
+    public int compareSlot(@NotNull F64 left, @NotNull F64 right) {
+        return Double.compare(left.getF64(), right.getF64());
     }
 
     @Override
-    public int sign(@NotNull F64 variable) {
-        return Double.compare(variable.getF64(), 0.0);
+    public int sign(@NotNull F64 in) {
+        return Double.compare(in.getF64(), 0.0);
     }
 
     @Override
-    public void move(@NotNull F64 src, @NotNull F64 dst) {
-        dst.setF64(src.getF64());
+    public void move(@NotNull F64 in, @NotNull F64 out) {
+        out.setF64(in.getF64());
     }
 
     @Override
@@ -117,13 +117,13 @@ public class F64Arithmetic extends PrimitiveArithmetic<F64, double[]> {
     }
 
     @Override
-    public void negate(@NotNull F64 variable, @NotNull F64 result) {
-        result.setF64(-variable.getF64());
+    public void negate(@NotNull F64 in, @NotNull F64 out) {
+        out.setF64(-in.getF64());
     }
 
     @Override
-    public void absolute(@NotNull F64 variable, @NotNull F64 result) {
-        result.setF64(variable.getF64());
+    public void absolute(@NotNull F64 in, @NotNull F64 out) {
+        out.setF64(in.getF64());
     }
 
     @Override
@@ -133,45 +133,45 @@ public class F64Arithmetic extends PrimitiveArithmetic<F64, double[]> {
     }
 
     @Override
-    public void invert(@NotNull F64 variable, @NotNull F64 result) {
-        result.setF64(1.0 / variable.getF64());
+    public void invert(@NotNull F64 in, @NotNull F64 out) {
+        out.setF64(1.0 / in.getF64());
     }
 
     @Override
-    public void increase(@NotNull F64 variable, @NotNull F64 result) {
-        result.value = Math.nextUp(variable.value);
+    public void increase(@NotNull F64 in, @NotNull F64 out) {
+        out.value = Math.nextUp(in.value);
     }
 
     @Override
-    public void decrease(@NotNull F64 variable, @NotNull F64 result) {
-        result.value = Math.nextDown(variable.value);
+    public void decrease(@NotNull F64 in, @NotNull F64 out) {
+        out.value = Math.nextDown(in.value);
     }
 
     @Override
-    public void add(@NotNull F64 left, @NotNull F64 right, @NotNull F64 result) {
-        result.setF64(left.getF64() + right.getF64());
+    public void add(@NotNull F64 left, @NotNull F64 right, @NotNull F64 out) {
+        out.setF64(left.getF64() + right.getF64());
     }
 
     @Override
-    public void subtract(@NotNull F64 left, @NotNull F64 right, @NotNull F64 result) {
-        result.setF64(left.getF64() - right.getF64());
+    public void subtract(@NotNull F64 left, @NotNull F64 right, @NotNull F64 out) {
+        out.setF64(left.getF64() - right.getF64());
     }
 
     @Override
-    public void multiply(@NotNull F64 left, @NotNull F64 right, @NotNull F64 result) {
-        result.setF64(left.getF64() * right.getF64());
+    public void multiply(@NotNull F64 left, @NotNull F64 right, @NotNull F64 out) {
+        out.setF64(left.getF64() * right.getF64());
     }
 
     @Override
-    public void square(@NotNull F64 variable, @NotNull F64 result) {
-        final double value = variable.getF64();
-        result.setF64(value * value);
+    public void square(@NotNull F64 in, @NotNull F64 out) {
+        final double value = in.getF64();
+        out.setF64(value * value);
     }
 
     @Override
-    public void triangle(@NotNull F64 variable, @NotNull F64 result) {
-        final double value = variable.getF64();
-        result.setF64(0.5 * value * (value + 1.0));
+    public void triangle(@NotNull F64 in, @NotNull F64 out) {
+        final double value = in.getF64();
+        out.setF64(0.5 * value * (value + 1.0));
     }
 
     @Override

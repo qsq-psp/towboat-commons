@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2026/8/10")
 public abstract class AbstractSlotMap<KS, VS> implements SlotMap<KS, VS> {
 
-    private static final long serialVersionUID = 0xBBC38C2EA200D1F3L;
+    private static final long serialVersionUID = 0xbbc38c2ea200d1f3L;
 
     @NotNull
     @Override

@@ -6,12 +6,10 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Locator;
 import org.xml.sax.ext.Locator2;
 
-/**
- * Created on 2026/5/6.
- */
 @CodeHistory(date = "2026/5/6")
 public class LocatorTransformer implements JsonContextTransformer<Locator> {
 
@@ -24,7 +22,7 @@ public class LocatorTransformer implements JsonContextTransformer<Locator> {
     static final FastString COLUMN_NUMBER = new FastString("columnNumber");
 
     @Override
-    public void transform(@NotNull Locator locator, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull Locator locator, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         if (locator instanceof Locator2) {
             Locator2 locator2 = (Locator2) locator;

@@ -59,6 +59,6 @@ public class PointI32SlotArrayAllocator implements SlotArrayAllocator<Point, int
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = i32*2, slotType = Point, arrayType = int[]]";
+        return "[dataType = i32*2, slotType = Point, arrayType = int[]]";
     }
 }

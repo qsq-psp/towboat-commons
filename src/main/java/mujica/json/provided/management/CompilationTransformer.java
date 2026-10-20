@@ -26,7 +26,7 @@ public class CompilationTransformer implements JsonContextTransformer<Compilatio
         }
         if (bean.isCompilationTimeMonitoringSupported()) {
             out.key(TOTAL_COMPILATION_TIME);
-            out.numberValue(bean.getTotalCompilationTime()); // unit is ms
+            out.numberValue(bean.getTotalCompilationTime()); // ms
         }
         out.closeObject();
     }

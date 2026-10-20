@@ -64,7 +64,7 @@ public class Bit implements BitSlot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/21")
     public static class BitNode1 extends Bit {
 
-        private static final long serialVersionUID = 0x9A038731A41F8689L;
+        private static final long serialVersionUID = 0x9a038731a41f8689L;
 
         BitNode1 first;
 
@@ -74,7 +74,7 @@ public class Bit implements BitSlot, Cloneable, Serializable {
     @CodeHistory(date = "2026/8/7")
     public static class BitNodeAllocator1 implements NodeAllocator1<BitNode1> {
 
-        private static final long serialVersionUID = 0x14A52A300300C76DL;
+        private static final long serialVersionUID = 0x14a52a300300c76dL;
 
         public static final BitNodeAllocator1 INSTANCE = new BitNodeAllocator1();
 
@@ -118,7 +118,7 @@ public class Bit implements BitSlot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/21")
     public static class BitNode2 extends Bit {
 
-        private static final long serialVersionUID = 0x33C5297F13DF0E2EL;
+        private static final long serialVersionUID = 0x33c5297f13df0e2eL;
 
         BitNode2 first, second;
 
@@ -128,7 +128,7 @@ public class Bit implements BitSlot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/28")
     public static class BitNodeAllocator2 implements NodeAllocator2<BitNode2> {
 
-        private static final long serialVersionUID = 0xE2D42D70C6B2452AL;
+        private static final long serialVersionUID = 0xe2d42d70c6b2452aL;
 
         public static final BitNodeAllocator2 INSTANCE = new BitNodeAllocator2();
 
@@ -193,7 +193,7 @@ public class Bit implements BitSlot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/21")
     public static class BitNode3 extends Bit {
 
-        private static final long serialVersionUID = 0xEFA4EC12189ADCA1L;
+        private static final long serialVersionUID = 0xefa4ec12189adca1L;
 
         BitNode3 first, second, third;
 
@@ -203,7 +203,7 @@ public class Bit implements BitSlot, Cloneable, Serializable {
     @CodeHistory(date = "2026/7/23")
     public static class BitNodeAllocator3 implements NodeAllocator3<BitNode3> {
 
-        private static final long serialVersionUID = 0xDEBF4B1C2CCAF682L;
+        private static final long serialVersionUID = 0xdebf4b1c2ccaf682L;
 
         public static final BitNodeAllocator3 INSTANCE = new BitNodeAllocator3();
 

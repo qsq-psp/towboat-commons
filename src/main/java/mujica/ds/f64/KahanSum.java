@@ -9,7 +9,7 @@ import mujica.reflect.modifier.ReferencePage;
 @ReferenceCode(groupId = "it.unimi.dsi", artifactId = "dsiutils", version = "2.7.4", fullyQualifiedName = "it.unimi.dsi.util.KahanSummation")
 public class KahanSum extends F64 {
 
-    private static final long serialVersionUID = 0x56ECFD599E030064L;
+    private static final long serialVersionUID = 0x56ecfd599e030064L;
 
     double correction;
 

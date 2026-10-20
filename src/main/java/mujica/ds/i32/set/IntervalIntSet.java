@@ -14,7 +14,7 @@ import java.util.Spliterators;
 @DirectSubclass({IntInterval.class, NavigableIntMapAsIntervalIntSet.class, SegmentTreeIntervalIntSet.class})
 public abstract class IntervalIntSet extends NavigableIntSet {
 
-    private static final long serialVersionUID = 0xDF952E9F0A10BC52L;
+    private static final long serialVersionUID = 0xdf952e9f0a10bc52L;
 
     protected IntervalIntSet() {
         super();

@@ -15,35 +15,35 @@ public class DecimalFormatSymbolsTransformer implements JsonContextTransformer<D
     public static final DecimalFormatSymbolsTransformer INSTANCE = new DecimalFormatSymbolsTransformer();
 
     @Override
-    public void transform(@NotNull DecimalFormatSymbols in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull DecimalFormatSymbols decimalFormatSymbols, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("zeroDigit");
-            out.stringValue(String.valueOf(in.getZeroDigit()));
+            out.stringValue(String.valueOf(decimalFormatSymbols.getZeroDigit()));
             out.key("groupingSeparator");
-            out.stringValue(String.valueOf(in.getGroupingSeparator()));
+            out.stringValue(String.valueOf(decimalFormatSymbols.getGroupingSeparator()));
             out.key("perMill");
-            out.stringValue(String.valueOf(in.getPerMill()));
+            out.stringValue(String.valueOf(decimalFormatSymbols.getPerMill()));
             out.key("percent");
-            out.stringValue(String.valueOf(in.getPercent()));
+            out.stringValue(String.valueOf(decimalFormatSymbols.getPercent()));
             out.key("digit");
-            out.stringValue(String.valueOf(in.getDigit()));
+            out.stringValue(String.valueOf(decimalFormatSymbols.getDigit()));
             out.key("patternSeparator");
-            out.stringValue(String.valueOf(in.getPatternSeparator()));
+            out.stringValue(String.valueOf(decimalFormatSymbols.getPatternSeparator()));
             out.key("infinity");
-            out.stringValue(in.getInfinity());
+            out.stringValue(decimalFormatSymbols.getInfinity());
             out.key("NaN");
-            out.stringValue(in.getNaN());
+            out.stringValue(decimalFormatSymbols.getNaN());
             out.key("minusSign");
-            out.stringValue(String.valueOf(in.getMinusSign()));
+            out.stringValue(String.valueOf(decimalFormatSymbols.getMinusSign()));
             out.key("currencySymbol");
-            out.stringValue(in.getCurrencySymbol());
+            out.stringValue(decimalFormatSymbols.getCurrencySymbol());
             out.key("internationalCurrencySymbol");
-            out.stringValue(in.getInternationalCurrencySymbol());
+            out.stringValue(decimalFormatSymbols.getInternationalCurrencySymbol());
             out.key("monetarySeparator");
-            out.stringValue(String.valueOf(in.getMonetaryDecimalSeparator()));
+            out.stringValue(String.valueOf(decimalFormatSymbols.getMonetaryDecimalSeparator()));
             out.key("exponentialSeparator");
-            out.stringValue(in.getExponentSeparator());
+            out.stringValue(decimalFormatSymbols.getExponentSeparator());
         }
         out.closeObject();
     }

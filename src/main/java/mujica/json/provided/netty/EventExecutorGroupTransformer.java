@@ -10,6 +10,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2026/6/23")
 public class EventExecutorGroupTransformer implements JsonContextTransformer<EventExecutorGroup> {
@@ -17,7 +18,7 @@ public class EventExecutorGroupTransformer implements JsonContextTransformer<Eve
     public static final EventExecutorGroupTransformer INSTANCE = new EventExecutorGroupTransformer();
 
     @Override
-    public void transform(EventExecutorGroup group, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull EventExecutorGroup group, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("class");

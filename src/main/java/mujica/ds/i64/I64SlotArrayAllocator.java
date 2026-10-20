@@ -99,7 +99,7 @@ public class I64SlotArrayAllocator implements SlotArrayAllocator<I64Slot, long[]
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = i64, slotType = I64Slot, arrayType = long[]]";
+        return "[dataType = i64, slotType = I64Slot, arrayType = long[]]";
     }
 
     @CodeHistory(date = "2026/7/23", name = "WithHashI64")
@@ -143,7 +143,7 @@ public class I64SlotArrayAllocator implements SlotArrayAllocator<I64Slot, long[]
         @Override
         @NotNull
         public String toString() {
-            return "SlotTool[dataType = i64, slotType = I64Slot, arrayType = long[], capacityPolicy = " + capacityPolicy + "]";
+            return "[dataType = i64, slotType = I64Slot, arrayType = long[], capacityPolicy = " + capacityPolicy + "]";
         }
     }
 }

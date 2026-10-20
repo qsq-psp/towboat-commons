@@ -18,13 +18,13 @@ public class S64ModuloArithmetic extends AbstractArithmetic<S64> {
     }
 
     @Override
-    public void zero(@NotNull S64 result) {
-        result.value = 0L;
+    public void zero(@NotNull S64 out) {
+        out.value = 0L;
     }
 
     @Override
-    public void one(@NotNull S64 result) {
-        result.value = 1L;
+    public void one(@NotNull S64 out) {
+        out.value = 1L;
     }
 
     @Override
@@ -33,13 +33,13 @@ public class S64ModuloArithmetic extends AbstractArithmetic<S64> {
     }
 
     @Override
-    public void move(@NotNull S64 src, @NotNull S64 dst) {
-        dst.value = src.value;
+    public void move(@NotNull S64 in, @NotNull S64 out) {
+        out.value = in.value;
     }
 
     @Override
-    public void negate(@NotNull S64 variable, @NotNull S64 result) {
-        result.value = -variable.value;
+    public void negate(@NotNull S64 in, @NotNull S64 out) {
+        out.value = -in.value;
     }
 
     @Override
@@ -48,27 +48,27 @@ public class S64ModuloArithmetic extends AbstractArithmetic<S64> {
     }
 
     @Override
-    public void invert(@NotNull S64 variable, @NotNull S64 result) {
-        if (Math.abs(variable.value) == 1) {
-            result.value = variable.value;
+    public void invert(@NotNull S64 in, @NotNull S64 out) {
+        if (Math.abs(in.value) == 1) {
+            out.value = in.value;
         } else {
             throw new ArithmeticException();
         }
     }
 
     @Override
-    public void add(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
-        result.value = left.value + right.value;
+    public void add(@NotNull S64 left, @NotNull S64 right, @NotNull S64 out) {
+        out.value = left.value + right.value;
     }
 
     @Override
-    public void subtract(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
-        result.value = left.value - right.value;
+    public void subtract(@NotNull S64 left, @NotNull S64 right, @NotNull S64 out) {
+        out.value = left.value - right.value;
     }
 
     @Override
-    public void multiply(@NotNull S64 left, @NotNull S64 right, @NotNull S64 result) {
-        result.value = left.value * right.value;
+    public void multiply(@NotNull S64 left, @NotNull S64 right, @NotNull S64 out) {
+        out.value = left.value * right.value;
     }
 
     @Override

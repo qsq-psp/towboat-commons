@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/7/9")
 public class Interval32 extends I32ValueS32Interval {
 
-    private static final long serialVersionUID = 0x374E49CEE7F80D88L;
+    private static final long serialVersionUID = 0x374e49cee7f80d88L;
 
     int left, right, value;
 

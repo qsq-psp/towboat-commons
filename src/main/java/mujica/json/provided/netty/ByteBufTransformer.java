@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @CodeHistory(date = "2022/1/9", project = "infrastructure", name = "NettyBufferValue")
 @CodeHistory(date = "2022/7/16", project = "Ultramarine", name = "NettyBufferValueSerializer")
@@ -15,33 +16,33 @@ public class ByteBufTransformer implements JsonContextTransformer<ByteBuf> {
     public static final ByteBufTransformer INSTANCE = new ByteBufTransformer();
 
     @Override
-    public void transform(@NotNull ByteBuf in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull ByteBuf byteBuf, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("class");
-            out.stringValue(in.getClass().getName());
+            out.stringValue(byteBuf.getClass().getName());
             out.key("capacity");
-            out.numberValue(in.capacity());
+            out.numberValue(byteBuf.capacity());
             out.key("maxCapacity");
-            out.numberValue(in.maxCapacity());
+            out.numberValue(byteBuf.maxCapacity());
             out.key("direct");
-            out.booleanValue(in.isDirect());
+            out.booleanValue(byteBuf.isDirect());
             out.key("readOnly");
-            out.booleanValue(in.isReadOnly());
+            out.booleanValue(byteBuf.isReadOnly());
             out.key("readerIndex");
-            out.numberValue(in.readerIndex());
+            out.numberValue(byteBuf.readerIndex());
             out.key("writerIndex");
-            out.numberValue(in.writerIndex());
+            out.numberValue(byteBuf.writerIndex());
             out.key("nioBufferCount");
-            out.numberValue(in.nioBufferCount());
+            out.numberValue(byteBuf.nioBufferCount());
             out.key("hasArray");
-            out.booleanValue(in.hasArray());
+            out.booleanValue(byteBuf.hasArray());
             out.key("hasMemoryAddress");
-            out.booleanValue(in.hasMemoryAddress());
+            out.booleanValue(byteBuf.hasMemoryAddress());
             out.key("isContiguous");
-            out.booleanValue(in.isContiguous());
+            out.booleanValue(byteBuf.isContiguous());
             out.key("referenceCount");
-            out.numberValue(in.refCnt());
+            out.numberValue(byteBuf.refCnt());
         }
         out.closeObject();
     }

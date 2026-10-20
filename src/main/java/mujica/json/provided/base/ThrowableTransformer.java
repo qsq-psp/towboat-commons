@@ -66,7 +66,7 @@ public class ThrowableTransformer implements JsonContextTransformer<Throwable> {
             context.getLogger().debug("throwable loop to null");
             out.nullValue();
         } else {
-            throw new RuntimeException("loop");
+            throw new RuntimeException("throwable loop");
         }
     }
 }

@@ -59,6 +59,48 @@ public class AnnotationTest {
         int data();
     }
 
+    @InheritedMark(data = 11)
+    static class InheritedMarked {
+
+        @InheritedMark(data = 12)
+        public void paper() {}
+
+        @InheritedMark(data = 13)
+        public void flower() {}
+    }
+
+    static class InheritedMarkedChild extends InheritedMarked {
+
+        @Override
+        public void paper() {}
+
+        @InheritedMark(data = 14)
+        @Override
+        public void flower() {}
+    }
+
+    @Test
+    public void caseInheritedMarked() throws ReflectiveOperationException {
+        InheritedMark mark;
+        mark = InheritedMarked.class.getAnnotation(InheritedMark.class);
+        Assert.assertNotNull(mark);
+        Assert.assertEquals(11, mark.data());
+        mark = InheritedMarkedChild.class.getAnnotation(InheritedMark.class);
+        Assert.assertNotNull(mark); // @Inherited works here
+        Assert.assertEquals(11, mark.data());
+        mark = InheritedMarked.class.getDeclaredMethod("paper").getAnnotation(InheritedMark.class);
+        Assert.assertNotNull(mark);
+        Assert.assertEquals(12, mark.data());
+        mark = InheritedMarkedChild.class.getDeclaredMethod("paper").getAnnotation(InheritedMark.class);
+        Assert.assertNull(mark); // @Inherited only works on class
+        mark = InheritedMarked.class.getDeclaredMethod("flower").getAnnotation(InheritedMark.class);
+        Assert.assertNotNull(mark);
+        Assert.assertEquals(13, mark.data());
+        mark = InheritedMarkedChild.class.getDeclaredMethod("flower").getAnnotation(InheritedMark.class);
+        Assert.assertNotNull(mark);
+        Assert.assertEquals(14, mark.data());
+    }
+
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.TYPE, ElementType.METHOD})
     @Repeatable(RepeatedMark.class)

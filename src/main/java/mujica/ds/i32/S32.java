@@ -327,7 +327,7 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
     @CodeHistory(date = "2026/7/27")
     public static class S32Node1 extends S32 {
 
-        private static final long serialVersionUID = 0x343DC7B058F2ACD3L;
+        private static final long serialVersionUID = 0x343dc7b058f2acd3L;
 
         S32Node1 first;
 
@@ -337,7 +337,7 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
     @CodeHistory(date = "2026/8/1")
     public static class S32NodeAllocator1 implements NodeAllocator1<S32Node1> {
 
-        private static final long serialVersionUID = 0x70DABD7C25E1B893L;
+        private static final long serialVersionUID = 0x70dabd7c25e1b893L;
 
         public static final S32NodeAllocator1 INSTANCE = new S32NodeAllocator1();
 
@@ -381,7 +381,7 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
     @CodeHistory(date = "2026/7/27")
     public static class S32Node2 extends S32 {
 
-        private static final long serialVersionUID = 0xBBB5F867CC6A6CCCL;
+        private static final long serialVersionUID = 0xbbb5f867cc6a6cccL;
 
         S32Node2 first, second;
 
@@ -391,7 +391,7 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
     @CodeHistory(date = "2026/8/4")
     public static class S32NodeAllocator2 implements NodeAllocator2<S32Node2> {
 
-        private static final long serialVersionUID = 0xFE752163463EDA84L;
+        private static final long serialVersionUID = 0xfe752163463eda84L;
 
         public static final S32NodeAllocator2 INSTANCE = new S32NodeAllocator2();
 
@@ -445,7 +445,7 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
     @CodeHistory(date = "2026/7/27")
     public static class S32Node3 extends S32 {
 
-        private static final long serialVersionUID = 0xC98E2D2ED4E15143L;
+        private static final long serialVersionUID = 0xc98e2d2ed4e15143L;
 
         S32Node3 first, second, third;
 
@@ -455,7 +455,7 @@ public class S32 extends Base2I32Slot implements Comparable<S32> {
     @CodeHistory(date = "2026/8/4")
     public static class S32NodeAllocator3 implements NodeAllocator3<S32Node3> {
 
-        private static final long serialVersionUID = 0xD49D5CAB2E0DCC51L;
+        private static final long serialVersionUID = 0xd49d5cab2e0dcc51L;
 
         public static final S32NodeAllocator3 INSTANCE = new S32NodeAllocator3();
 

@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2025/12/29")
 public abstract class JsonArray extends JsonContainer<Integer> {
 
-    private static final long serialVersionUID = 0x0809917A2F8E2812L;
+    private static final long serialVersionUID = 0x0809917a2f8e2812L;
 
     @NotNull
     public static JsonArray newArrayList() {

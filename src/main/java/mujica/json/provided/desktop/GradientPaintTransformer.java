@@ -19,6 +19,8 @@ public class GradientPaintTransformer implements JsonContextTransformer<Gradient
     public void transform(@NotNull GradientPaint gradientPaint, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
+            out.key(PathIteratorTransformer.TYPE);
+            out.stringValue(gradientPaint.getClass().getSimpleName());
             Point2D.Float p = (Point2D.Float) gradientPaint.getPoint1();
             out.key("x1");
             out.numberValue(p.x);

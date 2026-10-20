@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2026/6/24")
 public class MaskedI32ListAsBitList extends AbstractBitList {
 
-    private static final long serialVersionUID = 0xDDC4D159E9199C8DL;
+    private static final long serialVersionUID = 0xddc4d159e9199c8dL;
 
     @NotNull
     IntList intList;

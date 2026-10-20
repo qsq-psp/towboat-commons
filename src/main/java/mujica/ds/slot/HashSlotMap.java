@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2026/8/17")
 public abstract class HashSlotMap<KS, KA, VS, VA> extends AbstractSlotMap<KS, VS> {
 
-    private static final long serialVersionUID = 0x14813C4ACD0033A8L;
+    private static final long serialVersionUID = 0x14813c4acd0033a8L;
 
     @NotNull
     final SlotArrayAllocator.HashSAA<KS, KA> hashFunction;

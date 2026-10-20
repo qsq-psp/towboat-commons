@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 @CodeHistory(date = "2026/6/18")
 public class U64 extends Base2I64Slot {
 
-    private static final long serialVersionUID = 0x382C04E5DC974B5AL;
+    private static final long serialVersionUID = 0x382c04e5dc974b5aL;
 
     public U64() {
         super();
@@ -62,7 +62,7 @@ public class U64 extends Base2I64Slot {
     @CodeHistory(date = "2026/8/1")
     public static class U64Node1 extends U64 {
 
-        private static final long serialVersionUID = 0xF99A94D4B47D0264L;
+        private static final long serialVersionUID = 0xf99a94d4b47d0264L;
 
         U64Node1 first;
 
@@ -72,7 +72,7 @@ public class U64 extends Base2I64Slot {
     @CodeHistory(date = "2026/8/1")
     public static class U64NodeAllocator1 implements NodeAllocator1<U64Node1> {
 
-        private static final long serialVersionUID = 0xFA916DA2F319FEDAL;
+        private static final long serialVersionUID = 0xfa916da2f319fedaL;
 
         public static final U64NodeAllocator1 INSTANCE = new U64NodeAllocator1();
 
@@ -116,7 +116,7 @@ public class U64 extends Base2I64Slot {
     @CodeHistory(date = "2026/8/19")
     public static class U64Node2 extends U64 {
 
-        private static final long serialVersionUID = 0xB52EB96BD0284D0BL;
+        private static final long serialVersionUID = 0xb52eb96bd0284d0bL;
 
         U64Node2 first, second;
 
@@ -166,5 +166,15 @@ public class U64 extends Base2I64Slot {
         public void setSecondLink(@NotNull U64Node2 self, U64Node2 node) {
             self.second = node;
         }
+    }
+
+    @CodeHistory(date = "2026/9/22")
+    public static class U64Node3 extends U64 {
+
+        private static final long serialVersionUID = 0xACD4F2ABBF55E2A9L;
+
+        U64Node3 first, second, third;
+
+        int tag;
     }
 }

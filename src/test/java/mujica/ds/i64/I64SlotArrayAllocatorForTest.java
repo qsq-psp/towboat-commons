@@ -98,7 +98,7 @@ public class I64SlotArrayAllocatorForTest implements SlotArrayAllocator<I64Slot,
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = i64, slotType = I64Slot, arrayType = long[]]";
+        return "[dataType = i64, slotType = I64Slot, arrayType = long[]]";
     }
 
     @CodeHistory(date = "2026/8/5")
@@ -141,7 +141,7 @@ public class I64SlotArrayAllocatorForTest implements SlotArrayAllocator<I64Slot,
         @Override
         @NotNull
         public String toString() {
-            return "SlotTool[dataType = i64, slotType = I64Slot, arrayType = long[], capacityPolicy = " + capacityPolicy + "]";
+            return "[dataType = i64, slotType = I64Slot, arrayType = long[], capacityPolicy = " + capacityPolicy + "]";
         }
     }
 }

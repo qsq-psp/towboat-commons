@@ -6,6 +6,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.xml.namespace.QName;
 
@@ -24,15 +25,15 @@ public class QNameTransformer implements JsonContextTransformer<QName> {
     static final FastString PREFIX = new FastString("prefix");
 
     @Override
-    public void transform(QName in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(QName qName, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(NAMESPACE_URI);
-            out.stringValue(in.getNamespaceURI());
+            out.stringValue(qName.getNamespaceURI());
             out.key(LOCAL_PART);
-            out.stringValue(in.getLocalPart());
+            out.stringValue(qName.getLocalPart());
             out.key(PREFIX);
-            out.stringValue(in.getPrefix());
+            out.stringValue(qName.getPrefix());
         }
         out.closeObject();
     }

@@ -10,7 +10,7 @@ import java.util.Collection;
 @CodeHistory(date = "2025/9/25")
 public abstract class JsonContainer<K> implements Serializable {
 
-    private static final long serialVersionUID = 0x6DFEFA8C7E0FE8ADL;
+    private static final long serialVersionUID = 0x6dfefa8c7e0fe8adL;
 
     protected JsonContainer() {
         super();

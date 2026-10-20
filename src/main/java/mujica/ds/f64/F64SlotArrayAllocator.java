@@ -11,7 +11,7 @@ import java.util.Arrays;
 @CodeHistory(date = "2026/8/12")
 public class F64SlotArrayAllocator implements SlotArrayAllocator<F64Slot, double[]> {
 
-    private static final long serialVersionUID = 0x83C146A13B925FF7L;
+    private static final long serialVersionUID = 0x83c146a13b925ff7L;
 
     public static final F64SlotArrayAllocator INSTANCE = new F64SlotArrayAllocator();
 
@@ -106,13 +106,13 @@ public class F64SlotArrayAllocator implements SlotArrayAllocator<F64Slot, double
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = f64, slotType = F64Slot, arrayType = double[]]";
+        return "[dataType = f64, slotType = F64Slot, arrayType = double[]]";
     }
 
     @CodeHistory(date = "2026/8/11")
     public static class F64PolicySAA extends F64SlotArrayAllocator implements HashSAA<F64Slot, double[]> {
 
-        private static final long serialVersionUID = 0xC99F6FC4C72A8FA4L;
+        private static final long serialVersionUID = 0xc99f6fc4c72a8fa4L;
 
         @NotNull
         final CapacityPolicy capacityPolicy;
@@ -151,7 +151,7 @@ public class F64SlotArrayAllocator implements SlotArrayAllocator<F64Slot, double
         @Override
         @NotNull
         public String toString() {
-            return "SlotTool[dataType = f64, slotType = F64Slot, arrayType = double[], capacityPolicy = " + capacityPolicy + "]";
+            return "[dataType = f64, slotType = F64Slot, arrayType = double[], capacityPolicy = " + capacityPolicy + "]";
         }
     }
 }

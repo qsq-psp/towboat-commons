@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 @CodeHistory(date = "2026/3/18")
@@ -65,5 +66,29 @@ public class LoggerInvocationHandler implements InvocationHandler {
     @Override
     public String toString() {
         return "LoggerInvocationHandler[logger = " + logger + ", id = " + id + "]";
+    }
+
+    @CodeHistory(date = "2026/9/21")
+    public static class Counter implements InvocationHandler {
+
+        @NotNull
+        final Object target;
+
+        @NotNull
+        final Logger logger;
+
+        final AtomicInteger count = new AtomicInteger();
+
+        public Counter(@NotNull Object target, @NotNull Logger logger) {
+            super();
+            this.target = target;
+            this.logger = logger;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            count.incrementAndGet();
+            return null; // ...
+        }
     }
 }

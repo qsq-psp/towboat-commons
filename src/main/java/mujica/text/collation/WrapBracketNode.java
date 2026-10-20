@@ -3,13 +3,10 @@ package mujica.text.collation;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created on 2026/2/27.
- */
 @CodeHistory(date = "2026/2/27")
 public class WrapBracketNode extends BracketNode {
 
-    private static final long serialVersionUID = 0x7D66B743DF63E947L;
+    private static final long serialVersionUID = 0x7d66b743df63e947L;
 
     @NotNull
     BracketNode body;

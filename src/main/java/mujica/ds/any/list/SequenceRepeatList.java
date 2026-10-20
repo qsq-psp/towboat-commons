@@ -9,7 +9,7 @@ import java.util.Objects;
 @CodeHistory(date = "2026/1/25")
 public class SequenceRepeatList<E> extends PeriodicList<E> {
 
-    private static final long serialVersionUID = 0xB413AAA6B8A7DB51L;
+    private static final long serialVersionUID = 0xb413aaa6b8a7db51L;
 
     @NotNull
     protected List<E> sequence;

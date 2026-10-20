@@ -23,7 +23,8 @@ public class TruncateList<E> extends ArrayList<E> implements DataStructure {
         return list;
     }
 
-    @SuppressWarnings({"ManualArrayToCollectionCopy", "UseBulkOperation", "unchecked"})
+    @SuppressWarnings({"ManualArrayToCollectionCopy", "UseBulkOperation"})
+    @SafeVarargs
     @NotNull
     public static <E> TruncateList<E> of(E... objects) {
         final TruncateList<E> list = new TruncateList<>();

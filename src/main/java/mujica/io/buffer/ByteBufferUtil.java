@@ -92,9 +92,6 @@ public final class ByteBufferUtil {
         return read(is, OIO.BUFFER_SIZE);
     }
 
-    /**
-     * No instance
-     */
     private ByteBufferUtil() {
         super();
     }

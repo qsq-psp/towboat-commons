@@ -1,8 +1,18 @@
 package mujica.json.provided.netty;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.EmptyByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.DefaultEventLoop;
+import io.netty.channel.local.LocalAddress;
+import io.netty.channel.unix.DomainSocketAddress;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpScheme;
+import io.netty.util.concurrent.DefaultEventExecutor;
+import io.netty.util.concurrent.EventExecutorGroup;
+import io.netty.util.concurrent.GlobalEventExecutor;
 import mujica.json.handler.EarlyKeyCheckAdapter;
 import mujica.json.io.JsonIndentStringBuilderWriter;
 import mujica.json.io.JsonStringWriter;
@@ -15,6 +25,10 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,6 +64,46 @@ public class ProvidedNettyTest {
     }
 
     @Test
+    public void caseEmptyByteBuf() throws IOException {
+        final ByteBuf buf = new EmptyByteBuf(ByteBufAllocator.DEFAULT);
+        try {
+            caseObject(buf);
+        } finally {
+            buf.release();
+        }
+    }
+
+    @Test
+    public void caseUnpooledByteBuf() throws IOException {
+        final ByteBuf buf = Unpooled.buffer();
+        try {
+            buf.writeDouble(Math.PI);
+            buf.writeFloat(1.0f / 33.0f);
+            buf.writeByte(5);
+            caseObject(buf);
+        } finally {
+            buf.release();
+        }
+    }
+
+    @Test
+    public void caseEventExecutorGroup() throws Exception {
+        final EventExecutorGroup group = new DefaultEventExecutor();
+        try {
+            group.execute(Thread::yield);
+            caseObject(group);
+        } finally {
+            group.shutdownGracefully().sync();
+        }
+    }
+
+    @Test
+    public void caseGlobalEventExecutor() throws Exception {
+        caseObject(GlobalEventExecutor.INSTANCE);
+        caseObject(GlobalEventExecutorTransformer.INSTANCE);
+    }
+
+    @Test
     public void caseHttpMethod() throws IOException {
         caseObject(HttpMethod.GET);
     }
@@ -72,6 +126,21 @@ public class ProvidedNettyTest {
     @Test
     public void casePlatformDependent() throws IOException {
         caseObject(PlatformDependentTransformer.INSTANCE);
+    }
+
+    @Test
+    public void caseInetSocketAddress() throws IOException {
+        caseObject(new InetSocketAddress(InetAddress.getByAddress(new byte[] {(byte) 192, (byte) 168, 1, 1}), 605));
+    }
+
+    @Test
+    public void caseDomainSocketAddress() throws IOException {
+        caseObject(new DomainSocketAddress("master"));
+    }
+
+    @Test
+    public void caseLocalAddress() throws IOException {
+        caseObject(new LocalAddress("debug"));
     }
 
     @Test

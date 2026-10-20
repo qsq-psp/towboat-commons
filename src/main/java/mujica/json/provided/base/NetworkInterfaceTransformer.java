@@ -5,6 +5,7 @@ import mujica.json.reflect.JsonContext;
 import mujica.json.reflect.JsonContextTransformer;
 import mujica.reflect.modifier.CodeHistory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
@@ -19,16 +20,16 @@ public class NetworkInterfaceTransformer implements JsonContextTransformer<Netwo
     public static final NetworkInterfaceTransformer INSTANCE = new NetworkInterfaceTransformer();
 
     @Override
-    public void transform(@NotNull NetworkInterface in, @NotNull JsonHandler out, JsonContext context) {
+    public void transform(@NotNull NetworkInterface nif, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key(ClassLoaderTransformer.NAME);
-            out.stringValue(in.getName());
+            out.stringValue(nif.getName());
         }
         {
             out.key("inetAddress");
             out.openArray();
-            Enumeration<InetAddress> enumeration = in.getInetAddresses();
+            Enumeration<InetAddress> enumeration = nif.getInetAddresses();
             while (enumeration.hasMoreElements()) {
                 out.stringValue(enumeration.nextElement().toString());
             }
@@ -37,13 +38,13 @@ public class NetworkInterfaceTransformer implements JsonContextTransformer<Netwo
         {
             out.key("interfaceAddress");
             out.openArray();
-            for (InterfaceAddress interfaceAddress : in.getInterfaceAddresses()) {
+            for (InterfaceAddress interfaceAddress : nif.getInterfaceAddresses()) {
                 InterfaceAddressTransformer.INSTANCE.transform(interfaceAddress, out, context);
             }
             out.closeArray();
         }
         {
-            NetworkInterface parent = in.getParent();
+            NetworkInterface parent = nif.getParent();
             if (parent != null) {
                 out.key("parent");
                 out.stringValue(parent.getName());
@@ -51,10 +52,10 @@ public class NetworkInterfaceTransformer implements JsonContextTransformer<Netwo
         }
         {
             out.key("index");
-            out.numberValue(in.getIndex());
+            out.numberValue(nif.getIndex());
         }
         {
-            String displayName = in.getDisplayName();
+            String displayName = nif.getDisplayName();
             if (displayName != null) {
                 out.key("displayName");
                 out.stringValue(displayName);
@@ -62,7 +63,7 @@ public class NetworkInterfaceTransformer implements JsonContextTransformer<Netwo
         }
         {
             out.key("virtual");
-            out.booleanValue(in.isVirtual());
+            out.booleanValue(nif.isVirtual());
         }
         out.closeObject();
     }

@@ -5,13 +5,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-/**
- * Created on 2026/3/14.
- */
 @CodeHistory(date = "2026/3/14")
 public class BatchIOException extends IOException {
 
-    private static final long serialVersionUID = 0xAFC160A839F35459L;
+    private static final long serialVersionUID = 0xafc160a839f35459L;
 
     public BatchIOException() {
         super();

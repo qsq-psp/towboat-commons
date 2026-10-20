@@ -7,5 +7,5 @@ public enum BatchIOExceptionPolicy {
 
     BREAK, CONTINUE, ROLLBACK;
 
-    private static final long serialVersionUID = 0x392D7A0AF0273ECFL;
+    private static final long serialVersionUID = 0x392d7a0af0273ecfL;
 }

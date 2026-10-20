@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 @CodeHistory(date = "2026/6/24")
 public class CopyOnResizeBitList extends AbstractBitList {
 
-    private static final long serialVersionUID = 0xE04C062731DD528CL;
+    private static final long serialVersionUID = 0xe04c062731dd528cL;
 
     @NotNull
     final CapacityPolicy policy;

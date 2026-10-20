@@ -2,11 +2,14 @@ package mujica.ds.i8.run;
 
 import mujica.ds.i32.list.CapacityPolicy;
 import mujica.reflect.modifier.CodeHistory;
+import mujica.reflect.modifier.DirectSubclass;
 
 import java.io.Serializable;
 
 @CodeHistory(date = "2025/11/1", name = "ArrayLookBackMemory")
 @CodeHistory(date = "2025/11/26")
+@DirectSubclass({ArrayCopyRunBuffer.class, CyclicArrayRunBuffer.class})
+@Deprecated
 public abstract class ArrayRunBuffer extends RunBuffer implements Serializable {
 
     private static final long serialVersionUID = 0xb0b0048acda9f050L;

@@ -61,7 +61,7 @@ public class SlotArrayAllocatorIndexedF32ForTest implements SlotArrayAllocator<I
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = (f32, i32), slotType = IndexedF32ForTest, arrayType = int[]]";
+        return "[dataType = (f32, i32), slotType = IndexedF32ForTest, arrayType = int[]]";
     }
 
     @CodeHistory(date = "2026/7/24")

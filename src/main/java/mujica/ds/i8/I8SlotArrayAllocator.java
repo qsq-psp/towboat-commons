@@ -106,7 +106,7 @@ public class I8SlotArrayAllocator implements SlotArrayAllocator<I8Slot, byte[]> 
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = i8, slotType = I8Slot, arrayType = byte[]]";
+        return "[dataType = i8, slotType = I8Slot, arrayType = byte[]]";
     }
 
     @CodeHistory(date = "2026/7/26", name = "WithHashI8")

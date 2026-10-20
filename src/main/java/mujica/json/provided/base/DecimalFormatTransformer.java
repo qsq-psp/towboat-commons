@@ -13,15 +13,15 @@ import java.text.DecimalFormat;
 public class DecimalFormatTransformer implements JsonContextTransformer<DecimalFormat> {
 
     @Override
-    public void transform(@NotNull DecimalFormat in, @NotNull JsonHandler out, @Nullable JsonContext context) {
+    public void transform(@NotNull DecimalFormat format, @NotNull JsonHandler out, @Nullable JsonContext context) {
         out.openObject();
         {
             out.key("decimalFormatSymbols");
-            DecimalFormatSymbolsTransformer.INSTANCE.transform(in.getDecimalFormatSymbols(), out, context);
+            DecimalFormatSymbolsTransformer.INSTANCE.transform(format.getDecimalFormatSymbols(), out, context);
             out.key("pattern");
-            out.stringValue(in.toPattern());
+            out.stringValue(format.toPattern());
             out.key("localizedPattern");
-            out.stringValue(in.toLocalizedPattern());
+            out.stringValue(format.toLocalizedPattern());
         }
         out.closeObject();
     }

@@ -102,7 +102,7 @@ public class I32SlotArrayAllocatorForTest implements SlotArrayAllocator<I32Slot,
     @Override
     @NotNull
     public String toString() {
-        return "SlotTool[dataType = i32, slotType = I32Slot, arrayType = int[]]";
+        return "[dataType = i32, slotType = I32Slot, arrayType = int[]]";
     }
 
     @CodeHistory(date = "2026/7/27")
@@ -145,7 +145,7 @@ public class I32SlotArrayAllocatorForTest implements SlotArrayAllocator<I32Slot,
         @Override
         @NotNull
         public String toString() {
-            return "SlotTool[dataType = i32, slotType = I32Slot, arrayType = int[], capacityPolicy = " + capacityPolicy + "]";
+            return "[dataType = i32, slotType = I32Slot, arrayType = int[], capacityPolicy = " + capacityPolicy + "]";
         }
     }
 }
